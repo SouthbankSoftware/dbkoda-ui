@@ -54,6 +54,21 @@ export default class Profiling {
       });
     });
 
+    Broker.on(EventType.PROFILING_DATA, ({ profileId, payload }) => {
+      const { alias } = this.store.profileStore.profiles.get(profileId);
+
+      console.log(
+        `%cProfling Data for ${alias} (${profileId}):`,
+        'color: green'
+      );
+      console.log(payload);
+      this.api.sendMsgToPerformanceWindow({
+        profileId,
+        command: 'mw_profilingData',
+        payload
+      });
+    });
+
     Broker.on(
       EventType.PROFILING_ERROR,
       ({ profileId, payload: { error, level } }) => {
@@ -91,6 +106,26 @@ export default class Profiling {
       })
       .then(res => {
         Broker.emit(EventType.PROFILING_DATABASES_DATA, {
+          profileId,
+          payload: res
+        });
+      })
+      .catch(err => {
+        this._handleError(profileId, err);
+      });
+  };
+
+  getProfilingData = (profileId: UUID, database: string) => {
+    featherClient()
+      .service('profile')
+      .get(profileId, {
+        query: {
+          op: 'profile',
+          dbName: database
+        }
+      })
+      .then(res => {
+        Broker.emit(EventType.PROFILING_DATA, {
           profileId,
           payload: res
         });

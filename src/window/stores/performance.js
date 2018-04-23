@@ -28,6 +28,7 @@ import _ from 'lodash';
 import {observable, action} from 'mobx';
 import {restore} from 'dumpenvy';
 import {deserializer, postDeserializer} from '#/common/mobxDumpenvyExtension';
+import {ProfilingConstants} from '#/common/constants';
 import {handleNewData, attachToMobx} from '~/api/PerformancePanel';
 
 const electron = window.require('electron');
@@ -98,6 +99,11 @@ class PerformanceWindowApi {
   };
 
   @action.bound
+  getProfilingData = database => {
+    this.store.profilingPanel.payload = null;
+    this.sendCommandToMainProcess('pw_getProfilingData', {database});
+  };
+
   setProfilingDatabaseConfiguration = configs => {
     console.log('send profiling database configuration ', configs);
     this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', {
@@ -127,6 +133,7 @@ export default class Store {
     {
       databases: [],
       selectedDatabase: null,
+      payload: null,
     },
     null,
     {deep: false}
@@ -209,15 +216,39 @@ export default class Store {
           this.profilingPanel.databases = allDbs;
           this.profilingPanel.enabledDatabases = dbList;
         } else if (args.command === 'mw_profilingData') {
-          console.log(args.profileId);
-          console.log(args.payload);
-          this.profilingPanel.payload = args.payload;
-          this.profilingPanel.highWaterMarkProfile = _.maxBy(
-            this.profilingPanel.payload,
-            op => {
-              return op.us;
+          // Check if empty result set
+          if (
+            (Object.keys(args.payload).length === 0 &&
+              args.payload.constructor === Object) ||
+            args.payload === []
+          ) {
+            this.profilingPanel.payload = ProfilingConstants.NO_RESULTS;
+          } else {
+            // Transform array.
+            const opsArray = [];
+            if (args.payload instanceof Array) {
+              // Transform data for ID field.
+              args.payload.forEach(opEntry => {
+                const keys = Object.keys(opEntry);
+                const op = opEntry[keys[0]];
+                op.id = keys[0];
+                opsArray.push(op);
+              });
+            } else {
+              // Transform data for ID field.
+              const keys = Object.keys(args.payload);
+              const op = args.payload[keys[0]];
+              op.id = keys[0];
+              opsArray.push(op);
             }
-          );
+            this.profilingPanel.payload = opsArray;
+            this.profilingPanel.highWaterMarkProfile = _.maxBy(
+              this.profilingPanel.payload,
+              op => {
+                return op.us;
+              }
+            );
+          }
         } else if (args.command === 'mw_updateDatabaseConfiguration') {
           console.log('update database configuration res:', args);
           if (this.profilingPanel.databases && args && args.dbConfigs) {

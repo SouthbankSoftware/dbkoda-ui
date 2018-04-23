@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-20T17:44:24+10:00
+ * @Last modified time: 2018-04-23T10:24:28+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -130,7 +130,6 @@ export class ConnectionForm extends JsonForm {
     const urlField = field.$('urlCluster');
     const isUrlMode = field.$('urlRadioCluster').value;
     if (!isUrlMode) {
-      console.log(field);
       let connectionUrl = StaticApi.mongoProtocol;
       if (field.$('hostsList').value === '') {
         connectionUrl += (field.$('host', SubformCategory.BASIC).value + ':' + field.$('port', SubformCategory.BASIC).value);
@@ -222,8 +221,7 @@ export class ConnectionForm extends JsonForm {
             (this.api.getProfiles().size + 1);
         }
       } else {
-        console.log(field);
-        if (field.$('url').value.length > MAX_URL_ALIAS_LENGTH) {
+        if (field.$('url').value.length > MAX_URL_ALIAS_LENGTH) { //eslint-disable-line
           if (field.$('url').value.split('//').length > 1) {
             aliasField.value = field
               .$('url')

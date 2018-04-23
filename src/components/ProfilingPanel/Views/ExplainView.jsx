@@ -33,7 +33,7 @@ import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
 import { observer } from 'mobx-react';
 import React from 'react';
-import CodeMirror from '#/common/LegacyCodeMirror';
+import CodeMirror from '#/common/LegacyCodeMirror'; // eslint-disable-line
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/selection/active-line.js';
 import 'codemirror/addon/display/autorefresh.js';
@@ -102,9 +102,7 @@ export default class OperationDetails extends React.Component {
           </div>
         </nav>
         <div style={{ height: '100%' }}>
-          <div className="editorView">
-            <CodeMirror value={this.state.code} options={this.cmOptions} />
-          </div>
+          <div className="editorView" />
         </div>
       </div>
     );

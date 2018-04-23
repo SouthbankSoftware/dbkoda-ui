@@ -747,6 +747,8 @@ export default class PerformancePanelApi {
         this.api.killOperation(args.profileId, args.opId);
       } else if (args.command === 'pw_getProfilingDataBases') {
         this.api.getProfilingDataBases(args.profileId);
+      } else if (args.command === 'pw_getProfilingData') {
+        this.api.getProfilingData(args.profileId, args.database.name);
       } else if (args.command === 'pw_setProfilingDatabseConfiguration') {
         this.api.setProfilingDatabseConfiguration(
           args.profileId,

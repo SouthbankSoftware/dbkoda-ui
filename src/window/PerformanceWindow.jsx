@@ -25,13 +25,13 @@
  */
 
 import React from 'react';
-import {action} from 'mobx';
-import {inject, observer} from 'mobx-react';
-import {PerformancePanel} from '#/PerformancePanel';
-import {TopConnectionsPanel} from '#/TopConnectionsPanel';
-import {ProfilingPanel} from '#/ProfilingPanel';
-import {NewToaster} from '#/common/Toaster';
-import {attachToMobx, detachFromMobx} from '~/api/PerformancePanel';
+import { action } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { PerformancePanel } from '#/PerformancePanel';
+import { TopConnectionsPanel } from '#/TopConnectionsPanel';
+import { ProfilingPanel } from '#/ProfilingPanel';
+import { NewToaster } from '#/common/Toaster';
+import { attachToMobx, detachFromMobx } from '~/api/PerformancePanel';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/icons/lib/css/blueprint-icons.css';
@@ -44,7 +44,7 @@ import ProfileConfiguration from '../components/ProfileConfiguration';
 import Status from '../components/PerformancePanel/Status';
 
 @inject(allStores => ({
-  store: allStores.store,
+  store: allStores.store
 }))
 @observer
 class PerformanceWindow extends React.Component {
@@ -55,7 +55,7 @@ class PerformanceWindow extends React.Component {
       mongoStatus: Status.NORMAL,
       bTopConnection: false,
       bProfileConfiguration: false,
-      bProfiling: false,
+      bProfiling: false
     };
 
     document.addEventListener(
@@ -68,7 +68,7 @@ class PerformanceWindow extends React.Component {
   }
 
   componentWillMount() {
-    const {store} = this.props;
+    const { store } = this.props;
     store.toasterCallback = this._showToasterFromMainWindow;
     store.errorHandler = this._errorHandler;
   }
@@ -85,7 +85,7 @@ class PerformanceWindow extends React.Component {
       logToMain('info', 'becomes hidden');
 
       const {
-        store: {performancePanel},
+        store: { performancePanel }
       } = this.props;
 
       detachFromMobx(performancePanel);
@@ -93,7 +93,7 @@ class PerformanceWindow extends React.Component {
       logToMain('info', 'becomes visible');
 
       const {
-        store: {performancePanel},
+        store: { performancePanel }
       } = this.props;
 
       attachToMobx(performancePanel);
@@ -113,22 +113,22 @@ class PerformanceWindow extends React.Component {
     console.log('received an error', err);
     switch (err.code) {
       case 'SSH_NOT_ENABLED':
-        this.setState({sshStatus: Status.NOT_ENABLED});
+        this.setState({ sshStatus: Status.NOT_ENABLED });
         break;
       case 'SSH_CONNECTION_CLOSED':
-        this.setState({sshStatus: Status.CONNECTION_BROKEN});
+        this.setState({ sshStatus: Status.CONNECTION_BROKEN });
         break;
       case 'MONGO_CONNECTION_CLOSED':
-        this.setState({mongoStatus: Status.CONNECTION_BROKEN});
+        this.setState({ mongoStatus: Status.CONNECTION_BROKEN });
         break;
       case 'MONGO_RECONNECT_SUCCESS':
-        this.setState({mongoStatus: Status.NORMAL});
+        this.setState({ mongoStatus: Status.NORMAL });
         break;
       case 'SSH_RECONNECTION_SUCCESS':
-        this.setState({sshStatus: Status.NORMAL});
+        this.setState({ sshStatus: Status.NORMAL });
         break;
       case 'UNSUPPORTED_STATS_OS':
-        this.setState({sshStatus: Status.UNSUPPORTED_STATS_OS});
+        this.setState({ sshStatus: Status.UNSUPPORTED_STATS_OS });
         break;
       default:
         break;
@@ -137,11 +137,11 @@ class PerformanceWindow extends React.Component {
 
   showTopConnectionPanel = show => {
     if (show) {
-      const {store} = this.props;
+      const { store } = this.props;
       this.setState({
         bTopConnection: true,
         bProfileConfiguration: false,
-        bProfiling: false,
+        bProfiling: false
       });
       store.api.getTopConnections();
     }
@@ -149,11 +149,11 @@ class PerformanceWindow extends React.Component {
 
   showProfileConfiguration = show => {
     if (show) {
-      const {store} = this.props;
+      const { store } = this.props;
       this.setState({
         bProfileConfiguration: true,
         bTopConnection: false,
-        bProfiling: false,
+        bProfiling: false
       });
       store.api.getProfilingDataBases();
     }
@@ -163,24 +163,24 @@ class PerformanceWindow extends React.Component {
     this.setState({
       bProfiling: false,
       bProfileConfiguration: false,
-      bTopConnection: false,
+      bTopConnection: false
     });
   };
 
   showProfiling = show => {
     if (show) {
-      const {store} = this.props;
+      const { store } = this.props;
       this.setState({
         bProfileConfiguration: false,
         bTopConnection: false,
-        bProfiling: true,
+        bProfiling: true
       });
       store.api.getProfilingDataBases();
     }
   };
 
   render() {
-    const {store} = this.props;
+    const { store } = this.props;
 
     return (
       <div>
@@ -196,7 +196,7 @@ class PerformanceWindow extends React.Component {
                   resetPerformancePanel={() => {
                     this.setState({
                       sshStatus: Status.NORMAL,
-                      mongoStatus: Status.NORMAL,
+                      mongoStatus: Status.NORMAL
                     });
                     store.api.resetPerformancePanel();
                   }}

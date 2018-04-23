@@ -68,16 +68,26 @@
           "profile-mode": "Profile Mode",
           "operation-exceeds": "Operation exceeding time limit",
           "profiling-off": "Profiling off",
+          "profile-all": "All"
+        },
+        "results": {
+          "noResultsFoundTitle": "No Results",
+          "noResultsFoundBody":
+            "We were unable to find any profiling data for that database.",
           "profile-all": "All",
           "profile-collection-size": "Profile collection (system.profile) size",
-          "system-profile-size-warning": "Changing this value will resize system profile in all selected databases and clear all existing data.",
+          "system-profile-size-warning":
+            "Changing this value will resize system profile in all selected databases and clear all existing data.",
           "apply": "Apply",
           "cancel": "Cancel",
           "tooltip": {
-            "level0" : "The profiler is off and does not collect any data. This is the default profiler level.",
-            "level1" : "The profiler collects data for operations that take longer than the value of slowms.",
-            "level2" : "The profiler collects data for all operations.",
-            "collection-size": "The system.profile collection is a capped collection with a default size of 1 megabyte."
+            "level0":
+              "The profiler is off and does not collect any data. This is the default profiler level.",
+            "level1":
+              "The profiler collects data for operations that take longer than the value of slowms.",
+            "level2": "The profiler collects data for all operations.",
+            "collection-size":
+              "The system.profile collection is a capped collection with a default size of 1 megabyte."
           }
         }
       }
@@ -346,6 +356,7 @@
           "Show new features dialog on application start.",
         "tableOutputDefault": "Use Table Output as Default Output",
         "showWelcomePageAtStart": "Show Welcome Page on Startup",
+        "automaticAutoComplete": "Run AutoComplete automatically",
         "performancePanel": {
           "preventDisplaySleep":
             "Prevent display sleep when panel is visible. (Panel restart required)",
