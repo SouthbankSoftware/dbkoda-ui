@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T15:36:38+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-23T09:39:21+10:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -128,11 +128,16 @@ export default class ProfileApi {
     if (data.passRadio === null || data.passRadio === undefined) {
       data.passRadio = !data.keyRadio;
     }
-    if (data.hostRadio) {
-      connectionUrl = StaticApi.mongoProtocol + data.host + ':' + data.port;
-    } else if (data.urlRadio) {
+    if (data.useClusterConfig) {
+      connectionUrl = data.urlCluster;
+    } else {
       connectionUrl = data.url;
     }
+    // if (data.hostRadio) {
+    //   connectionUrl = StaticApi.mongoProtocol + data.host + ':' + data.port;
+    // } else if (data.urlRadio) {
+    //   connectionUrl = data.url;
+    // }
 
     let terminalQuery = null;
 
