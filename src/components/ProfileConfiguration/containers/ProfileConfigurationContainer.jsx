@@ -40,9 +40,9 @@ class ProfileConfigurationContainer extends React.Component {
     this._autorunDisposer = autorun(() => {
       const {profilingPanel} = this.props.store;
       if (profilingPanel.databases && profilingPanel.databases.length > 0) {
-        profilingPanel.databases.forEach(db => {
-          db.selected = false;
-        });
+        // profilingPanel.databases.forEach(db => {
+        //   db.selected = false;
+        // });
         this.setState({databases: profilingPanel.databases});
       }
     });

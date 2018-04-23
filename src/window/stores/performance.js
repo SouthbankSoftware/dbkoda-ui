@@ -25,19 +25,19 @@
  */
 
 import _ from 'lodash';
-import { observable, action } from 'mobx';
-import { restore } from 'dumpenvy';
-import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
-import { ProfilingConstants } from '#/common/constants';
-import { handleNewData, attachToMobx } from '~/api/PerformancePanel';
+import {observable, action} from 'mobx';
+import {restore} from 'dumpenvy';
+import {deserializer, postDeserializer} from '#/common/mobxDumpenvyExtension';
+import {ProfilingConstants} from '#/common/constants';
+import {handleNewData, attachToMobx} from '~/api/PerformancePanel';
 
 const electron = window.require('electron');
-const { ipcRenderer } = electron;
+const {ipcRenderer} = electron;
 
 const Globalize = require('globalize'); // doesn't work well with import
 // Globalize Configuration for Performance Window
 global.Globalize = Globalize;
-const { language, region } = Globalize.locale().attributes;
+const {language, region} = Globalize.locale().attributes;
 global.locale = `${language}-${region}`;
 global.globalString = (path, ...params) =>
   Globalize.messageFormatter(path)(...params);
@@ -60,7 +60,7 @@ class PerformanceWindowApi {
     ipcRenderer.send('performance', {
       command,
       profileId: this.profileId,
-      ...params
+      ...params,
     });
   };
 
@@ -88,7 +88,7 @@ class PerformanceWindowApi {
 
   @action.bound
   killOperation = opId => {
-    this.sendCommandToMainProcess('pw_killOperation', { opId });
+    this.sendCommandToMainProcess('pw_killOperation', {opId});
   };
 
   @action.bound
@@ -101,13 +101,13 @@ class PerformanceWindowApi {
   @action.bound
   getProfilingData = database => {
     this.store.profilingPanel.payload = null;
-    this.sendCommandToMainProcess('pw_getProfilingData', { database });
+    this.sendCommandToMainProcess('pw_getProfilingData', {database});
   };
 
   setProfilingDatabaseConfiguration = configs => {
     console.log('send profiling database configuration ', configs);
     this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', {
-      configs
+      configs,
     });
   };
 }
@@ -122,10 +122,10 @@ export default class Store {
     {
       payload: null,
       selectedConnection: null,
-      highWaterMarkConnection: null
+      highWaterMarkConnection: null,
     },
     null,
-    { deep: false }
+    {deep: false}
   );
 
   @observable
@@ -133,10 +133,10 @@ export default class Store {
     {
       databases: [],
       selectedDatabase: null,
-      payload: null
+      payload: null,
     },
     null,
-    { deep: false }
+    {deep: false}
   );
 
   toasterCallback = null;
@@ -163,11 +163,11 @@ export default class Store {
         if (args.command === 'mw_initData') {
           global.config = this.config = restore(args.configObject, {
             deserializer,
-            postDeserializer
+            postDeserializer,
           });
           this.performancePanel = restore(args.dataObject, {
             deserializer,
-            postDeserializer
+            postDeserializer,
           });
           attachToMobx(this.performancePanel);
         } else if (
@@ -248,6 +248,18 @@ export default class Store {
                 return op.us;
               }
             );
+          }
+        } else if (args.command === 'mw_updateDatabaseConfiguration') {
+          console.log('update database configuration res:', args);
+          if (this.profilingPanel.databases && args && args.dbConfigs) {
+            const newDbs = this.profilingPanel.databases.map(db => {
+              const find = args.dbConfigs.find(o => o.name === db.name);
+              if (find) {
+                db.value = find;
+              }
+              return db;
+            });
+            this.profilingPanel.databases = newDbs;
           }
         }
       }
