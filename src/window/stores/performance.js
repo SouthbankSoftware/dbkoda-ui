@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-17T16:32:56+10:00
+ * @Last modified time: 2018-04-23T16:35:56+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -104,12 +104,20 @@ class PerformanceWindowApi {
     this.sendCommandToMainProcess('pw_getProfilingData', {database});
   };
 
+  @action.bound
   setProfilingDatabaseConfiguration = configs => {
     console.log('send profiling database configuration ', configs);
     this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', {
       configs,
     });
   };
+
+  @action.bound
+  showToaster(toasterObj) {
+    if (this.store && this.store.toasterCallback) {
+      this.store.toasterCallback(toasterObj);
+    }
+  }
 }
 
 export default class Store {
