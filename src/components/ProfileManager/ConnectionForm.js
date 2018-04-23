@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-23T10:24:28+10:00
+ * @Last modified time: 2018-04-23T10:48:26+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -270,9 +270,9 @@ export class ConnectionForm extends JsonForm {
       if (formData.hasOwnProperty(subform)) {
         formData[subform].fields.forEach((field) => {
           if (field.value !== undefined && field.value !== null) {
-            if (!field.hasOwnProperty('disabled') || (field.hasOwnProperty('disabled') && field.disabled === false)) {
+            // if (!field.hasOwnProperty('disabled') || (field.hasOwnProperty('disabled') && field.disabled === false)) {
               profile[field.name] = field.value;
-            }
+            // }
           }
         });
       }
