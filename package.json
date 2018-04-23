@@ -44,9 +44,11 @@
     "esdoc": "rimraf docs && esdoc -c .esdoc.json",
     "flow": "flow",
     "flow:install": "flow-typed install --overwrite --skip --ignoreDeps mobx",
+    "format":
+      "bash -c 'INPUT=$(echo -e \"$0\n$@\" | egrep '\"'\"'\\.jsx?$|\\.json$|\\.scss$'\"'\"'); if [[ ! -z \"$INPUT\" ]]; then prettier --single-quote --write $INPUT; fi; INPUT=$(echo \"$0\n$@\" | egrep '\"'\"'\\.jsx?$'\"'\"'); if [[ ! -z \"$INPUT\" ]]; then eslint --fix $INPUT; fi'",
     "prepush": "yarn flow",
     "precommit":
-      "prettier --write $(git diff --name-only --cached | egrep '\\.jsx?$|\\.json$|\\.scss$') && eslint --fix $(git diff --name-only --cached | egrep '\\.jsx?$') && git add $(git diff --name-only --cached)"
+      "INPUT=$(git diff --name-only --cached); if [[ ! -z \"$INPUT\" ]]; then yarn format $INPUT; git add $INPUT; fi"
   },
   "repository": {
     "type": "git",
