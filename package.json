@@ -194,6 +194,7 @@
     "webpack-bundle-analyzer": "^2.8.2",
     "webpack-dashboard": "^1.1.1",
     "webpack-dev-server": "^2.11.1",
+    "webpack-jarvis": "^0.3.2",
     "webpack-merge": "^4.1.0",
     "worker-loader": "^1.1.0",
     "xml2js": "^0.4.17",

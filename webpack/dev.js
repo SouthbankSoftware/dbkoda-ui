@@ -2,8 +2,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-11-15T14:25:29+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-05T12:34:59+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-04-24T12:00:25+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,7 +28,8 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const GlobalizePlugin = require('globalize-webpack-plugin');
-const DashboardPlugin = require('webpack-dashboard/plugin');
+const Jarvis = require("webpack-jarvis");
+// const DashboardPlugin = require('webpack-dashboard/plugin');
 const commonGlobalizePluginOptions = require('./commonGlobalizePluginOptions');
 const common = require('./common');
 
@@ -85,10 +86,13 @@ module.exports = merge.strategy({
     ]
   },
   plugins: [
-    new DashboardPlugin({
-      minified: false,
-      gzip: false
+    new Jarvis({
+      port: 1337
     }),
+    // new DashboardPlugin({
+    //   minified: false,
+    //   gzip: false
+    // }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development')
