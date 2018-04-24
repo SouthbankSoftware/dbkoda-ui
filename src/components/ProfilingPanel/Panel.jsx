@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-04-16T17:02:17+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-04-24T14:26:08+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,17 +28,10 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import { runInAction } from 'mobx';
 import autobind from 'autobind-decorator';
-import { ProfilingConstants } from '#/common/constants';
+import { ProfilingConstants } from '#/common/Constants';
 import ErrorView from '#/common/ErrorView';
 import { debounce } from 'lodash';
-import {
-  Classes,
-  Button,
-  MenuItem,
-  Intent,
-  Position,
-  Tooltip
-} from '@blueprintjs/core';
+import { Classes, Button, MenuItem, Intent, Position, Tooltip } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import ProfilingView from './Views/ProfilingView';
 import ExplainView from './Views/ExplainView';
@@ -94,7 +87,11 @@ export default class ProfilingPanel extends React.Component<Props> {
     const ops = this.props.store.profilingPanel.payload;
     const { highWaterMarkProfile } = profilingPanel;
     let renderTable = true;
-    if (!selectedDatabase && profilingPanel.enabledDatabases && profilingPanel.enabledDatabases[0]) {
+    if (
+      !selectedDatabase &&
+      profilingPanel.enabledDatabases &&
+      profilingPanel.enabledDatabases[0]
+    ) {
       this.state.selectedDatabase = profilingPanel.enabledDatabases[0].name;
     }
     if (ops === ProfilingConstants.NO_RESULTS) {
@@ -169,12 +166,8 @@ export default class ProfilingPanel extends React.Component<Props> {
               />
             ) : (
               <ErrorView
-                title={globalString(
-                  'performance/profiling/results/noResultsFoundTitle'
-                )}
-                error={globalString(
-                  'performance/profiling/results/noResultsFoundBody'
-                )}
+                title={globalString('performance/profiling/results/noResultsFoundTitle')}
+                error={globalString('performance/profiling/results/noResultsFoundBody')}
               />
             )}
           </div>

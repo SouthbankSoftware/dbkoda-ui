@@ -3,7 +3,7 @@
  * @Date:   2017-11-15T14:25:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-04-24T12:00:25+10:00
+ * @Last modified time: 2018-04-24T14:20:28+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,8 +28,7 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const GlobalizePlugin = require('globalize-webpack-plugin');
-const Jarvis = require("webpack-jarvis");
-// const DashboardPlugin = require('webpack-dashboard/plugin');
+const Jarvis = require('webpack-jarvis');
 const commonGlobalizePluginOptions = require('./commonGlobalizePluginOptions');
 const common = require('./common');
 
