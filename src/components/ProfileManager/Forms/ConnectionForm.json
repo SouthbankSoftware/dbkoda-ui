@@ -51,55 +51,14 @@
         "value": false,
         "label": "Use SSL for all connections",
         "type": "checkbox",
-        "column": 1
+        "column": 2
       },
       {
         "name": "sslAllowInvalidCertificates",
         "value": false,
         "label": "Allow invalid certificates",
         "type": "checkbox",
-        "column": 1
-      },
-      {
-        "name": "sha",
-        "value": false,
-        "label": "SCRAM-SHA-1(username/password)",
-        "type": "checkbox",
-        "column": 2,
-        "refFields": ["username", "password", "authenticationDatabase"]
-      },
-      {
-        "name": "username",
-        "label": "Username",
-        "icon": "user",
-        "type": "text",
-        "value": "",
-        "column": 2,
-        "width": 0.5,
-        "disabled": true,
-        "checkbox": "enabled"
-      },
-      {
-        "name": "password",
-        "label": "Password",
-        "icon": "password",
-        "type": "password",
-        "value": "",
-        "column": 2,
-        "width": 0.5,
-        "disabled": true,
-        "checkbox": "enabled"
-      },
-      {
-        "name": "authenticationDatabase",
-        "label": "Authentication Database",
-        "options": { "tooltip": "The database in which this user was created" },
-        "type": "text",
-        "value": "",
-        "column": 2,
-        "width": 0.5,
-        "disabled": true,
-        "checkbox": "enabled"
+        "column": 2
       },
       {
         "name": "urlRadio",
@@ -116,6 +75,54 @@
         "value": "mongodb://",
         "type": "text",
         "column": 2,
+        "disabled": true,
+        "checkbox": "enabled"
+      }
+    ]
+  },
+  "authentication": {
+    "name": "Authentication",
+    "value": "authentication",
+    "tips": ["This page allows you to configure items specific to authentication of database.'"],
+    "fields": [
+      {
+        "name": "sha",
+        "value": false,
+        "label": "SCRAM-SHA-1(username/password)",
+        "type": "checkbox",
+        "column": 1,
+        "refFields": ["username", "password", "authenticationDatabase"]
+      },
+      {
+        "name": "username",
+        "label": "Username",
+        "icon": "user",
+        "type": "text",
+        "value": "",
+        "column": 1,
+        "width": 0.5,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "password",
+        "label": "Password",
+        "icon": "password",
+        "type": "password",
+        "value": "",
+        "column": 1,
+        "width": 0.5,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "authenticationDatabase",
+        "label": "Authentication Database",
+        "options": { "tooltip": "The database in which this user was created" },
+        "type": "text",
+        "value": "",
+        "column": 2,
+        "width": 0.5,
         "disabled": true,
         "checkbox": "enabled"
       }

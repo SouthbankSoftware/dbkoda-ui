@@ -112,38 +112,6 @@
               }
             },
             {
-              "$id": "sha",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "boolean" }
-              }
-            },
-            {
-              "$id": "username",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "string" }
-              }
-            },
-            {
-              "$id": "password",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "string" }
-              }
-            },
-            {
-              "$id": "authenticationDatabase",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "string" }
-              }
-            },
-            {
               "$id": "urlRadio",
               "additionalProperties": false,
               "properties": {
@@ -180,6 +148,49 @@
                     "value": { "type": "string" }
                   }
                 }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "authentication": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "additionalProperties": false,
+          "items": [
+            {
+              "$id": "sha",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
+            {
+              "$id": "username",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "$id": "password",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "$id": "authenticationDatabase",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
               }
             }
           ]
