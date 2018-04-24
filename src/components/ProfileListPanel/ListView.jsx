@@ -289,12 +289,11 @@ export default class ListView extends React.Component {
       if (selectedProfile.status === ProfileStatus.OPEN) {
         NewToaster.show({
           message: globalString('profile/notClosed'),
-          className: 'danger',
-          icon: 'thumbs-down'
+          className: 'warning',
+          icon: 'warning-sign'
         });
-      } else {
-        this.props.store.showConnectionPane();
       }
+      this.props.store.showConnectionPane();
     } else {
       NewToaster.show({
         message: globalString('profile/noProfile'),
@@ -538,6 +537,15 @@ export default class ListView extends React.Component {
               text={globalString('profile/menu/closeConnection')}
               intent={Intent.NONE}
               icon="lock"
+            />
+          </div>
+          <div className="menuItemWrapper">
+            <MenuItem
+              className="profileListContextMenu editProfile"
+              onClick={this.editProfile}
+              text={globalString('profile/menu/editProfile')}
+              intent={Intent.NONE}
+              icon="edit"
             />
           </div>
           <div className="menuItemWrapper">

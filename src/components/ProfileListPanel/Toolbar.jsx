@@ -98,13 +98,12 @@ export default class Toolbar extends React.Component {
     if (selectedProfile) {
       if (selectedProfile.status === ProfileStatus.OPEN) {
         NewToaster.show({
-          message: globalString('profile/not'),
-          className: 'danger',
-          icon: 'thumbs-down'
+          message: globalString('profile/notClosed'),
+          className: 'warning',
+          icon: 'warning-sign'
         });
-      } else {
-        this.props.store.showConnectionPane();
       }
+      this.props.store.showConnectionPane();
     } else {
       NewToaster.show({
         message: globalString('profile/noProfile'),
@@ -294,7 +293,9 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="editProfileButton"
               onClick={this.editProfile}
-              disabled={!selectedProfile || selectedProfile.status === ProfileStatus.OPEN}
+              disabled={
+                !selectedProfile
+              }
             >
               <EditProfileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
