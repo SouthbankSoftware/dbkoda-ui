@@ -3,7 +3,7 @@
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-17T14:30:02+10:00
+ * @Last modified time: 2018-04-24T15:00:30+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,14 +26,9 @@
 
 import _ from 'lodash';
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
-import {
-  SelectionModes,
-  Table,
-  Utils,
-  TableLoadingOption
-} from '@blueprintjs/table';
+import { SelectionModes, Table, Utils, TableLoadingOption } from '@blueprintjs/table';
 import { Button, Intent, Position, Tooltip } from '@blueprintjs/core';
 
 import TextSortableColumn from '../Components/TextSortableColumn';
@@ -41,13 +36,20 @@ import ProgressBarColumn from '../Components/ProgressBarColumn';
 
 const columnsWidthsPercent = [10, 15, 15, 10, 10, 15, 10, 15];
 
+@inject(({ store }) => {
+  console.log(store);
+  const { topConnectionsPanel } = store;
+
+  return {
+    connections: topConnectionsPanel.payload,
+    highWaterMark: topConnectionsPanel.highWaterMarkConnection
+  };
+})
 @observer
 export default class ConnectionsView extends React.Component<Props> {
   constructor(props) {
     super(props);
-    const columnsWidths = columnsWidthsPercent.map(
-      width => width * this.props.tableWidth / 100
-    );
+    const columnsWidths = columnsWidthsPercent.map(width => width * this.props.tableWidth / 100);
     this.state = {
       lastSelectRegion: null,
       sortedIndexMap: [],
@@ -71,19 +73,15 @@ export default class ConnectionsView extends React.Component<Props> {
       this.setState({ data: nextProps.connections });
     }
     if (nextProps && nextProps.highWaterMark) {
-      this.setState({highWaterMark: nextProps.highWaterMark});
+      this.setState({ highWaterMark: nextProps.highWaterMark });
     }
     if (nextProps && nextProps.tableWidth) {
-      const columnsWidths = columnsWidthsPercent.map(width => (width * nextProps.tableWidth / 100));
-      this.setState({columnsWidths});
+      const columnsWidths = columnsWidthsPercent.map(width => width * nextProps.tableWidth / 100);
+      this.setState({ columnsWidths });
     }
   }
 
-  getCellData = (
-    rowIndex: number,
-    columnIndex: number,
-    bUseIndex: boolen = true
-  ) => {
+  getCellData = (rowIndex: number, columnIndex: number, bUseIndex: boolen = true) => {
     if (bUseIndex) {
       const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
       if (sortedRowIndex != null) {
@@ -91,7 +89,7 @@ export default class ConnectionsView extends React.Component<Props> {
       }
     }
 
-    if (!this.state.data) {
+    if (this.state.data === null || this.state.data.length === 0) {
       return '';
     }
     let cellValue = '';
@@ -133,10 +131,7 @@ export default class ConnectionsView extends React.Component<Props> {
     return cellValue;
   };
 
-  sortColumn = (
-    columnIndex: number,
-    comparator: (a: any, b: any) => number
-  ) => {
+  sortColumn = (columnIndex: number, comparator: (a: any, b: any) => number) => {
     const { data } = this.state;
     const sortedIndexMap = Utils.times(data.length, (i: number) => i);
     sortedIndexMap.sort((a: number, b: number) => {
@@ -171,10 +166,9 @@ export default class ConnectionsView extends React.Component<Props> {
 
   render() {
     const { connections, showPerformancePanel } = this.props;
+    console.log('connections::', connections);
 
-    const columns = this.state.columns.map(col =>
-      col.getColumn(this.getCellData, this.sortColumn)
-    );
+    const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
 
     const loadingOptions = [];
     let numRows = 10;

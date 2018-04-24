@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-23T16:35:56+10:00
+ * @Last modified time: 2018-04-24T15:49:24+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,10 +39,8 @@ const Globalize = require('globalize'); // doesn't work well with import
 global.Globalize = Globalize;
 const { language, region } = Globalize.locale().attributes;
 global.locale = `${language}-${region}`;
-global.globalString = (path, ...params) =>
-  Globalize.messageFormatter(path)(...params);
-global.globalNumber = (value, config) =>
-  Globalize.numberFormatter(config)(value);
+global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...params);
+global.globalNumber = (value, config) => Globalize.numberFormatter(config)(value);
 
 global.config = null;
 
@@ -83,12 +81,22 @@ class PerformanceWindowApi {
   getTopConnections = () => {
     this.store.topConnectionsPanel.payload = null;
     this.store.topConnectionsPanel.selectedConnection = null;
+    this.store.topConnectionsPanel.operations = null;
+    this.store.topConnectionsPanel.selectedOperation = null;
+    this.store.topConnectionsPanel.highWaterMarkConnection = null;
     this.sendCommandToMainProcess('pw_getTopConnections');
   };
 
   @action.bound
-  killOperation = opId => {
-    this.sendCommandToMainProcess('pw_killOperation', { opId });
+  killSelectedOperation = () => {
+    const { selectedConnection, selectedOperation } = this.store.topConnectionsPanel;
+    if (selectedOperation) {
+      const { opId } = selectedOperation;
+      this.sendCommandToMainProcess('pw_killOperation', { opId });
+      const ops = _.omit(selectedConnection.ops, opId);
+      selectedConnection.ops = ops;
+      this.store.topConnectionsPanel.operations = ops;
+    }
   };
 
   @action.bound
@@ -130,6 +138,8 @@ export default class Store {
     {
       payload: null,
       selectedConnection: null,
+      operations: null,
+      selectedOperation: null,
       highWaterMarkConnection: null
     },
     null,
@@ -178,10 +188,7 @@ export default class Store {
             postDeserializer
           });
           attachToMobx(this.performancePanel);
-        } else if (
-          args.command === 'mw_updateData' &&
-          this.performancePanel !== null
-        ) {
+        } else if (args.command === 'mw_updateData' && this.performancePanel !== null) {
           const payload = args.dataObject;
           handleNewData(payload, this.performancePanel);
         } else if (args.command === 'mw_toaster') {
@@ -226,8 +233,7 @@ export default class Store {
         } else if (args.command === 'mw_profilingData') {
           // Check if empty result set
           if (
-            (Object.keys(args.payload).length === 0 &&
-              args.payload.constructor === Object) ||
+            (Object.keys(args.payload).length === 0 && args.payload.constructor === Object) ||
             args.payload === []
           ) {
             this.profilingPanel.payload = ProfilingConstants.NO_RESULTS;
@@ -250,12 +256,9 @@ export default class Store {
               opsArray.push(op);
             }
             this.profilingPanel.payload = opsArray;
-            this.profilingPanel.highWaterMarkProfile = _.maxBy(
-              this.profilingPanel.payload,
-              op => {
-                return op.us;
-              }
-            );
+            this.profilingPanel.highWaterMarkProfile = _.maxBy(this.profilingPanel.payload, op => {
+              return op.us;
+            });
           }
         } else if (args.command === 'mw_updateDatabaseConfiguration') {
           console.log('update database configuration res:', args);
@@ -268,9 +271,7 @@ export default class Store {
               return db;
             });
             this.api.showToaster({
-              message: globalString(
-                'performance/profiling/configuration/configure-success'
-              ),
+              message: globalString('performance/profiling/configuration/configure-success'),
               className: 'success',
               iconName: 'pt-icon-thumbs-down'
             });

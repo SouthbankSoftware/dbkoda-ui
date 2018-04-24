@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-16T17:02:17+10:00
+ * @Last modified time: 2018-04-24T15:42:49+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,8 +24,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import * as React from 'react';
+import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import SplitPane from 'react-split-pane';
 import autobind from 'autobind-decorator';
@@ -45,8 +45,6 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   constructor() {
     super();
     this.state = {
-      selectedConnection: null,
-      selectedOperation: null,
       bottomSplitPos: 1000,
       topSplitPos: window.innerWidth
     };
@@ -59,34 +57,29 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   }
   @autobind
   handleResize() {
-    this.setState({topSplitPos: window.innerWidth});
+    this.setState({ topSplitPos: window.innerWidth });
   }
   @autobind
   updateBottomSplitPos(pos) {
-    this.setState({bottomSplitPos: pos});
+    this.setState({ bottomSplitPos: pos });
+  }
+  @action.bound
+  onConnectionSelection(selectedConnection) {
+    this.props.store.topConnectionsPanel.selectedConnection = selectedConnection;
+    this.props.store.topConnectionsPanel.operations = selectedConnection.ops;
+  }
+  @action.bound
+  onOperationSelection(selectedOperation) {
+    this.props.store.topConnectionsPanel.selectedOperation = selectedOperation;
   }
   render() {
-    const { store, showPerformancePanel } = this.props;
-    const { topConnectionsPanel } = store;
-    const connections = topConnectionsPanel.payload;
-    const highWaterMarkCon = topConnectionsPanel.highWaterMarkConnection;
-    const { selectedConnection, selectedOperation } = this.state;
-    let operations = null;
-    if (selectedConnection && selectedConnection.ops) {
-      operations = selectedConnection.ops;
-    }
+    const { showPerformancePanel } = this.props;
 
     const splitPane2Style = {
       display: 'flex',
       flexDirection: 'column'
     };
-    const onConnectionSelection = (selectedConnection) => {
-      this.setState({selectedConnection});
-    };
 
-    const onOperationSelection = (selectedOperation) => {
-      this.setState({selectedOperation});
-    };
     return (
       <div>
         <SplitPane
@@ -98,7 +91,11 @@ export default class TopConnectionsPanel extends React.Component<Props> {
           pane2Style={splitPane2Style}
         >
           <div className="connectionList">
-            <ConnectionsView connections={connections} highWaterMark={highWaterMarkCon} onSelect={onConnectionSelection} showPerformancePanel={showPerformancePanel} tableWidth={this.state.topSplitPos} />
+            <ConnectionsView
+              onSelect={this.onConnectionSelection}
+              showPerformancePanel={showPerformancePanel}
+              tableWidth={this.state.topSplitPos}
+            />
           </div>
           <SplitPane
             className="BottomSplitPane"
@@ -108,8 +105,15 @@ export default class TopConnectionsPanel extends React.Component<Props> {
             minSize={700}
             maxSize={1200}
           >
-            <div className="operationList"><OperationsView operations={operations} onSelect={onOperationSelection} tableWidth={this.state.bottomSplitPos} /></div>
-            <div className="operationDetails"><OperationDetails operation={selectedOperation} /></div>
+            <div className="operationList">
+              <OperationsView
+                onSelect={this.onOperationSelection}
+                tableWidth={this.state.bottomSplitPos}
+              />
+            </div>
+            <div className="operationDetails">
+              <OperationDetails />
+            </div>
           </SplitPane>
         </SplitPane>
       </div>
