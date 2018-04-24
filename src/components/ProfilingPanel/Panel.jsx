@@ -87,7 +87,6 @@ export default class ProfilingPanel extends React.Component<Props> {
     const ops = this.props.store.profilingPanel.payload;
     const { highWaterMarkProfile } = profilingPanel;
     let renderTable = true;
-<<<<<<< HEAD
     let errorTitle = globalString(
       'performance/profiling/results/noResultsFoundTitle'
     );
@@ -101,14 +100,6 @@ export default class ProfilingPanel extends React.Component<Props> {
       errorBody = globalString(
         'performance/profiling/results/noDatabaseSelectedBody'
       );
-=======
-    if (
-      !selectedDatabase &&
-      profilingPanel.enabledDatabases &&
-      profilingPanel.enabledDatabases[0]
-    ) {
-      this.state.selectedDatabase = profilingPanel.enabledDatabases[0].name;
->>>>>>> a148df2513236f67b484075a602d948deb2519ce
     }
     if (ops === ProfilingConstants.NO_RESULTS || !ops || !selectedDatabase) {
       renderTable = false;
@@ -181,14 +172,7 @@ export default class ProfilingPanel extends React.Component<Props> {
                 tableWidth={this.state.topSplitPos}
               />
             ) : (
-<<<<<<< HEAD
               <ErrorView title={errorTitle} error={errorBody} />
-=======
-              <ErrorView
-                title={globalString('performance/profiling/results/noResultsFoundTitle')}
-                error={globalString('performance/profiling/results/noResultsFoundBody')}
-              />
->>>>>>> a148df2513236f67b484075a602d948deb2519ce
             )}
           </div>
         </div>
