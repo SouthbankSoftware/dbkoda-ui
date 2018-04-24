@@ -11,8 +11,8 @@
   background-color: $sideNavBackground;
 
   .menuItem {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
 
     .pt-popover-wrapper,
     .pt-popover-target {
@@ -28,11 +28,11 @@
       border-radius: 0;
       // opacity: 0.5;
     }
-    
+
     .dbKodaSVG {
-        width: 30px;
-        height: 30px;
-        transform: translate(-50%, -50%);
+      width: 30px;
+      height: 30px;
+      transform: translate(-50%, -50%);
     }
   }
   .menuItem.selected .pt-button {

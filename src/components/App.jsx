@@ -145,37 +145,41 @@ class App extends React.Component {
         <SplitPane
           className="RootSplitPane"
           split="vertical"
-          defaultSize={80}
-          minSize={80}
-          maxSize={80}
+          defaultSize={60}
+          minSize={60}
+          maxSize={60}
         >
           <SideNav />
           <div className="fullPanel">
-            {store.drawer && store.drawer.activeNavPane == NavPanes.PROFILE &&
-            <ProfileManager />}
-            {!store.drawer || store.drawer.activeNavPane == NavPanes.EDITOR &&
-            <SplitPane
-              className="EditorSplitPane"
-              split="vertical"
-              defaultSize={defaultOverallSplitPos}
-              onDragFinished={this.updateOverallSplitPos}
-              minSize={350}
-              maxSize={750}
-            >
-              <SidebarPanel />
-              <SplitPane
-                className="RightSplitPane"
-                split="horizontal"
-                defaultSize={defaultRightSplitPos}
-                onDragFinished={this.updateRightSplitPos}
-                minSize={200}
-                maxSize={1000}
-                pane2Style={splitPane2Style}
-              >
-                <EditorPanel />
-                <OutputPanel />
-              </SplitPane>
-            </SplitPane>}
+            {store.drawer &&
+              store.drawer.activeNavPane == NavPanes.PROFILE && (
+                <ProfileManager />
+              )}
+            {!store.drawer ||
+              (store.drawer.activeNavPane == NavPanes.EDITOR && (
+                <SplitPane
+                  className="EditorSplitPane"
+                  split="vertical"
+                  defaultSize={defaultOverallSplitPos}
+                  onDragFinished={this.updateOverallSplitPos}
+                  minSize={350}
+                  maxSize={750}
+                >
+                  <SidebarPanel />
+                  <SplitPane
+                    className="RightSplitPane"
+                    split="horizontal"
+                    defaultSize={defaultRightSplitPos}
+                    onDragFinished={this.updateRightSplitPos}
+                    minSize={200}
+                    maxSize={1000}
+                    pane2Style={splitPane2Style}
+                  >
+                    <EditorPanel />
+                    <OutputPanel />
+                  </SplitPane>
+                </SplitPane>
+              ))}
           </div>
         </SplitPane>
         <StatusPanel className="statusPanel" />
