@@ -750,7 +750,16 @@ export default class PerformancePanelApi {
       } else if (args.command === 'pw_getProfilingData') {
         this.api.getProfilingData(args.profileId, args.database.name);
       } else if (args.command === 'pw_setProfilingDatabseConfiguration') {
-        this.api.setProfilingDatabseConfiguration(args.profileId, args.configs);
+        this.api.setProfilingDatabseConfiguration(
+          args.profileId,
+          args.configs,
+          dbConfigs =>
+            this.sendMsgToPerformanceWindow({
+              command: 'mw_updateDatabaseConfiguration',
+              profileId: args.profileId,
+              dbConfigs,
+            })
+        );
       }
     }
   }
@@ -959,12 +968,21 @@ export default class PerformancePanelApi {
     });
   };
 
-  setProfilingDatabseConfiguration = (profileId: UUID, configs: Object) => {
+  setProfilingDatabseConfiguration = (
+    profileId: UUID,
+    configs: Object,
+    cb: *
+  ) => {
     console.log('send profile configuration ', profileId, configs);
     featherClient()
       .service('profile')
       .patch(profileId, configs)
-      .then(res => console.log('set profile configuration ', res))
+      .then(res => {
+        console.log('set profile configuration ', res);
+        if (cb) {
+          cb(res);
+        }
+      })
       .catch(err => {
         this._handleError(profileId, err);
       });

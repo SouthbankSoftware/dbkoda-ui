@@ -26,6 +26,7 @@ import Button from './Button';
 import DatabaseList from './DatabaseList';
 import layouts from './Layout';
 import Profile from './Profile';
+import ProfileTipsComponent from './ProfileTipsComponent';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 export default class ProfileConfiguration extends React.Component {
@@ -130,7 +131,9 @@ export default class ProfileConfiguration extends React.Component {
       }
       if (layout.i === 'profile-tips') {
         return (
-          <div key={layout.i} className={layout.className} data-grid={layout} />
+          <div key={layout.i} className={layout.className} data-grid={layout}>
+            <ProfileTipsComponent />
+          </div>
         );
       }
       return (

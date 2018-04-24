@@ -17,33 +17,30 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {inject, observer} from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import React from 'react';
-import {autorun, action} from 'mobx';
+import { autorun, action } from 'mobx';
 
 import ProfileConfiguration from '../components/ProfileConfigurationComponent';
 
-@inject(({store, api}) => {
+@inject(({ store, api }) => {
   return {
     store,
-    api,
+    api
   };
 })
 @observer
 class ProfileConfigurationContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {databases: []};
+    this.state = { databases: [] };
   }
 
   componentDidMount() {
     this._autorunDisposer = autorun(() => {
-      const {profilingPanel} = this.props.store;
+      const { profilingPanel } = this.props.store;
       if (profilingPanel.databases && profilingPanel.databases.length > 0) {
-        profilingPanel.databases.forEach(db => {
-          db.selected = false;
-        });
-        this.setState({databases: profilingPanel.databases});
+        this.setState({ databases: profilingPanel.databases });
       }
     });
   }
@@ -55,7 +52,7 @@ class ProfileConfigurationContainer extends React.Component {
   @action.bound
   selectDatabase = db => {
     db.selected = !db.selected;
-    this.setState({databases: this.state.databases});
+    this.setState({ databases: this.state.databases });
   };
 
   commitProfileConfiguration = config => {

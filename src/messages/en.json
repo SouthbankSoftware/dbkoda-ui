@@ -85,6 +85,7 @@
             "Changing this value will resize system profile in all selected databases and clear all existing data.",
           "apply": "Apply",
           "cancel": "Cancel",
+          "configure-success": "Profile configuration applied.",
           "tooltip": {
             "level0":
               "The profiler is off and does not collect any data. This is the default profiler level.",
@@ -94,6 +95,11 @@
             "collection-size":
               "The system.profile collection is a capped collection with a default size of 1 megabyte."
           }
+        },
+        "results": {
+          "noResultsFoundTitle": "No Results",
+          "noResultsFoundBody":
+            "We were unable to find any profiling data for that database."
         }
       }
     },

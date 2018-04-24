@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-20T17:44:24+10:00
+ * @Last modified time: 2018-04-23T13:45:14+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,6 +33,7 @@ const MAX_URL_ALIAS_LENGTH = 25;
 const MAX_HOSTNAME_ALIAS_LENGTH = 20;
 const SubformCategory = {
   BASIC: 'basic',
+  AUTH: 'authentication',
   CLUSTER: 'cluster',
   SSH: 'ssh'
 };
@@ -118,7 +119,7 @@ export class ConnectionForm extends JsonForm {
     const isUrlMode = field.$('urlRadio').value;
     if (!isUrlMode) {
       let connectionUrl = StaticApi.mongoProtocol + field.$('host').value + ':' + field.$('port').value;
-      const conDB = field.$('authenticationDatabase').value;
+      const conDB = field.$('authenticationDatabase', SubformCategory.AUTH).value;
       connectionUrl += '/';
       connectionUrl += ((conDB === '') ? 'admin' : conDB);
       urlField.value = connectionUrl;
@@ -130,7 +131,6 @@ export class ConnectionForm extends JsonForm {
     const urlField = field.$('urlCluster');
     const isUrlMode = field.$('urlRadioCluster').value;
     if (!isUrlMode) {
-      console.log(field);
       let connectionUrl = StaticApi.mongoProtocol;
       if (field.$('hostsList').value === '') {
         connectionUrl += (field.$('host', SubformCategory.BASIC).value + ':' + field.$('port', SubformCategory.BASIC).value);
@@ -139,7 +139,7 @@ export class ConnectionForm extends JsonForm {
       }
       connectionUrl += '/';
 
-      const conDB = field.$('authenticationDatabase', SubformCategory.BASIC).value;
+      const conDB = field.$('authenticationDatabase', SubformCategory.AUTH).value;
       connectionUrl += ((conDB === '') ? 'admin' : conDB);
 
       const addQueryParam = (key, value) => {
@@ -186,9 +186,9 @@ export class ConnectionForm extends JsonForm {
       if (!isUrlMode) {
         if (
           field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH &&
-          field.$('username').value.length > 0
+          field.$('username', SubformCategory.AUTH).value.length > 0
         ) {
-          aliasField.value = field.$('username').value +
+          aliasField.value = field.$('username', SubformCategory.AUTH).value +
           '@' +
           field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
           ':' +
@@ -204,9 +204,9 @@ export class ConnectionForm extends JsonForm {
             field.$('port').value +
             ' - ' +
             (this.api.getProfiles().size + 1);
-        } else if (field.$('username').value.length > 0) {
+        } else if (field.$('username', SubformCategory.AUTH).value.length > 0) {
           aliasField.value =
-            field.$('username').value +
+            field.$('username', SubformCategory.AUTH).value +
             '@' +
             field.$('host').value +
             ':' +
@@ -222,8 +222,7 @@ export class ConnectionForm extends JsonForm {
             (this.api.getProfiles().size + 1);
         }
       } else {
-        console.log(field);
-        if (field.$('url').value.length > MAX_URL_ALIAS_LENGTH) {
+        if (field.$('url').value.length > MAX_URL_ALIAS_LENGTH) { //eslint-disable-line
           if (field.$('url').value.split('//').length > 1) {
             aliasField.value = field
               .$('url')
@@ -272,9 +271,9 @@ export class ConnectionForm extends JsonForm {
       if (formData.hasOwnProperty(subform)) {
         formData[subform].fields.forEach((field) => {
           if (field.value !== undefined && field.value !== null) {
-            if (!field.hasOwnProperty('disabled') || (field.hasOwnProperty('disabled') && field.disabled === false)) {
+            // if (!field.hasOwnProperty('disabled') || (field.hasOwnProperty('disabled') && field.disabled === false)) {
               profile[field.name] = field.value;
-            }
+            // }
           }
         });
       }

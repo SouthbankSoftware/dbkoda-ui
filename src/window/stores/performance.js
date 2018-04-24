@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-04-17T16:32:56+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-04-24T14:26:33+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,7 +28,7 @@ import _ from 'lodash';
 import { observable, action } from 'mobx';
 import { restore } from 'dumpenvy';
 import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
-import { ProfilingConstants } from '#/common/constants';
+import { ProfilingConstants } from '#/common/Constants';
 import { handleNewData, attachToMobx } from '~/api/PerformancePanel';
 
 const electron = window.require('electron');
@@ -39,10 +39,8 @@ const Globalize = require('globalize'); // doesn't work well with import
 global.Globalize = Globalize;
 const { language, region } = Globalize.locale().attributes;
 global.locale = `${language}-${region}`;
-global.globalString = (path, ...params) =>
-  Globalize.messageFormatter(path)(...params);
-global.globalNumber = (value, config) =>
-  Globalize.numberFormatter(config)(value);
+global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...params);
+global.globalNumber = (value, config) => Globalize.numberFormatter(config)(value);
 
 global.config = null;
 
@@ -104,12 +102,20 @@ class PerformanceWindowApi {
     this.sendCommandToMainProcess('pw_getProfilingData', { database });
   };
 
+  @action.bound
   setProfilingDatabaseConfiguration = configs => {
     console.log('send profiling database configuration ', configs);
     this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', {
       configs
     });
   };
+
+  @action.bound
+  showToaster(toasterObj) {
+    if (this.store && this.store.toasterCallback) {
+      this.store.toasterCallback(toasterObj);
+    }
+  }
 }
 
 export default class Store {
@@ -170,10 +176,7 @@ export default class Store {
             postDeserializer
           });
           attachToMobx(this.performancePanel);
-        } else if (
-          args.command === 'mw_updateData' &&
-          this.performancePanel !== null
-        ) {
+        } else if (args.command === 'mw_updateData' && this.performancePanel !== null) {
           const payload = args.dataObject;
           handleNewData(payload, this.performancePanel);
         } else if (args.command === 'mw_toaster') {
@@ -218,8 +221,7 @@ export default class Store {
         } else if (args.command === 'mw_profilingData') {
           // Check if empty result set
           if (
-            (Object.keys(args.payload).length === 0 &&
-              args.payload.constructor === Object) ||
+            (Object.keys(args.payload).length === 0 && args.payload.constructor === Object) ||
             args.payload === []
           ) {
             this.profilingPanel.payload = ProfilingConstants.NO_RESULTS;
@@ -244,12 +246,26 @@ export default class Store {
               });
             }
             this.profilingPanel.payload = opsArray;
-            this.profilingPanel.highWaterMarkProfile = _.maxBy(
-              this.profilingPanel.payload,
-              op => {
-                return op.us;
+            this.profilingPanel.highWaterMarkProfile = _.maxBy(this.profilingPanel.payload, op => {
+              return op.us;
+            });
+          }
+        } else if (args.command === 'mw_updateDatabaseConfiguration') {
+          console.log('update database configuration res:', args);
+          if (this.profilingPanel.databases && args && args.dbConfigs) {
+            const newDbs = this.profilingPanel.databases.map(db => {
+              const find = args.dbConfigs.find(o => o.name === db.name);
+              if (find) {
+                db.value = find;
               }
-            );
+              return db;
+            });
+            this.api.showToaster({
+              message: globalString('performance/profiling/configuration/configure-success'),
+              className: 'success',
+              iconName: 'pt-icon-thumbs-down'
+            });
+            this.profilingPanel.databases = newDbs;
           }
         }
       }
