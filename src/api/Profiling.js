@@ -125,6 +125,7 @@ export default class Profiling {
         }
       })
       .then(res => {
+        console.log(res);
         Broker.emit(EventType.PROFILING_DATA, {
           profileId,
           payload: res

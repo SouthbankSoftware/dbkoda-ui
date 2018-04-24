@@ -94,10 +94,21 @@ export default class ProfilingPanel extends React.Component<Props> {
     const ops = this.props.store.profilingPanel.payload;
     const { highWaterMarkProfile } = profilingPanel;
     let renderTable = true;
-    if (!selectedDatabase && profilingPanel.enabledDatabases && profilingPanel.enabledDatabases[0]) {
-      this.state.selectedDatabase = profilingPanel.enabledDatabases[0].name;
+    let errorTitle = globalString(
+      'performance/profiling/results/noResultsFoundTitle'
+    );
+    let errorBody = globalString(
+      'performance/profiling/results/noResultsFoundTitle'
+    );
+    if (!selectedDatabase) {
+      errorTitle = globalString(
+        'performance/profiling/results/noDatabaseSelectedTitle'
+      );
+      errorBody = globalString(
+        'performance/profiling/results/noDatabaseSelectedBody'
+      );
     }
-    if (ops === ProfilingConstants.NO_RESULTS) {
+    if (ops === ProfilingConstants.NO_RESULTS || !ops || !selectedDatabase) {
       renderTable = false;
     }
 
@@ -153,7 +164,7 @@ export default class ProfilingPanel extends React.Component<Props> {
               >
                 <Button
                   className="select-button"
-                  text={this.state.selectedDatabase || 'Select Database'}
+                  text={this.state.selectedDatabase || 'Select DB'}
                   rightIcon="double-caret-vertical"
                 />
               </Select>
@@ -168,24 +179,15 @@ export default class ProfilingPanel extends React.Component<Props> {
                 tableWidth={this.state.topSplitPos}
               />
             ) : (
-              <ErrorView
-                title={globalString(
-                  'performance/profiling/results/noResultsFoundTitle'
-                )}
-                error={globalString(
-                  'performance/profiling/results/noResultsFoundBody'
-                )}
-              />
+              <ErrorView title={errorTitle} error={errorBody} />
             )}
           </div>
         </div>
         <div className="detailsWrapper">
-          <div className="operationDetails">
+          <div className="exampleWrapper">
             <OperationDetails operation={selectedOperation} />
           </div>
-          <div className="explainView">
-            <ExplainView operation={selectedOperation} />
-          </div>
+          <ExplainView operation={selectedOperation} />
         </div>
       </div>
     );

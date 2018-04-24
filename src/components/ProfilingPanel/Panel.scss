@@ -102,8 +102,16 @@
         padding-left: 2.5%;
         padding-right: 2.5%;
 
-        .operationDetails {
-            flex-grow: 1;
+        .exampleWrapper {
+            .exampleToolbar {
+                height: 30px;
+
+                .exampleGroup {
+                    height: 100%;
+                }
+
+                .exampleTitle {}
+            }
 
             .editorView {
                 height: 300px;
@@ -112,6 +120,14 @@
 
         .explainView {
             flex-grow: 1;
+
+            .explainToolbar {
+                .explainTitle {}
+            }
+
+            .explainBody {
+                color: #bfbec0;
+            }
         }
     }
 
@@ -119,7 +135,7 @@
         font-weight: lighter;
         font-size: small;
         color: $connectionButtonFontColour;
-        width: 8em !important;
+        width: 12em !important;
         border-radius: 5px;
         background-image: unset;
         background-color: #313131;

@@ -38,7 +38,7 @@ import {
 import TextSortableColumn from '../Components/TextSortableColumn';
 import ProgressBarColumn from '../Components/ProgressBarColumn';
 
-const columnsWidthsPercent = [15, 20, 10, 25, 5, 5, 15];
+const columnsWidthsPercent = [15, 12, 12, 30, 6, 10, 10];
 
 @observer
 export default class ProfilingView extends React.Component<Props> {
@@ -50,14 +50,14 @@ export default class ProfilingView extends React.Component<Props> {
     this.state = {
       lastSelectRegion: null,
       sortedIndexMap: [],
-      data: null,
+      data: this.props.ops || null,
       highWaterMark: null,
       columns: [
         new TextSortableColumn('Id', 0),
         new TextSortableColumn('ns', 1),
         new TextSortableColumn('Plan Summary', 2),
         new TextSortableColumn('Plan Stack', 3),
-        new TextSortableColumn('Count', 4),
+        new TextSortableColumn('#', 4),
         new TextSortableColumn('ms', 5),
         new ProgressBarColumn('', 'us', 6)
       ],
@@ -65,7 +65,6 @@ export default class ProfilingView extends React.Component<Props> {
     };
   }
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if (nextProps && nextProps.ops) {
       this.setState({ data: nextProps.ops });
     } else {
@@ -106,16 +105,16 @@ export default class ProfilingView extends React.Component<Props> {
         cellValue = this.state.data[rowIndex].ns;
         break;
       case 2:
-        cellValue = this.state.data[rowIndex].planSummary;
+        cellValue = this.state.data[rowIndex].plansSummary;
         break;
       case 3:
-        cellValue = this.state.data[rowIndex].planStack;
+        cellValue = this.state.data[rowIndex].planQuery.join(', ');
         break;
       case 4:
         cellValue = this.state.data[rowIndex].count;
         break;
       case 5:
-        cellValue = this.state.data[rowIndex].ms;
+        cellValue = this.state.data[rowIndex].millis;
         break;
       case 6:
         cellValue = _.pick(this.state.data[rowIndex], 'us');
@@ -170,7 +169,6 @@ export default class ProfilingView extends React.Component<Props> {
 
   render() {
     const { ops } = this.props;
-    console.log(this.props);
 
     const columns = this.state.columns.map(col =>
       col.getColumn(this.getCellData, this.sortColumn)

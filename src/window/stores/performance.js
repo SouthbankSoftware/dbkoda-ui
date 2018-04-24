@@ -93,7 +93,7 @@ class PerformanceWindowApi {
 
   @action.bound
   getProfilingDataBases = () => {
-    this.store.profilingPanel.databases = [];
+    this.store.profilingPanel.enabledDatabases = [];
     this.store.profilingPanel.selectedDatabase = null;
     this.sendCommandToMainProcess('pw_getProfilingDataBases');
   };
@@ -131,7 +131,7 @@ export default class Store {
   @observable
   profilingPanel = observable.object(
     {
-      databases: [],
+      enabledDatabases: [],
       selectedDatabase: null,
       payload: null
     },
@@ -237,9 +237,11 @@ export default class Store {
             } else {
               // Transform data for ID field.
               const keys = Object.keys(args.payload);
-              const op = args.payload[keys[0]];
-              op.id = keys[0];
-              opsArray.push(op);
+              keys.forEach(key => {
+                const op = args.payload[key];
+                op.id = key;
+                opsArray.push(op);
+              });
             }
             this.profilingPanel.payload = opsArray;
             this.profilingPanel.highWaterMarkProfile = _.maxBy(
