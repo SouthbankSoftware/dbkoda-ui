@@ -51,8 +51,7 @@ export default class Toolbar extends React.Component {
           {globalString('output/editor/collapseAll')}
         </AnchorButton> */}
         <p className="docCount">
-          {globalString('output/editor/numOfDocs')}{' '}
-          <b>{this.props.totalDocs}</b>
+          {globalString('output/editor/numOfDocs')} <b>{this.props.totalDocs}</b>
         </p>
       </div>
     );

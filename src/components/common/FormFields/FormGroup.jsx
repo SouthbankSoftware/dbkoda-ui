@@ -38,29 +38,17 @@ export default observer(({ field }) => {
   const memberFields = [];
   field.map(member => {
     if (member.type == 'Text') {
-      memberFields.push(
-        <TextField key={member.id + member.key} field={member} />
-      );
+      memberFields.push(<TextField key={member.id + member.key} field={member} />);
     } else if (member.type == 'Select') {
-      memberFields.push(
-        <SelectField key={member.id + member.key} field={member} />
-      );
+      memberFields.push(<SelectField key={member.id + member.key} field={member} />);
     } else if (member.type == 'CodeMirror') {
-      memberFields.push(
-        <CodeMirrorField key={member.id + member.key} field={member} />
-      );
+      memberFields.push(<CodeMirrorField key={member.id + member.key} field={member} />);
     } else if (member.type == 'Numeric') {
-      memberFields.push(
-        <NumericField key={member.id + member.key} field={member} />
-      );
+      memberFields.push(<NumericField key={member.id + member.key} field={member} />);
     } else if (member.type == 'Boolean') {
-      memberFields.push(
-        <BooleanField key={member.id + member.key} field={member} />
-      );
+      memberFields.push(<BooleanField key={member.id + member.key} field={member} />);
     } else if (member.type == 'Combo') {
-      memberFields.push(
-        <ComboField key={member.id + member.key} field={member} />
-      );
+      memberFields.push(<ComboField key={member.id + member.key} field={member} />);
     }
   });
   return (

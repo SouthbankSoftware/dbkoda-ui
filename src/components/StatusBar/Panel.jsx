@@ -142,9 +142,7 @@ export default class Panel extends React.Component {
 
   @action.bound
   onClickBugForum() {
-    const subject = globalString(
-      'status_bar/support_bundle/forum/default_subject'
-    );
+    const subject = globalString('status_bar/support_bundle/forum/default_subject');
     const url = 'https://dbkoda.useresponse.com/topic/add?title=' + subject;
     if (IS_ELECTRON) {
       window.require('electron').shell.openExternal(url);
@@ -153,9 +151,7 @@ export default class Panel extends React.Component {
 
   @action.bound
   onClickBugEmail() {
-    const subject = globalString(
-      'status_bar/support_bundle/email/default_subject'
-    );
+    const subject = globalString('status_bar/support_bundle/email/default_subject');
     const body = globalString('status_bar/support_bundle/email/default_body');
     const mailToString =
       'mailto:support@southbanksoftware.com?subject=' +
@@ -220,10 +216,7 @@ export default class Panel extends React.Component {
             if (!filePath) {
               filePath = '/Users/mike/.dbKoda/';
               console.error('Did not recieve a file path back from controller');
-              logToMain(
-                'error',
-                'Did not recieve a file path back from controller'
-              );
+              logToMain('error', 'Did not recieve a file path back from controller');
             }
             window.require('electron').shell.showItemInFolder(filePath);
           }
@@ -234,11 +227,7 @@ export default class Panel extends React.Component {
           this.setState({ isLodgeBugPending: false });
           this.setState({ isSupportBundleReady: false });
           NewToaster.show({
-            message: (
-              <span
-                dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }}
-              />
-            ),
+            message: <span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }} />,
             className: 'danger',
             icon: 'thumbs-up'
           });
@@ -316,29 +305,19 @@ export default class Panel extends React.Component {
           {this.state.isSupportBundleReady ? (
             <div className="supportBundleFinished">
               <p className="supportBundleFinishedText">
-                {globalString(
-                  'status_bar/support_bundle/finished_text_default_one'
-                )}
+                {globalString('status_bar/support_bundle/finished_text_default_one')}
               </p>
               <p className="supportBundleFinishedText">
-                {globalString(
-                  'status_bar/support_bundle/finished_text_default_two'
-                )}
+                {globalString('status_bar/support_bundle/finished_text_default_two')}
                 <br />
-                {globalString(
-                  'status_bar/support_bundle/finished_text_default_three'
-                )}
+                {globalString('status_bar/support_bundle/finished_text_default_three')}
               </p>
               <p className="supportBundleFinishedText">
-                {globalString(
-                  'status_bar/support_bundle/finished_text_default_four'
-                )}
+                {globalString('status_bar/support_bundle/finished_text_default_four')}
                 <b className="directoryFAQLink" onClick={this.openDirectoryFAQ}>
                   {globalString('status_bar/support_bundle/directory_faq_link')}
                 </b>
-                {globalString(
-                  'status_bar/support_bundle/finished_text_default_five'
-                )}
+                {globalString('status_bar/support_bundle/finished_text_default_five')}
               </p>
               <AnchorButton
                 className="forumButton"
@@ -385,31 +364,19 @@ export default class Panel extends React.Component {
           />
           <div className="npsButtons">
             <div
-              className={
-                this.state.feedbackType === FeedbackTypes.NEGATIVE
-                  ? 'active'
-                  : 'inactive'
-              }
+              className={this.state.feedbackType === FeedbackTypes.NEGATIVE ? 'active' : 'inactive'}
               onClick={this.onClickFeedbackDetractor}
             >
               <SadIcon width={20} height={20} />
             </div>
             <div
-              className={
-                this.state.feedbackType === FeedbackTypes.NEUTRAL
-                  ? 'active'
-                  : 'inactive'
-              }
+              className={this.state.feedbackType === FeedbackTypes.NEUTRAL ? 'active' : 'inactive'}
               onClick={this.onClickFeedbackPassive}
             >
               <NeutralIcon width={20} height={20} />
             </div>
             <div
-              className={
-                this.state.feedbackType === FeedbackTypes.POSITIVE
-                  ? 'active'
-                  : 'inactive'
-              }
+              className={this.state.feedbackType === FeedbackTypes.POSITIVE ? 'active' : 'inactive'}
               onClick={this.onClickFeedbackAdvocate}
             >
               <HappyIcon width={20} height={20} />
@@ -421,9 +388,7 @@ export default class Panel extends React.Component {
   }
 
   render() {
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
 
     let updateBtnClassNames = 'updateButton';
     if (this.state.isUpdateAvailable || this.state.isUpdateDownloaded) {
@@ -433,16 +398,11 @@ export default class Panel extends React.Component {
       <div className="statusPanel">
         {this.renderAlerts()}
         <div className="float_left">
-          <span className="productVersion">
-            {'dbKoda: v' + this.props.store.version}
-          </span>
+          <span className="productVersion">{'dbKoda: v' + this.props.store.version}</span>
           {(this.state.isUpdateAvailable ||
             this.state.isUpdateDownloaded ||
             this.state.isUpdateDownloading) && (
-            <div
-              className={updateBtnClassNames}
-              onClick={this.onClickUpdateBtn}
-            >
+            <div className={updateBtnClassNames} onClick={this.onClickUpdateBtn}>
               <span>{this.state.updateStatusMsg}</span>
             </div>
           )}
@@ -453,9 +413,8 @@ export default class Panel extends React.Component {
                   <p>{this.props.store.treePanel.drillStatusMsg}</p>
                   {this.props.store.treePanel.drillDownloadProgress && (
                     <p style={{ textAlign: 'center' }}>
-                      {Math.round(
-                        this.props.store.treePanel.drillDownloadProgress * 100
-                      ) + '% complete'}
+                      {Math.round(this.props.store.treePanel.drillDownloadProgress * 100) +
+                        '% complete'}
                     </p>
                   )}
                 </div>
@@ -474,23 +433,15 @@ export default class Panel extends React.Component {
             editor &&
             this.props.store.editors.get(editor.id).lastExecutionTime && (
               <div className="executionTime">
-                <span className="label">
-                  {globalString('editor/toolbar/executionTimeLabel')}
-                </span>
+                <span className="label">{globalString('editor/toolbar/executionTimeLabel')}</span>
                 <span className="value">
                   {
-                    convertUnits(
-                      this.props.store.editors.get(editor.id).lastExecutionTime,
-                      'ms',
-                      3
-                    ).value
+                    convertUnits(this.props.store.editors.get(editor.id).lastExecutionTime, 'ms', 3)
+                      .value
                   }
                   {
-                    convertUnits(
-                      this.props.store.editors.get(editor.id).lastExecutionTime,
-                      'ms',
-                      3
-                    ).unit
+                    convertUnits(this.props.store.editors.get(editor.id).lastExecutionTime, 'ms', 3)
+                      .unit
                   }
                 </span>
               </div>

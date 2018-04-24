@@ -29,11 +29,11 @@ import * as common from './Common.js';
 
 export const DropUser = {
   // Prefill function for alter user
-  dbkoda_DropUserPreFill: (params) => {
+  dbkoda_DropUserPreFill: params => {
     const userId = params.UserId;
     return `db.getSiblingDB("admin").system.users.find({"_id": "${userId}"}).toArray()`;
   },
-  dbkoda_DropUserPreFill_parse: (userDocs) => {
+  dbkoda_DropUserPreFill_parse: userDocs => {
     if (userDocs.length == 0) {
       throw new Error('No user found for Alter User');
     } else if (userDocs.length > 1) {
@@ -46,10 +46,10 @@ export const DropUser = {
     outputDoc.UserName = userDoc.user;
     // outputDoc.CustomData = userDoc.customData;
     outputDoc.Roles = [];
-    userDoc.roles.forEach((role) => {
+    userDoc.roles.forEach(role => {
       outputDoc.Roles.push({
         Database: role.db,
-        Role: role.role,
+        Role: role.role
       });
     });
 
@@ -58,5 +58,5 @@ export const DropUser = {
   dbkoda_listdb: common.dbkoda_listdb,
   dbkoda_listdb_parse: common.dbkoda_listdb_parse,
   dbkoda_listcollections: common.dbkoda_listcollections,
-  dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
+  dbkoda_listcollections_parse: common.dbkoda_listcollections_parse
 };

@@ -36,7 +36,7 @@ import './style.scss';
  *  enhancedJson - a JSON object to be represented in the output tab
  */
 @inject(allStores => ({
-  api: allStores.api,
+  api: allStores.api
 }))
 export default class Panel extends React.Component {
   constructor(props) {
@@ -50,45 +50,25 @@ export default class Panel extends React.Component {
   getNextDoc() {
     const lineNumber = this.props.enhancedJson.lastLine + 1;
     const lines = { start: 0, end: 0, status: '' };
-    const currentJson = this.props.getDocumentAtLine(
-      this.props.outputId,
-      lineNumber,
-      1,
-      lines,
-    );
+    const currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber, 1, lines);
     if (lines.status === 'Invalid') {
       this.setState({ moreNext: false });
       return;
     }
     this.setState({ morePrevious: true, moreNext: true });
-    this.props.api.initJsonView(
-      currentJson,
-      this.props.outputId,
-      'enhancedJson',
-      lines,
-    );
+    this.props.api.initJsonView(currentJson, this.props.outputId, 'enhancedJson', lines);
   }
 
   getPreviousDoc() {
     const lineNumber = this.props.enhancedJson.firstLine - 1;
     const lines = { start: 0, end: 0, status: '' };
-    const currentJson = this.props.getDocumentAtLine(
-      this.props.outputId,
-      lineNumber,
-      -1,
-      lines,
-    );
+    const currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber, -1, lines);
     if (lines.status === 'Invalid') {
       this.setState({ morePrevious: false });
       return;
     }
     this.setState({ morePrevious: true, moreNext: true });
-    this.props.api.initJsonView(
-      currentJson,
-      this.props.outputId,
-      'enhancedJson',
-      lines,
-    );
+    this.props.api.initJsonView(currentJson, this.props.outputId, 'enhancedJson', lines);
   }
 
   render() {
@@ -124,52 +104,28 @@ export default class Panel extends React.Component {
             <div className="pt-navbar-heading">Expand </div>
             <button
               type="button"
-              className={
-                this.state.collapseDepth === 1 ? (
-                  'pt-button active'
-                ) : (
-                  'pt-button'
-                )
-              }
+              className={this.state.collapseDepth === 1 ? 'pt-button active' : 'pt-button'}
               onClick={() => this.setState({ collapseDepth: 1 })}
             >
               1
             </button>
             <button
               type="button"
-              className={
-                this.state.collapseDepth === 2 ? (
-                  'pt-button active'
-                ) : (
-                  'pt-button'
-                )
-              }
+              className={this.state.collapseDepth === 2 ? 'pt-button active' : 'pt-button'}
               onClick={() => this.setState({ collapseDepth: 2 })}
             >
               2
             </button>
             <button
               type="button"
-              className={
-                this.state.collapseDepth === 3 ? (
-                  'pt-button active'
-                ) : (
-                  'pt-button'
-                )
-              }
+              className={this.state.collapseDepth === 3 ? 'pt-button active' : 'pt-button'}
               onClick={() => this.setState({ collapseDepth: 3 })}
             >
               3
             </button>
             <button
               type="button"
-              className={
-                this.state.collapseDepth === false ? (
-                  'pt-button active'
-                ) : (
-                  'pt-button'
-                )
-              }
+              className={this.state.collapseDepth === false ? 'pt-button active' : 'pt-button'}
               onClick={() => this.setState({ collapseDepth: false })}
             >
               All
@@ -194,7 +150,7 @@ export default class Panel extends React.Component {
             base0C: '#575a6a',
             base0D: '#535253',
             base0E: '#535253',
-            base0F: 'rgb(1, 139, 147)',
+            base0F: 'rgb(1, 139, 147)'
           }}
           indentWidth={2}
           collapsed={this.state.collapseDepth}

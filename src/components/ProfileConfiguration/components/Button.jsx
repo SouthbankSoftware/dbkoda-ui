@@ -18,10 +18,10 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import {Button, Tooltip, Intent, Position} from '@blueprintjs/core';
+import { Button, Tooltip, Intent, Position } from '@blueprintjs/core';
 import './button.scss';
 
-export default ({onClick, text, className, toolTipClassName}) => (
+export default ({ onClick, text, className, toolTipClassName }) => (
   <Tooltip
     className={`${toolTipClassName} pt-tooltip-indicator pt-tooltip-indicator-form`}
     content=""

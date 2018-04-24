@@ -31,7 +31,7 @@ import * as common from './Common.js';
 
 export const CreateIndex = {
   // Prefill function for alter user
-  dbkoda_CreateIndexPreFill: (params) => {
+  dbkoda_CreateIndexPreFill: params => {
     const data = {};
     data.Database = params.Database;
     data.CollectionName = params.CollectionName;
@@ -45,7 +45,7 @@ export const CreateIndex = {
   dbkoda_indexOptions: () => {
     return 'db';
   },
-  dbkoda_indexOptions_parse: (res) => {
+  dbkoda_indexOptions_parse: res => {
     return [1, -1, '"hashed"', '"text"', '"2dsphere"', '"2d"'];
   },
   dbkoda_listdb: common.dbkoda_listdb,
@@ -53,5 +53,5 @@ export const CreateIndex = {
   dbkoda_listcollections: common.dbkoda_listcollections,
   dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
   dbkodaListAttributes: common.dbkodaListAttributes,
-  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
+  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse
 };

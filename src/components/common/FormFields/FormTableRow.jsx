@@ -42,52 +42,25 @@ export default observer(({ member }) => {
   member.map(col => {
     if (col.type == 'Text') {
       rowFields.push(
-        <TextField
-          key={member.id + col.key}
-          field={col}
-          showLabel={false}
-          formGroup
-        />
+        <TextField key={member.id + col.key} field={col} showLabel={false} formGroup />
       );
     } else if (col.type == 'Select') {
       rowFields.push(
-        <SelectField
-          key={member.id + col.key}
-          field={col}
-          showLabel={false}
-          formGroup
-        />
+        <SelectField key={member.id + col.key} field={col} showLabel={false} formGroup />
       );
     } else if (col.type == 'CodeMirror') {
       rowFields.push(
-        <CodeMirrorField
-          key={member.id + col.key}
-          field={col}
-          showLabel={false}
-          formGroup
-        />
+        <CodeMirrorField key={member.id + col.key} field={col} showLabel={false} formGroup />
       );
     } else if (col.type == 'Numeric') {
       rowFields.push(
-        <NumericField
-          key={member.id + col.key}
-          field={col}
-          showLabel={false}
-          formGroup
-        />
+        <NumericField key={member.id + col.key} field={col} showLabel={false} formGroup />
       );
     } else if (col.type == 'Boolean') {
-      rowFields.push(
-        <BooleanField key={member.id + col.key} field={col} formGroup />
-      );
+      rowFields.push(<BooleanField key={member.id + col.key} field={col} formGroup />);
     } else if (col.type == 'Combo') {
       rowFields.push(
-        <ComboField
-          key={member.id + col.key}
-          field={col}
-          showLabel={false}
-          formGroup
-        />
+        <ComboField key={member.id + col.key} field={col} showLabel={false} formGroup />
       );
     }
   });

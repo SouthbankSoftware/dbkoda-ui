@@ -79,10 +79,7 @@ export default class Explain extends React.Component {
   componentDidMount() {
     const { editor } = this.props;
     if (editor) {
-      Broker.on(
-        EventType.EXPLAIN_OUTPUT_AVAILABLE,
-        this.explainOutputAvailable
-      );
+      Broker.on(EventType.EXPLAIN_OUTPUT_AVAILABLE, this.explainOutputAvailable);
     }
   }
 
@@ -95,10 +92,7 @@ export default class Explain extends React.Component {
   componentWillUnmount() {
     const { editor } = this.props;
     if (editor) {
-      Broker.removeListener(
-        EventType.EXPLAIN_OUTPUT_AVAILABLE,
-        this.explainOutputAvailable
-      );
+      Broker.removeListener(EventType.EXPLAIN_OUTPUT_AVAILABLE, this.explainOutputAvailable);
     }
   }
 
@@ -130,10 +124,7 @@ export default class Explain extends React.Component {
         command: this.explainCommand,
         viewType: 0
       };
-      if (
-        explainOutputJson.output.stages &&
-        explainOutputJson.output.stages.length > 0
-      ) {
+      if (explainOutputJson.output.stages && explainOutputJson.output.stages.length > 0) {
         // this is aggregate framework explain output, convert stages to regular stage
         const aggStages = explainOutputJson.output.stages;
         const converted = { queryPlanner: { winningPlan: {} } };
@@ -154,10 +145,7 @@ export default class Explain extends React.Component {
         _.forOwn(explainOutputJson.output.shards, (value, key) => {
           if (value.stages && value.stages.length > 0) {
             _.forOwn(value.stages[0], stageValue => {
-              if (
-                stageValue.queryPlanner &&
-                stageValue.queryPlanner.winningPlan
-              ) {
+              if (stageValue.queryPlanner && stageValue.queryPlanner.winningPlan) {
                 const shardOutput = {
                   shardName: key,
                   winningPlan: stageValue.queryPlanner.winningPlan
@@ -169,10 +157,7 @@ export default class Explain extends React.Component {
           }
         });
         explainOutputJson.output = shardsOutput;
-      } else if (
-        !explainOutputJson.output ||
-        !explainOutputJson.output.queryPlanner
-      ) {
+      } else if (!explainOutputJson.output || !explainOutputJson.output.queryPlanner) {
         explainOutputJson = {
           error: globalString('explain/parseError'),
           command: this.explainCommand,
@@ -218,9 +203,7 @@ export default class Explain extends React.Component {
         icon: 'thumbs-down'
       });
     } else {
-      const editor = this.props.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      );
+      const editor = this.props.editors.get(this.props.store.editorPanel.activeEditorId);
       const lineSep = editor.doc.cm.lineSeparator() || '\n';
       const profileId = editor.profileId;
       const shell = editor.shellId;
@@ -238,8 +221,7 @@ export default class Explain extends React.Component {
           console.log(JSON.parse(res));
           this.suggestionsGenerated = true;
           this.suggestionText = JSON.parse(res);
-          let suggestionCode =
-            globalString('explain/panel/suggestIndexDescription') + lineSep;
+          let suggestionCode = globalString('explain/panel/suggestIndexDescription') + lineSep;
           // Iterate through each object in the result.
           if (typeof this.suggestionText === 'object') {
             const output = toJS(this.props.editor.explains.output);
@@ -253,34 +235,23 @@ export default class Explain extends React.Component {
               this.suggestionText.redundantIndexes.length <= 0
             ) {
               console.log('No Suggestions Found');
-              suggestionCode =
-                globalString('explain/panel/noAdditionalIndexesRequired') +
-                lineSep;
+              suggestionCode = globalString('explain/panel/noAdditionalIndexesRequired') + lineSep;
             } else {
               if (this.suggestionText.redundantIndexes.length > 0) {
                 for (const key in this.suggestionText.redundantIndexes) {
-                  if (
-                    typeof this.suggestionText.redundantIndexes[key] ===
-                    'object'
-                  ) {
+                  if (typeof this.suggestionText.redundantIndexes[key] === 'object') {
                     suggestionCode +=
                       '// The index ' +
-                      JSON.stringify(
-                        this.suggestionText.redundantIndexes[key].indexName
-                      ) +
+                      JSON.stringify(this.suggestionText.redundantIndexes[key].indexName) +
                       ' on ' +
                       lineSep +
                       '//' +
-                      JSON.stringify(
-                        this.suggestionText.redundantIndexes[key].key
-                      ) +
+                      JSON.stringify(this.suggestionText.redundantIndexes[key].key) +
                       lineSep +
                       ' // can be replaced by a new index on ' +
                       lineSep +
                       '//' +
-                      JSON.stringify(
-                        this.suggestionText.redundantIndexes[key].because
-                      );
+                      JSON.stringify(this.suggestionText.redundantIndexes[key].because);
                   }
                 }
               }
@@ -308,19 +279,14 @@ export default class Explain extends React.Component {
 
                 // Indexes to remove.
                 for (const key in this.suggestionText.redundantIndexes) {
-                  if (
-                    typeof this.suggestionText.redundantIndexes[key] ===
-                    'object'
-                  ) {
+                  if (typeof this.suggestionText.redundantIndexes[key] === 'object') {
                     suggestionCode +=
                       'db.getSiblingDB("' +
                       table +
                       '").getCollection("' +
                       collection +
                       '").dropIndex(' +
-                      JSON.stringify(
-                        this.suggestionText.redundantIndexes[key].indexName
-                      ) +
+                      JSON.stringify(this.suggestionText.redundantIndexes[key].indexName) +
                       ');' +
                       lineSep;
                   }

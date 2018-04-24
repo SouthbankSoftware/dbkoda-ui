@@ -43,13 +43,13 @@ describe('TreeState', () => {
               children: [
                 {
                   text: 'CustId_1',
-                  type: 'index',
-                },
-              ],
+                  type: 'index'
+                }
+              ]
             },
             {
               text: 'products',
-              type: 'collection',
+              type: 'collection'
             },
             {
               text: 'bstatestat',
@@ -57,23 +57,23 @@ describe('TreeState', () => {
               children: [
                 {
                   text: 'statid_1',
-                  type: 'index',
-                },
-              ],
-            },
-          ],
-        },
-      ],
+                  type: 'index'
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       text: 'Shards',
       children: [
         {
           text: 'S0',
-          type: 'shard',
-        },
-      ],
-    },
+          type: 'shard'
+        }
+      ]
+    }
   ];
   const treeState = new TreeState();
   test('should have a node array defined', () => {
@@ -93,8 +93,8 @@ describe('TreeState', () => {
 
   test('should visit each node', () => {
     const nodeCheck = {
-      noOfNodes:0,
-      increment: (n) => {
+      noOfNodes: 0,
+      increment: n => {
         if (n) {
           nodeCheck.noOfNodes += 1;
         }

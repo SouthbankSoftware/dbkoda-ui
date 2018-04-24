@@ -34,45 +34,50 @@ const firstElements = (object, N) => {
   // First Elements in array
   const output = {};
   let n = 0;
-  Object
-    .keys(object)
-    .forEach((key) => {
-      if (n++ < N) {
-        output[key] = object[key];
-      }
-    });
+  Object.keys(object).forEach(key => {
+    if (n++ < N) {
+      output[key] = object[key];
+    }
+  });
   return output;
 };
 
 export const RedundantIndex = {
   // Prefill function for alter user
-  dbkoda_DropUnecessaryPreFill: (params) => {
+  dbkoda_DropUnecessaryPreFill: params => {
     const db = params.Database;
     const collection = params.CollectionName;
     return `db.getSiblingDB("${db}").getCollection("${collection}").getIndexes()`;
   },
-  dbkoda_DropUnecessaryPreFill_parse: (existingIndexes) => {
+  dbkoda_DropUnecessaryPreFill_parse: existingIndexes => {
     console.log(existingIndexes);
     const ns = existingIndexes[0].ns;
     const dbName = ns.split('.')[0];
     const collectionName = ns.split('.')[1];
-   const redundantIndexes = [];
-    existingIndexes.forEach((index1) => {
-      existingIndexes.some((index2) => {
-          if (index1.name !== index2.name) {
-            const existingLen = Object.keys(index1.key).length;  // eslint-disable-line
-            const matchKeys = firstElements(index2.key, existingLen);
-            if (JSON.stringify(matchKeys) === JSON.stringify(index1.key)) {
-              redundantIndexes.push({
-                IndexName: index1.name,
-                Reason: 'Index ' + index1.name + '(' + JSON.stringify(index1.key) +
-                ' is covered by ' + index2.name + '(' +
-                JSON.stringify(index2.key) + ')'
-              });
-              return true;
-            }
+    const redundantIndexes = [];
+    existingIndexes.forEach(index1 => {
+      existingIndexes.some(index2 => {
+        if (index1.name !== index2.name) {
+          const existingLen = Object.keys(index1.key).length; // eslint-disable-line
+          const matchKeys = firstElements(index2.key, existingLen);
+          if (JSON.stringify(matchKeys) === JSON.stringify(index1.key)) {
+            redundantIndexes.push({
+              IndexName: index1.name,
+              Reason:
+                'Index ' +
+                index1.name +
+                '(' +
+                JSON.stringify(index1.key) +
+                ' is covered by ' +
+                index2.name +
+                '(' +
+                JSON.stringify(index2.key) +
+                ')'
+            });
+            return true;
           }
-        });
+        }
+      });
     });
     const outputDoc = {};
     outputDoc.Database = dbName;

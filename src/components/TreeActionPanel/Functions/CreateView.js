@@ -26,14 +26,14 @@
 
 export const CreateView = {
   // Prefill function for create role
-  dbkoda_CreateViewPreFill: (params) => {
+  dbkoda_CreateViewPreFill: params => {
     const data = {};
     data.Database = params.Database;
     data.Collection = params.Collection;
     data.ViewName = `${data.Collection}_View`;
     return data;
   },
-  dbkoda_validateView: (inputDoc) => {
+  dbkoda_validateView: inputDoc => {
     if (!Object.prototype.hasOwnProperty.call(inputDoc, 'Collection')) {
       throw new Error('dbkoda: Create View requires a collection to be selected');
     }
@@ -41,5 +41,5 @@ export const CreateView = {
       throw new Error('dbkoda: Create View requires a View Name');
     }
     return true;
-  },
+  }
 };

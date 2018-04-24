@@ -35,13 +35,7 @@ import { performancePanelStatuses } from '~/api/PerformancePanel';
 import { inject, observer } from 'mobx-react';
 import { action, reaction, runInAction } from 'mobx';
 import path from 'path';
-import {
-  AnchorButton,
-  Intent,
-  Position,
-  Tooltip,
-  Dialog
-} from '@blueprintjs/core';
+import { AnchorButton, Intent, Position, Tooltip, Dialog } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { EditorTypes } from '#/common/Constants.js';
@@ -56,9 +50,7 @@ import OpenFileIcon from '../../styles/icons/open-icon.svg';
 import SaveFileIcon from '../../styles/icons/save-icon.svg';
 import PerfPanelIcon from '../../styles/icons/performance-icon.svg';
 
-const { dialog, BrowserWindow } = IS_ELECTRON
-  ? window.require('electron').remote
-  : {};
+const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
 /**
  * @Mike TODO -> These filters can probably be moved to a common place in the constants file.
@@ -173,36 +165,19 @@ export default class Toolbar extends React.Component {
 
   componentDidMount() {
     // Add hotkey bindings for this component:
-    Mousetrap.bindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.executeLine.keys,
-      this.executeLine
-    );
-    Mousetrap.bindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.executeAll.keys,
-      this.executeAll
-    );
-    Mousetrap.bindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.stopExecution.keys,
-      this.stopExecution
-    );
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeLine.keys, this.executeLine);
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeAll.keys, this.executeAll);
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.stopExecution.keys, this.stopExecution);
 
     if (IS_ELECTRON) {
-      window
-        .require('electron')
-        .ipcRenderer.on('command', this.handleMainProcessCommand);
+      window.require('electron').ipcRenderer.on('command', this.handleMainProcessCommand);
     }
   }
 
   componentWillUnmount() {
     this.reactionToNewEditorForProfileId();
-    Mousetrap.unbindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.executeLine.keys,
-      this.executeLine
-    );
-    Mousetrap.unbindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.executeAll.keys,
-      this.executeAll
-    );
+    Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeLine.keys, this.executeLine);
+    Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeAll.keys, this.executeAll);
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.stopExecution.keys,
       this.stopExecution
@@ -227,9 +202,7 @@ export default class Toolbar extends React.Component {
 
   openFile() {
     if (IS_ELECTRON) {
-      const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      );
+      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
 
       if (editor && editor.type === 'drill') {
         // Show Warning.
@@ -252,10 +225,7 @@ export default class Toolbar extends React.Component {
                 .openFile(v, ({ _id, content }) => {
                   let _fileName = path.basename(_id);
                   if (window.navigator.platform.toLowerCase() === 'win32') {
-                    _fileName = _id.substring(
-                      _id.lastIndexOf('\\') + 1,
-                      _id.length
-                    );
+                    _fileName = _id.substring(_id.lastIndexOf('\\') + 1, _id.length);
                   }
                   return this.props.api.addEditor({
                     content,
@@ -269,10 +239,7 @@ export default class Toolbar extends React.Component {
         );
       }
     } else {
-      const warningMsg = globalString(
-        'editor/toolbar/notSupportedInUI',
-        'openFile'
-      );
+      const warningMsg = globalString('editor/toolbar/notSupportedInUI', 'openFile');
       NewToaster.show({
         message: warningMsg,
         className: 'danger',
@@ -282,9 +249,7 @@ export default class Toolbar extends React.Component {
   }
 
   openSQLFile() {
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     dialog.showOpenDialog(
       BrowserWindow.getFocusedWindow(),
       {
@@ -301,10 +266,7 @@ export default class Toolbar extends React.Component {
             .openFile(v, ({ _id, content }) => {
               let _fileName = path.basename(_id);
               if (window.navigator.platform.toLowerCase() === 'win32') {
-                _fileName = _id.substring(
-                  _id.lastIndexOf('\\') + 1,
-                  _id.length
-                );
+                _fileName = _id.substring(_id.lastIndexOf('\\') + 1, _id.length);
               }
 
               runInAction(() => {
@@ -333,10 +295,7 @@ export default class Toolbar extends React.Component {
   saveFile(currentEditor) {
     if (IS_ELECTRON) {
       currentEditor =
-        currentEditor ||
-        this.props.store.editors.get(
-          this.props.store.editorPanel.activeEditorId
-        );
+        currentEditor || this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
 
       if (!currentEditor) {
         return Promise.reject();
@@ -361,7 +320,9 @@ export default class Toolbar extends React.Component {
         return _saveFile(currentEditor.path);
       }
 
-      const { api: { getUnsavedEditorSuggestedFileName } } = this.props;
+      const {
+        api: { getUnsavedEditorSuggestedFileName }
+      } = this.props;
 
       return new Promise((resolve, reject) => {
         dialog.showSaveDialog(
@@ -371,19 +332,14 @@ export default class Toolbar extends React.Component {
               this.props.store.editorPanel.lastFileSavingDirectoryPath,
               getUnsavedEditorSuggestedFileName(currentEditor)
             ),
-            filters:
-              currentEditor.type == EditorTypes.DRILL
-                ? FILE_FILTERS_SQL
-                : FILE_FILTERS
+            filters: currentEditor.type == EditorTypes.DRILL ? FILE_FILTERS_SQL : FILE_FILTERS
           },
           fileName => {
             this.props.store.editorToolbar.saveAs = false;
             if (!fileName) {
               return reject();
             }
-            this.props.store.editorPanel.lastFileSavingDirectoryPath = path.dirname(
-              fileName
-            );
+            this.props.store.editorPanel.lastFileSavingDirectoryPath = path.dirname(fileName);
             _saveFile(fileName)
               .then(() => {
                 runInAction('update fileName and path', () => {
@@ -395,13 +351,9 @@ export default class Toolbar extends React.Component {
                     );
                   }
                   currentEditor.path = fileName;
-                  const treeEditor = this.props.store.treeActionPanel.editors.get(
-                    currentEditor.id
-                  );
+                  const treeEditor = this.props.store.treeActionPanel.editors.get(currentEditor.id);
                   if (treeEditor) {
-                    this.props.store.treeActionPanel.editors.delete(
-                      currentEditor.id
-                    );
+                    this.props.store.treeActionPanel.editors.delete(currentEditor.id);
                   }
                 });
                 this.props.store.watchFileBackgroundChange(currentEditor.id);
@@ -413,10 +365,7 @@ export default class Toolbar extends React.Component {
       });
     }
 
-    const warningMsg = globalString(
-      'editor/toolbar/notSupportedInUI',
-      'saveFile'
-    );
+    const warningMsg = globalString('editor/toolbar/notSupportedInUI', 'saveFile');
     NewToaster.show({
       message: warningMsg,
       className: 'danger',
@@ -496,9 +445,7 @@ export default class Toolbar extends React.Component {
       this.props.store.editorToolbar.noActiveProfile = false;
     }
     // Send command through current editor to swap DB: Get current editor instance:
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     const profile = this.props.profileStore.profiles.get(
       this.props.store.editorToolbar.currentProfile
     );
@@ -565,9 +512,7 @@ export default class Toolbar extends React.Component {
 
   @action
   updateCurrentProfile(profile, shellId = undefined) {
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     if (shellId) {
       Broker.emit(EventType.SWAP_SHELL_CONNECTION, {
         oldId: editor.profileId,
@@ -636,9 +581,7 @@ export default class Toolbar extends React.Component {
       <nav className="pt-navbar editorToolbar">
         {this.renderSQLImportWarning()}
         <div className="pt-navbar-group pt-align-left leftEditorToolbar">
-          <div className="pt-navbar-heading">
-            {globalString('editor/toolbar/queryInput')}
-          </div>
+          <div className="pt-navbar-heading">{globalString('editor/toolbar/queryInput')}</div>
           <div className="pt-button-group pt-intent-primary leftButtonGroup">
             <div className="pt-select pt-intent-primary editorContextDropdownWrapper">
               <select
@@ -703,11 +646,7 @@ export default class Toolbar extends React.Component {
                 onClick={this.stopExecution}
                 disabled={!this.props.store.editorToolbar.isActiveExecuting}
               >
-                <StopExecutionIcon
-                  className="dbKodaSVG"
-                  width={20}
-                  height={20}
-                />
+                <StopExecutionIcon className="dbKodaSVG" width={20} height={20} />
               </AnchorButton>
             </Tooltip>
           </div>
@@ -719,9 +658,7 @@ export default class Toolbar extends React.Component {
             hoverOpenDelay={1000}
             content={globalString(
               `profile/menu/${
-                !hasPerformancePanel
-                  ? 'createPerformancePanel'
-                  : 'openPerformancePanel'
+                !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
               }`
             )}
             tooltipClassName="pt-dark"
@@ -730,9 +667,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               disabled={this.props.store.editorToolbar.noActiveProfile}
               className={`pt-button pt-intent-primary ${
-                !hasPerformancePanel
-                  ? 'createPerformancePanel'
-                  : 'openPerformancePanel'
+                !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
               }`}
               onClick={() => {
                 // Emit event for performance panel
@@ -791,9 +726,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="pt-button circleButton saveFileButton"
               onClick={this.saveFileHandleError}
-              disabled={
-                this.props.store.editorPanel.activeEditorId === 'Default'
-              }
+              disabled={this.props.store.editorPanel.activeEditorId === 'Default'}
             >
               <SaveFileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>

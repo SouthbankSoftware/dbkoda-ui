@@ -34,13 +34,12 @@ describe('General database hbr tests', () => {
 
   afterAll(() => {});
 
-  test('get Parameters', (done) => {
+  test('get Parameters', done => {
     // Random database for the test
     const getParametersInput = {};
     getParametersInput.AllParameters = true;
     getParametersInput.getCmdLineOpts = true;
-    const templateToBeTested =
-      './src/components/TreeActionPanel/Templates/GetParameters.hbs';
+    const templateToBeTested = './src/components/TreeActionPanel/Templates/GetParameters.hbs';
     fs.readFile(templateToBeTested, (err, template) => {
       if (err) {
         throw err;
@@ -53,7 +52,7 @@ describe('General database hbr tests', () => {
       mongoCommands += '\nexit\n';
       const matchString = 'argv';
       const matchString2 = 'authenticationMechanisms';
-      common.mongoOutput(mongoCommands).then((output) => {
+      common.mongoOutput(mongoCommands).then(output => {
         expect(output).toEqual(expect.stringMatching(matchString));
         expect(output).toEqual(expect.stringMatching(matchString2));
         done();
@@ -61,12 +60,11 @@ describe('General database hbr tests', () => {
     });
   });
 
-  test('get Log', (done) => {
+  test('get Log', done => {
     // Random database for the test
     const getLog = {};
     getLog.logType = 'global';
-    const templateToBeTested =
-      './src/components/TreeActionPanel/Templates/GetLog.hbs';
+    const templateToBeTested = './src/components/TreeActionPanel/Templates/GetLog.hbs';
 
     fs.readFile(templateToBeTested, (err, template) => {
       if (err) {
@@ -80,20 +78,19 @@ describe('General database hbr tests', () => {
       mongoCommands += '\nexit\n';
       const matchString = '"ok" : 1';
 
-      common.mongoOutput(mongoCommands).then((output) => {
+      common.mongoOutput(mongoCommands).then(output => {
         expect(output).toEqual(expect.stringMatching(matchString));
         done();
       });
     });
   });
 
-  test('set Parameter', (done) => {
+  test('set Parameter', done => {
     // Random database for the test
     const setparameterData = {};
     setparameterData.Parameter = 'logLevel';
     setparameterData.Value = 3;
-    const templateToBeTested =
-      './src/components/TreeActionPanel/Templates/SetParameter.hbs';
+    const templateToBeTested = './src/components/TreeActionPanel/Templates/SetParameter.hbs';
 
     fs.readFile(templateToBeTested, (err, template) => {
       if (err) {
@@ -107,20 +104,19 @@ describe('General database hbr tests', () => {
       mongoCommands += '\nexit\n';
       const matchString = '"ok" : 1';
 
-      common.mongoOutput(mongoCommands).then((output) => {
+      common.mongoOutput(mongoCommands).then(output => {
         expect(output).toEqual(expect.stringMatching(matchString));
         done();
       });
     });
   });
-  test('set Log Level', (done) => {
+  test('set Log Level', done => {
     // Random database for the test
     const setLogLevelData = {};
     setLogLevelData.verbosity = 1;
     setLogLevelData.Components = [];
     setLogLevelData.Components.push({ Component: 'command', Level: 1 });
-    const templateToBeTested =
-      './src/components/TreeActionPanel/Templates/SetLogLevel.hbs';
+    const templateToBeTested = './src/components/TreeActionPanel/Templates/SetLogLevel.hbs';
 
     fs.readFile(templateToBeTested, (err, template) => {
       if (err) {
@@ -134,7 +130,7 @@ describe('General database hbr tests', () => {
       mongoCommands += '\nexit\n';
       const matchString = '"ok" : 1';
 
-      common.mongoOutput(mongoCommands).then((output) => {
+      common.mongoOutput(mongoCommands).then(output => {
         expect(output).toEqual(expect.stringMatching(matchString));
         done();
       });

@@ -46,5 +46,5 @@ export default {
   replica_member: 'tree-replica_member-node.hbs',
   primary: 'tree-replica_member-node.hbs',
   secondary: 'tree-replica_member-node.hbs',
-  arbiter: 'tree-replica_member-node.hbs',
+  arbiter: 'tree-replica_member-node.hbs'
 };

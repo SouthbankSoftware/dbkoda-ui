@@ -30,4 +30,3 @@ export StackedRadialWidget from './StackedRadialWidget';
 export ProgressBarWidget from './ProgressBarWidget';
 export Widget from './Widget';
 export DonutWidget from './Donut';
-

@@ -32,8 +32,7 @@ import * as common from './Common.js';
 const debug = false;
 
 export const UpdateDocuments = {
-
-  dbkoda_UpdateDocumentsPreFill: (params) => {
+  dbkoda_UpdateDocumentsPreFill: params => {
     // console.log('invoked dbkoda_DeleteDocumentsPreFill');
     const data = {};
     data.Database = params.Database;
@@ -57,11 +56,12 @@ export const UpdateDocuments = {
     console.log('returns', data);
     return data;
   },
-  dbkodaUpdateOperators: (params) => { //eslint-disable-line
+  dbkodaUpdateOperators: params => {
+    //eslint-disable-line
     params.dontRun = true;
     return params;
   },
-  dbkodaUpdateOperators_parse: (res) => {
+  dbkodaUpdateOperators_parse: res => {
     //eslint-disable-line
     if (debug) console.log(res);
     return [
@@ -83,5 +83,5 @@ export const UpdateDocuments = {
   dbkodaListAttributes: common.dbkodaListAttributes,
   dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
   dbkodaMatchOperators: common.dbkodaMatchOperators,
-  dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse,
+  dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse
 };

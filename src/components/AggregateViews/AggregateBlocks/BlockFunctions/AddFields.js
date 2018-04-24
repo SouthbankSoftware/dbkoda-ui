@@ -20,5 +20,5 @@
 import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
 export const AddFields = {
-  dbkodaListAttributes: common.dbkodaListAttributes,
+  dbkodaListAttributes: common.dbkodaListAttributes
 };

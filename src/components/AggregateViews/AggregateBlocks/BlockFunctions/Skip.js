@@ -20,5 +20,5 @@
 import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
 export const Skip = {
-  dbkodaListAttributes: common.dbkodaListAttributes,
+  dbkodaListAttributes: common.dbkodaListAttributes
 };

@@ -23,12 +23,12 @@ import TipsCard from '../../common/TipsCard';
 const tips = [
   {
     content:
-      'The database profiler collects detailed information about Database Commands executed against a running mongod instance. This includes CRUD operations as well as configuration and administration commands. The profiler writes all the data it collects to the system.profile collection, a capped collection in the admin database. See Database Profiler Output for an overview of the system.profile documents created by the profiler.',
+      'The database profiler collects detailed information about Database Commands executed against a running mongod instance. This includes CRUD operations as well as configuration and administration commands. The profiler writes all the data it collects to the system.profile collection, a capped collection in the admin database. See Database Profiler Output for an overview of the system.profile documents created by the profiler.'
   },
   {
     content:
-      'The profiler is off by default. You can enable the profiler on a per-database or per-instance basis at one of several profiling levels.',
-  },
+      'The profiler is off by default. You can enable the profiler on a per-database or per-instance basis at one of several profiling levels.'
+  }
 ];
 
 export default () => {

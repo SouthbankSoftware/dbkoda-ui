@@ -50,9 +50,7 @@ export default class TelemetryConsent extends React.Component {
     if (IS_ELECTRON) {
       window
         .require('electron')
-        .shell.openExternal(
-          'https://southbanksoftware.github.io/privacy-policy'
-        );
+        .shell.openExternal('https://southbanksoftware.github.io/privacy-policy');
     }
   }
 
@@ -110,10 +108,7 @@ export default class TelemetryConsent extends React.Component {
       this.props.store.dateLastPinged = this.getToday();
       this.props.store.firstPingDate = this.getToday();
       Broker.emit(EventType.PING_HOME);
-    } else if (
-      !this.props.store.dateLastPinged &&
-      this.props.config.settings.telemetryEnabled
-    ) {
+    } else if (!this.props.store.dateLastPinged && this.props.config.settings.telemetryEnabled) {
       this.props.store.dateLastPinged = this.getToday();
       this.props.store.firstPingDate = this.getToday();
       Broker.emit(EventType.PING_HOME);
@@ -134,16 +129,10 @@ export default class TelemetryConsent extends React.Component {
           <p>
             {' '}
             {globalString('telemetry_dialog/content_third')}
-            <a onClick={this.openPrivacyPolicy}>
-              {globalString('telemetry_dialog/privacy_link')}
-            </a>
+            <a onClick={this.openPrivacyPolicy}>{globalString('telemetry_dialog/privacy_link')}</a>
           </p>
         </div>
-        <div
-          className={
-            'dialogButtons ' + this.props.config.settings.telemetryEnabled
-          }
-        >
+        <div className={'dialogButtons ' + this.props.config.settings.telemetryEnabled}>
           <Switch
             checked={this.props.config.settings.telemetryEnabled}
             label="Enable Telemetry"

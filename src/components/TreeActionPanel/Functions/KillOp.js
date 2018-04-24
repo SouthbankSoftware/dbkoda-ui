@@ -32,7 +32,7 @@ export const KillOp = {
   dbkodaOperationList: () => {
     return 'dbeOps.opForKillList()';
   },
-  dbkodaOperationList_parse: (data) => {
-    return (data);
+  dbkodaOperationList_parse: data => {
+    return data;
   }
 };

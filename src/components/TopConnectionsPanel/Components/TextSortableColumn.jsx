@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-04-11T15:24:47+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-04-11T15:27:02+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-04-24T16:54:13+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,10 +29,7 @@ import { Menu, MenuItem } from '@blueprintjs/core';
 import { Cell, Column, ColumnHeaderCell } from '@blueprintjs/table';
 
 export type ICellLookup = (rowIndex: number, columnIndex: number) => any;
-export type ISortCallback = (
-  columnIndex: number,
-  comparator: (a: any, b: any) => number
-) => void;
+export type ISortCallback = (columnIndex: number, comparator: (a: any, b: any) => number) => void;
 
 export default class TextSortableColumn {
   constructor(name: string, index: number) {
@@ -45,7 +42,9 @@ export default class TextSortableColumn {
       <Cell>{getCellData(rowIndex, columnIndex)}</Cell>
     );
     const menuRenderer = this.renderMenu.bind(this, sortColumn);
-    const columnHeaderCellRenderer = () => ( <ColumnHeaderCell name={this.name} menuRenderer={menuRenderer} /> ); // eslint-disable-line
+    const columnHeaderCellRenderer = () => (
+      <ColumnHeaderCell name={this.name} menuRenderer={menuRenderer} /> // eslint-disable-line
+    );
     return (
       <Column
         cellRenderer={cellRenderer}

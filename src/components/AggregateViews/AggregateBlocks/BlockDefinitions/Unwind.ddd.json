@@ -1,16 +1,19 @@
 {
-    "Title": "Unwind",
-    "DefaultValues": {},
-    "Fields": [{
-        "name": "UnWindAttribute",
-        "label": "Array value to unwind",
-        "tooltip": "Enter the array value you wish to unwind",
-        "type": "Combo",
-        "lookup": "dbkodaListAttributesAgg",
-        "lookup_arguments": [{
-                "name": "prevAttributes",
-                "value": "prevAttributes"
-            }
-        ]
-    }]
+  "Title": "Unwind",
+  "DefaultValues": {},
+  "Fields": [
+    {
+      "name": "UnWindAttribute",
+      "label": "Array value to unwind",
+      "tooltip": "Enter the array value you wish to unwind",
+      "type": "Combo",
+      "lookup": "dbkodaListAttributesAgg",
+      "lookup_arguments": [
+        {
+          "name": "prevAttributes",
+          "value": "prevAttributes"
+        }
+      ]
+    }
+  ]
 }

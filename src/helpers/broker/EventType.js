@@ -62,8 +62,7 @@ export default {
   createFileChangedEvent(id) {
     return `fileChanged::${id}`;
   },
-  createAggregatorResultReceived: editorId =>
-    `aggregator::result-received::${editorId}`,
+  createAggregatorResultReceived: editorId => `aggregator::result-received::${editorId}`,
   SHELL_RECONNECT: 'controller::shell::reconnect',
   createShellReconnectEvent: (id, shellId) => {
     return 'controller::shell::reconnect::' + id + '::' + shellId;

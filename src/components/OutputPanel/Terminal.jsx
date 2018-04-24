@@ -40,7 +40,7 @@ import {
   Menu,
   MenuItem,
   Position,
-  Tooltip,
+  Tooltip
 } from '@blueprintjs/core';
 import CodeMirror from '#/common/LegacyCodeMirror';
 import 'codemirror/mode/javascript/javascript';
@@ -66,7 +66,7 @@ const terminalTarget = {
   drop(props, monitor) {
     const item = monitor.getItem();
     props.onDrop(item);
-  },
+  }
 };
 
 /**
@@ -78,7 +78,7 @@ function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
-    isOverCurrent: monitor.isOver({ shallow: true }),
+    isOverCurrent: monitor.isOver({ shallow: true })
   };
 }
 
@@ -90,8 +90,7 @@ class Terminal extends React.Component {
     super(props);
     this.state = {
       command: '',
-      historyCursor: this.props.store.outputs.get(this.props.id).commandHistory
-        .length,
+      historyCursor: this.props.store.outputs.get(this.props.id).commandHistory.length,
       terminalOptions: {
         mode: 'MongoScript',
         matchBrackets: true,
@@ -104,12 +103,12 @@ class Terminal extends React.Component {
           'Ctrl-Space': 'autocomplete',
           'Ctrl-X': () => {
             this.sendCommandToEditor();
-          },
+          }
         },
         smartIndent: true,
         theme: 'ambiance',
-        typescript: true,
-      },
+        typescript: true
+      }
     };
 
     this.updateCommand = this.updateCommand.bind(this);
@@ -125,19 +124,17 @@ class Terminal extends React.Component {
      */
     const reactionToDragDrop = reaction(
       () => this.props.store.dragItem.dragDropTerminal,
-      (dragDropTerminal) => {
+      dragDropTerminal => {
         if (
           this.props.store.editorPanel.activeEditorId == this.props.id &&
           this.props.store.dragItem.dragDropTerminal
         ) {
           this.setState({
-            command: TreeDropActions.getCodeForTreeNode(
-              this.props.store.dragItem.item,
-            ),
+            command: TreeDropActions.getCodeForTreeNode(this.props.store.dragItem.item)
           });
         }
         this.props.store.dragItem.dragDropTerminal = false;
-      },
+      }
     );
 
     /**
@@ -145,11 +142,8 @@ class Terminal extends React.Component {
      */
     reaction(
       () => this.props.store.outputPanel.executingTerminalCmd,
-      (executingTerminalCmd) => {
-        if (
-          executingTerminalCmd &&
-          this.props.id == this.props.store.editorPanel.activeEditorId
-        ) {
+      executingTerminalCmd => {
+        if (executingTerminalCmd && this.props.id == this.props.store.editorPanel.activeEditorId) {
           this.updateHistory(this.state.command);
           const command = this.interceptCommand(this.state.command);
           if (command) {
@@ -158,22 +152,19 @@ class Terminal extends React.Component {
             const service = featherClient().service('/mongo-shells');
             service.timeout = 30000;
             Broker.on(
-              EventType.createShellExecutionFinishEvent(
-                this.props.profileId,
-                this.props.shellId,
-              ),
-              this.finishedExecution,
+              EventType.createShellExecutionFinishEvent(this.props.profileId, this.props.shellId),
+              this.finishedExecution
             );
             service.update(this.props.profileId, {
               shellId: this.props.shellId,
-              commands: command,
+              commands: command
             });
           }
           this.setState({ command: '' });
           this.props.store.outputPanel.executingTerminalCmd = false;
         }
       },
-      { name: 'reactionOutputTerminalExecuteCmd' },
+      { name: 'reactionOutputTerminalExecuteCmd' }
     );
   }
 
@@ -228,9 +219,7 @@ class Terminal extends React.Component {
     if (this.state.historyCursor > 0) {
       this.state.historyCursor -= 1;
       this.updateCommand(
-        this.props.store.outputs.get(this.props.id).commandHistory[
-          this.state.historyCursor
-        ],
+        this.props.store.outputs.get(this.props.id).commandHistory[this.state.historyCursor]
       );
     }
   }
@@ -245,14 +234,10 @@ class Terminal extends React.Component {
     ) {
       this.state.historyCursor += 1;
       this.updateCommand(
-        this.props.store.outputs.get(this.props.id).commandHistory[
-          this.state.historyCursor
-        ],
+        this.props.store.outputs.get(this.props.id).commandHistory[this.state.historyCursor]
       );
     } else {
-      this.state.historyCursor = this.props.store.outputs.get(
-        this.props.id,
-      ).commandHistory.length;
+      this.state.historyCursor = this.props.store.outputs.get(this.props.id).commandHistory.length;
       this.setState({ command: '' });
     }
   }
@@ -262,9 +247,7 @@ class Terminal extends React.Component {
    */
   updateHistory(command) {
     this.props.store.outputs.get(this.props.id).commandHistory.push(command);
-    this.state.historyCursor = this.props.store.outputs.get(
-      this.props.id,
-    ).commandHistory.length;
+    this.state.historyCursor = this.props.store.outputs.get(this.props.id).commandHistory.length;
   }
 
   /**
@@ -310,8 +293,7 @@ class Terminal extends React.Component {
       this.props.store.outputPanel.sendingCommand = this.state.command;
       this.setState({
         command: '',
-        historyCursor: this.props.store.outputs.get(this.props.id)
-          .commandHistory.length,
+        historyCursor: this.props.store.outputs.get(this.props.id).commandHistory.length
       });
     }
   }
@@ -344,7 +326,7 @@ class Terminal extends React.Component {
       <div className="outputTerminal">
         <CodeMirror
           className="outputCmdLine"
-          ref={(c) => {
+          ref={c => {
             this.terminal = c;
           }}
           options={this.state.terminalOptions}
@@ -368,11 +350,9 @@ class Terminal extends React.Component {
             <SubmitIcon className="dbKodaSVG" width={30} height={30} />
           </AnchorButton>
         </Tooltip>
-      </div>,
+      </div>
     );
   }
 }
 
-export default DropTarget(DragItemTypes.LABEL, terminalTarget, collect)(
-  Terminal,
-);
+export default DropTarget(DragItemTypes.LABEL, terminalTarget, collect)(Terminal);

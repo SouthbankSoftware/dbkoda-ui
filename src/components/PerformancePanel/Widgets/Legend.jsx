@@ -106,14 +106,9 @@ export default class Legend extends React.Component<Props> {
 
     // Determine size.
     const fontSize =
-      Legend.fontSize +
-      Legend.fontSize * this.state.height / Legend.fontScalingFactor +
-      'px';
+      Legend.fontSize + Legend.fontSize * this.state.height / Legend.fontScalingFactor + 'px';
     const rowDynamicStyle = {
-      height:
-        Legend.rowSize +
-        Legend.rowSize * this.state.width / Legend.rowScalingFactor +
-        'px'
+      height: Legend.rowSize + Legend.rowSize * this.state.width / Legend.rowScalingFactor + 'px'
     };
     let totalFontColor = 'white';
     let totalValueFontColor = 'white';

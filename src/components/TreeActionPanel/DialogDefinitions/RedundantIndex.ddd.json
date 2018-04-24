@@ -44,7 +44,8 @@
           "label": "Index",
           "readOnly": true,
           "tooltip": "Name of uncessary index",
-          "type": "Text"},
+          "type": "Text"
+        },
         {
           "name": "Reason",
           "Label": "Reason",

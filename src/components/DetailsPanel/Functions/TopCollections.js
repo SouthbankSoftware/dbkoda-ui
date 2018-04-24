@@ -32,11 +32,11 @@ export const TopCollections = {
   dbkoda_TopCollections: () => {
     return 'dbe.Top()';
   },
-  dbkoda_TopCollections_parse: (data) => {
+  dbkoda_TopCollections_parse: data => {
     // data.time = Globalize.formatNumber(data.time);
     if (data && data.top.length == 1 && data.top[0].collection) {
       return { error: data.top[0].collection };
     }
     return data;
-  },
+  }
 };

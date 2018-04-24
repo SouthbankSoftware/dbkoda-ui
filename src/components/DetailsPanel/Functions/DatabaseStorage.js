@@ -23,14 +23,14 @@ export const DatabaseStorage = {
   dbkoda_DatabaseStorage: () => {
     return 'dbe.databaseStorage()';
   },
-  dbkoda_DatabaseStorage_parse: (data) => {
+  dbkoda_DatabaseStorage_parse: data => {
     const result = {};
     const sbdb = []; // tmp store for db storage
     result.shardMap = [];
-    data.storageByDb.forEach((d) => {
+    data.storageByDb.forEach(d => {
       sbdb.push({
         name: d.name,
-        sizeOnDisk: d.sizeOnDisk / 1048576,
+        sizeOnDisk: d.sizeOnDisk / 1048576
       });
     });
     result.storageByDb = sbdb
@@ -38,12 +38,12 @@ export const DatabaseStorage = {
         return b.sizeOnDisk - a.sizeOnDisk;
       })
       .slice(0, 10);
-    Object.keys(data.shardData).forEach((shard) => {
+    Object.keys(data.shardData).forEach(shard => {
       result.shardMap.push({
         shardName: shard,
-        size: data.shardData[shard] / 1048576,
+        size: data.shardData[shard] / 1048576
       });
     });
     return result;
-  },
+  }
 };

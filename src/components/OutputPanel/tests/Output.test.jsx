@@ -39,13 +39,17 @@ describe('Output Toolbar', () => {
   let window;
   let store;
   const OutputToolbarWrapper = function OutputToolbarWrapper(props) {
-    return (<Provider store={props.store}><OutputToolbar title="Test" /></Provider>);
+    return (
+      <Provider store={props.store}>
+        <OutputToolbar title="Test" />
+      </Provider>
+    );
   };
 
   beforeAll(() => {
     globalizeInit();
-    ({window} = new JSDOM('<div id="container"></div>'));
-    ({document} = window);
+    ({ window } = new JSDOM('<div id="container"></div>'));
+    ({ document } = window);
     store = new Store();
   });
 

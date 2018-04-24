@@ -26,18 +26,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
-import {
-  AnchorButton,
-  Dialog,
-  Intent,
-  Tooltip,
-  Position,
-} from '@blueprintjs/core';
+import { AnchorButton, Dialog, Intent, Tooltip, Position } from '@blueprintjs/core';
 import './CreateViewButton.scss';
 import DocumentsIcon from '../../styles/icons/documents-icon.svg';
 
 @inject(allStores => ({
-  store: allStores.store,
+  store: allStores.store
 }))
 @observer
 export default class CreateViewButton extends React.Component {
@@ -45,7 +39,9 @@ export default class CreateViewButton extends React.Component {
   openViewNameDialog() {
     this.props.store.aggregateBuilder.showViewNameDialog = true;
     // Wait until dialog is rendered before focus
-    setTimeout(() => { this.viewNameInput.focus(); }, 0);
+    setTimeout(() => {
+      this.viewNameInput.focus();
+    }, 0);
   }
 
   @action.bound
@@ -69,9 +65,9 @@ export default class CreateViewButton extends React.Component {
   }
 
   render() {
-    const buttonClasses = this.props.store.aggregateBuilder.includeCreateView ?
-      'createViewButton circleButton selected' :
-      'createViewButton circleButton';
+    const buttonClasses = this.props.store.aggregateBuilder.includeCreateView
+      ? 'createViewButton circleButton selected'
+      : 'createViewButton circleButton';
     return (
       <span>
         <Tooltip
@@ -87,7 +83,7 @@ export default class CreateViewButton extends React.Component {
             intent={Intent.SUCCESS}
             onClick={() => {
               runInAction(() => {
-                const {includeCreateView} = this.props.store.aggregateBuilder;
+                const { includeCreateView } = this.props.store.aggregateBuilder;
                 this.props.store.aggregateBuilder.includeCreateView = !includeCreateView;
                 if (includeCreateView) {
                   this.cancelViewNameDialog();
@@ -109,7 +105,9 @@ export default class CreateViewButton extends React.Component {
           <p>{globalString('aggregate_builder/alerts/create_view_message')}</p>
           <input
             type="text"
-            ref={input => { this.viewNameInput = input; }}
+            ref={input => {
+              this.viewNameInput = input;
+            }}
             className="pt-input"
             placeholder="View Name"
           />

@@ -24,7 +24,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import SplitPane from 'react-split-pane';
@@ -59,11 +58,11 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   }
   @autobind
   handleResize() {
-    this.setState({topSplitPos: window.innerWidth});
+    this.setState({ topSplitPos: window.innerWidth });
   }
   @autobind
   updateBottomSplitPos(pos) {
-    this.setState({bottomSplitPos: pos});
+    this.setState({ bottomSplitPos: pos });
   }
   render() {
     const { store, showPerformancePanel } = this.props;
@@ -80,12 +79,12 @@ export default class TopConnectionsPanel extends React.Component<Props> {
       display: 'flex',
       flexDirection: 'column'
     };
-    const onConnectionSelection = (selectedConnection) => {
-      this.setState({selectedConnection});
+    const onConnectionSelection = selectedConnection => {
+      this.setState({ selectedConnection });
     };
 
-    const onOperationSelection = (selectedOperation) => {
-      this.setState({selectedOperation});
+    const onOperationSelection = selectedOperation => {
+      this.setState({ selectedOperation });
     };
     return (
       <div>
@@ -98,7 +97,13 @@ export default class TopConnectionsPanel extends React.Component<Props> {
           pane2Style={splitPane2Style}
         >
           <div className="connectionList">
-            <ConnectionsView connections={connections} highWaterMark={highWaterMarkCon} onSelect={onConnectionSelection} showPerformancePanel={showPerformancePanel} tableWidth={this.state.topSplitPos} />
+            <ConnectionsView
+              connections={connections}
+              highWaterMark={highWaterMarkCon}
+              onSelect={onConnectionSelection}
+              showPerformancePanel={showPerformancePanel}
+              tableWidth={this.state.topSplitPos}
+            />
           </div>
           <SplitPane
             className="BottomSplitPane"
@@ -108,8 +113,16 @@ export default class TopConnectionsPanel extends React.Component<Props> {
             minSize={700}
             maxSize={1200}
           >
-            <div className="operationList"><OperationsView operations={operations} onSelect={onOperationSelection} tableWidth={this.state.bottomSplitPos} /></div>
-            <div className="operationDetails"><OperationDetails operation={selectedOperation} /></div>
+            <div className="operationList">
+              <OperationsView
+                operations={operations}
+                onSelect={onOperationSelection}
+                tableWidth={this.state.bottomSplitPos}
+              />
+            </div>
+            <div className="operationDetails">
+              <OperationDetails operation={selectedOperation} />
+            </div>
           </SplitPane>
         </SplitPane>
       </div>

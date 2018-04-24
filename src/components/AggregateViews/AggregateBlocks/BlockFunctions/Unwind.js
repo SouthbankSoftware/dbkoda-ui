@@ -23,5 +23,5 @@ export const Unwind = {
   dbkodaListAttributes: common.dbkodaListAttributes,
   dbkodaListAttributesAgg: common.dbkodaListAttributesAgg,
   dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
-  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse,
+  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse
 };

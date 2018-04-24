@@ -39,7 +39,7 @@ const labelSource = {
    */
   beginDrag(props) {
     return { label: props.label, type: props.type, id: props.id, refParent: props.refParent };
-  },
+  }
 };
 /**
  * Collect the information required by the connector and inject it into the react component as props
@@ -50,7 +50,7 @@ const labelSource = {
 function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging(),
+    isDragging: monitor.isDragging()
   };
 }
 
@@ -118,11 +118,11 @@ class DragLabel extends React.Component {
       <span
         style={{
           opacity: isDragging ? 0.5 : 1,
-          cursor: 'move',
+          cursor: 'move'
         }}
       >
         {this.FilteredTextLabel}
-      </span>,
+      </span>
     );
   }
 }
@@ -131,7 +131,7 @@ DragLabel.propTypes = {
   label: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   connectDragSource: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired,
+  isDragging: PropTypes.bool.isRequired
 };
 
 export default DragSource(DragItemTypes.LABEL, labelSource, collect)(DragLabel);

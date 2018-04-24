@@ -1,25 +1,26 @@
 {
-    "UserId": "admin.randomUser",
-    "Database": "admin",
-    "UserName": "randomUser",
-    "Password": "xyz",
-    "CustomData":"{a:1,b:1}",
-    "Roles": [{
-            "Role": "userAdminAnyDatabase",
-            "Database": "admin"
-        },
-        {
-            "Role": "readWriteAnyDatabase",
-            "Database": "admin"
-        },
-        {
-            "Role": "dbAdminAnyDatabase",
-            "Database": "admin"
-        },
-        {
-            "Role": "clusterAdmin",
-            "Database": "admin",
-            "last": 1
-        }
-    ]
+  "UserId": "admin.randomUser",
+  "Database": "admin",
+  "UserName": "randomUser",
+  "Password": "xyz",
+  "CustomData": "{a:1,b:1}",
+  "Roles": [
+    {
+      "Role": "userAdminAnyDatabase",
+      "Database": "admin"
+    },
+    {
+      "Role": "readWriteAnyDatabase",
+      "Database": "admin"
+    },
+    {
+      "Role": "dbAdminAnyDatabase",
+      "Database": "admin"
+    },
+    {
+      "Role": "clusterAdmin",
+      "Database": "admin",
+      "last": 1
+    }
+  ]
 }

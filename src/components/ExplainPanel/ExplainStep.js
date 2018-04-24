@@ -43,10 +43,10 @@ const LIMIT = 'LIMIT';
 const SKIP = 'SKIP';
 const OR = 'OR';
 
-const generateFetchComments = (stage) => {
+const generateFetchComments = stage => {
   if (stage.filter) {
     const filterStr = {};
-    Object.keys(stage.filter).map((filter) => {
+    Object.keys(stage.filter).map(filter => {
       filterStr[filter] = stage.filter[filter];
     });
     return globalString('explain/step/fetchFilter', JSON.stringify(filterStr));
@@ -54,11 +54,11 @@ const generateFetchComments = (stage) => {
   return globalString('explain/step/fetchIndex');
 };
 
-const generateCollScanComments = (stage) => {
+const generateCollScanComments = stage => {
   let fullScan = false;
   const filterStr = {};
   if (stage.filter) {
-    Object.keys(stage.filter).map((filter) => {
+    Object.keys(stage.filter).map(filter => {
       filterStr[filter] = stage.filter[filter];
     });
   } else {
@@ -70,7 +70,7 @@ const generateCollScanComments = (stage) => {
   return globalString('explain/step/collScanFilter', JSON.stringify(filterStr));
 };
 
-const generateIxscanComments = (stage) => {
+const generateIxscanComments = stage => {
   const idxName = stage.indexName || 'Unknown';
   let columnList;
   if ('keyPattern' in stage) {
@@ -79,26 +79,26 @@ const generateIxscanComments = (stage) => {
   return globalString('explain/step/ixscan', idxName, columnList);
 };
 
-const generateSortComments = (stage) => {
+const generateSortComments = stage => {
   const sortPattern = stage.sortPattern;
   return globalString('explain/step/sort', Object.keys(sortPattern));
 };
 
-const generateLimitComments = (stage) => {
+const generateLimitComments = stage => {
   if ('limitAmount' in stage) {
     return globalString('explain/step/limit', stage.limitAmount);
   }
   return globalString('explain/step/limit', '?');
 };
 
-const generateSkipComments = (stage) => {
+const generateSkipComments = stage => {
   if ('skipAmount' in stage) {
     return globalString('explain/step/skip', stage.skipAmount);
   }
   return globalString('explain/step/skip', '?');
 };
 
-const generateProjectionComments = (stage) => {
+const generateProjectionComments = stage => {
   let comments = stage.stage;
   if ('transformBy' in stage) {
     comments = 'Project for ';
@@ -115,7 +115,7 @@ const generateProjectionComments = (stage) => {
  * generate comments for the given stage.
  *
  */
-export const generateComments = (stage) => {
+export const generateComments = stage => {
   const stageName = stage.stage;
   let shard;
   switch (stageName) {
@@ -155,26 +155,19 @@ export const generateComments = (stage) => {
     case PROJECTION:
       return generateProjectionComments(stage);
     case OR:
-      return globalString(
-        'explain/step/or',
-        stage.inputStages ? stage.inputStages.length : 1,
-      );
+      return globalString('explain/step/or', stage.inputStages ? stage.inputStages.length : 1);
     default:
       return stageName;
   }
 };
 
-export const getCommonExecutionStages = (executionStages) => {
+export const getCommonExecutionStages = executionStages => {
   const stages = [];
   if (executionStages) {
     let currentStage = executionStages;
     while (currentStage) {
       stages.push(currentStage);
-      if (
-        currentStage &&
-        currentStage.inputStages &&
-        currentStage.inputStages.length > 0
-      ) {
+      if (currentStage && currentStage.inputStages && currentStage.inputStages.length > 0) {
         currentStage = currentStage.inputStages;
       } else {
         currentStage = currentStage.inputStage;
@@ -184,15 +177,13 @@ export const getCommonExecutionStages = (executionStages) => {
   return stages.reverse();
 };
 
-export const getShardsExecutionStages = (executionStages) => {
+export const getShardsExecutionStages = executionStages => {
   if (executionStages && executionStages.shards) {
-    return executionStages.shards.map((shard) => {
-      const stages = shard.winningPlan
-        ? shard.winningPlan
-        : shard.executionStages;
+    return executionStages.shards.map(shard => {
+      const stages = shard.winningPlan ? shard.winningPlan : shard.executionStages;
       return {
         shardName: shard.shardName,
-        stages: getCommonExecutionStages(stages),
+        stages: getCommonExecutionStages(stages)
       };
     });
   }
@@ -202,7 +193,7 @@ export const getShardsExecutionStages = (executionStages) => {
 /**
  * get execution stages array
  */
-export const getExecutionStages = (executionStages) => {
+export const getExecutionStages = executionStages => {
   if (executionStages && executionStages.shards) {
     return getShardsExecutionStages(executionStages);
   }

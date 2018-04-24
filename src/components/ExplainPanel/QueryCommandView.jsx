@@ -35,7 +35,7 @@ const options = {
   tabSize: 2,
   matchBrackets: true,
   keyMap: 'sublime',
-  mode: 'MongoScript',
+  mode: 'MongoScript'
 };
 
 const QueryCommandView = ({ command, namespace }) => {
@@ -64,7 +64,7 @@ const QueryCommandView = ({ command, namespace }) => {
       <div className="codemirror">
         <div className="label">{globalString('explain/view/queryLabel')}</div>
         <CodeMirror
-          ref={(cm) => {
+          ref={cm => {
             editor = cm;
           }}
           codeMirrorInstance={CM}

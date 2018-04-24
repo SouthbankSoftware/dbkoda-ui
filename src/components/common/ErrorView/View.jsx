@@ -33,13 +33,13 @@ import './View.scss';
 type Props = {
   title?: string,
   errorLevel?: string,
-  error: string,
+  error: string
 };
 
 export default class ErrorView extends React.PureComponent<Props> {
   static defaultProps = {
     errorLevel: 'error',
-    title: 'Oh Snap!',
+    title: 'Oh Snap!'
   };
 
   render() {

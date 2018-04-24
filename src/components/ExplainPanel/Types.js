@@ -18,9 +18,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 export const Types = {
   QUERY_PLANNER: 'queryPlanner',
   EXECUTION_STATS: 'executionStats',
-  ALL_PLANS_EXECUTION: 'allPlansExecution',
+  ALL_PLANS_EXECUTION: 'allPlansExecution'
 };

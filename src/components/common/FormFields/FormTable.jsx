@@ -35,8 +35,8 @@ import FieldControl from './FieldControls';
 export default observer(({ members }) => {
   const labels = [];
   if (members.value && members.value.length > 0) {
-    const cols = members.map((member) => {
-      return member.map((fld) => {
+    const cols = members.map(member => {
+      return member.map(fld => {
         if (fld.label != '') {
           return fld.label;
         }
@@ -48,17 +48,14 @@ export default observer(({ members }) => {
         labels.push(
           <div key={'lbl' + lbl} className="pt-form-group form-group-inline">
             <label htmlFor={lbl}>{lbl}</label>
-          </div>,
+          </div>
         );
       }
     }
     labels.push(
-      <div
-        key="lblCtrl"
-        className="pt-form-group form-group-inline table-field-15"
-      >
+      <div key="lblCtrl" className="pt-form-group form-group-inline table-field-15">
         <label htmlFor="ctrl" style={{ display: 'hidden' }} />
-      </div>,
+      </div>
     );
   }
 
@@ -74,10 +71,7 @@ export default observer(({ members }) => {
   }
 
   return (
-    <fieldset
-      className="tableFieldSet"
-      label={members.label ? members.label : members.name}
-    >
+    <fieldset className="tableFieldSet" label={members.label ? members.label : members.name}>
       <div className="clearfix tableHeader">
         <div className="left">
           <b>{members.label}</b>
@@ -88,16 +82,14 @@ export default observer(({ members }) => {
             field={members}
             controls={{
               onAdd: true,
-              onClear: true,
+              onClear: true
             }}
           />
         </div>
       </div>
       <div className={tableHeaderClassname}>{labels}</div>
       <div className={tableContentClassname}>
-        {members.map(member => (
-          <FormTableRow key={member.id} member={member} />
-        ))}
+        {members.map(member => <FormTableRow key={member.id} member={member} />)}
       </div>
     </fieldset>
   );

@@ -82,12 +82,7 @@ describe('Test Performance Panel Util Class', () => {
 
   test('Can convert to a specific metric.', () => {
     targetedTestValues.forEach(value => {
-      const newValue = convertToTarget(
-        value.input.value,
-        value.input.unit,
-        value.input.target,
-        3
-      );
+      const newValue = convertToTarget(value.input.value, value.input.unit, value.input.target, 3);
       assert.equal(newValue.value, value.output.value);
       assert.equal(newValue.unit, value.output.unit);
     });

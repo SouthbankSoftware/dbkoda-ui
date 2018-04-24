@@ -106,12 +106,7 @@ export default class Editor extends React.Component {
       <div className="menuItemWrapper showJsonView" id="showJsonViewMenuItem">
         <MenuItem
           onClick={() => {
-            this.props.api.initJsonView(
-              currentJson,
-              this.props.id,
-              'enhancedJson',
-              lines
-            );
+            this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson', lines);
           }}
           text={globalString('output/editor/contextJson')}
           icon="panel-stats"
@@ -121,11 +116,7 @@ export default class Editor extends React.Component {
     );
     menuItems.push(
       <div className="menuItemWrapper showTableView" id="showTableViewMenuItem">
-        <MenuItem
-          icon="th"
-          text={globalString('output/editor/contextTable')}
-          intent={Intent.NONE}
-        >
+        <MenuItem icon="th" text={globalString('output/editor/contextTable')} intent={Intent.NONE}>
           <MenuItem
             onClick={() => {
               this.props.api.initJsonView(
@@ -179,24 +170,14 @@ export default class Editor extends React.Component {
           onClick={() => {
             const editorId = this.props.id;
 
-            StaticApi.parseTableJson(
-              currentJson,
-              lines,
-              this.editor.getCodeMirror(),
-              editorId
-            )
+            StaticApi.parseTableJson(currentJson, lines, this.editor.getCodeMirror(), editorId)
               .then(result => {
                 runInAction(() => {
-                  this.props.api.outputApi.showChartPanel(
-                    editorId,
-                    result,
-                    'loaded'
-                  );
+                  this.props.api.outputApi.showChartPanel(editorId, result, 'loaded');
                 });
               })
               .catch(err => {
-                const message =
-                  globalString('output/editor/parseJsonError') + err;
+                const message = globalString('output/editor/parseJsonError') + err;
                 runInAction(() => {
                   NewToaster.show({
                     message,
@@ -206,12 +187,7 @@ export default class Editor extends React.Component {
                 });
 
                 runInAction(() => {
-                  this.props.api.outputApi.showChartPanel(
-                    editorId,
-                    {},
-                    'error',
-                    message
-                  );
+                  this.props.api.outputApi.showChartPanel(editorId, {}, 'error', message);
                 });
               });
           }}

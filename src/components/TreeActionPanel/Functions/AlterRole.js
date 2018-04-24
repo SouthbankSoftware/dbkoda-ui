@@ -28,34 +28,34 @@ import * as common from './Common.js';
 
 export const AlterRole = {
   // Prefill function for alter role
-  dbkoda_AlterRolePreFill: (params) => {
-    return `db.getSiblingDB("${params.parentDB}").getRole("${params.RoleName}", { showPrivileges: true, showBuiltinRoles: false })`;
+  dbkoda_AlterRolePreFill: params => {
+    return `db.getSiblingDB("${params.parentDB}").getRole("${
+      params.RoleName
+    }", { showPrivileges: true, showBuiltinRoles: false })`;
   },
-  dbkoda_AlterRolePreFill_parse: (roleDoc) => {
+  dbkoda_AlterRolePreFill_parse: roleDoc => {
     if (!roleDoc) {
       throw new Error('No role found for Alter Role');
     }
     const outputDoc = {};
     outputDoc.Database = roleDoc.db;
     outputDoc.RoleName = roleDoc.role;
-    outputDoc.Roles = roleDoc.roles.map((role) => {
+    outputDoc.Roles = roleDoc.roles.map(role => {
       return { Database: role.db, Role: role.role };
     });
-    outputDoc.Privileges = roleDoc.privileges.map((privilege) => {
+    outputDoc.Privileges = roleDoc.privileges.map(privilege => {
       return {
         Database: privilege.resource.db,
         Collection: privilege.resource.collection,
         Cluster: privilege.resource.cluster,
-        Actions: privilege.actions,
+        Actions: privilege.actions
       };
     });
     return outputDoc;
   },
-  dbkoda_validateAlterRole: (inputDoc) => {
+  dbkoda_validateAlterRole: inputDoc => {
     if (!Object.prototype.hasOwnProperty.call(inputDoc, 'RoleName')) {
-      throw new Error(
-        'dbkoda: Alter Role requires the name of the role to be modified',
-      );
+      throw new Error('dbkoda: Alter Role requires the name of the role to be modified');
     }
     return true;
   },
@@ -64,5 +64,5 @@ export const AlterRole = {
   dbkoda_listRoles: common.dbkoda_listRoles,
   dbkoda_listRoles_parse: common.dbkoda_listRoles_parse,
   dbkoda_listActions: common.dbkoda_listActions,
-  dbkoda_listActions_parse: common.dbkoda_listActions_parse,
+  dbkoda_listActions_parse: common.dbkoda_listActions_parse
 };

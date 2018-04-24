@@ -29,17 +29,17 @@
 import * as common from './Common.js';
 
 export const DropCollection = {
-    executeCommand: null,
-    setExecuteFunction: (cbFuncExecute) => {
-        DropCollection.executeCommand = cbFuncExecute;
-    },
-    // Prefill function for alter user
-    dbkoda_DropCollectionPreFill: (params) => {
-        const data = {};
-        data.Database = params.Database;
-        data.CollectionName = params.CollectionName;
-        return data;
-    },
+  executeCommand: null,
+  setExecuteFunction: cbFuncExecute => {
+    DropCollection.executeCommand = cbFuncExecute;
+  },
+  // Prefill function for alter user
+  dbkoda_DropCollectionPreFill: params => {
+    const data = {};
+    data.Database = params.Database;
+    data.CollectionName = params.CollectionName;
+    return data;
+  },
   dbkoda_listdb: common.dbkoda_listdb,
   dbkoda_listdb_parse: common.dbkoda_listdb_parse,
   dbkoda_listcollections: common.dbkoda_listcollections,

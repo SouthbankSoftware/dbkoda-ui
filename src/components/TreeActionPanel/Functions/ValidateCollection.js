@@ -29,19 +29,19 @@
 import * as common from './Common.js';
 
 export const ValidateCollection = {
-    // Prefill function for alter user
-    dbkoda_ValidateCollectionPreFill: (params) => {
-        const data = {};
-        data.Database = params.Database;
-        data.CollectionName = params.CollectionName;
-        data.full = false;
-        data.scandata = true;
-        return data;
-    },
-    dbkoda_listdb: common.dbkoda_listdb,
-    dbkoda_listdb_parse: common.dbkoda_listdb_parse,
-    dbkoda_listcollections: common.dbkoda_listcollections,
-    dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
-    dbkodaListAttributes: common.dbkodaListAttributes,
-    dbkodaListAttributes_parse: common.dbkodaListAttributes_parse
+  // Prefill function for alter user
+  dbkoda_ValidateCollectionPreFill: params => {
+    const data = {};
+    data.Database = params.Database;
+    data.CollectionName = params.CollectionName;
+    data.full = false;
+    data.scandata = true;
+    return data;
+  },
+  dbkoda_listdb: common.dbkoda_listdb,
+  dbkoda_listdb_parse: common.dbkoda_listdb_parse,
+  dbkoda_listcollections: common.dbkoda_listcollections,
+  dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
+  dbkodaListAttributes: common.dbkodaListAttributes,
+  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse
 };

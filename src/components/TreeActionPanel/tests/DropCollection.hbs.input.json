@@ -1,4 +1,4 @@
 {
-    "Database": "test",
-    "CollectionName": "randomCollectionName"
+  "Database": "test",
+  "CollectionName": "randomCollectionName"
 }

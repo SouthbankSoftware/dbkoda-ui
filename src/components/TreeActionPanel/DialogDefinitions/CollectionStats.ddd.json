@@ -1,27 +1,31 @@
 {
-    "Title": "Collection Statistics",
-    "AutoExecute":true,
-    "DefaultValues": {
-        "function": "dbkoda_CollectionStatsPreFill",
-        "arguments": [{
-            "name": "Database",
-            "value": "treeNode.parentDB"
-        }, {
-            "name": "CollectionName",
-            "value": "treeNode"
-        }]
-    },
-    "Fields": [{
-            "name": "Database",
-            "type": "Text",
-            "readOnly": true,
-            "rules": "required"
-        },
-        {
-            "name": "CollectionName",
-            "type": "Text",
-            "readOnly": true,
-            "rules": "required"
-        }
+  "Title": "Collection Statistics",
+  "AutoExecute": true,
+  "DefaultValues": {
+    "function": "dbkoda_CollectionStatsPreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode.parentDB"
+      },
+      {
+        "name": "CollectionName",
+        "value": "treeNode"
+      }
     ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true,
+      "rules": "required"
+    },
+    {
+      "name": "CollectionName",
+      "type": "Text",
+      "readOnly": true,
+      "rules": "required"
+    }
+  ]
 }

@@ -101,7 +101,12 @@ export default class Terminal extends React.PureComponent<Props> {
     this.reactions.push(
       reaction(
         () => {
-          const { store: { outputPanel: { currentTab } }, tabId } = this.props;
+          const {
+            store: {
+              outputPanel: { currentTab }
+            },
+            tabId
+          } = this.props;
 
           return currentTab === tabId;
         },
@@ -228,7 +233,10 @@ export default class Terminal extends React.PureComponent<Props> {
   });
 
   _onExecuteCommands = (all: boolean) => {
-    const { store: { editorPanel, editors }, send } = this.props;
+    const {
+      store: { editorPanel, editors },
+      send
+    } = this.props;
     const currEditor = editors.get(editorPanel.activeEditorId);
 
     if (!currEditor) return;

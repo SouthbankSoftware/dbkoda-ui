@@ -91,12 +91,8 @@ export default class FormBuilder {
     }
     if (defField.type == 'Numeric') {
       res.fieldBinding = 'NumericField';
-      res.fieldMin = Object.prototype.hasOwnProperty.call(defField, 'min')
-        ? defField.min
-        : null;
-      res.fieldMax = Object.prototype.hasOwnProperty.call(defField, 'max')
-        ? defField.max
-        : null;
+      res.fieldMin = Object.prototype.hasOwnProperty.call(defField, 'min') ? defField.min : null;
+      res.fieldMax = Object.prototype.hasOwnProperty.call(defField, 'max') ? defField.max : null;
     }
     if (defField.type == 'Combo') {
       res.fieldBinding = 'ComboField';
@@ -134,11 +130,7 @@ export default class FormBuilder {
           resolve(query);
         }
       } else {
-        SyncService.executeQuery(
-          query,
-          this.editor.shellId,
-          this.editor.profileId
-        )
+        SyncService.executeQuery(query, this.editor.shellId, this.editor.profileId)
           .then(res => {
             result[query] = res;
             if (queries.length > 0) {
@@ -255,8 +247,7 @@ export default class FormBuilder {
         if (defField.type == 'Table') {
           for (const col of defField.columns) {
             const colField = this.getField(col, formFunctions);
-            const colFieldName =
-              resField.fieldName + '[].' + colField.fieldName;
+            const colFieldName = resField.fieldName + '[].' + colField.fieldName;
             setFormOptions(colField, colFieldName);
           }
           result.arrayLast.push(resField.fieldName); // this is utilized after the form has returned the input document for the template
@@ -290,9 +281,7 @@ export default class FormBuilder {
                 }
                 if (formFunctions[fldQuery.parseFn]) {
                   try {
-                    arrOptions = [''].concat(
-                      formFunctions[fldQuery.parseFn](resOpts)
-                    );
+                    arrOptions = [''].concat(formFunctions[fldQuery.parseFn](resOpts));
                   } catch (e) {
                     console.error(e.stack);
                   }
@@ -333,12 +322,7 @@ export default class FormBuilder {
    * @param  {String}   formAction            Action to load by Form Builder
    * @return {Promise}                        Promise which will be resolved once all the queries for prefetching are resolved.
    */
-  createForm = (
-    resolveArguments,
-    updateDynamicFormCode,
-    editorObject,
-    formAction
-  ) => {
+  createForm = (resolveArguments, updateDynamicFormCode, editorObject, formAction) => {
     try {
       let treeAction;
       let ddd;
@@ -370,9 +354,7 @@ export default class FormBuilder {
         // Load the form definitions dynamically
         ddd = require('./DialogDefinitions/' + treeAction + '.ddd.json'); //eslint-disable-line
         // Load the form functions to support the definitions dynamically
-        formFunctions = require('./Functions/' + treeAction + '.js')[ //eslint-disable-line
-          treeAction
-        ];
+        formFunctions = require('./Functions/' + treeAction + '.js')[treeAction]; //eslint-disable-line
         // load the form template
         formTemplate = require('./Templates/' + treeAction + '.hbs'); //eslint-disable-line
       }
@@ -478,8 +460,7 @@ export default class FormBuilder {
                 editorObject.blockList[editorObject.selectedBlock].modified
               ) {
                 // Prefill fields with data from store.
-                const blockFields =
-                  editorObject.blockList[editorObject.selectedBlock].fields;
+                const blockFields = editorObject.blockList[editorObject.selectedBlock].fields;
                 updatePrefilledData(blockFields);
               } else if (ddd.DefaultValues) {
                 // Else fill with default values.
@@ -489,21 +470,15 @@ export default class FormBuilder {
                   params = this.resolveArguments(args);
                 }
                 let PrefilledValues;
-                if (
-                  ddd.DefaultValues.arguments &&
-                  ddd.DefaultValues.arguments.length > 0
-                ) {
-                  PrefilledValues = formFunctions[ddd.DefaultValues.function](
-                    params
-                  );
+                if (ddd.DefaultValues.arguments && ddd.DefaultValues.arguments.length > 0) {
+                  PrefilledValues = formFunctions[ddd.DefaultValues.function](params);
                 } else {
                   PrefilledValues = formFunctions[ddd.DefaultValues.function]();
                 }
                 if (typeof PrefilledValues === 'string') {
                   let parseFunction;
                   if (formFunctions[ddd.DefaultValues.function + '_parse']) {
-                    parseFunction =
-                      formFunctions[ddd.DefaultValues.function + '_parse'];
+                    parseFunction = formFunctions[ddd.DefaultValues.function + '_parse'];
                   } else {
                     parseFunction = defaultParseFunction;
                   }

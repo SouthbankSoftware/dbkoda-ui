@@ -19,13 +19,7 @@
  */
 
 import React from 'react';
-import {
-  Radio,
-  NumericInput,
-  Tooltip,
-  Intent,
-  Position,
-} from '@blueprintjs/core';
+import { Radio, NumericInput, Tooltip, Intent, Position } from '@blueprintjs/core';
 
 import './Profile.scss';
 
@@ -33,12 +27,12 @@ export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.defaultOptions = {
-      selectedDb: {value: {was: 0}},
+      selectedDb: { value: { was: 0 } },
       selectedValue: -1,
       exceedLimit: 100,
-      profileCollectionSize: 1000000,
+      profileCollectionSize: 1000000
     };
-    this.state = {...this.defaultOptions};
+    this.state = { ...this.defaultOptions };
   }
 
   componentDidMount() {
@@ -53,7 +47,7 @@ export default class Profile extends React.Component {
         this.applyCollectionSize(nextProps.selectedDb);
       }
     } else {
-      this.setState({...this.defaultOptions});
+      this.setState({ ...this.defaultOptions });
     }
   }
 
@@ -61,19 +55,19 @@ export default class Profile extends React.Component {
     console.log('selected db', selectedDb);
     if (selectedDb) {
       const selectedValue = selectedDb.value.was;
-      this.setState({selectedDb, selectedValue});
+      this.setState({ selectedDb, selectedValue });
     }
   }
 
   applyExceedLimits(selectedDb) {
     if (selectedDb && selectedDb.value.slowms) {
-      this.setState({exceedLimit: selectedDb.value.slowms});
+      this.setState({ exceedLimit: selectedDb.value.slowms });
     }
   }
 
   applyCollectionSize(selectedDb) {
     if (selectedDb && selectedDb.value.size) {
-      this.setState({profileCollectionSize: selectedDb.value.size});
+      this.setState({ profileCollectionSize: selectedDb.value.size });
     }
   }
 
@@ -85,15 +79,15 @@ export default class Profile extends React.Component {
   }
 
   onChange = e => {
-    this.setState({selectedValue: parseInt(e.target.value, 10)});
+    this.setState({ selectedValue: parseInt(e.target.value, 10) });
   };
 
   commitProfileConfiguration = () => {
-    const {selectedValue, exceedLimit, profileCollectionSize} = this.state;
+    const { selectedValue, exceedLimit, profileCollectionSize } = this.state;
     this.props.commitProfileConfiguration({
       level: selectedValue,
       slowms: exceedLimit,
-      profileSize: profileCollectionSize,
+      profileSize: profileCollectionSize
     });
   };
 
@@ -107,9 +101,7 @@ export default class Profile extends React.Component {
         <div>
           <Tooltip
             className=""
-            content={globalString(
-              'performance/profiling/configuration/tooltip/level2'
-            )}
+            content={globalString('performance/profiling/configuration/tooltip/level2')}
             hoverOpenDelay={1000}
             intent={Intent.PRIMARY}
             position={Position.TOP}
@@ -119,18 +111,14 @@ export default class Profile extends React.Component {
               checked={selectedValue === 2}
               onChange={this.onChange}
               className="profiling-label profile-all"
-              label={globalString(
-                'performance/profiling/configuration/profile-all'
-              )}
+              label={globalString('performance/profiling/configuration/profile-all')}
             />
           </Tooltip>
         </div>
         <div className="exceeding-limit-panel">
           <Tooltip
             className=""
-            content={globalString(
-              'performance/profiling/configuration/tooltip/level1'
-            )}
+            content={globalString('performance/profiling/configuration/tooltip/level1')}
             hoverOpenDelay={1000}
             intent={Intent.PRIMARY}
             position={Position.TOP}
@@ -140,9 +128,7 @@ export default class Profile extends React.Component {
               onChange={this.onChange}
               checked={selectedValue === 1}
               className="profiling-label operation-exceeds"
-              label={globalString(
-                'performance/profiling/configuration/operation-exceeds'
-              )}
+              label={globalString('performance/profiling/configuration/operation-exceeds')}
             />
           </Tooltip>
           <NumericInput
@@ -151,16 +137,14 @@ export default class Profile extends React.Component {
             majorStepSize={100}
             selectAllOnFocus
             min={1}
-            onValueChange={v => this.setState({exceedLimit: v})}
+            onValueChange={v => this.setState({ exceedLimit: v })}
           />
           <div className="profiling-label">ms</div>
         </div>
         <div>
           <Tooltip
             className=""
-            content={globalString(
-              'performance/profiling/configuration/tooltip/level0'
-            )}
+            content={globalString('performance/profiling/configuration/tooltip/level0')}
             hoverOpenDelay={1000}
             intent={Intent.PRIMARY}
             position={Position.TOP}
@@ -170,26 +154,20 @@ export default class Profile extends React.Component {
               onChange={this.onChange}
               className="profiling-label"
               checked={selectedValue === 0}
-              label={globalString(
-                'performance/profiling/configuration/profiling-off'
-              )}
+              label={globalString('performance/profiling/configuration/profiling-off')}
             />
           </Tooltip>
         </div>
         <div className="exceeding-limit-panel">
           <Tooltip
             className=""
-            content={globalString(
-              'performance/profiling/configuration/tooltip/collection-size'
-            )}
+            content={globalString('performance/profiling/configuration/tooltip/collection-size')}
             hoverOpenDelay={1000}
             intent={Intent.PRIMARY}
             position={Position.TOP}
           >
             <div className="profiling-label collection-size">
-              {globalString(
-                'performance/profiling/configuration/profile-collection-size'
-              )}
+              {globalString('performance/profiling/configuration/profile-collection-size')}
             </div>
           </Tooltip>
           <NumericInput
@@ -197,15 +175,13 @@ export default class Profile extends React.Component {
             stepSize={1000}
             majorStepSize={1000000}
             min={1000}
-            onValueChange={v => this.setState({profileCollectionSize: v})}
+            onValueChange={v => this.setState({ profileCollectionSize: v })}
             value={this.state.profileCollectionSize}
           />
           <div className="profiling-label">Byte</div>
         </div>
         <div className="profiling-label profile-size-warning">
-          {globalString(
-            'performance/profiling/configuration/system-profile-size-warning'
-          )}
+          {globalString('performance/profiling/configuration/system-profile-size-warning')}
         </div>
         <div className="button-group">
           <button

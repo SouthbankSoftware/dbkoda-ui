@@ -113,8 +113,7 @@ export const generateColorValueByTime = (stage, number, max, min) => {
     return defaultColor;
   }
   const value = parseInt(
-    (getStageElapseTime(stage) - min) * (greenValue - redValue) / (max - min) +
-      redValue,
+    (getStageElapseTime(stage) - min) * (greenValue - redValue) / (max - min) + redValue,
     10
   );
   return coloursTheme[value];
@@ -126,17 +125,11 @@ const findMongoCommandFromMemberExpress = exp => {
   let parent = exp;
   const commands = [];
   while (memberExp && memberExp.type === esprima.Syntax.MemberExpression) {
-    if (
-      memberExp.property &&
-      memberExp.property.type === esprima.Syntax.Identifier
-    ) {
+    if (memberExp.property && memberExp.property.type === esprima.Syntax.Identifier) {
       const cmd = { name: memberExp.property.name, parent };
       parent = memberExp;
       cmd.ast = memberExp;
-      if (
-        memberExp.object &&
-        memberExp.object.type === esprima.Syntax.CallExpression
-      ) {
+      if (memberExp.object && memberExp.object.type === esprima.Syntax.CallExpression) {
         memberExp = memberExp.object.callee;
       } else {
         memberExp = memberExp.object;
@@ -148,18 +141,12 @@ const findMongoCommandFromMemberExpress = exp => {
 };
 
 const findRootExpression = ast => {
-  if (
-    ast.type === esprima.Syntax.Program &&
-    ast.body &&
-    ast.body.length === 1
-  ) {
+  if (ast.type === esprima.Syntax.Program && ast.body && ast.body.length === 1) {
     const script = ast.body[0];
     if (script.type === esprima.Syntax.ExpressionStatement) {
       if (script.expression.type === esprima.Syntax.CallExpression) {
         return script.expression;
-      } else if (
-        script.expression.type === esprima.Syntax.AssignmentExpression
-      ) {
+      } else if (script.expression.type === esprima.Syntax.AssignmentExpression) {
         return script.expression.right;
       }
     } else if (
@@ -183,9 +170,7 @@ export const findMongoCommand = commandAst => {
     if (script.type === esprima.Syntax.ExpressionStatement) {
       if (script.expression.type === esprima.Syntax.CallExpression) {
         return findMongoCommandFromMemberExpress(script.expression);
-      } else if (
-        script.expression.type === esprima.Syntax.AssignmentExpression
-      ) {
+      } else if (script.expression.type === esprima.Syntax.AssignmentExpression) {
         return findMongoCommandFromMemberExpress(script.expression.right);
       }
     } else if (
@@ -238,11 +223,7 @@ export const insertExplainToAggregate = root => {
     if (root.arguments.length > 1) {
       // insert into the second argument
       const second = root.arguments[1];
-      if (
-        second &&
-        second.type === esprima.Syntax.ObjectExpression &&
-        second.properties
-      ) {
+      if (second && second.type === esprima.Syntax.ObjectExpression && second.properties) {
         second.properties.push({
           type: esprima.Syntax.Property,
           key: {
@@ -296,10 +277,7 @@ export const appendNextOnExplainFind = command => {
   return command;
 };
 
-export const insertExplainOnCommand = (
-  command,
-  explainParam = 'queryPlanner'
-) => {
+export const insertExplainOnCommand = (command, explainParam = 'queryPlanner') => {
   try {
     const parsed = esprima.parseScript(command);
     const root = findRootExpression(parsed);
@@ -308,15 +286,9 @@ export const insertExplainOnCommand = (
     if (!_.find(commands, { name: 'explain' })) {
       const matchedCmd = findMatchedCommand(commands);
       if (matchedCmd) {
-        if (
-          ['aggregate', 'count', 'update', 'distinct'].indexOf(
-            matchedCmd.name
-          ) >= 0
-        ) {
+        if (['aggregate', 'count', 'update', 'distinct'].indexOf(matchedCmd.name) >= 0) {
           const explainObj =
-            matchedCmd.name === 'aggregate'
-              ? explainAst()
-              : explainAst(explainParam);
+            matchedCmd.name === 'aggregate' ? explainAst() : explainAst(explainParam);
           explainObj.callee.object = matchedCmd.ast.object;
           matchedCmd.ast.object = explainObj;
           return escodegen.generate(parsed);

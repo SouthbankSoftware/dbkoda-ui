@@ -28,7 +28,7 @@ import { Position, Toaster } from '@blueprintjs/core';
 
 export const NewToaster = Toaster.create({
   className: 'dbkoda-toaster',
-  position: Position.TOP_RIGHT,
+  position: Position.TOP_RIGHT
 });
 
 export const DBKodaToaster = () => {

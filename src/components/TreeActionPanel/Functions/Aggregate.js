@@ -34,33 +34,29 @@ const sprintf = require('sprintf-js').sprintf;
 
 export const Aggregate = {
   executeCommand: null,
-  setExecuteFunction: (cbFuncExecute) => {
+  setExecuteFunction: cbFuncExecute => {
     Aggregate.executeCommand = cbFuncExecute;
   },
   // Prefill function for alter user
-  dbkoda_AggregatePreFill: (params) => {
-    return sprintf(
-      'dbe.aggregationPreFill("%s","%s")',
-      params.Database,
-      params.CollectionName,
-    );
+  dbkoda_AggregatePreFill: params => {
+    return sprintf('dbe.aggregationPreFill("%s","%s")', params.Database, params.CollectionName);
   },
-  dbkoda_AggregatePreFill_parse: (res) => {
+  dbkoda_AggregatePreFill_parse: res => {
     res.InitialFilter = false;
     return res;
   },
   dbkoda_sortOptions: () => {
     return 'db';
   },
-  dbkoda_sortOptions_parse: (res) => {
+  dbkoda_sortOptions_parse: res => {
     return [1, -1];
   },
   dbkodaAggSteps: () => {
     return 'dbe.aggregationArgs()';
   },
-  dbkodaAggSteps_parse: (res) => {
+  dbkodaAggSteps_parse: res => {
     const data = [];
-    res.forEach((r) => {
+    res.forEach(r => {
       data.push(r.StepName);
     });
     return data;
@@ -70,5 +66,5 @@ export const Aggregate = {
   dbkoda_listcollections: common.dbkoda_listcollections,
   dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
   dbkodaListAttributes: common.dbkodaListAttributes,
-  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
+  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse
 };

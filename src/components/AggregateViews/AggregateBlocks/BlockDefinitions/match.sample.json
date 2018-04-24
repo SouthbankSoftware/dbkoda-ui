@@ -1,12 +1,13 @@
 {
-    "UseOr":false,
-    "FilterKeys":[ {
-        "AttributeName":"a",
-        "Value":"1"
+  "UseOr": false,
+  "FilterKeys": [
+    {
+      "AttributeName": "a",
+      "Value": "1"
     },
     {
-        "AttributeName":"b",
-        "Value":"2"
+      "AttributeName": "b",
+      "Value": "2"
     }
-    ]
+  ]
 }

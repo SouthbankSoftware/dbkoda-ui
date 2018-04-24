@@ -24,93 +24,89 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* eslint import/no-dynamic-require: warn */
 
- /* eslint import/no-dynamic-require: warn */
+import 'codemirror/addon/hint/show-hint.css';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/addon/lint/lint.css';
+import 'codemirror/addon/dialog/dialog.css';
+import 'codemirror/addon/search/matchesonscrollbar.css';
+import { observer } from 'mobx-react';
+import React from 'react';
+import CodeMirror from '#/common/LegacyCodeMirror';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/addon/selection/active-line.js';
+import 'codemirror/addon/display/autorefresh.js';
+import 'codemirror/addon/edit/matchbrackets.js';
+// Patched for codemirror@5.28.0. Need to check this file when upgrade codemirror
+import '#/common/closebrackets.js';
+import 'codemirror/addon/fold/foldcode.js';
+import 'codemirror/addon/fold/foldgutter.js';
+import 'codemirror/addon/fold/brace-fold.js';
+import 'codemirror/addon/fold/comment-fold.js';
+import 'codemirror/addon/fold/xml-fold.js';
+import 'codemirror/addon/hint/show-hint.js';
+import 'codemirror/addon/hint/javascript-hint.js';
+import 'codemirror/keymap/sublime.js';
+import 'codemirror-formatting';
+import '#/common/MongoScript.js';
+import 'codemirror/theme/material.css';
 
- import 'codemirror/addon/hint/show-hint.css';
- import 'codemirror/lib/codemirror.css';
- import 'codemirror/addon/lint/lint.css';
- import 'codemirror/addon/dialog/dialog.css';
- import 'codemirror/addon/search/matchesonscrollbar.css';
- import { observer } from 'mobx-react';
- import React from 'react';
- import CodeMirror from '#/common/LegacyCodeMirror';
- import 'codemirror/mode/javascript/javascript';
- import 'codemirror/addon/selection/active-line.js';
- import 'codemirror/addon/display/autorefresh.js';
- import 'codemirror/addon/edit/matchbrackets.js';
- // Patched for codemirror@5.28.0. Need to check this file when upgrade codemirror
- import '#/common/closebrackets.js';
- import 'codemirror/addon/fold/foldcode.js';
- import 'codemirror/addon/fold/foldgutter.js';
- import 'codemirror/addon/fold/brace-fold.js';
- import 'codemirror/addon/fold/comment-fold.js';
- import 'codemirror/addon/fold/xml-fold.js';
- import 'codemirror/addon/hint/show-hint.js';
- import 'codemirror/addon/hint/javascript-hint.js';
- import 'codemirror/keymap/sublime.js';
- import 'codemirror-formatting';
- import '#/common/MongoScript.js';
- import 'codemirror/theme/material.css';
+@observer
+export default class OperationDetails extends React.Component {
+  static propTypes = {};
+  constructor(props) {
+    super(props);
 
- @observer
- export default class OperationDetails extends React.Component {
-   static propTypes = {};
-   constructor(props) {
-     super(props);
+    this.cmOptions = {
+      value: '',
+      theme: 'material',
+      // lineNumbers: 'false',
+      indentUnit: 2,
+      styleActiveLine: 'true',
+      scrollbarStyle: null,
+      smartIndent: true,
+      styleSelectedText: false,
+      tabSize: 2,
+      matchBrackets: true,
+      autoCloseBrackets: true,
+      // foldOptions: {
+      //   widget: '...',
+      // },
+      // foldGutter: false,
+      // gutters: [
+      //   'CodeMirror-linenumbers',
+      //   'CodeMirror-foldgutter', // , 'CodeMirror-lint-markers'
+      // ],
+      keyMap: 'sublime',
+      mode: 'MongoScript'
+    };
 
-     this.cmOptions = {
-       value: '',
-       theme: 'material',
-       // lineNumbers: 'false',
-       indentUnit: 2,
-       styleActiveLine: 'true',
-       scrollbarStyle: null,
-       smartIndent: true,
-       styleSelectedText: false,
-       tabSize: 2,
-       matchBrackets: true,
-       autoCloseBrackets: true,
-       // foldOptions: {
-       //   widget: '...',
-       // },
-       // foldGutter: false,
-       // gutters: [
-       //   'CodeMirror-linenumbers',
-       //   'CodeMirror-foldgutter', // , 'CodeMirror-lint-markers'
-       // ],
-       keyMap: 'sublime',
-       mode: 'MongoScript',
-     };
+    this.state = {
+      code: ''
+    };
+  }
 
-     this.state = {
-       code: ''
-     };
-   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps && nextProps.operation) {
+      this.setState({ code: JSON.stringify(nextProps.operation, null, 2) });
+    }
+  }
 
-   componentWillReceiveProps(nextProps) {
-     if (nextProps && nextProps.operation) {
-       this.setState({code: JSON.stringify(nextProps.operation, null, 2)});
-     }
-   }
-
-   render() {
-     return (
-       <div style={{ height: '100%' }}>
-         <nav className="pt-navbar connectionsToolbar">
-           <div className="pt-navbar-group pt-align-left">
-             <div className="pt-navbar-heading" />
-           </div>
-         </nav>
-         <div style={{ height: '100%' }}>
-           <div className="editorView">
-             <CodeMirror
-               value={this.state.code}
-               options={this.cmOptions}
-             />
-           </div>
-         </div>
-       </div>
-     );
-   }
- }
+  render() {
+    return (
+      <div style={{ height: '100%' }}>
+        <nav className="pt-navbar connectionsToolbar">
+          <div className="pt-navbar-group pt-align-left">
+            <div className="pt-navbar-heading" />
+          </div>
+        </nav>
+        <div style={{ height: '100%' }}>
+          <div className="editorView">
+            <CodeMirror value={this.state.code} options={this.cmOptions} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+}

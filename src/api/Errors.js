@@ -33,4 +33,3 @@ export const ErrorCodes = {
   MONGO_RECONNECT_SUCCESS: 'performance/errors/mongo_reconnect_success',
   UNSUPPORTED_STATS_OS: 'performance/errors/ssh_unsupported_os'
 };
-

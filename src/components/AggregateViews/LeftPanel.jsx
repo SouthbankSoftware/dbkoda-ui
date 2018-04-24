@@ -39,7 +39,7 @@ const splitPane2Style = {
 };
 
 @inject(allStores => ({
-  store: allStores.store,
+  store: allStores.store
 }))
 @observer
 export default class LeftPanel extends React.Component {
@@ -58,13 +58,11 @@ export default class LeftPanel extends React.Component {
           minSize={250}
           maxSize={1000}
           pane2Style={splitPane2Style}
-          >
+        >
           <Palette />
           <Details />
         </SplitPane>
-
       </div>
     );
   }
 }
-

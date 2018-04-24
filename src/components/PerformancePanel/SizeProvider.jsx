@@ -83,26 +83,21 @@ export default (ComposedComponent: ReactComponentType<any>) =>
       const { verticalGridSize, margin, bFitHeight, minFitHeight } = this.props;
       if (bFitHeight) {
         let rowHeight =
-          (window.innerHeight -
-            (verticalGridSize - 1) * margin[1] -
-            2 * margin[1]) /
+          (window.innerHeight - (verticalGridSize - 1) * margin[1] - 2 * margin[1]) /
           verticalGridSize;
-        if (minFitHeight && (rowHeight * verticalGridSize < minFitHeight)) {
+        if (minFitHeight && rowHeight * verticalGridSize < minFitHeight) {
           rowHeight = 1000 / verticalGridSize;
         }
 
         this.setState({
-          width:
-            node instanceof HTMLElement ? node.offsetWidth : this.state.width,
+          width: node instanceof HTMLElement ? node.offsetWidth : this.state.width,
           rowHeight
         });
       } else {
         console.log(this.props.rowHeight);
-        const gridHeight =
-          (this.props.rowHeight + margin[1]) * verticalGridSize;
+        const gridHeight = (this.props.rowHeight + margin[1]) * verticalGridSize;
         this.setState({
-          width:
-            node instanceof HTMLElement ? node.offsetWidth : this.state.width,
+          width: node instanceof HTMLElement ? node.offsetWidth : this.state.width,
           height: gridHeight,
           rowHeight: this.props.rowHeight
         });
@@ -118,8 +113,6 @@ export default (ComposedComponent: ReactComponentType<any>) =>
         return <div {...this.props} {...this.state} style={gridStyle} />;
       }
 
-      return (
-        <ComposedComponent {...this.props} {...this.state} style={gridStyle} />
-      );
+      return <ComposedComponent {...this.props} {...this.state} style={gridStyle} />;
     }
   };

@@ -1,11 +1,13 @@
 {
   "Title": "Sample",
   "DefaultValues": {},
-  "Fields": [{
-    "name": "sample",
-    "label": "Sample size",
-    "tooltip": "Random sample of documents in the pipeline",
-    "type": "Numeric",
-    "rules": "integer"
-  }]
+  "Fields": [
+    {
+      "name": "sample",
+      "label": "Sample size",
+      "tooltip": "Random sample of documents in the pipeline",
+      "type": "Numeric",
+      "rules": "integer"
+    }
+  ]
 }

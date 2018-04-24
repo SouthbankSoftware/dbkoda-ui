@@ -1,16 +1,19 @@
 {
-    "Title": "ReplaceRoot",
-    "DefaultValues": {},
-    "Fields": [{
-        "name": "Attribute",
-        "label": "Embedded document to promote",
-        "tooltip": "Choose an embedded document to be promoted",
-        "type": "Combo",
-        "lookup": "dbkodaListAttributesAgg",
-        "lookup_arguments": [{
-                "name": "prevAttributes",
-                "value": "prevAttributes"
-            }
-        ]
-    }]
+  "Title": "ReplaceRoot",
+  "DefaultValues": {},
+  "Fields": [
+    {
+      "name": "Attribute",
+      "label": "Embedded document to promote",
+      "tooltip": "Choose an embedded document to be promoted",
+      "type": "Combo",
+      "lookup": "dbkodaListAttributesAgg",
+      "lookup_arguments": [
+        {
+          "name": "prevAttributes",
+          "value": "prevAttributes"
+        }
+      ]
+    }
+  ]
 }

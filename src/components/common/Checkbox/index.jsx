@@ -18,21 +18,12 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import {Checkbox} from '@blueprintjs/core';
+import { Checkbox } from '@blueprintjs/core';
 
 import './style.scss';
 
 export default props => {
-  const clsName = props.className
-    ? props.className + ' checkbox-form'
-    : 'checkbox-form';
-  const {value, label} = props;
-  return (
-    <Checkbox
-      className={clsName}
-      onClick={props.onClick}
-      checked={value}
-      label={label}
-    />
-  );
+  const clsName = props.className ? props.className + ' checkbox-form' : 'checkbox-form';
+  const { value, label } = props;
+  return <Checkbox className={clsName} onClick={props.onClick} checked={value} label={label} />;
 };

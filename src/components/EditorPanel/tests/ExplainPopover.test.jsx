@@ -42,7 +42,7 @@ describe('Explain Toolbar Test', () => {
     globalizeInit();
     store = new Store();
     app = mount(
-      <ExplainPopover editorToolbar={store.editorToolbar} editorPanel={store.editorPanel} />,
+      <ExplainPopover editorToolbar={store.editorToolbar} editorPanel={store.editorPanel} />
     );
   });
 

@@ -39,9 +39,7 @@ import {
 import { generateCode, getCommandObject } from './CodeGenerator';
 import { getDialogProperites, isImportAction, isRestoreAction } from './Utils';
 
-const { dialog, BrowserWindow } = IS_ELECTRON
-  ? window.require('electron').remote
-  : {};
+const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
 export default class DatabaseExport extends React.Component {
   constructor(props) {
@@ -81,14 +79,7 @@ export default class DatabaseExport extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      treeAction,
-      db,
-      collection,
-      treeEditor,
-      treeNode,
-      profile
-    } = this.props;
+    const { treeAction, db, collection, treeEditor, treeNode, profile } = this.props;
     this.setState({
       db,
       collection,
@@ -217,15 +208,11 @@ export default class DatabaseExport extends React.Component {
             jsonArray={this.state.jsonArray}
             changeSSL={() => this.setState({ ssl: !this.state.ssl })}
             changePretty={() => this.setState({ pretty: !this.state.pretty })}
-            changeJsonArray={() =>
-              this.setState({ jsonArray: !this.state.jsonArray })
-            }
+            changeJsonArray={() => this.setState({ jsonArray: !this.state.jsonArray })}
             changeAllCollections={() =>
               this.setState({ allCollections: !this.state.allCollections })
             }
-            changeNoHeaderLine={() =>
-              this.setState({ noHeaderLine: !this.state.noHeaderLine })
-            }
+            changeNoHeaderLine={() => this.setState({ noHeaderLine: !this.state.noHeaderLine })}
             noHeaderLine={this.state.noHeaderLine}
             changeExportType={e => {
               const { exportType } = this.state;
@@ -250,9 +237,7 @@ export default class DatabaseExport extends React.Component {
             skip={this.state.skip}
             changeSkip={e => this.setState({ skip: e })}
             assertExists={this.state.assertExists}
-            changeAssertExists={() =>
-              this.setState({ assertExists: !this.state.assertExists })
-            }
+            changeAssertExists={() => this.setState({ assertExists: !this.state.assertExists })}
           />
         );
       case BackupRestoreActions.DUMP_DATABASE:
@@ -264,9 +249,7 @@ export default class DatabaseExport extends React.Component {
             allCollections={this.state.allCollections}
             gzip={this.state.gzip}
             archive={this.state.archive}
-            changeArchive={() =>
-              this.setState({ archive: !this.state.archive })
-            }
+            changeArchive={() => this.setState({ archive: !this.state.archive })}
             changeSSL={() => this.setState({ ssl: !this.state.ssl })}
             changeGZip={() => this.setState({ gzip: !this.state.gzip })}
             repair={this.state.repair}
@@ -295,9 +278,7 @@ export default class DatabaseExport extends React.Component {
               this.setState({ allCollections: !this.state.allCollections });
             }}
             numParallelCollections={this.state.numParallelCollections}
-            changeNumParallelCollections={e =>
-              this.setState({ numParallelCollections: e })
-            }
+            changeNumParallelCollections={e => this.setState({ numParallelCollections: e })}
             readPreference={this.state.readPreference}
             changeReadPreference={e => this.setState({ readPreference: e })}
             forceTableScan={this.state.forceTableScan}
@@ -340,19 +321,13 @@ export default class DatabaseExport extends React.Component {
               })
             }
             numParallelCollections={this.state.numParallelCollections}
-            changeNumParallelCollections={e =>
-              this.setState({ numParallelCollections: e })
-            }
-            numInsertionWorkersPerCollection={
-              this.state.numInsertionWorkersPerCollection
-            }
+            changeNumParallelCollections={e => this.setState({ numParallelCollections: e })}
+            numInsertionWorkersPerCollection={this.state.numInsertionWorkersPerCollection}
             changeNumInsertionWorkersPerCollection={e =>
               this.setState({ numInsertionWorkersPerCollection: e })
             }
             stopOnError={this.state.stopOnError}
-            changeStopOnError={() =>
-              this.setState({ stopOnError: !this.state.stopOnError })
-            }
+            changeStopOnError={() => this.setState({ stopOnError: !this.state.stopOnError })}
             bypassDocumentValidation={this.state.bypassDocumentValidation}
             changeBypassDocumentValidation={() =>
               this.setState({
@@ -360,13 +335,9 @@ export default class DatabaseExport extends React.Component {
               })
             }
             objcheck={this.state.objcheck}
-            changeObjcheck={() =>
-              this.setState({ objcheck: !this.state.objcheck })
-            }
+            changeObjcheck={() => this.setState({ objcheck: !this.state.objcheck })}
             oplogReplay={this.state.oplogReplay}
-            changeOplogReplay={() =>
-              this.setState({ oplogReplay: !this.state.oplogReplay })
-            }
+            changeOplogReplay={() => this.setState({ oplogReplay: !this.state.oplogReplay })}
             oplogLimit={this.state.oplogLimit}
             changeOplogLimit={e => this.setState({ oplogLimit: e })}
             restoreDbUsersAndRoles={this.state.restoreDbUsersAndRoles}
@@ -378,9 +349,7 @@ export default class DatabaseExport extends React.Component {
             gzip={this.state.gzip}
             changeGzip={() => this.setState({ gzip: !this.state.gzip })}
             archive={this.state.archive}
-            changeArchive={() =>
-              this.setState({ archive: !this.state.archive })
-            }
+            changeArchive={() => this.setState({ archive: !this.state.archive })}
           />
         );
       case BackupRestoreActions.IMPORT_COLLECTION:
@@ -391,13 +360,9 @@ export default class DatabaseExport extends React.Component {
             outputFields={this.state.outputFields}
             changeOutputFields={e => this.setState({ outputFields: e })}
             headerLine={this.state.headerLine}
-            changeHeaderLine={() =>
-              this.setState({ headerLine: !this.state.headerLine })
-            }
+            changeHeaderLine={() => this.setState({ headerLine: !this.state.headerLine })}
             jsonArray={this.state.jsonArray}
-            changeJsonArray={() =>
-              this.setState({ jsonArray: !this.state.jsonArray })
-            }
+            changeJsonArray={() => this.setState({ jsonArray: !this.state.jsonArray })}
             parseGrace={this.state.parseGrace}
             changeParseGrace={e => {
               const { parseGrace } = this.state;
@@ -415,9 +380,7 @@ export default class DatabaseExport extends React.Component {
             drop={this.state.drop}
             changeDrop={() => this.setState({ drop: !this.state.drop })}
             ignoreBlanks={this.state.ignoreBlanks}
-            changeIgnoreBlanks={() =>
-              this.setState({ ignoreBlanks: !this.state.ignoreBlanks })
-            }
+            changeIgnoreBlanks={() => this.setState({ ignoreBlanks: !this.state.ignoreBlanks })}
             maintainInsertionOrder={this.state.maintainInsertionOrder}
             changeMaintainInsertionOrder={() =>
               this.setState({
@@ -431,9 +394,7 @@ export default class DatabaseExport extends React.Component {
               })
             }
             stopOnError={this.state.stopOnError}
-            changeStopOnError={() =>
-              this.setState({ stopOnError: !this.state.stopOnError })
-            }
+            changeStopOnError={() => this.setState({ stopOnError: !this.state.stopOnError })}
             mode={this.state.mode}
             changeMode={e => {
               const { mode } = this.state;
@@ -546,9 +507,7 @@ export default class DatabaseExport extends React.Component {
                   className="pt-input db-backup-collection-input"
                   type="text"
                   dir="auto"
-                  readOnly={
-                    treeAction === BackupRestoreActions.RESTORE_COLLECTION
-                  }
+                  readOnly={treeAction === BackupRestoreActions.RESTORE_COLLECTION}
                   value={this.state.collection}
                   onChange={e => this.setState({ collection: e.target.value })}
                 />
@@ -565,17 +524,11 @@ export default class DatabaseExport extends React.Component {
               onChange={e => this.setState({ directoryPath: e.target.value })}
               value={this.state.directoryPath}
             />
-            <Button
-              className="browse-directory"
-              onClick={() => this.openFile(treeAction)}
-            >
+            <Button className="browse-directory" onClick={() => this.openFile(treeAction)}>
               {globalString('backuprestore/chooseDirectory')}
             </Button>
           </div>
-          <label
-            className={this.state.directoryPath ? 'hide' : 'warning'}
-            htmlFor="database"
-          >
+          <label className={this.state.directoryPath ? 'hide' : 'warning'} htmlFor="database">
             {globalString('backuprestore/requiredWarning')}
           </label>
         </div>
@@ -611,11 +564,7 @@ export default class DatabaseExport extends React.Component {
                 treeAction === BackupRestoreActions.IMPORT_COLLECTION ||
                 treeAction === BackupRestoreActions.IMPORT_DATABASE
               }
-              target={
-                treeAction === BackupRestoreActions.DUMP_SERVER
-                  ? 'server'
-                  : 'database'
-              }
+              target={treeAction === BackupRestoreActions.DUMP_SERVER ? 'server' : 'database'}
               selectCollection={this.selectCollection}
               unSelectCollection={this.unSelectCollection}
               selectedCollections={this.state.selectedCollections}

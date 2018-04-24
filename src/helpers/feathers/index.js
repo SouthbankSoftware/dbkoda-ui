@@ -51,10 +51,7 @@ class FeatherClient {
     });
     this.shellService.on('mongo-execution-end', output => {
       const { id, shellId } = output;
-      Broker.emit(
-        EventType.createShellExecutionFinishEvent(id, shellId),
-        output
-      );
+      Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
     });
     this.shellService.on('mongo-shell-reconnected', output => {
       const { id, shellId } = output;
@@ -67,10 +64,7 @@ class FeatherClient {
     this.osService.on('os-command-finish', output => {
       const { id, shellId } = output;
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
-      Broker.emit(
-        EventType.createShellExecutionFinishEvent(id, shellId),
-        output
-      );
+      Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
     });
 
     this.service('files').on('changed', ({ _id }) => {
@@ -98,12 +92,9 @@ class FeatherClient {
     });
 
     this.passwordService = this.service('master-pass');
-    this.passwordService.on(
-      EventType.MASTER_PASSWORD_REQUIRED,
-      ({ method }) => {
-        Broker.emit(EventType.MASTER_PASSWORD_REQUIRED, method);
-      }
-    );
+    this.passwordService.on(EventType.MASTER_PASSWORD_REQUIRED, ({ method }) => {
+      Broker.emit(EventType.MASTER_PASSWORD_REQUIRED, method);
+    });
     this.passwordService.on(EventType.PASSWORD_STORE_RESET, () => {
       Broker.emit(EventType.PASSWORD_STORE_RESET, {});
     });

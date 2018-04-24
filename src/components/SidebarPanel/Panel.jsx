@@ -42,13 +42,13 @@ import './Panel.scss';
 
 const splitPane2Style = {
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'column'
 };
 
 @inject(allStores => ({
   store: allStores.store,
   layout: allStores.store.layout,
-  drawer: allStores.store.drawer,
+  drawer: allStores.store.drawer
 }))
 @observer
 export default class Panel extends React.Component {

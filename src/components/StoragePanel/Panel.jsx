@@ -47,7 +47,7 @@ export default class StoragePanel extends React.Component {
 
     this.state = {
       data: {},
-      selectedNode: null,
+      selectedNode: null
     };
     this.loadData = this.loadData.bind(this);
     Broker.emit(EventType.FEATURE_USE, 'StorageView');
@@ -56,10 +56,7 @@ export default class StoragePanel extends React.Component {
   @action
   loadData() {
     const selectedProfile = this.props.store.profileList.selectedProfile;
-    if (
-      !selectedProfile ||
-      (selectedProfile && selectedProfile.status != 'OPEN')
-    ) {
+    if (!selectedProfile || (selectedProfile && selectedProfile.status != 'OPEN')) {
       this.props.store.profileList.selectedProfile.storageView.visible = false;
       return;
     }
@@ -67,22 +64,16 @@ export default class StoragePanel extends React.Component {
     if (editorId) {
       this.showLoading(true);
       const editor = this.props.store.editors.get(editorId);
-      SyncService.executeQuery(
-        'dbe.storageAnalysis()',
-        editor.shellId,
-        editor.profileId,
-      )
-        .then((res) => {
+      SyncService.executeQuery('dbe.storageAnalysis()', editor.shellId, editor.profileId)
+        .then(res => {
           try {
             this.setStorageData(res);
             this.storageData = res;
           } catch (err) {
-            this.updateMsg(
-              'Unable to parse response from the query. ' + err.message,
-            );
+            this.updateMsg('Unable to parse response from the query. ' + err.message);
           }
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.updateMsg('Error in SyncService: ' + reason);
         });
     }
@@ -91,7 +82,7 @@ export default class StoragePanel extends React.Component {
     const newData = data;
     this.addParent(newData);
     this.setState({
-      data: newData,
+      data: newData
     });
     this.showLoading(false);
     this.showView(true);
@@ -105,9 +96,9 @@ export default class StoragePanel extends React.Component {
         SyncService.executeQuery(
           'dbe.collectionStorageAnalysis("' + db + '", "' + col + '" , 1000)',
           editor.shellId,
-          editor.profileId,
+          editor.profileId
         )
-          .then((res) => {
+          .then(res => {
             try {
               this.showLoading(false);
               if (!nodeData.children) {
@@ -122,7 +113,7 @@ export default class StoragePanel extends React.Component {
               reject('Unable to parse response from the query. ' + err.message);
             }
           })
-          .catch((reason) => {
+          .catch(reason => {
             reject('Error in SyncService: ' + reason);
           });
       }
@@ -174,31 +165,31 @@ export default class StoragePanel extends React.Component {
       this.bLoading = false;
     }
   }
-  onChartBreadCrumbClick = (node) => {
+  onChartBreadCrumbClick = node => {
     if (this.state.selectedNode != node) {
       this.setState({
-        selectedNode: node,
+        selectedNode: node
       });
     }
   };
-  onChildDblClick = (node) => {
+  onChildDblClick = node => {
     // node is a tree Node in d3-hierachy (https://github.com/d3/d3-hierarchy) that just clicked by user
     if (this.state.selectedNode == node) {
       // root is clicked, we should move upward in the data tree
       if (node.parent) {
         this.setState({
-          selectedNode: node.parent,
+          selectedNode: node.parent
         });
       }
     } else {
       // a child is clicked, we should move downward in the data tree
       this.setState({
-        selectedNode: node,
+        selectedNode: node
       });
     }
   };
 
-  onChildClick = (node) => {
+  onChildClick = node => {
     const nodeData = node.data;
     if (
       nodeData.name == 'data' &&
@@ -208,12 +199,8 @@ export default class StoragePanel extends React.Component {
       nodeData.parent.parent.parent.name == 'total' &&
       !nodeData.children
     ) {
-      this.loadChildData(
-        nodeData.parent.parent.name,
-        nodeData.parent.name,
-        nodeData,
-      )
-        .then((res) => {
+      this.loadChildData(nodeData.parent.parent.name, nodeData.parent.name, nodeData)
+        .then(res => {
           if (res) {
             this.forceUpdate();
           }
@@ -221,7 +208,7 @@ export default class StoragePanel extends React.Component {
           //   data: resNodeData,
           // });
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.updateMsg(reason);
         });
     }
@@ -259,9 +246,7 @@ export default class StoragePanel extends React.Component {
                   </div>
                 )}
                 {!this.bLoading &&
-                !this.bStorageView && (
-                  <span className="failureText">{this.msg}</span>
-                )}
+                  !this.bStorageView && <span className="failureText">{this.msg}</span>}
               </div>
             </div>
           </div>

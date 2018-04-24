@@ -32,10 +32,7 @@ import { Cell, Column, ColumnHeaderCell } from '@blueprintjs/table';
 import ProgressBar from './ProgressBar';
 
 export type ICellLookup = (rowIndex: number, columnIndex: number) => any;
-export type ISortCallback = (
-  columnIndex: number,
-  comparator: (a: any, b: any) => number
-) => void;
+export type ISortCallback = (columnIndex: number, comparator: (a: any, b: any) => number) => void;
 
 export default class ProgressBarColumn {
   constructor(name: string, key: string, index: number) {

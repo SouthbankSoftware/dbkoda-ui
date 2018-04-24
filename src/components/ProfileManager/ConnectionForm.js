@@ -60,7 +60,7 @@ export class ConnectionForm extends JsonForm {
     const fieldsCol = [];
     const subForm = this.formSchema[selectedSubform];
     if (subForm.fields) {
-      subForm.fields.forEach((field) => {
+      subForm.fields.forEach(field => {
         // Update fields on load
         if (selectedSubform === SubformCategory.BASIC) {
           if (field.name === 'alias') {
@@ -96,18 +96,33 @@ export class ConnectionForm extends JsonForm {
     if (field.refFields) {
       this.updateReferencedFields(field);
     }
-    if (field.name == 'host' || field.name == 'urlRadio' || field.name == 'port' || field.name == 'username' || field.name == 'url') {
+    if (
+      field.name == 'host' ||
+      field.name == 'urlRadio' ||
+      field.name == 'port' ||
+      field.name == 'username' ||
+      field.name == 'url'
+    ) {
       this.updateAlias(field);
     }
 
-    if (field.subForm.value === SubformCategory.BASIC && field.name !== 'urlRadio' && field.name !== 'url') {
+    if (
+      field.subForm.value === SubformCategory.BASIC &&
+      field.name !== 'urlRadio' &&
+      field.name !== 'url'
+    ) {
       this.updateUrl(field);
     }
 
-    if (field.name === 'urlRadioCluster' && field.value) { // disable the cluster config to use the cluster url
+    if (field.name === 'urlRadioCluster' && field.value) {
+      // disable the cluster config to use the cluster url
       this.updateFieldValue(field.$('useClusterConfig'), false);
     }
-    if (field.subForm.value === SubformCategory.CLUSTER && field.name !== 'urlRadioCluster' && field.name !== 'urlCluster') {
+    if (
+      field.subForm.value === SubformCategory.CLUSTER &&
+      field.name !== 'urlRadioCluster' &&
+      field.name !== 'urlCluster'
+    ) {
       this.updateClusterUrl(field);
     }
 
@@ -118,10 +133,11 @@ export class ConnectionForm extends JsonForm {
     const urlField = field.$('url');
     const isUrlMode = field.$('urlRadio').value;
     if (!isUrlMode) {
-      let connectionUrl = StaticApi.mongoProtocol + field.$('host').value + ':' + field.$('port').value;
+      let connectionUrl =
+        StaticApi.mongoProtocol + field.$('host').value + ':' + field.$('port').value;
       const conDB = field.$('authenticationDatabase', SubformCategory.AUTH).value;
       connectionUrl += '/';
-      connectionUrl += ((conDB === '') ? 'admin' : conDB);
+      connectionUrl += conDB === '' ? 'admin' : conDB;
       urlField.value = connectionUrl;
     }
   }
@@ -133,14 +149,17 @@ export class ConnectionForm extends JsonForm {
     if (!isUrlMode) {
       let connectionUrl = StaticApi.mongoProtocol;
       if (field.$('hostsList').value === '') {
-        connectionUrl += (field.$('host', SubformCategory.BASIC).value + ':' + field.$('port', SubformCategory.BASIC).value);
+        connectionUrl +=
+          field.$('host', SubformCategory.BASIC).value +
+          ':' +
+          field.$('port', SubformCategory.BASIC).value;
       } else {
         connectionUrl += field.$('hostsList').value;
       }
       connectionUrl += '/';
 
       const conDB = field.$('authenticationDatabase', SubformCategory.AUTH).value;
-      connectionUrl += ((conDB === '') ? 'admin' : conDB);
+      connectionUrl += conDB === '' ? 'admin' : conDB;
 
       const addQueryParam = (key, value) => {
         let addQM = false;
@@ -152,7 +171,7 @@ export class ConnectionForm extends JsonForm {
           if (!addQM) {
             connectionUrl += '&';
           }
-          connectionUrl += (key + '=' + value);
+          connectionUrl += key + '=' + value;
         }
       };
       if (field.$('replicaSetName').value !== '') {
@@ -188,16 +207,15 @@ export class ConnectionForm extends JsonForm {
           field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH &&
           field.$('username', SubformCategory.AUTH).value.length > 0
         ) {
-          aliasField.value = field.$('username', SubformCategory.AUTH).value +
-          '@' +
-          field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
-          ':' +
-          field.$('port').value +
-          ' - ' +
-          (this.api.getProfiles().size + 1);
-        } else if (
-          field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH
-        ) {
+          aliasField.value =
+            field.$('username', SubformCategory.AUTH).value +
+            '@' +
+            field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
+            ':' +
+            field.$('port').value +
+            ' - ' +
+            (this.api.getProfiles().size + 1);
+        } else if (field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH) {
           aliasField.value =
             field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
             ':' +
@@ -221,27 +239,24 @@ export class ConnectionForm extends JsonForm {
             ' - ' +
             (this.api.getProfiles().size + 1);
         }
-      } else {
-        if (field.$('url').value.length > MAX_URL_ALIAS_LENGTH) { //eslint-disable-line
-          if (field.$('url').value.split('//').length > 1) {
-            aliasField.value = field
-              .$('url')
-              .value.split('//')[1]
-              .substring(0, MAX_URL_ALIAS_LENGTH);
-          } else {
-            aliasField.value = field
-              .$('url')
-              .value.substring(0, MAX_URL_ALIAS_LENGTH);
-          }
-        } else if (field.$('url').value.split('//').length > 1) {
-          if (field.$('url').value.split('//')[1] === '') {
-            aliasField.value = 'New Profile - ' + (this.api.getProfiles().size + 1);
-          } else {
-            aliasField.value = field.$('url').value.split('//')[1]; //eslint-disable-line
-          }
+      } else if (field.$('url').value.length > MAX_URL_ALIAS_LENGTH) {
+        //eslint-disable-line
+        if (field.$('url').value.split('//').length > 1) {
+          aliasField.value = field
+            .$('url')
+            .value.split('//')[1]
+            .substring(0, MAX_URL_ALIAS_LENGTH);
         } else {
-          aliasField.value = field.$('url').value;
+          aliasField.value = field.$('url').value.substring(0, MAX_URL_ALIAS_LENGTH);
         }
+      } else if (field.$('url').value.split('//').length > 1) {
+        if (field.$('url').value.split('//')[1] === '') {
+          aliasField.value = 'New Profile - ' + (this.api.getProfiles().size + 1);
+        } else {
+          aliasField.value = field.$('url').value.split('//')[1]; //eslint-disable-line
+        }
+      } else {
+        aliasField.value = field.$('url').value;
       }
     }
   }
@@ -252,7 +267,7 @@ export class ConnectionForm extends JsonForm {
     this.isEditMode = true;
     for (const subform in this.formSchema) {
       if (this.formSchema.hasOwnProperty(subform)) {
-        this.formSchema[subform].fields.forEach((field) => {
+        this.formSchema[subform].fields.forEach(field => {
           if (profile[field.name] !== null && profile[field.name] !== undefined) {
             this.updateFieldValue(field, profile[field.name]);
             // field.value = profile[field.name];
@@ -269,10 +284,10 @@ export class ConnectionForm extends JsonForm {
     console.log('getProfileFromInstance:', formData);
     for (const subform in formData) {
       if (formData.hasOwnProperty(subform)) {
-        formData[subform].fields.forEach((field) => {
+        formData[subform].fields.forEach(field => {
           if (field.value !== undefined && field.value !== null) {
             // if (!field.hasOwnProperty('disabled') || (field.hasOwnProperty('disabled') && field.disabled === false)) {
-              profile[field.name] = field.value;
+            profile[field.name] = field.value;
             // }
           }
         });

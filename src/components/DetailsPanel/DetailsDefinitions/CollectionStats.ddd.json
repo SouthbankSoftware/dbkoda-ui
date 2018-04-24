@@ -1,50 +1,59 @@
 {
-	"Title": "Collection Statistics for %treeNode.parentDB%.%treeNode%",
-	"DefaultValues": {
-		"function": "dbkoda_CollectionStats",
-		"arguments": [{
-			"name": "ColId",
-			"value": "treeNode"
-		}, {
-			"name": "parentDB",
-			"value": "treeNode.parentDB"
-		}]
-	},
-	"Fields": [
-		{
-			"name": "Statistics",
-			"label": "Statistics",
-			"type": "Table",
-			"width": "30%",
-			"columns": [{
-				"name": "statistic",
-				"label": "Statistic"
-			}, {
-				"name": "value",
-				"label": "Value"
-			}]
-		},
-		{
-			"name": "Shards",
-			"label": "Shards Statistics",
-			"type": "BarChart",
-			"XAxis": [{
-				"key": "size",
-				"label": "Size in KBs"
-			},{
-				"key": "count",
-				"label": "Count"
-				}],
-			"YAxis" :{
-				"key": "name"
-			},
-			"width": "50%"
-		},
-		{
-			"name": "ShardsPercentage",
-			"label": "Shards Percentage",
-			"type": "PieChart",
-			"width": "20%"
-		}
-	]
+  "Title": "Collection Statistics for %treeNode.parentDB%.%treeNode%",
+  "DefaultValues": {
+    "function": "dbkoda_CollectionStats",
+    "arguments": [
+      {
+        "name": "ColId",
+        "value": "treeNode"
+      },
+      {
+        "name": "parentDB",
+        "value": "treeNode.parentDB"
+      }
+    ]
+  },
+  "Fields": [
+    {
+      "name": "Statistics",
+      "label": "Statistics",
+      "type": "Table",
+      "width": "30%",
+      "columns": [
+        {
+          "name": "statistic",
+          "label": "Statistic"
+        },
+        {
+          "name": "value",
+          "label": "Value"
+        }
+      ]
+    },
+    {
+      "name": "Shards",
+      "label": "Shards Statistics",
+      "type": "BarChart",
+      "XAxis": [
+        {
+          "key": "size",
+          "label": "Size in KBs"
+        },
+        {
+          "key": "count",
+          "label": "Count"
+        }
+      ],
+      "YAxis": {
+        "key": "name"
+      },
+      "width": "50%"
+    },
+    {
+      "name": "ShardsPercentage",
+      "label": "Shards Percentage",
+      "type": "PieChart",
+      "width": "20%"
+    }
+  ]
 }

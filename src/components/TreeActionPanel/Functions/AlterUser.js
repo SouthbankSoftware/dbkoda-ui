@@ -30,11 +30,11 @@ import * as common from './Common.js';
 
 export const AlterUser = {
   // Prefill function for alter user
-  dbkoda_AlterUserPreFill: (params) => {
+  dbkoda_AlterUserPreFill: params => {
     const userId = params.UserId;
     return `db.getSiblingDB("admin").system.users.find({"_id": "${userId}"}).toArray()`;
   },
-  dbkoda_AlterUserPreFill_parse: (userDocs) => {
+  dbkoda_AlterUserPreFill_parse: userDocs => {
     if (userDocs.length == 0) {
       throw new Error('No user found for Alter User');
     } else if (userDocs.length > 1) {
@@ -47,20 +47,17 @@ export const AlterUser = {
     outputDoc.UserName = userDoc.user;
     // outputDoc.CustomData = userDoc.customData;
     outputDoc.Roles = [];
-    userDoc.roles.forEach((role) => {
+    userDoc.roles.forEach(role => {
       outputDoc.Roles.push({
         Database: role.db,
-        Role: role.role,
+        Role: role.role
       });
     });
 
     return outputDoc;
   },
-  dbkoda_validateUser: (inputDoc) => {
-    if (
-      Object.prototype.hasOwnProperty.call(inputDoc, 'Roles') &&
-      inputDoc.Roles.length > 0
-    ) {
+  dbkoda_validateUser: inputDoc => {
+    if (Object.prototype.hasOwnProperty.call(inputDoc, 'Roles') && inputDoc.Roles.length > 0) {
       return true;
     }
     throw new Error('dbkoda: Alter user should include as least one role');
@@ -68,5 +65,5 @@ export const AlterUser = {
   dbkoda_listdb: common.dbkoda_listdb,
   dbkoda_listdb_parse: common.dbkoda_listdb_parse,
   dbkoda_listRoles: common.dbkoda_listRoles,
-  dbkoda_listRoles_parse: common.dbkoda_listRoles_parse,
+  dbkoda_listRoles_parse: common.dbkoda_listRoles_parse
 };

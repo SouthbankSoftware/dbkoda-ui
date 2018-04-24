@@ -1,9 +1,11 @@
 {
-    "Title": "rs.status()",
-    "AutoExecute": true,
-    "Fields": [ {
-            "name": " ",
-            "type": "Text",
-            "readOnly": true 
-        }]
+  "Title": "rs.status()",
+  "AutoExecute": true,
+  "Fields": [
+    {
+      "name": " ",
+      "type": "Text",
+      "readOnly": true
+    }
+  ]
 }

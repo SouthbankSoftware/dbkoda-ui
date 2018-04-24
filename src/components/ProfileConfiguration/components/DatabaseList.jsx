@@ -24,13 +24,11 @@ import './DatabaseList.scss';
 
 export default class DatabaseList extends React.Component {
   render() {
-    const {selectDatabase} = this.props;
+    const { selectDatabase } = this.props;
     return (
       <div className="profile-config-database-list">
         <div className="profile-db-list-title">
-          {globalString(
-            'performance/profiling/configuration/database-list-title'
-          )}
+          {globalString('performance/profiling/configuration/database-list-title')}
         </div>
         <div className="profile-db-list">
           {this.props.databases.map(db => {
