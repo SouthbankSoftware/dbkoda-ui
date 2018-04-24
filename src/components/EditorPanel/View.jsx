@@ -35,7 +35,7 @@ import { featherClient } from '~/helpers/feathers';
 import { action, reaction, runInAction } from 'mobx';
 import _ from 'lodash';
 import { ContextMenuTarget, Intent, Menu, MenuItem } from '@blueprintjs/core';
-import {now} from 'performance-now';
+import { now } from 'performance-now';
 import SplitPane from 'react-split-pane';
 import Prettier from 'prettier-standalone';
 import sqlFormatter from 'sql-formatter';
@@ -79,7 +79,7 @@ import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 import { TranslatorPanel } from '../Translator';
 import { insertExplainOnCommand } from '../ExplainPanel/Utils';
-import {getSeparator} from '../common/Utils';
+import { getSeparator } from '../common/Utils';
 
 const esprima = require('esprima');
 
@@ -95,7 +95,7 @@ const editorTarget = {
   drop(props, monitor) {
     const item = monitor.getItem();
     props.onDrop(item);
-  },
+  }
 };
 
 /**
@@ -107,7 +107,7 @@ function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
-    isOverCurrent: monitor.isOver({ shallow: true }),
+    isOverCurrent: monitor.isOver({ shallow: true })
   };
 }
 
@@ -118,12 +118,12 @@ function collect(connect, monitor) {
   store: allStores.store,
   api: allStores.api,
   profiles: allStores.profileStore.profiles,
-  config: allStores.config,
+  config: allStores.config
 }))
 @ContextMenuTarget
 class View extends React.Component {
   static propTypes = {
-    store: PropTypes.observableObject.isRequired,
+    store: PropTypes.observableObject.isRequired
   };
 
   constructor(props) {
@@ -147,12 +147,12 @@ class View extends React.Component {
       matchBrackets: true,
       autoCloseBrackets: true,
       foldOptions: {
-        widget: '...',
+        widget: '...'
       },
       foldGutter: true,
       gutters: [
         'CodeMirror-linenumbers',
-        'CodeMirror-foldgutter', // , 'CodeMirror-lint-markers'
+        'CodeMirror-foldgutter' // , 'CodeMirror-lint-markers'
       ],
       keyMap: 'sublime',
       extraKeys: {
@@ -162,9 +162,12 @@ class View extends React.Component {
         },
         'Ctrl-Q': function(cm) {
           cm.foldCode(cm.getCursor());
-        },
+        }
       },
-      mode: this.editorObject.type == EditorTypes.DRILL ? 'text/x-mariadb' : 'MongoScript',
+      mode:
+        this.editorObject.type == EditorTypes.DRILL
+          ? 'text/x-mariadb'
+          : 'MongoScript'
     };
 
     this.reactions = [];
@@ -173,58 +176,62 @@ class View extends React.Component {
     this.reactions.push(
       reaction(
         () => this.props.store.editorPanel.executingEditorAll,
-        (executingEditorAll) => {
+        executingEditorAll => {
           if (
             this.props.store.editorPanel.activeEditorId === this.props.id &&
             executingEditorAll === true
           ) {
             this.setExecStartLine();
             const editor = this.props.store.editors.get(
-              this.props.store.editorPanel.activeEditorId,
+              this.props.store.editorPanel.activeEditorId
             );
             const shell = editor.shellId;
-            const {profileId} = editor;
+            const { profileId } = editor;
             const currEditorValue = this.getEditorValue();
             Broker.emit(EventType.FEATURE_USE, 'ExecuteAll');
             // Listen for completion
             this.props.store.editors.get(editor.id).executing = true;
-            this.props.store.editors.get(editor.id).lastExecutionStart = Date.now();
+            this.props.store.editors.get(
+              editor.id
+            ).lastExecutionStart = Date.now();
             this.props.store.editors.get(editor.id).lastExecutionFailed = false;
             this.props.store.editorToolbar.isActiveExecuting = true;
             // Send request to feathers client
-            const {type} = editor;
+            const { type } = editor;
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 90000;
-              let queries = currEditorValue.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1').replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, ' ').split(';');
-              queries = queries.filter((query) => {
-                return (query.trim().length > 0);
+              let queries = currEditorValue
+                .replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1')
+                .replace(/\t/g, '  ')
+                .replace(/ *(\r\n|\r|\n)/gm, ' ')
+                .split(';');
+              queries = queries.filter(query => {
+                return query.trim().length > 0;
               });
-              queries = queries.map((query) => {
+              queries = queries.map(query => {
                 return query.trim();
               });
-              queries = queries.map((query) => {
+              queries = queries.map(query => {
                 return query.replace(/ *(\r\n|\r|\n)/gm, ' ');
               });
               console.log(queries);
               service
                 .update(shell, {
                   queries,
-                  schema: editor.db,
+                  schema: editor.db
                 })
-                .then((res) => {
+                .then(res => {
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
                   if (res.output.length > 10000) {
                     output.output = { output: _.slice(res.output, 0, 10000) }; // JSON.stringify(res);
-                    const message = globalString(
-                      'drill/drill_large_dataset',
-                    );
+                    const message = globalString('drill/drill_large_dataset');
                     NewToaster.show({
                       message,
                       className: 'danger',
-                      icon: 'thumbs-down',
+                      icon: 'thumbs-down'
                     });
                   } else {
                     output.output = res; // JSON.stringify(res);
@@ -232,12 +239,17 @@ class View extends React.Component {
                   this.props.api.drillOutputAvailable(output);
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
-                    this.props.store.editors.get(editor.id).lastExecutionTime = Date.now() - this.props.store.editors.get(editor.id).lastExecutionStart;
-                    this.props.store.editors.get(editor.id).lastExecutionFailed = false;
+                    this.props.store.editors.get(editor.id).lastExecutionTime =
+                      Date.now() -
+                      this.props.store.editors.get(editor.id)
+                        .lastExecutionStart;
+                    this.props.store.editors.get(
+                      editor.id
+                    ).lastExecutionFailed = false;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                   });
                 })
-                .catch((err) => {
+                .catch(err => {
                   console.error(err);
                   runInAction(() => {
                     // Append this error to raw output:
@@ -245,51 +257,62 @@ class View extends React.Component {
                       Name: err.name,
                       StatusCode: err.statusCode,
                       Message: err.error || err.message
-                      };
+                    };
 
                     if (err.Message.match(/Timeout of 90000ms/)) {
-                      const message = globalString(
-                        'drill/drill_timed_out',
-                      );
+                      const message = globalString('drill/drill_timed_out');
                       NewToaster.show({
                         message,
                         className: 'danger',
-                        icon: 'thumbs-down',
+                        icon: 'thumbs-down'
                       });
                     }
 
                     const strOutput = JSON.stringify(err, null, 2);
-                    const editorObject = this.props.store.editors.get(editor.id);
-                    const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
-                    this.props.store.outputs.get(editor.id).output = totalOutput;
+                    const editorObject = this.props.store.editors.get(
+                      editor.id
+                    );
+                    const totalOutput =
+                      this.props.store.outputs.get(editor.id).output +
+                      editorObject.doc.lineSep +
+                      'ERROR:' +
+                      editorObject.doc.lineSep +
+                      strOutput;
+                    this.props.store.outputs.get(
+                      editor.id
+                    ).output = totalOutput;
                     this.props.store.outputPanel.currentTab = editor.id;
                   });
 
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
-                    this.props.store.editors.get(editor.id).lastExecutionTime = Date.now() - this.props.store.editors.get(editor.id).lastExecutionStart;
-                    this.props.store.editors.get(editor.id).lastExecutionFailed = true;
+                    this.props.store.editors.get(editor.id).lastExecutionTime =
+                      Date.now() -
+                      this.props.store.editors.get(editor.id)
+                        .lastExecutionStart;
+                    this.props.store.editors.get(
+                      editor.id
+                    ).lastExecutionFailed = true;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                     NewToaster.show({
-                      message: globalString(
-                        'drill/execution_failed',
-                      ),
+                      message: globalString('drill/execution_failed'),
                       className: 'danger',
-                      icon: 'thumbs-down',
+                      icon: 'thumbs-down'
                     });
                   });
                 });
             } else {
-              const service = type && type === 'os'
-                ? featherClient().service('/os-execution')
-                : featherClient().service('/mongo-shells');
+              const service =
+                type && type === 'os'
+                  ? featherClient().service('/os-execution')
+                  : featherClient().service('/mongo-shells');
               service.timeout = 30000;
               service
                 .update(profileId, {
                   shellId: shell, // eslint-disable-line
-                  commands: currEditorValue.replace(/\t/g, '  '),
+                  commands: currEditorValue.replace(/\t/g, '  ')
                 })
-                .catch((err) => {
+                .catch(err => {
                   console.error(err);
                   runInAction(() => {
                     // Append this error to raw output:
@@ -297,21 +320,33 @@ class View extends React.Component {
                       Name: err.name,
                       StatusCode: err.statusCode,
                       Message: err.error
-                      };
+                    };
 
                     const strOutput = JSON.stringify(err, null, 2);
-                    const editorObject = this.props.store.editors.get(editor.id);
-                    const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
-                    this.props.store.outputs.get(editor.id).output = totalOutput;
+                    const editorObject = this.props.store.editors.get(
+                      editor.id
+                    );
+                    const totalOutput =
+                      this.props.store.outputs.get(editor.id).output +
+                      editorObject.doc.lineSep +
+                      'ERROR:' +
+                      editorObject.doc.lineSep +
+                      strOutput;
+                    this.props.store.outputs.get(
+                      editor.id
+                    ).output = totalOutput;
                     this.props.store.outputPanel.currentTab = editor.id;
                   });
                   runInAction(() => {
-                    this.props.store.editors.get(editor.id).lastExecutionTime = now() - this.props.store.editors.get(editor.id).lastExecutionStart;
-                    this.props.store.editors.get(editor.id).lastExecutionFailed = true;
+                    this.props.store.editors.get(editor.id).lastExecutionTime =
+                      now() -
+                      this.props.store.editors.get(editor.id)
+                        .lastExecutionStart;
+                    this.props.store.editors.get(
+                      editor.id
+                    ).lastExecutionFailed = true;
                     this.props.store.editorToolbar.isActiveExecuting = false;
-                    let message = globalString(
-                      'drill/execution_failed',
-                    );
+                    let message = globalString('drill/execution_failed');
                     if (err && err.statusCode === 602) {
                       message = globalString('drill/query_error');
                     } else if (err && err.statusCode === 600) {
@@ -320,7 +355,7 @@ class View extends React.Component {
                     NewToaster.show({
                       message,
                       className: 'danger',
-                      icon: 'thumbs-down',
+                      icon: 'thumbs-down'
                     });
                   });
                 });
@@ -330,15 +365,15 @@ class View extends React.Component {
             }
             this.props.store.editorPanel.executingEditorAll = false;
           }
-        },
-      ),
+        }
+      )
     );
 
     // React when a change occurs on the editorPanel.executingEditorLines state.
     this.reactions.push(
       reaction(
         () => this.props.store.editorPanel.executingEditorLines,
-        (executingEditorLines) => {
+        executingEditorLines => {
           if (
             this.props.store.editorPanel.activeEditorId === this.props.id &&
             executingEditorLines === true
@@ -346,12 +381,12 @@ class View extends React.Component {
             this.setExecStartLine();
             // Determine code to send.
             const editor = this.props.store.editors.get(
-              this.props.store.editorPanel.activeEditorId,
+              this.props.store.editorPanel.activeEditorId
             );
             const shell = editor.shellId;
-            const {profileId} = editor;
+            const { profileId } = editor;
             const cm = this.editor.getCodeMirror(); // eslint-disable-line
-            const {line} = cm.getCursor();
+            const { line } = cm.getCursor();
             let content = cm.getSelection();
             if (cm.getSelection().length > 0) {
               Broker.emit(EventType.FEATURE_USE, 'ExecuteSelected');
@@ -360,33 +395,41 @@ class View extends React.Component {
               content = cm.getLine(cm.getCursor().line);
             }
             this.props.store.editors.get(editor.id).executing = true;
-            this.props.store.editors.get(editor.id).lastExecutionStart = Date.now();
+            this.props.store.editors.get(
+              editor.id
+            ).lastExecutionStart = Date.now();
             this.props.store.editors.get(editor.id).lastExecutionFailed = false;
             this.props.store.editorToolbar.isActiveExecuting = true;
 
-            const {type} = editor;
+            const { type } = editor;
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 90000;
-              console.log(content.replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, ' ').split(';'));
+              console.log(
+                content
+                  .replace(/\t/g, '  ')
+                  .replace(/ *(\r\n|\r|\n)/gm, ' ')
+                  .split(';')
+              );
               service
                 .update(shell, {
-                  queries: content.replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, ' ').split(';'),
+                  queries: content
+                    .replace(/\t/g, '  ')
+                    .replace(/ *(\r\n|\r|\n)/gm, ' ')
+                    .split(';'),
                   schema: editor.db
                 })
-                .then((res) => {
+                .then(res => {
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
                   if (res.output.length > 10000) {
                     output.output = { output: _.slice(res.output, 0, 10000) }; // JSON.stringify(res);
-                    const message = globalString(
-                      'drill/drill_large_dataset',
-                    );
+                    const message = globalString('drill/drill_large_dataset');
                     NewToaster.show({
                       message,
                       className: 'danger',
-                      icon: 'thumbs-down',
+                      icon: 'thumbs-down'
                     });
                   } else {
                     output.output = res; // JSON.stringify(res);
@@ -394,12 +437,17 @@ class View extends React.Component {
                   this.props.api.drillOutputAvailable(output);
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
-                    this.props.store.editors.get(editor.id).lastExecutionTime = Date.now() - this.props.store.editors.get(editor.id).lastExecutionStart;
-                    this.props.store.editors.get(editor.id).lastExecutionFailed = false;
+                    this.props.store.editors.get(editor.id).lastExecutionTime =
+                      Date.now() -
+                      this.props.store.editors.get(editor.id)
+                        .lastExecutionStart;
+                    this.props.store.editors.get(
+                      editor.id
+                    ).lastExecutionFailed = false;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                   });
                 })
-                .catch((err) => {
+                .catch(err => {
                   console.error('execute error:', err);
                   // Append this error to raw output:
                   runInAction(() => {
@@ -410,13 +458,11 @@ class View extends React.Component {
                     };
 
                     if (err.Message.match(/Timeout of 90000ms/)) {
-                      const message = globalString(
-                        'drill/drill_timed_out',
-                      );
+                      const message = globalString('drill/drill_timed_out');
                       NewToaster.show({
                         message,
                         className: 'danger',
-                        icon: 'thumbs-down',
+                        icon: 'thumbs-down'
                       });
                     }
 
@@ -424,35 +470,57 @@ class View extends React.Component {
                     // @TODO -> if drill proves popular, we should improve error handling here.
                     try {
                       if (err.Message.match(/From line [0-9]+/)) {
-                        const errorStringArray = err.Message.substring(err.Message.search(/From line [0-9]+/), 120).split(' ');
+                        const errorStringArray = err.Message.substring(
+                          err.Message.search(/From line [0-9]+/),
+                          120
+                        ).split(' ');
                         const errStartLine = parseInt(errorStringArray[2], 10);
                         const errStartCol = parseInt(errorStringArray[4], 10);
                         const errEndLine = parseInt(errorStringArray[7], 10);
                         const errEndCol = parseInt(errorStringArray[9], 10);
                         // Set cm cursor:
-                        cm.setSelection({line: errStartLine + line - 1, ch: errStartCol - 1 }, { line: errEndLine + line - 1, ch: errEndCol }, {scroll: true});
+                        cm.setSelection(
+                          {
+                            line: errStartLine + line - 1,
+                            ch: errStartCol - 1
+                          },
+                          { line: errEndLine + line - 1, ch: errEndCol },
+                          { scroll: true }
+                        );
                       } else {
-                        cm.setSelection({line, ch: 0 });
+                        cm.setSelection({ line, ch: 0 });
                       }
                     } catch (err) {
                       console.error(err);
                     }
 
                     const strOutput = JSON.stringify(err, null, 2);
-                    const editorObject = this.props.store.editors.get(editor.id);
-                    const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
-                    this.props.store.outputs.get(editor.id).output = totalOutput;
+                    const editorObject = this.props.store.editors.get(
+                      editor.id
+                    );
+                    const totalOutput =
+                      this.props.store.outputs.get(editor.id).output +
+                      editorObject.doc.lineSep +
+                      'ERROR:' +
+                      editorObject.doc.lineSep +
+                      strOutput;
+                    this.props.store.outputs.get(
+                      editor.id
+                    ).output = totalOutput;
                     this.props.store.outputPanel.currentTab = editor.id;
                   });
 
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
-                    this.props.store.editors.get(editor.id).lastExecutionTime = Date.now() - this.props.store.editors.get(editor.id).lastExecutionStart;
-                    this.props.store.editors.get(editor.id).lastExecutionFailed = true;
+                    this.props.store.editors.get(editor.id).lastExecutionTime =
+                      Date.now() -
+                      this.props.store.editors.get(editor.id)
+                        .lastExecutionStart;
+                    this.props.store.editors.get(
+                      editor.id
+                    ).lastExecutionFailed = true;
                     this.props.store.editorToolbar.isActiveExecuting = false;
-                    let message = globalString(
-                      'drill/execution_failed',
-                    );
+                    let message = globalString('drill/execution_failed');
                     if (err && err.statusCode === 602) {
                       message = globalString('drill/query_error');
                       // message = err.error;
@@ -462,7 +530,7 @@ class View extends React.Component {
                     NewToaster.show({
                       message,
                       className: 'danger',
-                      icon: 'thumbs-down',
+                      icon: 'thumbs-down'
                     });
                   });
                 });
@@ -473,7 +541,7 @@ class View extends React.Component {
                 const splitted = content.split(getSeparator());
                 let hasError = false;
                 let filteredCode = '';
-                splitted.forEach((str) => {
+                splitted.forEach(str => {
                   const ignoredStr = str.replace(ignore, '');
                   filteredCode += ignoredStr + getSeparator();
                 });
@@ -485,55 +553,58 @@ class View extends React.Component {
                 if (hasError) {
                   NewToaster.show({
                     message: globalString(
-                      'editor/toolbar/possibleMultiLineCommand',
+                      'editor/toolbar/possibleMultiLineCommand'
                     ),
                     className: 'warning',
-                    icon: 'pEmilt-icon-thumbs-down',
+                    icon: 'pEmilt-icon-thumbs-down'
                   });
                 }
               }
               // Send request to feathers client
-            const service = type && type === 'os'
-                ? featherClient().service('/os-execution')
-                : featherClient().service('/mongo-shells');
-            service.timeout = 30000;
-            service
-              .update(profileId, {
-                shellId: shell, // eslint-disable-line
-                commands: content.replace(/\t/g, '  '),
-              })
-              .catch((err) => {
-                console.error('execute error:', err);
-                runInAction(() => {
-                  this.finishedExecution({ id: profileId, shellId: shell });
-                  NewToaster.show({
-                    message: globalString(
-                      'editor/toolbar/executionScriptFailed',
-                    ),
-                    className: 'danger',
-                    icon: 'thumbs-down',
+              const service =
+                type && type === 'os'
+                  ? featherClient().service('/os-execution')
+                  : featherClient().service('/mongo-shells');
+              service.timeout = 30000;
+              service
+                .update(profileId, {
+                  shellId: shell, // eslint-disable-line
+                  commands: content.replace(/\t/g, '  ')
+                })
+                .catch(err => {
+                  console.error('execute error:', err);
+                  runInAction(() => {
+                    this.finishedExecution({ id: profileId, shellId: shell });
+                    NewToaster.show({
+                      message: globalString(
+                        'editor/toolbar/executionScriptFailed'
+                      ),
+                      className: 'danger',
+                      icon: 'thumbs-down'
+                    });
                   });
                 });
-              });
             }
             this.props.store.editorPanel.executingEditorLines = false;
           }
-        },
-      ),
+        }
+      )
     );
 
     // React when a change occurs on the dragItem.drapDrop state.
     this.reactions.push(
       reaction(
         () => this.props.store.dragItem.dragDrop,
-        (dragDrop) => {
+        dragDrop => {
           if (
             this.props.store.editorPanel.activeEditorId === this.props.id &&
             dragDrop
           ) {
             if (this.props.store.dragItem.item) {
-              const {item} = this.props.store.dragItem;
-              if (this.props.store.editors.get(this.props.id).type === 'drill') {
+              const { item } = this.props.store.dragItem;
+              if (
+                this.props.store.editors.get(this.props.id).type === 'drill'
+              ) {
                 console.log('SQL DnD');
                 this.insertAtCursor(TreeDropActions.getSQLForTreeNode(item));
               } else {
@@ -543,15 +614,15 @@ class View extends React.Component {
             }
             this.props.store.dragItem.dragDrop = false;
           }
-        },
-      ),
+        }
+      )
     );
 
     // React when receive and append a command from the output terminal
     this.reactions.push(
       reaction(
         () => this.props.store.outputPanel.sendingCommand,
-        (sendingCommand) => {
+        sendingCommand => {
           if (
             sendingCommand &&
             this.props.store.editorPanel.activeEditorId === this.props.id
@@ -560,73 +631,76 @@ class View extends React.Component {
             this.props.store.outputPanel.sendingCommand = '';
           }
         },
-        { name: 'EditorViewReactionToTerminalPush' },
-      ),
+        { name: 'EditorViewReactionToTerminalPush' }
+      )
     );
 
     // React when a change occurs on the editorPanel.stoppingExecution state
     this.reactions.push(
       reaction(
         () => this.props.store.editorPanel.stoppingExecution,
-        (stoppingExecution) => {
+        stoppingExecution => {
           if (stoppingExecution) {
             this.props.store.editorPanel.stoppingExecution = false;
             const editor = this.props.store.editors.get(
-              this.props.store.editorPanel.activeEditorId,
+              this.props.store.editorPanel.activeEditorId
             );
             const shell = editor.shellId;
             const id = editor.profileId;
-            const {type} = editor;
-            const service = type && type === 'os'
-              ? featherClient().service('/os-execution')
-              : featherClient().service('/mongo-stop-execution');
+            const { type } = editor;
+            const service =
+              type && type === 'os'
+                ? featherClient().service('/os-execution')
+                : featherClient().service('/mongo-stop-execution');
             service.timeout = 1000;
             service
               .remove(id, {
                 query: {
-                  shellId: shell,
-                },
+                  shellId: shell
+                }
               })
-              .then((response) => {
+              .then(response => {
                 if (response) {
                   NewToaster.show({
                     message: response.result,
                     className: 'success',
-                    icon: 'thumbs-up',
+                    icon: 'thumbs-up'
                   });
                 } else {
                   NewToaster.show({
                     message: globalString('editor/view/executionStopped'),
                     className: 'success',
-                    icon: 'thumbs-up',
+                    icon: 'thumbs-up'
                   });
                 }
                 this.finishedExecution({ id, shellId: shell });
               })
-              .catch((reason) => {
+              .catch(reason => {
                 console.error(
-                  `Stopping Execution failed for ${id} / ${shell}! ${reason.message}`,
+                  `Stopping Execution failed for ${id} / ${shell}! ${
+                    reason.message
+                  }`
                 );
                 NewToaster.show({
                   message: globalString(
                     'editor/view/executionStoppedError',
-                    reason.message,
+                    reason.message
                   ),
                   className: 'danger',
-                  icon: 'thumbs-down',
+                  icon: 'thumbs-down'
                 });
                 this.finishedExecution({ id, shellId: shell });
               });
           }
-        },
-      ),
+        }
+      )
     );
 
     // react to tree action change
     this.reactions.push(
       reaction(
         () => this.props.store.treeActionPanel.isNewFormValues,
-        (isNewFormValues) => {
+        isNewFormValues => {
           if (
             isNewFormValues &&
             this.props.store.editorPanel.activeEditorId === this.props.id
@@ -640,22 +714,22 @@ class View extends React.Component {
             }
             this.props.store.treeActionPanel.isNewFormValues = false;
           }
-        },
-      ),
+        }
+      )
     );
 
     // react to syntax error change
     this.reactions.push(
       reaction(
         () => this.props.store.editorPanel.activeEditorId,
-        (activeEditorId) => {
+        activeEditorId => {
           if (activeEditorId === this.id) {
             requestAnimationFrame(() => {
               this.refresh();
             });
           }
-        },
-      ),
+        }
+      )
     );
 
     this.refresh = this.refresh.bind(this);
@@ -674,18 +748,16 @@ class View extends React.Component {
 
     if (this.props.config.settings.automaticAutoComplete) {
       const cm = this.editor.getCodeMirror();
-      cm.on('change', CodeMirror.commands.autocomplete);
+      cm.on('change', _.debounce(CodeMirror.commands.autocomplete, 200));
     }
 
     const _updateUnsavedFileIndicator = _.debounce(
       () => {
-        const elem = document.querySelector(`#unsavedFileIndicator_${this.id}`);
-        if (elem) {
-          elem.style.opacity = this.doc.isClean() ? 0 : 1;
-        }
-      },
-      300,
-    );
+      const elem = document.querySelector(`#unsavedFileIndicator_${this.id}`);
+      if (elem) {
+        elem.style.opacity = this.doc.isClean() ? 0 : 1;
+      }
+    }, 300);
     this._updateUnsavedFileIndicator = _updateUnsavedFileIndicator;
     this.editor.getCodeMirror().on('change', _updateUnsavedFileIndicator);
 
@@ -708,17 +780,17 @@ class View extends React.Component {
 
     Broker.on(
       EventType.EXECUTION_EXPLAIN_EVENT,
-      this.executingExplain.bind(this),
+      this.executingExplain.bind(this)
     );
     Broker.on(
       EventType.SWAP_SHELL_CONNECTION,
-      this.swapShellConnection.bind(this),
+      this.swapShellConnection.bind(this)
     );
     if (this.props.editor) {
       const { profileId, shellId } = this.props.editor;
       Broker.on(
         EventType.createShellExecutionFinishEvent(profileId, shellId),
-        this.finishedExecution,
+        this.finishedExecution
       );
     }
   }
@@ -732,24 +804,25 @@ class View extends React.Component {
 
     Broker.removeListener(
       EventType.EXECUTION_EXPLAIN_EVENT,
-      this.executingExplain,
+      this.executingExplain
     );
     if (this.props.editor) {
       const { profileId, shellId } = this.props.editor;
       Broker.removeListener(
         EventType.createShellExecutionFinishEvent(profileId, shellId),
-        this.finishedExecution,
+        this.finishedExecution
       );
     }
   }
 
   setupAutoCompletion() {
-    CodeMirror.commands.autocomplete = (cm) => {
+    CodeMirror.commands.autocomplete = cm => {
       const currentLine = cm.getLine(cm.getCursor().line);
       let start = cm.getCursor().ch;
       let end = start;
       while (
-        end < currentLine.length && /[\w|.$]+/.test(currentLine.charAt(end))
+        end < currentLine.length &&
+        /[\w|.$]+/.test(currentLine.charAt(end))
       ) {
         end -= 1;
       }
@@ -769,27 +842,27 @@ class View extends React.Component {
         .get(id, {
           query: {
             shellId: shell,
-            command: curWord,
-          },
+            command: curWord
+          }
         })
-        .then((res) => {
+        .then(res => {
           if (res && res.length === 1 && res[0].trim().length === 0) {
             return;
           }
           const cursor = cm.getDoc().getCursor();
           const from = new CodeMirror.Pos(
             cursor.line,
-            cursor.ch - curWord.length,
+            cursor.ch - curWord.length
           );
           const options = {
             hint() {
               return {
                 from,
                 to: cm.getDoc().getCursor(),
-                list: res,
+                list: res
               };
             },
-            'completeSingle': false,
+            completeSingle: false
           };
           cm.showHint(options);
         });
@@ -801,15 +874,23 @@ class View extends React.Component {
    */
   @action.bound
   setExecStartLine() {
-    const {activeEditorId} = this.props.store.editorPanel;
-    const outputCm = this.props.store.outputPanel.editorRefs[activeEditorId].getCodeMirror();
-    this.props.store.outputs.get(activeEditorId).currentExecStartLine = outputCm.lineCount();
-    console.log(`Output Exec Start Line: ${this.props.store.outputs.get(activeEditorId).currentExecStartLine}`);
+    const { activeEditorId } = this.props.store.editorPanel;
+    const outputCm = this.props.store.outputPanel.editorRefs[
+      activeEditorId
+    ].getCodeMirror();
+    this.props.store.outputs.get(
+      activeEditorId
+    ).currentExecStartLine = outputCm.lineCount();
+    console.log(
+      `Output Exec Start Line: ${
+        this.props.store.outputs.get(activeEditorId).currentExecStartLine
+      }`
+    );
   }
 
   getActiveProfileId() {
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
+      this.props.store.editorPanel.activeEditorId
     );
     if (editor) {
       const shell = editor.shellId;
@@ -822,7 +903,7 @@ class View extends React.Component {
   }
 
   setEditorValue(newValue) {
-    const {cm} = this.doc;
+    const { cm } = this.doc;
     const scrollInfo = cm.getScrollInfo();
     this.doc.setValue(newValue);
     cm.scrollTo(scrollInfo.left, scrollInfo.top);
@@ -838,13 +919,13 @@ class View extends React.Component {
       Broker.removeListener(
         EventType.createShellExecutionFinishEvent(
           this.props.editor.profileId,
-          this.props.editor.shellId,
+          this.props.editor.shellId
         ),
-        this.finishedExecution,
+        this.finishedExecution
       );
       Broker.on(
         EventType.createShellExecutionFinishEvent(id, shellId),
-        this.finishedExecution,
+        this.finishedExecution
       );
       this.props.api.swapOutputShellConnection(event);
     }
@@ -862,7 +943,7 @@ class View extends React.Component {
     ) {
       // Get current Editor and Profile.
       const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId,
+        this.props.store.editorPanel.activeEditorId
       );
       const { id, shell } = this.getActiveProfileId();
 
@@ -870,29 +951,41 @@ class View extends React.Component {
       const cm = this.editor.getCodeMirror(); // eslint-disable-line
       let content = cm.getSelection();
       // If no text is selected, try to find query based on cursor position.
-      if ((cm.getSelection().length > 0) === false) {
+      if (cm.getSelection().length > 0 === false) {
         // Get line text at current cursor position.
         let currentLine = cm.getCursor().line;
         content = cm.getLine(currentLine);
         // If a full command isn't detected, parse up and down until white space.
-      let linesAbove = '';
-      while (cm.getLine(currentLine - 1) && !cm.getLine(currentLine - 1).match(/^\/\//gmi) && !cm.getLine(currentLine - 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine - 1).match(/;[ \t\s]*$/gmi)) {
-        linesAbove = cm.getLine(currentLine - 1) + linesAbove;
-        currentLine -= 1;
-      }
-      currentLine = cm.getCursor().line;
-      let linesBelow = '';
+        let linesAbove = '';
+        while (
+          cm.getLine(currentLine - 1) &&
+          !cm.getLine(currentLine - 1).match(/^\/\//gim) &&
+          !cm.getLine(currentLine - 1).match(/^[ \s\t]*[\n\r]+$/gim) &&
+          !cm.getLine(currentLine - 1).match(/;[ \t\s]*$/gim)
+        ) {
+          linesAbove = cm.getLine(currentLine - 1) + linesAbove;
+          currentLine -= 1;
+        }
+        currentLine = cm.getCursor().line;
+        let linesBelow = '';
 
+        while (
+          cm.getLine(currentLine + 1) &&
+          !cm.getLine(currentLine + 1).match(/^\/\//gim) &&
+          !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gim) &&
+          !cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gim)
+        ) {
+          linesBelow += cm.getLine(currentLine + 1);
+          currentLine += 1;
+        }
+        if (
+          cm.getLine(currentLine + 1) &&
+          cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gim)
+        ) {
+          linesBelow += cm.getLine(currentLine + 1);
+        }
 
-      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine + 1).match(/^\/\//gmi) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
-        linesBelow += cm.getLine(currentLine + 1);
-        currentLine += 1;
-      }
-      if (cm.getLine(currentLine + 1) && cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
-        linesBelow += cm.getLine(currentLine + 1);
-      }
-
-      content = linesAbove + content + linesBelow;
+        content = linesAbove + content + linesBelow;
       }
       content = insertExplainOnCommand(content, explainParam);
       editor.executing = true;
@@ -900,21 +993,25 @@ class View extends React.Component {
       // Send request to feathers client
       const service = featherClient().service('/mongo-sync-execution');
       const filteredContent = content.replace(/\t/g, '  ');
-      const saveExplainCommand = 'var explain_' + editor.id.replace(/\-/g, '_') + ' = ' + filteredContent + ';';
+      const saveExplainCommand =
+        'var explain_' +
+        editor.id.replace(/\-/g, '_') +
+        ' = ' +
+        filteredContent +
+        ';';
       service.timeout = 300000;
       this.props.store.editorToolbar.isActiveExecuting = true;
-      service
-        .update(id, {
-          shellId: shell, // eslint-disable-line
-          commands: saveExplainCommand,
-        });
+      service.update(id, {
+        shellId: shell, // eslint-disable-line
+        commands: saveExplainCommand
+      });
       service
         .update(id, {
           shellId: shell, // eslint-disable-line
           commands: filteredContent,
-          responseType: 'explain',
+          responseType: 'explain'
         })
-        .then((response) => {
+        .then(response => {
           runInAction(() => {
             this.props.store.editorToolbar.isActiveExecuting = false;
             editor.executing = false;
@@ -924,15 +1021,15 @@ class View extends React.Component {
             shell,
             command: filteredContent,
             type: explainParam,
-            output: response,
+            output: response
           });
         })
-        .catch((err) => {
+        .catch(err => {
           console.error('error:', err);
           NewToaster.show({
             message: globalString('explain/executionError'),
             className: 'danger',
-            icon: 'thumbs-down',
+            icon: 'thumbs-down'
           });
           logToMain('error', 'Failed to execute explain: ' + err);
           runInAction(() => {
@@ -965,7 +1062,7 @@ class View extends React.Component {
     }
   }
 
-    /**
+  /**
    * Beautify SQL Code.
    * @param {string code} - input code.
    * @return {string} - beautified code.
@@ -987,10 +1084,10 @@ class View extends React.Component {
       // cross-platform support
       const commentMongoCommandLinesRegex = /^[^\S\x0a\x0d]*(?:show|help|use|it|exit)(?:[^\S\x0a\x0d]+\S+|)$/gm;
       const commentMongoCommandLinesReplacement = '//DBKODA//$&';
-      this._prettify.preprocess = (code) => {
+      this._prettify.preprocess = code => {
         code = code.replace(
           commentMongoCommandLinesRegex,
-          commentMongoCommandLinesReplacement,
+          commentMongoCommandLinesReplacement
         );
 
         return code;
@@ -999,7 +1096,7 @@ class View extends React.Component {
     code = this._prettify.preprocess(code);
 
     // feed into prettier
-    code = Prettier.format(code, {singleQuote: true});
+    code = Prettier.format(code, { singleQuote: true });
 
     // postprocess result
     if (!this._prettify.postprocess) {
@@ -1010,15 +1107,15 @@ class View extends React.Component {
       const fixFunctionChainingRegex = /(\S)(\s+)\.(\S)/g;
       const fixFunctionChainingReplacement = '$1.$2$3';
 
-      this._prettify.postprocess = (code) => {
+      this._prettify.postprocess = code => {
         code = code.replace(
           uncommentMongoCommandLinesRegex,
-          uncommentMongoCommandLinesReplacement,
+          uncommentMongoCommandLinesReplacement
         );
 
         code = code.replace(
           fixFunctionChainingRegex,
-          fixFunctionChainingReplacement,
+          fixFunctionChainingReplacement
         );
 
         return code;
@@ -1035,7 +1132,7 @@ class View extends React.Component {
   prettifyAll() {
     try {
       const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId,
+        this.props.store.editorPanel.activeEditorId
       );
       if (editor.type === 'drill') {
         this.setEditorValue(this._prettifySQL(this.getEditorValue()));
@@ -1046,7 +1143,7 @@ class View extends React.Component {
       NewToaster.show({
         message: 'Error: ' + err.message,
         className: 'danger',
-        icon: 'thumbs-down',
+        icon: 'thumbs-down'
       });
     }
   }
@@ -1057,19 +1154,19 @@ class View extends React.Component {
   prettifySelection() {
     const cm = this.editor.getCodeMirror();
     try {
-        const editor = this.props.store.editors.get(
-          this.props.store.editorPanel.activeEditorId,
-        );
-        if (editor.type === 'drill') {
-          cm.replaceSelection(this._prettifySQL(cm.getSelection()).trim());
-        } else {
-          cm.replaceSelection(this._prettify(cm.getSelection()).trim());
-        }
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId
+      );
+      if (editor.type === 'drill') {
+        cm.replaceSelection(this._prettifySQL(cm.getSelection()).trim());
+      } else {
+        cm.replaceSelection(this._prettify(cm.getSelection()).trim());
+      }
     } catch (err) {
       NewToaster.show({
         message: 'Error: ' + err.message,
         className: 'danger',
-        icon: 'thumbs-down',
+        icon: 'thumbs-down'
       });
     }
   }
@@ -1083,7 +1180,7 @@ class View extends React.Component {
       shellCode = this.getEditorValue();
     }
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
+      this.props.store.editorPanel.activeEditorId
     );
     if (editor) {
       editor.openTranslator = true;
@@ -1105,14 +1202,17 @@ class View extends React.Component {
     }
     this.props.store.editors.get(editorIndex).executing = false;
     const editorValues = [...this.props.store.editors.values()];
-    editorValues.map((v) => {
+    editorValues.map(v => {
       if (v.profileId === event.id && v.shellId === event.shellId) {
         v.executing = false;
         v.lastExecutionTime = Date.now() - v.lastExecutionStart;
-       v.lastExecutionFailed = true;
+        v.lastExecutionFailed = true;
       }
     });
-    if (this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).shellId === event.shellId) {
+    if (
+      this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
+        .shellId === event.shellId
+    ) {
       runInAction('Execution has copleted on current editor.', () => {
         this.props.store.editorToolbar.isActiveExecuting = false;
         this.props.store.editorPanel.stoppingExecution = false;
@@ -1123,14 +1223,16 @@ class View extends React.Component {
   /**
    * Trigger an executeLine event by updating the MobX global store.
    */
-  @action executeLine() {
+  @action
+  executeLine() {
     this.props.store.editorPanel.executingEditorLines = true;
   }
 
   /**
    * Trigger an executeAll event by updating the MobX global store.
    */
-  @action executeAll() {
+  @action
+  executeAll() {
     this.props.store.editorPanel.executingEditorAll = true;
   }
 
@@ -1180,8 +1282,8 @@ class View extends React.Component {
             intent={Intent.NONE}
           />
         </div>
-        {this.props.store.editors.get(this.props.id).type != EditorTypes.DRILL &&
-        (
+        {this.props.store.editors.get(this.props.id).type !=
+          EditorTypes.DRILL && (
           <div className="menuItemWrapper translator">
             <MenuItem
               onClick={this.translateToNativeCode}
@@ -1190,8 +1292,7 @@ class View extends React.Component {
               intent={Intent.NONE}
             />
           </div>
-          )
-        }
+        )}
       </Menu>
     );
   }
@@ -1199,7 +1300,7 @@ class View extends React.Component {
   @action.bound
   closeTranslatorPanel() {
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
+      this.props.store.editorPanel.activeEditorId
     );
     editor.openTranslator = false;
     this.setState({ openTranslator: false });
@@ -1211,7 +1312,7 @@ class View extends React.Component {
   render() {
     const { connectDropTarget, isOver } = this.props; // eslint-disable-line
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
+      this.props.store.editorPanel.activeEditorId
     );
     if (editor && editor.openTranslator && this.editor) {
       let cm = null;
@@ -1220,7 +1321,12 @@ class View extends React.Component {
       }
       return connectDropTarget(
         <div className="editorView translator-open">
-          <SplitPane split="vertical" primary="second" defaultSize={512} minSize={200}>
+          <SplitPane
+            split="vertical"
+            primary="second"
+            defaultSize={512}
+            minSize={200}
+          >
             <CodeMirrorEditor
               ref={ref => (this.editor = ref)}
               codeMirrorInstance={CodeMirror}
@@ -1236,7 +1342,7 @@ class View extends React.Component {
               closePanel={this.closeTranslatorPanel}
             />
           </SplitPane>
-        </div>,
+        </div>
       );
     }
 
@@ -1246,11 +1352,8 @@ class View extends React.Component {
           ref={ref => (this.editor = ref)}
           codeMirrorInstance={CodeMirror}
           options={this.cmOptions}
-        />
-        {' '}
-        {' '}
-        {' '}
-        {isOver &&
+        />{' '}
+        {isOver && (
           <div
             style={{
               position: 'absolute',
@@ -1260,10 +1363,11 @@ class View extends React.Component {
               width: '100%',
               zIndex: 1,
               opacity: 0.5,
-              backgroundColor: 'yellow',
+              backgroundColor: 'yellow'
             }}
-          />}
-      </div>,
+          />
+        )}
+      </div>
     );
   }
 }
