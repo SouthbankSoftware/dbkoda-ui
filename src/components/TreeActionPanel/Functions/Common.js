@@ -43,7 +43,7 @@ export function dbkoda_listdb(params) {
 export function dbkoda_listdb_parse(res) {
   //eslint-disable-line
   const dblist = [];
-  res.forEach((d) => {
+  res.forEach(d => {
     dblist.push(d.name);
   });
   return dblist.sort();
@@ -58,7 +58,7 @@ export function dbkoda_listRoles(params) {
 export function dbkoda_listRoles_parse(res) {
   //eslint-disable-line
   const roleList = [];
-  res.forEach((r) => {
+  res.forEach(r => {
     roleList.push(r.role);
   });
   return roleList.sort();
@@ -69,8 +69,8 @@ export function dbkoda_listActions() {
 }
 
 export function dbkoda_listActions_parse(res) {
-  let actions = res.map((role) => {
-    return role.privileges.map((actions) => {
+  let actions = res.map(role => {
+    return role.privileges.map(actions => {
       return actions.actions;
     });
   });
@@ -91,7 +91,7 @@ export function dbkoda_listcollections(params) {
 export function dbkoda_listcollections_parse(res) {
   //eslint-disable-line
   const collectionList = [];
-  res.forEach((d) => {
+  res.forEach(d => {
     collectionList.push(d);
   });
   return collectionList.sort();
@@ -107,7 +107,7 @@ export function dbkoda_listcollectionsAgg(params) {
 export function dbkoda_listcollectionsAgg_parse(res) {
   //eslint-disable-line
   const collectionList = [];
-  res.forEach((d) => {
+  res.forEach(d => {
     collectionList.push(d);
   });
   if (debug) console.log('listCollAgg:', collectionList.sort());
@@ -128,11 +128,7 @@ export function dbkodaParameterList_parse(res) {
 }
 
 export function dbkodaListAttributes(params) {
-  const cmd = sprintf(
-    'dbe.sampleCollection("%s","%s");',
-    params.db,
-    params.collection,
-  );
+  const cmd = sprintf('dbe.sampleCollection("%s","%s");', params.db, params.collection);
   console.log(cmd);
   return cmd;
 }
@@ -140,7 +136,7 @@ export function dbkodaListAttributes(params) {
 export function dbkodaListAttributes_parse(res) {
   //eslint-disable-line
   const data = [];
-  res.forEach((a) => {
+  res.forEach(a => {
     data.push(a);
   });
   return data;

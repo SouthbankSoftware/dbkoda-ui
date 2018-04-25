@@ -30,14 +30,7 @@ import * as d3 from 'd3';
 import 'd3-selection-multi';
 import { convertUnits } from '#/PerformancePanel/Widgets/Utils';
 
-const colors = [
-  '#476A8E',
-  '#DC5D3E',
-  '#39B160',
-  '#643798',
-  '#2E547A',
-  '#3333cc'
-];
+const colors = ['#476A8E', '#DC5D3E', '#39B160', '#643798', '#2E547A', '#3333cc'];
 const BAR_CLIPPATH_ID = 'barCP';
 const vbWidth = 250;
 const vbHeight = 30;
@@ -96,9 +89,7 @@ export default class ProgressBar extends React.Component<Props> {
     const posTransY = vbHeight / 2 - barHeight / 2;
     // chart background
     // $FlowFixMe
-    const chartBG = this._chart
-      .append('g')
-      .attr('transform', `translate(30, ${posTransY})`);
+    const chartBG = this._chart.append('g').attr('transform', `translate(30, ${posTransY})`);
     chartBG.append('rect').attrs({
       class: 'chart-bg',
       rx: 0,
@@ -110,9 +101,7 @@ export default class ProgressBar extends React.Component<Props> {
       x: 0
     });
     // $FlowFixMe
-    this._dataGroup = this._chart
-      .append('g')
-      .attr('transform', `translate(30, ${posTransY})`);
+    this._dataGroup = this._chart.append('g').attr('transform', `translate(30, ${posTransY})`);
   };
 
   _removeD3View = () => {
@@ -192,34 +181,29 @@ export default class ProgressBar extends React.Component<Props> {
         x: 0
       })
       .on('mouseover', d => {
-        d3.selectAll('.d3-tip-top')
-        .transition()
-        .duration(500)
-        .style('opacity', 0)
-        .style('z-index', -1);
+        d3
+          .selectAll('.d3-tip-top')
+          .transition()
+          .duration(500)
+          .style('opacity', 0)
+          .style('z-index', -1);
         this._tip
           .transition()
           .duration(200)
           .style('opacity', 0.9)
           .style('z-index', 1000);
         const strTipValue =
-          String(d.value).indexOf('.') >= 0
-            ? Number(d.value).toFixed(2)
-            : d.value;
+          String(d.value).indexOf('.') >= 0 ? Number(d.value).toFixed(2) : d.value;
         const strTipLabel = convertUnits(strTipValue, this._unit, 3);
         this._tip.html(
-          '<strong>' +
-            d.key +
-            ':</strong> <span style="color:red">' +
-            strTipLabel.value +
-            '</span>'
+          '<strong>' + d.key + ':</strong> <span style="color:red">' + strTipLabel.value + '</span>'
         );
         const strWidth = String(d.key + ': ' + strTipValue).length * 8;
 
         this._tip
-        .style('left', d3.event.pageX - strWidth / 2 + 'px')
-        .style('top', d3.event.pageY - 28 + 'px')
-        .style('width', strWidth + 10 + 'px');
+          .style('left', d3.event.pageX - strWidth / 2 + 'px')
+          .style('top', d3.event.pageY - 28 + 'px')
+          .style('width', strWidth + 10 + 'px');
       })
       .on('mouseout', () => {
         if (d3.event.relatedTarget.className !== 'd3-tip-top') {

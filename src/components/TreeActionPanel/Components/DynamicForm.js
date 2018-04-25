@@ -170,10 +170,7 @@ export class DynamicForm extends MobxReactForm {
         onBlur: $try(props.onBlur, field.onBlur),
         onFocus: $try(props.onFocus, field.onFocus),
         autoFocus: $try(props.autoFocus, field.autoFocus),
-        onValueChange: $try(
-          props.onValueChange,
-          this.onNumericValueChange(field)
-        )
+        onValueChange: $try(props.onValueChange, this.onNumericValueChange(field))
       })
     };
   }

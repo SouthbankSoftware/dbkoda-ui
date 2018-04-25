@@ -1,18 +1,18 @@
 {
-    "Title": "Set parameter",
-    "Fields": [ 
-        {
-            "name": "Parameter",
-            "label":"Parameter",
-            "type": "Select" ,
-            "tooltip": "Parameter to alter", 
-            "lookup": "dbkodaParameterList"
-        } ,
-        {
-            "name": "Value",
-            "label": "New value", 
-            "type": "Text" ,
-            "tooltip": "New value for the parameter" 
-        }
-    ]
+  "Title": "Set parameter",
+  "Fields": [
+    {
+      "name": "Parameter",
+      "label": "Parameter",
+      "type": "Select",
+      "tooltip": "Parameter to alter",
+      "lookup": "dbkodaParameterList"
+    },
+    {
+      "name": "Value",
+      "label": "New value",
+      "type": "Text",
+      "tooltip": "New value for the parameter"
+    }
+  ]
 }

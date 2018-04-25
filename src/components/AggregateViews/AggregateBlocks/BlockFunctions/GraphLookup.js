@@ -32,7 +32,7 @@ export const GraphLookup = {
   dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse,
   dbkodaAggOperators: common.dbkodaAggOperators,
   dbkodaAggOperators_parse: common.dbkodaAggOperators_parse,
-  dbkodaGraphLookupPreFill: (params) => {
+  dbkodaGraphLookupPreFill: params => {
     const data = {};
     data.collection = params.collection;
     data.as = 'GraphOutput';

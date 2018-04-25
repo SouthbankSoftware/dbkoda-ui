@@ -31,22 +31,21 @@ import * as common from './Common.js';
 // const sprintf = require('sprintf-js').sprintf;
 
 export const InsertDocuments = {
-
-    dbkoda_InsertDocumentsPreFill: (params) => {
-        // console.log('invoked dbkoda_DeleteDocumentsPreFill');
-        const data = {};
-        data.Database = params.Database;
-        data.CollectionName = params.CollectionName;
-        console.log('returns', data);
-        data.Ordered = false;
-        return data;
-    },
-    dbkoda_listdb: common.dbkoda_listdb,
-    dbkoda_listdb_parse: common.dbkoda_listdb_parse,
-    dbkoda_listcollections: common.dbkoda_listcollections,
-    dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
-    dbkodaListAttributes: common.dbkodaListAttributes,
-    dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
-    dbkodaMatchOperators: common.dbkodaMatchOperators,
-    dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse,
+  dbkoda_InsertDocumentsPreFill: params => {
+    // console.log('invoked dbkoda_DeleteDocumentsPreFill');
+    const data = {};
+    data.Database = params.Database;
+    data.CollectionName = params.CollectionName;
+    console.log('returns', data);
+    data.Ordered = false;
+    return data;
+  },
+  dbkoda_listdb: common.dbkoda_listdb,
+  dbkoda_listdb_parse: common.dbkoda_listdb_parse,
+  dbkoda_listcollections: common.dbkoda_listcollections,
+  dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
+  dbkodaListAttributes: common.dbkodaListAttributes,
+  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
+  dbkodaMatchOperators: common.dbkodaMatchOperators,
+  dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse
 };

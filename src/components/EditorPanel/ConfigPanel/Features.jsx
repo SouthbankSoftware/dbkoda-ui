@@ -103,9 +103,7 @@ export default class Features extends React.Component<Props, State> {
     return (
       <div className="learnShortcutsWrapper">
         <div className="groupsList">
-          <div
-            className={'welcomeButtonWrapper selected_' + general.toString()}
-          >
+          <div className={'welcomeButtonWrapper selected_' + general.toString()}>
             <AnchorButton
               className="welcomeMenuButton welcomePageButton"
               onClick={() => {
@@ -115,9 +113,7 @@ export default class Features extends React.Component<Props, State> {
               General
             </AnchorButton>
           </div>
-          <div
-            className={'welcomeButtonWrapper selected_' + connection.toString()}
-          >
+          <div className={'welcomeButtonWrapper selected_' + connection.toString()}>
             <AnchorButton
               className="welcomeMenuButton welcomePageButton"
               onClick={() => {
@@ -127,9 +123,7 @@ export default class Features extends React.Component<Props, State> {
               Connection
             </AnchorButton>
           </div>
-          <div
-            className={'welcomeButtonWrapper selected_' + queries.toString()}
-          >
+          <div className={'welcomeButtonWrapper selected_' + queries.toString()}>
             <AnchorButton
               className="welcomeMenuButton welcomePageButton"
               onClick={() => {
@@ -149,11 +143,7 @@ export default class Features extends React.Component<Props, State> {
               Output
             </AnchorButton>
           </div>
-          <div
-            className={
-              'welcomeButtonWrapper selected_' + performance.toString()
-            }
-          >
+          <div className={'welcomeButtonWrapper selected_' + performance.toString()}>
             <AnchorButton
               className="welcomeMenuButton welcomePageButton"
               onClick={() => {

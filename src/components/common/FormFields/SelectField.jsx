@@ -30,14 +30,8 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Intent, Position, Tooltip } from '@blueprintjs/core';
 
-export default observer(({
-  field,
-  showLabel = true,
-  formGroup = false
-}) => {
-  const fldClassName = formGroup
-    ? 'pt-form-group form-group-inline'
-    : 'pt-form-group pt-top-level';
+export default observer(({ field, showLabel = true, formGroup = false }) => {
+  const fldClassName = formGroup ? 'pt-form-group form-group-inline' : 'pt-form-group pt-top-level';
   let selectClassName = 'pt-select';
   let tooltipClassName = 'pt-tooltip-indicator pt-tooltip-indicator-form';
   if (formGroup) {
@@ -48,18 +42,16 @@ export default observer(({
       selectClassName += ' table-field-90';
     }
   }
-  const getSelectField = (field) => {
+  const getSelectField = field => {
     return (
       <div className={selectClassName}>
-        <select
-          id={field.id}
-          value={field.value}
-          {...field.bind()}
-        >
+        <select id={field.id} value={field.value} {...field.bind()}>
           {field.options &&
             field.options.dropdown &&
             field.options.dropdown.map(val => (
-              <option key={val} value={val}>{val}</option>
+              <option key={val} value={val}>
+                {val}
+              </option>
             ))}
         </select>
       </div>
@@ -67,23 +59,25 @@ export default observer(({
   };
   return (
     <div className={fldClassName}>
-      {showLabel &&
+      {showLabel && (
         <label htmlFor={field.id} className="pt-label pt-label-r-30">
           {field.label}
-        </label>}
+        </label>
+      )}
       <div className="pt-form-content">
         {field.options &&
-          field.options.tooltip &&
-          <Tooltip
-            className={tooltipClassName}
-            content={field.options.tooltip}
-            hoverOpenDelay={1000}
-            inline
-            intent={Intent.PRIMARY}
-            position={Position.TOP}
-          >
-            {getSelectField(field)}
-          </Tooltip>}
+          field.options.tooltip && (
+            <Tooltip
+              className={tooltipClassName}
+              content={field.options.tooltip}
+              hoverOpenDelay={1000}
+              inline
+              intent={Intent.PRIMARY}
+              position={Position.TOP}
+            >
+              {getSelectField(field)}
+            </Tooltip>
+          )}
         {(!field.options || !field.options.tooltip) && getSelectField(field)}
         <p className="pt-form-helper-text">{field.error}</p>
       </div>

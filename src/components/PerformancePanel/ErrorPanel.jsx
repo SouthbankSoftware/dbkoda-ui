@@ -28,32 +28,52 @@ const styles = {
   position: 'absolute',
   zIndex: 10,
   opacity: 0.6,
-  pointerEvents: 'none',
+  pointerEvents: 'none'
 };
 
-
-export const ErrorPanel = ({mongoStatus, sshStatus}) => {
-  const newStyle = {...styles};
+export const ErrorPanel = ({ mongoStatus, sshStatus }) => {
+  const newStyle = { ...styles };
   if (mongoStatus === Status.NORMAL && sshStatus === Status.NORMAL) {
     return null;
   }
   let mongoPanel = null;
   if (mongoStatus === Status.CONNECTION_BROKEN) {
-    mongoPanel = <div className="item-status-panel mongo-status-panel"><p className="status-text">{globalString('performance/errors/driver_connection_closed')}</p></div>;
+    mongoPanel = (
+      <div className="item-status-panel mongo-status-panel">
+        <p className="status-text">{globalString('performance/errors/driver_connection_closed')}</p>
+      </div>
+    );
   }
   let sshPanel = null;
   switch (sshStatus) {
     case Status.CONNECTION_BROKEN:
-      sshPanel = <div className="item-status-panel ssh-status-panel"><p className="status-text">{globalString('performance/errors/ssh_connection_closed')}</p></div>;
+      sshPanel = (
+        <div className="item-status-panel ssh-status-panel">
+          <p className="status-text">{globalString('performance/errors/ssh_connection_closed')}</p>
+        </div>
+      );
       break;
     case Status.NOT_ENABLED:
-      sshPanel = <div className="item-status-panel ssh-status-panel"><p className="status-text">{globalString('performance/errors/ssh_not_enabled')}</p></div>;
+      sshPanel = (
+        <div className="item-status-panel ssh-status-panel">
+          <p className="status-text">{globalString('performance/errors/ssh_not_enabled')}</p>
+        </div>
+      );
       break;
     case Status.UNSUPPORTED_STATS_OS:
-      sshPanel = <div className="item-status-panel ssh-status-panel"><p className="status-text">{globalString('performance/errors/ssh_unsupported_os')}</p></div>;
+      sshPanel = (
+        <div className="item-status-panel ssh-status-panel">
+          <p className="status-text">{globalString('performance/errors/ssh_unsupported_os')}</p>
+        </div>
+      );
       break;
     default:
       break;
   }
-  return <div className="performance-status-panel" style={newStyle}>{sshPanel}{mongoPanel}</div>;
+  return (
+    <div className="performance-status-panel" style={newStyle}>
+      {sshPanel}
+      {mongoPanel}
+    </div>
+  );
 };

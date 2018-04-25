@@ -32,12 +32,12 @@ type Props = {
   api: *,
   store: *,
   showDialog: boolean,
-  verifyPassword: boolean,
+  verifyPassword: boolean
 };
 
 type State = {
   passPhrase: string,
-  passPhraseVerified: boolean,
+  passPhraseVerified: boolean
 };
 
 @inject(allStores => ({
@@ -49,29 +49,30 @@ export default class PasswordDialog extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      passPhraseVerified: !(this.props.verifyPassword),
+      passPhraseVerified: !this.props.verifyPassword,
       passPhrase: ''
     };
   }
 
   closeDialog = () => {
     this.props.api.passwordApi.closePasswordDialog();
-  }
+  };
 
   onPasswordSubmit = () => {
     if (this.state.passPhraseVerified) {
       this.props.api.passwordApi.sendStoreInit();
       // this.props.api.passwordApi.sendStoreInit(this.state.passPhrase);
-      this.setState({ passPhraseVerified: !(this.props.verifyPassword) });
+      this.setState({ passPhraseVerified: !this.props.verifyPassword });
     }
-  }
+  };
 
   render() {
     return (
       <Dialog
         className="passwordDialog"
         isOpen={this.props.showDialog}
-        onClose={this.props.api.passwordApi.closePasswordDialog}>
+        onClose={this.props.api.passwordApi.closePasswordDialog}
+      >
         <div className="dialogContent">
           <p>{globalString('password_dialog/message')}</p>
           <input
@@ -82,35 +83,31 @@ export default class PasswordDialog extends React.Component<Props, State> {
               this.props.store.password.initialPassword = event.target.value;
               // this.setState({ passPhrase: event.target.value });
               this.setState({
-                passPhraseVerified: (
-                  !this.props.verifyPassword ||
-                  this.props.api.passwordApi.verifyPassword()
-                )
+                passPhraseVerified:
+                  !this.props.verifyPassword || this.props.api.passwordApi.verifyPassword()
               });
             }}
           />
-          {
-            this.props.verifyPassword &&
+          {this.props.verifyPassword && (
             <input
               type="password"
               className="pt-input passPhraseInput verifyInput"
               placeholder="Verify Master Password..."
               onChange={event => {
                 this.props.store.password.repeatPassword = event.target.value;
-                  this.setState({
-                    passPhraseVerified: (
-                      !this.props.verifyPassword ||
-                      this.props.api.passwordApi.verifyPassword()
-                    )
-                  });
+                this.setState({
+                  passPhraseVerified:
+                    !this.props.verifyPassword || this.props.api.passwordApi.verifyPassword()
+                });
               }}
             />
-          }
-          {
-            this.props.verifyPassword &&
-            !this.state.passPhraseVerified &&
-            <p className="dialogValidationError">{globalString('password_dialog/validation_message')}</p>
-          }
+          )}
+          {this.props.verifyPassword &&
+            !this.state.passPhraseVerified && (
+              <p className="dialogValidationError">
+                {globalString('password_dialog/validation_message')}
+              </p>
+            )}
         </div>
         <div className="dialogButtons">
           <AnchorButton

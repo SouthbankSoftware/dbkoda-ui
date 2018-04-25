@@ -26,6 +26,4 @@
  * @Last modified time: 2017-05-22T09:11:39+10:00
  */
 
-
-
 export DetailsPanel from './Panel';

@@ -32,9 +32,7 @@ import { observer } from 'mobx-react';
 import { Intent, Position, Tooltip, NumericInput } from '@blueprintjs/core';
 
 export default observer(({ field, showLabel = true, formGroup = false }) => {
-  let fldClassName = formGroup
-    ? 'pt-form-group form-group-inline'
-    : 'pt-form-group pt-top-level';
+  let fldClassName = formGroup ? 'pt-form-group form-group-inline' : 'pt-form-group pt-top-level';
   if (field.error) {
     fldClassName += ' pt-intent-danger';
   }
@@ -68,8 +66,8 @@ export default observer(({ field, showLabel = true, formGroup = false }) => {
             >
               <NumericInput
                 className={inputClassName}
-                {...(field.options && field.options.min) ? {min: field.options.min} : {}}
-                {...(field.options && field.options.max) ? {max: field.options.max} : {}}
+                {...(field.options && field.options.min ? { min: field.options.min } : {})}
+                {...(field.options && field.options.max ? { max: field.options.max } : {})}
                 {...field.bind()}
               />
             </Tooltip>
@@ -77,8 +75,12 @@ export default observer(({ field, showLabel = true, formGroup = false }) => {
         {(!field.options || !field.options.tooltip) && (
           <NumericInput
             className={inputClassName}
-            {...(field.options && field.options.min !== undefined) ? {min: field.options.min} : {}}
-            {...(field.options && field.options.max !== undefined) ? {max: field.options.max} : {}}
+            {...(field.options && field.options.min !== undefined
+              ? { min: field.options.min }
+              : {})}
+            {...(field.options && field.options.max !== undefined
+              ? { max: field.options.max }
+              : {})}
             {...field.bind()}
           />
         )}

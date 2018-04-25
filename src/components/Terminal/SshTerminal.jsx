@@ -37,7 +37,7 @@ import Terminal from './Terminal';
 
 type Props = {
   id: UUID,
-  tabId: string,
+  tabId: string
 };
 
 export default class SshTerminal extends React.PureComponent<Props> {
@@ -63,18 +63,18 @@ export default class SshTerminal extends React.PureComponent<Props> {
         IS_DEVELOPMENT && console.debug('Terminal already exists');
         this._send('\f');
       })
-      .catch((err) => {
+      .catch(err => {
         if (err.code === 404) {
           Broker.emit(EventType.TERMINAL_ATTACHING(id), xterm);
         } else {
           Broker.emit(EventType.TERMINAL_ERROR(id), {
             error: err.message,
-            level: terminalErrorLevels.error,
+            level: terminalErrorLevels.error
           });
         }
       });
 
-    this._receive = (data) => {
+    this._receive = data => {
       IS_DEVELOPMENT && console.debug('Receiving: ', JSON.stringify(data));
 
       xterm.write(data);
@@ -107,7 +107,7 @@ export default class SshTerminal extends React.PureComponent<Props> {
     IS_DEVELOPMENT && console.debug('Sending: ', JSON.stringify(code));
 
     this.terminalService.patch(id, {
-      cmd: code,
+      cmd: code
     });
   };
 

@@ -42,10 +42,7 @@ export default class Profiling {
     Broker.on(EventType.PROFILING_DATABASES_DATA, ({ profileId, payload }) => {
       const { alias } = this.store.profileStore.profiles.get(profileId);
 
-      console.log(
-        `%cProfling Databases for ${alias} (${profileId}):`,
-        'color: green'
-      );
+      console.log(`%cProfling Databases for ${alias} (${profileId}):`, 'color: green');
       console.log(payload);
       this.api.sendMsgToPerformanceWindow({
         profileId,
@@ -57,10 +54,7 @@ export default class Profiling {
     Broker.on(EventType.PROFILING_DATA, ({ profileId, payload }) => {
       const { alias } = this.store.profileStore.profiles.get(profileId);
 
-      console.log(
-        `%cProfling Data for ${alias} (${profileId}):`,
-        'color: green'
-      );
+      console.log(`%cProfling Data for ${alias} (${profileId}):`, 'color: green');
       console.log(payload);
       this.api.sendMsgToPerformanceWindow({
         profileId,
@@ -69,25 +63,17 @@ export default class Profiling {
       });
     });
 
-    Broker.on(
-      EventType.PROFILING_ERROR,
-      ({ profileId, payload: { error, level } }) => {
-        this._handleError(profileId, error, level);
-      }
-    );
+    Broker.on(EventType.PROFILING_ERROR, ({ profileId, payload: { error, level } }) => {
+      this._handleError(profileId, error, level);
+    });
   }
 
-  _handleError = (
-    profileId: UUID,
-    err: Error | string,
-    level: 'error' | 'warn' = 'error'
-  ) => {
+  _handleError = (profileId: UUID, err: Error | string, level: 'error' | 'warn' = 'error') => {
     const { alias } = this.store.profileStore.profiles.get(profileId);
 
     console.error(err);
     // $FlowFixMe
-    const errorMessage = `Profile ${alias} (${profileId}) ${level}: ${err.message ||
-      err}`;
+    const errorMessage = `Profile ${alias} (${profileId}) ${level}: ${err.message || err}`;
 
     NewToaster.show({
       message: errorMessage,

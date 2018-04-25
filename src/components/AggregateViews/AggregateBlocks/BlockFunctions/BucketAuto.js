@@ -27,11 +27,11 @@ export const BucketAuto = {
   dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse,
   dbkodaAggOperators: common.dbkodaAggOperators,
   dbkodaAggOperators_parse: common.dbkodaAggOperators_parse,
-  dbkodaGranularityLookup: (params) => {
+  dbkodaGranularityLookup: params => {
     params.dontRun = true;
     return params;
   },
-  dbkodaGranularityLookup_parse: (res) => {
+  dbkodaGranularityLookup_parse: res => {
     //eslint-disable-line
     const debug = false;
     const granularities = [
@@ -47,8 +47,8 @@ export const BucketAuto = {
       'E48',
       'E96',
       'E192',
-      'POWERSOF2',
+      'POWERSOF2'
     ];
     return granularities;
-  },
+  }
 };

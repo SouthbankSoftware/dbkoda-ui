@@ -80,11 +80,7 @@ export default class Toolbar extends React.Component {
     this.downloadOutput = this.downloadOutput.bind(this);
 
     // Determine toolbar context.
-    if (
-      this.props.store.outputPanel.currentTab.startsWith(
-        OutputToolbarContexts.TABLE_VIEW
-      )
-    ) {
+    if (this.props.store.outputPanel.currentTab.startsWith(OutputToolbarContexts.TABLE_VIEW)) {
       this.state.context = OutputToolbarContexts.TABLE_VIEW;
     } else {
       this.state.context = OutputToolbarContexts.DEFAULT;
@@ -98,27 +94,19 @@ export default class Toolbar extends React.Component {
       executingShowMore => {
         if (
           executingShowMore &&
-          this.props.store.outputs.get(
-            this.props.store.outputPanel.currentTab
-          ) &&
-          !this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
-            .cannotShowMore
+          this.props.store.outputs.get(this.props.store.outputPanel.currentTab) &&
+          !this.props.store.outputs.get(this.props.store.outputPanel.currentTab).cannotShowMore
         ) {
           const command = 'it';
           this.props.store.editorToolbar.isActiveExecuting = true;
-          this.props.store.editors.get(
-            this.props.store.outputPanel.currentTab
-          ).executing = true;
+          this.props.store.editors.get(this.props.store.outputPanel.currentTab).executing = true;
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
           service.update(
-            this.props.store.outputs.get(
-              this.props.store.outputPanel.currentTab
-            ).connId,
+            this.props.store.outputs.get(this.props.store.outputPanel.currentTab).connId,
             {
-              shellId: this.props.store.outputs.get(
-                this.props.store.outputPanel.currentTab
-              ).shellId,
+              shellId: this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
+                .shellId,
               commands: command
             }
           );
@@ -242,9 +230,9 @@ export default class Toolbar extends React.Component {
 
   onShellIdChanged() {
     console.log(
-      `EventType.createShellExecutionFinishEvent(${
-        this.props.store.editorPanel.activeEditorId
-      }, ${this.props.store.editorToolbar.shellId})`
+      `EventType.createShellExecutionFinishEvent(${this.props.store.editorPanel.activeEditorId}, ${
+        this.props.store.editorToolbar.shellId
+      })`
     );
     Broker.on(
       EventType.createShellExecutionFinishEvent(
@@ -294,15 +282,11 @@ export default class Toolbar extends React.Component {
       existingOutputs = this.getExistingOutputs();
       if (this.props.store.outputPanel.currentTab.startsWith('TableView-')) {
         currentOutput.tableView = true;
-      } else if (
-        this.props.store.outputPanel.currentTab.startsWith('Enhanced')
-      ) {
+      } else if (this.props.store.outputPanel.currentTab.startsWith('Enhanced')) {
         currentOutput.enhancedView = true;
       } else if (this.props.store.outputPanel.currentTab.startsWith('Chart')) {
         currentOutput.chartView = true;
-      } else if (
-        this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
-      ) {
+      } else if (this.props.store.outputs.get(this.props.store.outputPanel.currentTab)) {
         currentOutput.rawView = true;
       }
     }
@@ -310,9 +294,7 @@ export default class Toolbar extends React.Component {
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">
-          <div className="pt-navbar-heading">
-            {globalString('output/headings/default')}
-          </div>
+          <div className="pt-navbar-heading">{globalString('output/headings/default')}</div>
           {true && (
             <div>
               <Tooltip
@@ -327,16 +309,10 @@ export default class Toolbar extends React.Component {
                   disabled={disabledButtons.raw || currentOutput.rawView}
                   className="pt-intent-danger circleButton jsonTreeViewButton"
                   onClick={() => {
-                    this.props.api.outputApi.openView(
-                      OutputToolbarContexts.RAW
-                    );
+                    this.props.api.outputApi.openView(OutputToolbarContexts.RAW);
                   }}
                 >
-                  <EnhanceJSONIcon
-                    className="dbKodaSVG"
-                    width={30}
-                    height={30}
-                  />
+                  <EnhanceJSONIcon className="dbKodaSVG" width={30} height={30} />
                 </AnchorButton>
               </Tooltip>
               <Tooltip
@@ -350,28 +326,18 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="pt-intent-danger circleButton jsonTreeViewButton"
                   onClick={() => {
-                    if (
-                      existingOutputs.enhancedJson &&
-                      !currentOutput.rawView
-                    ) {
-                      this.props.api.outputApi.openView(
-                        OutputToolbarContexts.ENHANCED_VIEW
-                      );
+                    if (existingOutputs.enhancedJson && !currentOutput.rawView) {
+                      this.props.api.outputApi.openView(OutputToolbarContexts.ENHANCED_VIEW);
                     } else {
                       this.openJsonTreeView();
                     }
                   }}
                   disabled={
-                    (disabledButtons.jsonView &&
-                      !existingOutputs.enhancedJson) ||
+                    (disabledButtons.jsonView && !existingOutputs.enhancedJson) ||
                     currentOutput.enhancedView
                   }
                 >
-                  <EnhanceJSONIcon
-                    className="dbKodaSVG"
-                    width={30}
-                    height={30}
-                  />
+                  <EnhanceJSONIcon className="dbKodaSVG" width={30} height={30} />
                 </AnchorButton>
               </Tooltip>
               <Tooltip
@@ -387,13 +353,8 @@ export default class Toolbar extends React.Component {
                   onClick={() => {
                     if (currentOutput.chartView) {
                       this.openTableView(true, false);
-                    } else if (
-                      existingOutputs.tableJson &&
-                      !currentOutput.rawView
-                    ) {
-                      this.props.api.outputApi.openView(
-                        OutputToolbarContexts.TABLE_VIEW
-                      );
+                    } else if (existingOutputs.tableJson && !currentOutput.rawView) {
+                      this.props.api.outputApi.openView(OutputToolbarContexts.TABLE_VIEW);
                     } else {
                       this.openTableView(false, false);
                     }
@@ -418,16 +379,13 @@ export default class Toolbar extends React.Component {
                   className="pt-intent-danger circleButton chartViewButton"
                   onClick={() => {
                     if (existingOutputs.chartPanel && !currentOutput.rawView) {
-                      this.props.api.outputApi.openView(
-                        OutputToolbarContexts.CHART_VIEW
-                      );
+                      this.props.api.outputApi.openView(OutputToolbarContexts.CHART_VIEW);
                     } else {
                       this.openChartView();
                     }
                   }}
                   disabled={
-                    (disabledButtons.chartView &&
-                      !existingOutputs.chartPanel) ||
+                    (disabledButtons.chartView && !existingOutputs.chartPanel) ||
                     currentOutput.chartView
                   }
                 >
@@ -466,16 +424,11 @@ export default class Toolbar extends React.Component {
               onClick={this.showMore}
               disabled={
                 this.props.store.outputPanel.currentTab == 'Default' ||
-                this.props.store.outputPanel.currentTab.indexOf('Explain') >=
-                  0 ||
-                this.props.store.outputPanel.currentTab.indexOf('Details') >=
-                  0 ||
-                (this.props.store.outputs.get(
-                  this.props.store.outputPanel.currentTab
-                ) &&
-                  this.props.store.outputs.get(
-                    this.props.store.outputPanel.currentTab
-                  ).cannotShowMore)
+                this.props.store.outputPanel.currentTab.indexOf('Explain') >= 0 ||
+                this.props.store.outputPanel.currentTab.indexOf('Details') >= 0 ||
+                (this.props.store.outputs.get(this.props.store.outputPanel.currentTab) &&
+                  this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
+                    .cannotShowMore)
               }
             >
               <ShowMoreIcon className="dbKodaSVG" width={30} height={30} />
@@ -489,10 +442,7 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}
           >
-            <AnchorButton
-              className="saveOutputBtn circleButton"
-              onClick={this.downloadOutput}
-            >
+            <AnchorButton className="saveOutputBtn circleButton" onClick={this.downloadOutput}>
               <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>
@@ -505,9 +455,7 @@ export default class Toolbar extends React.Component {
    * Render function for a Table View Toolbar.
    */
   renderTableToolbar() {
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
 
     // Get list of already generated tabs for switching too:
     const existingOutputs = this.getExistingOutputs();
@@ -515,9 +463,7 @@ export default class Toolbar extends React.Component {
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">
-          <div className="pt-navbar-heading">
-            {globalString('output/headings/table')}
-          </div>
+          <div className="pt-navbar-heading">{globalString('output/headings/table')}</div>
           {IS_DEVELOPMENT && (
             <div>
               <Tooltip
@@ -531,16 +477,10 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="pt-intent-danger circleButton rawButton"
                   onClick={() => {
-                    this.props.api.outputApi.openView(
-                      OutputToolbarContexts.RAW
-                    );
+                    this.props.api.outputApi.openView(OutputToolbarContexts.RAW);
                   }}
                 >
-                  <EnhanceJSONIcon
-                    className="dbKodaSVG"
-                    width={30}
-                    height={30}
-                  />
+                  <EnhanceJSONIcon className="dbKodaSVG" width={30} height={30} />
                 </AnchorButton>
               </Tooltip>
               <Tooltip
@@ -554,17 +494,11 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="pt-intent-danger circleButton jsonTreeViewButton"
                   onClick={() => {
-                    this.props.api.outputApi.openView(
-                      OutputToolbarContexts.ENHANCED_VIEW
-                    );
+                    this.props.api.outputApi.openView(OutputToolbarContexts.ENHANCED_VIEW);
                   }}
                   disabled={!existingOutputs.enhancedJson}
                 >
-                  <EnhanceJSONIcon
-                    className="dbKodaSVG"
-                    width={30}
-                    height={30}
-                  />
+                  <EnhanceJSONIcon className="dbKodaSVG" width={30} height={30} />
                 </AnchorButton>
               </Tooltip>
               <Tooltip
@@ -575,10 +509,7 @@ export default class Toolbar extends React.Component {
                 tooltipClassName="pt-dark"
                 position={Position.BOTTOM}
               >
-                <AnchorButton
-                  className="pt-intent-danger circleButton tableViewButton"
-                  disabled
-                >
+                <AnchorButton className="pt-intent-danger circleButton tableViewButton" disabled>
                   <TableIcon className="dbKodaSVG" width={30} height={30} />
                 </AnchorButton>
               </Tooltip>
@@ -644,10 +575,8 @@ export default class Toolbar extends React.Component {
                       }
                       this.props.api.treeApi.openNewTableViewForCollection(
                         {
-                          collection: this.props.store.outputs.get(editor.id)
-                            .tableJson.collection,
-                          database: this.props.store.outputs.get(editor.id)
-                            .tableJson.database
+                          collection: this.props.store.outputs.get(editor.id).tableJson.collection,
+                          database: this.props.store.outputs.get(editor.id).tableJson.database
                         },
                         this.state.tableToolbar.limit
                       );
@@ -700,10 +629,7 @@ export default class Toolbar extends React.Component {
               <CollapseIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>
-          <Popover
-            content={this.renderDownloadMenu()}
-            position={Position.BOTTOM_LEFT}
-          >
+          <Popover content={this.renderDownloadMenu()} position={Position.BOTTOM_LEFT}>
             <Tooltip
               intent={Intent.PRIMARY}
               hoverOpenDelay={1000}
@@ -712,10 +638,7 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}
             >
-              <AnchorButton
-                className="saveOutputBtn circleButton"
-                onClick={this.showDownloadMenu}
-              >
+              <AnchorButton className="saveOutputBtn circleButton" onClick={this.showDownloadMenu}>
                 <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
               </AnchorButton>
             </Tooltip>
@@ -732,28 +655,14 @@ export default class Toolbar extends React.Component {
   getExistingOutputs() {
     // Can always swap to Raw Output.
     const existingOutputs = { raw: true };
-    if (
-      this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId)
-    ) {
-      if (
-        this.props.store.outputs.get(
-          this.props.store.editorPanel.activeEditorId
-        ).chartPanel
-      ) {
+    if (this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId)) {
+      if (this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId).chartPanel) {
         existingOutputs.chartPanel = true;
       }
-      if (
-        this.props.store.outputs.get(
-          this.props.store.editorPanel.activeEditorId
-        ).enhancedJson
-      ) {
+      if (this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId).enhancedJson) {
         existingOutputs.enhancedJson = true;
       }
-      if (
-        this.props.store.outputs.get(
-          this.props.store.editorPanel.activeEditorId
-        ).tableJson
-      ) {
+      if (this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId).tableJson) {
         existingOutputs.tableJson = true;
       }
     }
@@ -794,12 +703,9 @@ export default class Toolbar extends React.Component {
     if (fromChart) {
       editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
       runInAction(() => {
-        this.props.store.outputs.get(
-          this.props.store.editorPanel.activeEditorId
-        ).tableJson = {
-          json: this.props.store.outputs.get(
-            this.props.store.editorPanel.activeEditorId
-          ).chartPanel.data,
+        this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId).tableJson = {
+          json: this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId).chartPanel
+            .data,
           firstLine: 0,
           lastLine: 20
         };
@@ -850,9 +756,7 @@ export default class Toolbar extends React.Component {
   @action.bound
   openJsonTreeView() {
     // Get the output instance:
-    const editor = this.props.editorRefs[
-      this.props.store.outputPanel.currentTab
-    ];
+    const editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
     const cm = editor.getCodeMirror();
 
     // Get the last line that we think is valid:
@@ -898,9 +802,7 @@ export default class Toolbar extends React.Component {
       runInAction(() => {
         this.props.api.outputApi.showChartPanel(
           this.props.store.editorPanel.activeEditorId,
-          this.props.store.outputs.get(
-            this.props.store.editorPanel.activeEditorId
-          ).tableJson.json,
+          this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId).tableJson.json,
           'loaded'
         );
       });
@@ -980,17 +882,13 @@ export default class Toolbar extends React.Component {
       });
     } else if (currentOutput.startsWith('Chart')) {
       return this.renderDefaultToolbar({ chartView: true, jsonView: true });
-    } else if (
-      this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
-    ) {
+    } else if (this.props.store.outputs.get(this.props.store.outputPanel.currentTab)) {
       return this.renderDefaultToolbar({ raw: true });
     }
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">
-          <div className="pt-navbar-heading">
-            {globalString('output/headings/default')}
-          </div>
+          <div className="pt-navbar-heading">{globalString('output/headings/default')}</div>
         </div>
         <div className="pt-navbar-group pt-align-right">
           <Tooltip
@@ -1021,16 +919,11 @@ export default class Toolbar extends React.Component {
               onClick={this.showMore}
               disabled={
                 this.props.store.outputPanel.currentTab == 'Default' ||
-                this.props.store.outputPanel.currentTab.indexOf('Explain') >=
-                  0 ||
-                this.props.store.outputPanel.currentTab.indexOf('Details') >=
-                  0 ||
-                (this.props.store.outputs.get(
-                  this.props.store.outputPanel.currentTab
-                ) &&
-                  this.props.store.outputs.get(
-                    this.props.store.outputPanel.currentTab
-                  ).cannotShowMore)
+                this.props.store.outputPanel.currentTab.indexOf('Explain') >= 0 ||
+                this.props.store.outputPanel.currentTab.indexOf('Details') >= 0 ||
+                (this.props.store.outputs.get(this.props.store.outputPanel.currentTab) &&
+                  this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
+                    .cannotShowMore)
               }
             >
               <ShowMoreIcon className="dbKodaSVG" width={30} height={30} />
@@ -1044,10 +937,7 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}
           >
-            <AnchorButton
-              className="saveOutputBtn circleButton"
-              onClick={this.downloadOutput}
-            >
+            <AnchorButton className="saveOutputBtn circleButton" onClick={this.downloadOutput}>
               <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>

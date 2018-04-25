@@ -23,834 +23,835 @@
  * @Last modified by:   wahaj
  * @Last modified time: 2018-03-26T16:32:49+11:00
  */
-@import "../../../styles/_defaultTheme.scss";
+@import '../../../styles/_defaultTheme.scss';
 
 $menuBackground1: #837395;
-$menuBackground2: #CF7769;
-$menuBackground3: #7FA5AD;
-$menuBackground4: #6A9CCE;
+$menuBackground2: #cf7769;
+$menuBackground3: #7fa5ad;
+$menuBackground4: #6a9cce;
 $menuBackground5: #994182;
-$menuBackground6: #E0B448;
-$menuBackground7: #ADC88F;
+$menuBackground6: #e0b448;
+$menuBackground7: #adc88f;
 
-.pt-button {}
+.pt-button {
+}
 
 input {
-    background-color: $searchPrimaryBackground !important;
-    color: $searchPrimaryFontColor !important;
-    border: none;
+  background-color: $searchPrimaryBackground !important;
+  color: $searchPrimaryFontColor !important;
+  border: none;
 }
 
 input[type='text'],
 input[type='number'],
 input[type='password'] {
-    background: unset;
-    color: $connectionActiveTextFieldTextColour !important;
+  background: unset;
+  color: $connectionActiveTextFieldTextColour !important;
 }
 
 input[type='text']:focus,
 input[type='number']:focus,
 input[type='password']:focus {
-    background-color: $connectionActiveTextFieldBackgroundColour !important;
-    box-shadow: none !important;
-    outline: none !important;
+  background-color: $connectionActiveTextFieldBackgroundColour !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 h4 {
-    color: #bfbec0 !important;
+  color: #bfbec0 !important;
 }
 
 .logo {
-    .st0 {
-        fill: none;
-    }
+  .st0 {
+    fill: none;
+  }
 }
 
 .configContentWrapper {
-    display: flex;
-    flex-direction: row;
-    margin-top: 25px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 25px;
 
-    .loadingWrapper {
-        position: relative;
+  .loadingWrapper {
+    position: relative;
+    float: right;
+    width: 50px;
+    height: 50px;
+  }
+
+  .configLeftMenuWrapper {
+    width: 30%;
+    max-width: 225px;
+    min-width: 110px;
+    border-right: 1px solid $selectDarkBorderColor;
+
+    .configMenu {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 100%;
+
+      .menuItem {
+        width: 100px;
+        height: 100px;
+        margin: 5px;
+      }
+
+      .menuItem:hover {
+        background-color: darken(#2e3042, 15%);
+      }
+
+      .pt-button {
+        width: 100px;
+        height: 100px;
+        border-radius: 0;
+        opacity: 0.5;
+
+        .dbKodaSVG {
+          width: 80px;
+          height: 80px;
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      .menuItem.selected .pt-button {
+        opacity: 1;
+      }
+
+      .menuItem .menuItemHome {
+        background-color: $menuBackground1;
+
+        .st0 {
+          fill: #ffffff;
+        }
+
+        .st1 {
+          fill: #d7dadb;
+        }
+
+        .st2 {
+          fill: #3d516a;
+        }
+
+        .st3 {
+          fill: #2d384c;
+        }
+
+        .st4 {
+          fill: #0f2a48;
+        }
+
+        .st5 {
+          fill: #2c3d51;
+        }
+
+        .st6 {
+          fill: #e2ebf2;
+        }
+
+        .st7 {
+          fill: #3c526a;
+        }
+
+        .st8 {
+          fill: #e1ebed;
+        }
+
+        svg {
+          width: 65px;
+          height: 65px;
+        }
+      }
+
+      .menuItem .menuItemPaths {
+        background-color: $menuBackground2;
+
+        .st0 {
+          fill: #efce4a;
+        }
+
+        .st1 {
+          fill: #d6a416;
+        }
+      }
+
+      .menuItem .menuItemApplication {
+        background-color: $menuBackground3;
+
+        .st0 {
+          fill: #ffffff;
+        }
+
+        .st1 {
+          fill: #d7dadb;
+        }
+      }
+
+      .menuItem .menuItemPasswordStore {
+        background-color: $menuBackground4;
+
+        .st0 {
+          fill: #ffffff;
+        }
+
+        .st1 {
+          fill: #efce4a;
+        }
+
+        .st2 {
+          fill: #d6a416;
+        }
+
+        svg {
+          width: 65px;
+          height: 65px;
+        }
+      }
+
+      .menuItem .menuItemPerformance {
+        background-color: $menuBackground5;
+
+        .st0 {
+          fill: #aeafaf;
+        }
+
+        .st1 {
+          fill: #d7dadb;
+        }
+
+        .st2 {
+          fill: #ffffff;
+        }
+
+        .st3 {
+          fill: #6a9cce;
+        }
+
+        .st4 {
+          fill: #adc88f;
+        }
+
+        .st5 {
+          fill: #d6a416;
+        }
+
+        .st6 {
+          fill: #cf7769;
+        }
+
+        svg {
+          width: 65px;
+          height: 65px;
+        }
+      }
+
+      .menuItem .menuItemShortcuts {
+        background-color: $menuBackground6;
+
+        .st0 {
+          fill: #d7dadb;
+        }
+
+        .st1 {
+          fill: #ffffff;
+        }
+
+        .st2 {
+          fill: #656d78;
+        }
+
+        svg {
+          width: 65px;
+          height: 65px;
+        }
+      }
+
+      .menuItem .menuItemUserGuide {
+        background-color: $menuBackground7;
+
+        .st0 {
+          fill: #d2555a;
+        }
+
+        .st1 {
+          fill: #ff6464;
+        }
+
+        .st2 {
+          fill: #be4b50;
+        }
+
+        .st3 {
+          fill: #f0dcbe;
+        }
+
+        .st4 {
+          fill: #e1c3a0;
+        }
+
+        svg {
+          width: 65px;
+          height: 65px;
+        }
+      }
+    }
+  }
+
+  .configRightFormWrapper {
+    margin-left: 30px;
+    width: 100%;
+
+    button.pt-button.formButton {
+      margin-left: 5px;
+      font-weight: lighter;
+      color: $connectionButtonFontColour;
+      width: 7em !important;
+      border-radius: 0;
+      background-image: unset;
+      background-color: $connectionButtonBackgroundColour;
+      border: 1px solid $connectionButtonBorderColour;
+      box-shadow: unset;
+    }
+
+    .formContentWrapper {
+      display: table;
+      width: 80%;
+
+      .sectionHeader {
+        font-size: 20px;
+        margin: 8px 0 13px;
+      }
+
+      .form-row {
+        display: flex;
+        flex-direction: row;
+        margin-left: 12px;
+        margin-top: 12px;
+        height: 35px;
+
+        label {
+          display: table-cell;
+          font-size: 10pt;
+          vertical-align: middle;
+          max-width: max-content;
+        }
+
+        input {
+          float: right;
+          margin-left: auto;
+          height: 24px;
+          padding-left: 4px;
+        }
+
+        .pt-switch {
+          font-size: 10pt;
+          font-weight: lighter;
+          color: $connectionHeadingsFontColour !important;
+          text-align: left;
+          margin: 0;
+          margin-left: 12px;
+        }
+      }
+
+      .switch {
+        display: flex;
+        flex-direction: row;
+        margin-left: 12px;
+
+        .switchLabel {
+          margin-left: 8px;
+        }
+      }
+
+      .fileInput {
+        margin-left: 12px;
+        min-width: 150px;
+
+        input {
+          height: 30px;
+          width: 40%;
+          padding-left: 8px;
+          margin-right: 8px;
+        }
+
+        button {
+          border-radius: 0.5em;
+          background-color: #2f3344;
+          font-size: 12px;
+        }
+
+        button:hover {
+          background-color: #41465c;
+        }
+      }
+
+      .unsavedFileIndicator {
+        opacity: 1;
+        top: 0;
         float: right;
-        width: 50px;
-        height: 50px;
+      }
     }
 
-    .configLeftMenuWrapper {
-        width: 30%;
-        max-width: 225px;
-        min-width: 110px;
-        border-right: 1px solid $selectDarkBorderColor;
+    .formContentWrapper.ApplicationPreferences {
+      .form-row {
+        label {
+          vertical-align: text-top;
+        }
+      }
+    }
 
-        .configMenu {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
+    .learnShortcutsWrapper {
+      .groupsList {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 16px;
+
+        div {
+          margin-right: 20px;
+          width: 15%;
+          height: 50px;
+
+          a {
+            background: none;
             width: 100%;
+            height: 100%;
+            background-color: #41465c;
+            border-radius: 0.5em;
+          }
 
-            .menuItem {
-                width: 100px;
-                height: 100px;
-                margin: 5px;
-            }
+          a:hover {
+            background-color: #282a39;
+          }
 
-            .menuItem:hover {
-                background-color: darken(#2e3042, 15%);
-            }
-
-            .pt-button {
-                width: 100px;
-                height: 100px;
-                border-radius: 0;
-                opacity: 0.5;
-
-                .dbKodaSVG {
-                    width: 80px;
-                    height: 80px;
-                    transform: translate(-50%, -50%);
-                }
-            }
-
-            .menuItem.selected .pt-button {
-                opacity: 1.0;
-            }
-
-            .menuItem .menuItemHome {
-                background-color: $menuBackground1;
-
-                .st0 {
-                    fill: #FFFFFF;
-                }
-
-                .st1 {
-                    fill: #D7DADB;
-                }
-
-                .st2 {
-                    fill: #3D516A;
-                }
-
-                .st3 {
-                    fill: #2D384C;
-                }
-
-                .st4 {
-                    fill: #0F2A48;
-                }
-
-                .st5 {
-                    fill: #2C3D51;
-                }
-
-                .st6 {
-                    fill: #E2EBF2;
-                }
-
-                .st7 {
-                    fill: #3C526A;
-                }
-
-                .st8 {
-                    fill: #E1EBED;
-                }
-
-                svg {
-                    width: 65px;
-                    height: 65px;
-                }
-            }
-
-            .menuItem .menuItemPaths {
-                background-color: $menuBackground2;
-
-                .st0 {
-                    fill: #EFCE4A;
-                }
-
-                .st1 {
-                    fill: #D6A416;
-                }
-            }
-
-            .menuItem .menuItemApplication {
-                background-color: $menuBackground3;
-
-                .st0 {
-                    fill: #FFFFFF;
-                }
-
-                .st1 {
-                    fill: #D7DADB;
-                }
-            }
-
-            .menuItem .menuItemPasswordStore {
-                background-color: $menuBackground4;
-
-                .st0 {
-                    fill: #FFFFFF;
-                }
-
-                .st1 {
-                    fill: #EFCE4A;
-                }
-
-                .st2 {
-                    fill: #D6A416;
-                }
-
-                svg {
-                    width: 65px;
-                    height: 65px;
-                }
-            }
-
-            .menuItem .menuItemPerformance {
-                background-color: $menuBackground5;
-
-                .st0 {
-                    fill: #AEAFAF;
-                }
-
-                .st1 {
-                    fill: #D7DADB;
-                }
-
-                .st2 {
-                    fill: #FFFFFF;
-                }
-
-                .st3 {
-                    fill: #6A9CCE;
-                }
-
-                .st4 {
-                    fill: #ADC88F;
-                }
-
-                .st5 {
-                    fill: #D6A416;
-                }
-
-                .st6 {
-                    fill: #CF7769;
-                }
-
-                svg {
-                    width: 65px;
-                    height: 65px;
-                }
-            }
-
-            .menuItem .menuItemShortcuts {
-                background-color: $menuBackground6;
-
-                .st0 {
-                    fill: #D7DADB;
-                }
-
-                .st1 {
-                    fill: #FFFFFF;
-                }
-
-                .st2 {
-                    fill: #656D78;
-                }
-
-                svg {
-                    width: 65px;
-                    height: 65px;
-                }
-            }
-
-            .menuItem .menuItemUserGuide {
-                background-color: $menuBackground7;
-
-                .st0 {
-                    fill: #D2555A;
-                }
-
-                .st1 {
-                    fill: #FF6464;
-                }
-
-                .st2 {
-                    fill: #BE4B50;
-                }
-
-                .st3 {
-                    fill: #F0DCBE;
-                }
-
-                .st4 {
-                    fill: #E1C3A0;
-                }
-
-                svg {
-                    width: 65px;
-                    height: 65px;
-                }
-            }
+          a:focus {
+            border: none;
+            box-shadow: none;
+          }
         }
+
+        div.selected_true {
+          a {
+            background-color: #282a39;
+          }
+        }
+      }
+
+      .hotkeysList {
+        div {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+
+          .hotkeyItem {
+            margin: 8px;
+            margin-left: 0px;
+            margin-right: 16px;
+            padding-top: 6px;
+            padding-left: 8px;
+            padding-right: 4px;
+            border: 1px solid rgba(191, 190, 192, 0.5);
+            border-radius: 0.5em;
+            width: 50%;
+            height: 100px;
+            min-width: 150px;
+            max-width: 250px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+          }
+        }
+      }
     }
 
-    .configRightFormWrapper {
-        margin-left: 30px;
-        width: 100%;
+    .welcomePageContentWrapper {
+      display: flex;
+      flex-direction: row;
+      height: 100%;
 
-        button.pt-button.formButton {
-            margin-left: 5px;
-            font-weight: lighter;
-            color: $connectionButtonFontColour;
-            width: 7em !important;
-            border-radius: 0;
-            background-image: unset;
-            background-color: $connectionButtonBackgroundColour;
-            border: 1px solid $connectionButtonBorderColour;
-            box-shadow: unset;
+      .welcomePageContentLeft {
+        width: 250px;
+        color: $welcomeViewSocialMediaText;
+        padding-right: 20px;
+        border-right: 1px solid $welcomeViewDividerTransparent;
+        flex-shrink: 0;
+        flex-direction: column;
+
+        h2 {
+          color: $welcomeViewFontColor;
+          font-size: 18px;
+          margin-bottom: 20px;
         }
 
-        .formContentWrapper {
-            display: table;
-            width: 80%;
-
-            .sectionHeader {
-                font-size: 20px;
-                margin: 8px 0 13px;
-            }
-
-            .form-row {
-                display: flex;
-                flex-direction: row;
-                margin-left: 12px;
-                margin-top: 12px;
-                height: 35px;
-
-                label {
-                    display: table-cell;
-                    font-size: 10pt;
-                    vertical-align: middle;
-                    max-width: max-content;
-                }
-
-                input {
-                    float: right;
-                    margin-left: auto;
-                    height: 24px;
-                    padding-left: 4px;
-                }
-
-                .pt-switch {
-                    font-size: 10pt;
-                    font-weight: lighter;
-                    color: $connectionHeadingsFontColour !important;
-                    text-align: left;
-                    margin: 0;
-                    margin-left: 12px;
-                }
-            }
-
-            .switch {
-                display: flex;
-                flex-direction: row;
-                margin-left: 12px;
-
-                .switchLabel {
-                    margin-left: 8px;
-                }
-            }
-
-            .fileInput {
-                margin-left: 12px;
-                min-width: 150px;
-
-                input {
-                    height: 30px;
-                    width: 40%;
-                    padding-left: 8px;
-                    margin-right: 8px;
-                }
-
-                button {
-                    border-radius: 0.5em;
-                    background-color: #2f3344;
-                    font-size: 12px;
-                }
-
-                button:hover {
-                    background-color: #41465C;
-                }
-            }
-
-            .unsavedFileIndicator {
-                opacity: 1;
-                top: 0;
-                float: right;
-            }
+        p {
+          color: $welcomeViewFontColorDark;
         }
 
-        .formContentWrapper.ApplicationPreferences {
-            .form-row {
-                label {
-                    vertical-align: text-top;
-                }
-            }
-        }
+        .docsContent {
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
 
-        .learnShortcutsWrapper {
-            .groupsList {
-                display: flex;
-                flex-direction: row;
-                margin-bottom: 16px;
-
-                div {
-                    margin-right: 20px;
-                    width: 15%;
-                    height: 50px;
-
-                    a {
-                        background: none;
-                        width: 100%;
-                        height: 100%;
-                        background-color: #41465C;
-                        border-radius: 0.5em;
-                    }
-
-                    a:hover {
-                        background-color: #282A39;
-                    }
-
-                    a:focus {
-                        border: none;
-                        box-shadow: none;
-                    }
-                }
-
-                div.selected_true {
-                    a {
-                        background-color: #282A39;
-                    }
-                }
-            }
-
-            .hotkeysList {
-                div {
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-
-                    .hotkeyItem {
-                        margin: 8px;
-                        margin-left: 0px;
-                        margin-right: 16px;
-                        padding-top: 6px;
-                        padding-left: 8px;
-                        padding-right: 4px;
-                        border: 1px solid rgba(191, 190, 192, 0.5);
-                        border-radius: 0.5em;
-                        width: 50%;
-                        height: 100px;
-                        min-width: 150px;
-                        max-width: 250px;
-                        display: flex;
-                        flex-direction: column;
-                        flex-wrap: nowrap;
-                    }
-                }
-            }
-        }
-
-        .welcomePageContentWrapper {
+          .docsList {
+            overflow-y: auto;
             display: flex;
-            flex-direction: row;
-            height: 100%;
+            flex-direction: column;
 
-            .welcomePageContentLeft {
-                width: 250px;
-                color: $welcomeViewSocialMediaText;
-                padding-right: 20px;
-                border-right: 1px solid $welcomeViewDividerTransparent;
-                flex-shrink: 0;
+            .documentationLinkWrapper {
+              padding-bottom: 12px;
+              flex-grow: 1;
+              display: flex;
+              flex-direction: row;
+              margin-right: 6%;
+
+              .iconWrapper {
+                width: 50px;
+                height: 50px;
+                order: 1;
+                flex-grow: 2;
+                border-radius: 0.4em;
+                text-align: center;
+
+                a {
+                  float: left;
+                  width: 50px;
+                  height: 50px;
+                  border-radius: 0.4em;
+                  background: $welcomeViewIconBGHover;
+                  position: relative;
+                  text-align: center;
+
+                  svg {
+                    position: absolute;
+                    top: 50%;
+                    bottom: 50%;
+                    transform: translate(-50%, -50%);
+                    fill: $welcomeViewSocialMediaIcons;
+                  }
+                }
+
+                a:focus {
+                  box-shadow: none !important;
+                }
+
+                a:hover {
+                  background-color: $welcomeViewIconBG;
+                }
+              }
+
+              p {
+                padding-left: 16px;
+                padding-top: 6px;
+                padding-bottom: 5px;
+                margin: 0;
+                flex-grow: 3;
+                order: 2;
+                text-align: left;
+              }
+            }
+          }
+
+          .linksWrapper {
+            h2 {
+              margin: 0px;
+            }
+
+            .linksList {
+              display: flex;
+              flex-direction: row;
+              flex-grow: 1;
+
+              .linkWrapper {
                 flex-direction: column;
+                margin-right: 10px;
 
-                h2 {
-                    color: $welcomeViewFontColor;
-                    font-size: 18px;
-                    margin-bottom: 20px;
+                a {
+                  width: 40px;
+                  border-radius: 50%;
+                  order: 1;
+                  flex-grow: 4;
+                  background: none;
+                  font-size: 40;
+                }
+
+                a:focus {
+                  box-shadow: none !important;
+                }
+
+                .twitterIcon {
+                  width: 40px;
+                  height: 40px;
+                  position: relative;
+
+                  svg {
+                    width: 30px;
+                    height: 30px;
+                    position: absolute;
+                    top: 50%;
+                    bottom: 50%;
+                    transform: translate(-50%, -50%);
+                    fill: $welcomeViewSocialMediaIcons;
+                  }
+
+                  svg:hover {
+                    fill: lighten($welcomeViewSocialMediaIcons, 20);
+                  }
+                }
+
+                .gitHubIcon {
+                  width: 40px;
+                  height: 40px;
+                  position: relative;
+
+                  svg {
+                    width: 30px;
+                    height: 30px;
+                    position: absolute;
+                    top: 50%;
+                    bottom: 50%;
+                    transform: translate(-50%, -50%);
+                    fill: $welcomeViewSocialMediaIcons;
+                  }
+
+                  svg:hover {
+                    fill: lighten($welcomeViewSocialMediaIcons, 20);
+                  }
+                }
+
+                .kodaIcon {
+                  width: 40px;
+                  height: 40px;
+                  position: relative;
+
+                  svg {
+                    width: 30px;
+                    height: 30px;
+                    position: absolute;
+                    top: 50%;
+                    bottom: 50%;
+                    transform: translate(-50%, -50%);
+                    fill: $welcomeViewSocialMediaIcons;
+
+                    path.st0 {
+                      fill: none;
+                    }
+                  }
+
+                  svg:hover {
+                    fill: lighten($welcomeViewSocialMediaIcons, 20);
+                  }
+                }
+
+                .mediumIcon {
+                  width: 40px;
+                  height: 40px;
+                  position: relative;
+
+                  svg {
+                    width: 30px;
+                    height: 30px;
+                    position: absolute;
+                    top: 50%;
+                    bottom: 50%;
+                    transform: translate(-50%, -50%);
+                    fill: $welcomeViewSocialMediaIcons;
+                  }
+
+                  svg:hover {
+                    fill: lighten($welcomeViewSocialMediaIcons, 20);
+                  }
+                }
+
+                a:hover {
+                  background-color: none;
                 }
 
                 p {
-                    color: $welcomeViewFontColorDark;
+                  flex-grow: 1;
+                  order: 2;
+                  text-align: center;
+                  margin-top: 10%;
                 }
-
-                .docsContent {
-                    overflow-y: auto;
-                    display: flex;
-                    flex-direction: column;
-
-                    .docsList {
-                        overflow-y: auto;
-                        display: flex;
-                        flex-direction: column;
-
-                        .documentationLinkWrapper {
-                            padding-bottom: 12px;
-                            flex-grow: 1;
-                            display: flex;
-                            flex-direction: row;
-                            margin-right: 6%;
-
-                            .iconWrapper {
-                                width: 50px;
-                                height: 50px;
-                                order: 1;
-                                flex-grow: 2;
-                                border-radius: 0.4em;
-                                text-align: center;
-
-                                a {
-                                    float: left;
-                                    width: 50px;
-                                    height: 50px;
-                                    border-radius: 0.4em;
-                                    background: $welcomeViewIconBGHover;
-                                    position: relative;
-                                    text-align: center;
-
-                                    svg {
-                                        position: absolute;
-                                        top: 50%;
-                                        bottom: 50%;
-                                        transform: translate(-50%, -50%);
-                                        fill: $welcomeViewSocialMediaIcons;
-                                    }
-                                }
-
-                                a:focus {
-                                    box-shadow: none !important;
-                                }
-
-                                a:hover {
-                                    background-color: $welcomeViewIconBG;
-                                }
-                            }
-
-                            p {
-                                padding-left: 16px;
-                                padding-top: 6px;
-                                padding-bottom: 5px;
-                                margin: 0;
-                                flex-grow: 3;
-                                order: 2;
-                                text-align: left;
-                            }
-                        }
-                    }
-
-                    .linksWrapper {
-                        h2 {
-                            margin: 0px;
-                        }
-
-                        .linksList {
-                            display: flex;
-                            flex-direction: row;
-                            flex-grow: 1;
-
-                            .linkWrapper {
-                                flex-direction: column;
-                                margin-right: 10px;
-
-                                a {
-                                    width: 40px;
-                                    border-radius: 50%;
-                                    order: 1;
-                                    flex-grow: 4;
-                                    background: none;
-                                    font-size: 40;
-                                }
-
-                                a:focus {
-                                    box-shadow: none !important;
-                                }
-
-                                .twitterIcon {
-                                    width: 40px;
-                                    height: 40px;
-                                    position: relative;
-
-                                    svg {
-                                        width: 30px;
-                                        height: 30px;
-                                        position: absolute;
-                                        top: 50%;
-                                        bottom: 50%;
-                                        transform: translate(-50%, -50%);
-                                        fill: $welcomeViewSocialMediaIcons;
-                                    }
-
-                                    svg:hover {
-                                        fill: lighten($welcomeViewSocialMediaIcons, 20);
-                                    }
-                                }
-
-                                .gitHubIcon {
-                                    width: 40px;
-                                    height: 40px;
-                                    position: relative;
-
-                                    svg {
-                                        width: 30px;
-                                        height: 30px;
-                                        position: absolute;
-                                        top: 50%;
-                                        bottom: 50%;
-                                        transform: translate(-50%, -50%);
-                                        fill: $welcomeViewSocialMediaIcons;
-                                    }
-
-                                    svg:hover {
-                                        fill: lighten($welcomeViewSocialMediaIcons, 20);
-                                    }
-                                }
-
-                                .kodaIcon {
-                                    width: 40px;
-                                    height: 40px;
-                                    position: relative;
-
-                                    svg {
-                                        width: 30px;
-                                        height: 30px;
-                                        position: absolute;
-                                        top: 50%;
-                                        bottom: 50%;
-                                        transform: translate(-50%, -50%);
-                                        fill: $welcomeViewSocialMediaIcons;
-
-                                        path.st0 {
-                                            fill: none;
-                                        }
-                                    }
-
-                                    svg:hover {
-                                        fill: lighten($welcomeViewSocialMediaIcons, 20);
-                                    }
-                                }
-
-                                .mediumIcon {
-                                    width: 40px;
-                                    height: 40px;
-                                    position: relative;
-
-                                    svg {
-                                        width: 30px;
-                                        height: 30px;
-                                        position: absolute;
-                                        top: 50%;
-                                        bottom: 50%;
-                                        transform: translate(-50%, -50%);
-                                        fill: $welcomeViewSocialMediaIcons;
-                                    }
-
-                                    svg:hover {
-                                        fill: lighten($welcomeViewSocialMediaIcons, 20);
-                                    }
-                                }
-
-                                a:hover {
-                                    background-color: none;
-                                }
-
-                                p {
-                                    flex-grow: 1;
-                                    order: 2;
-                                    text-align: center;
-                                    margin-top: 10%;
-                                }
-                            }
-                        }
-                    }
-                }
+              }
             }
-
-            .welcomePageContentRight {
-                padding-right: 3%;
-                flex-grow: 1;
-                flex-shrink: 1;
-                display: flex;
-                flex-direction: column;
-                padding-left: 40px;
-
-                h2 {
-                    margin-bottom: 20px;
-                    font-size: 18px;
-                    color: $welcomeViewFontColor;
-                }
-
-                .feedList {
-                    .feedItem {
-                        display: flex;
-                        flex-direction: row;
-                        overflow-x: auto;
-
-                        .feedIconWrapper {
-                            width: 60px;
-                            height: 60px;
-                            order: 1;
-                            border-radius: 0.4em;
-                            text-align: center;
-
-                            a {
-                                width: 60px;
-                                height: 60px;
-                                border-radius: 0.4em;
-                                background: $welcomeViewIconBGHover;
-                                position: relative;
-                                text-align: center;
-
-                                svg {
-                                    width: 30px;
-                                    height: 30px;
-                                    position: absolute;
-                                    top: 50%;
-                                    bottom: 50%;
-                                    transform: translate(-50%, -50%);
-                                    fill: $welcomeViewSocialMediaIcons;
-                                }
-                            }
-
-                            a:hover {
-                                background-color: $welcomeViewIconBG;
-                            }
-                        }
-
-                        .feedItemContent {
-                            order: 2;
-                            margin-left: 10px;
-                            display: flex;
-                            flex-direction: column;
-                            color: $welcomeViewFontColor;
-
-                            .feedItemTitle {
-                                font-weight: bold;
-                                font-size: 12;
-                            }
-
-                            .feedItemContent {
-                                margin-left: 0;
-                                width: 600px;
-                            }
-
-                            .feedItemPubDate {
-                                font-weight: lighter;
-                                font-size: 8;
-                            }
-                        }
-                    }
-                }
-
-                .newsListWrapper {
-                    overflow-y: auto;
-
-                    .newsItemWrapper {
-                        display: flex;
-                        flex-direction: row;
-                        background-color: #41465C;
-                        min-height: 150px;
-                        max-height: 300px;
-                        margin-bottom: 20px;
-                        padding-top: 10px;
-
-                        .newsContentWrapper {
-                            margin-left: 12px;
-                            margin-bottom: 12px;
-                            padding-right: 5px;
-                            font-family: 'Arial';
-                            color: $welcomeViewFontColorDark;
-
-                            h2.newsTitle {
-                                color: $welcomeViewFontColorDark;
-                                font-family: 'Arial';
-                                font-size: 18px;
-                                line-height: 20px;
-                                margin-bottom: 12px;
-                            }
-
-                            p.newsContent {
-                                color: $welcomeViewFontColorDark;
-                                font-family: 'Arial';
-                                font-size: small;
-                                margin-bottom: 4px;
-                                line-height: 16px;
-                            }
-
-                            p.datePublished {
-                                color: $welcomeViewFontColorDark;
-                                opacity: 0.6;
-                                font-family: 'Arial';
-                            }
-
-                            .svgWrapper {
-                                float: left;
-                                height: 24px;
-                                border-radius: 0.4em;
-                                background: $welcomeViewIconBGHover;
-                                position: relative;
-                                text-align: center;
-                                color: $welcomeViewFontColorDark;
-
-                                svg {
-                                    opacity: 0.9;
-                                    position: absolute;
-                                    height: 30px;
-                                    top: 50%;
-                                    bottom: 50%;
-                                    transform: translate(-50%, -50%);
-                                    fill: $welcomeViewFontColorDark;
-
-                                    .st0 {
-                                        fill: none;
-                                    }
-                                }
-                            }
-
-                            .svgWrapper:hover {
-                                background: $welcomeViewIconBG;
-                            }
-
-                            .svgWrapper:focus {
-                                outline: none;
-                                box-shadow: none;
-                            }
-                        }
-                    }
-                }
-            }
+          }
         }
+      }
+
+      .welcomePageContentRight {
+        padding-right: 3%;
+        flex-grow: 1;
+        flex-shrink: 1;
+        display: flex;
+        flex-direction: column;
+        padding-left: 40px;
+
+        h2 {
+          margin-bottom: 20px;
+          font-size: 18px;
+          color: $welcomeViewFontColor;
+        }
+
+        .feedList {
+          .feedItem {
+            display: flex;
+            flex-direction: row;
+            overflow-x: auto;
+
+            .feedIconWrapper {
+              width: 60px;
+              height: 60px;
+              order: 1;
+              border-radius: 0.4em;
+              text-align: center;
+
+              a {
+                width: 60px;
+                height: 60px;
+                border-radius: 0.4em;
+                background: $welcomeViewIconBGHover;
+                position: relative;
+                text-align: center;
+
+                svg {
+                  width: 30px;
+                  height: 30px;
+                  position: absolute;
+                  top: 50%;
+                  bottom: 50%;
+                  transform: translate(-50%, -50%);
+                  fill: $welcomeViewSocialMediaIcons;
+                }
+              }
+
+              a:hover {
+                background-color: $welcomeViewIconBG;
+              }
+            }
+
+            .feedItemContent {
+              order: 2;
+              margin-left: 10px;
+              display: flex;
+              flex-direction: column;
+              color: $welcomeViewFontColor;
+
+              .feedItemTitle {
+                font-weight: bold;
+                font-size: 12;
+              }
+
+              .feedItemContent {
+                margin-left: 0;
+                width: 600px;
+              }
+
+              .feedItemPubDate {
+                font-weight: lighter;
+                font-size: 8;
+              }
+            }
+          }
+        }
+
+        .newsListWrapper {
+          overflow-y: auto;
+
+          .newsItemWrapper {
+            display: flex;
+            flex-direction: row;
+            background-color: #41465c;
+            min-height: 150px;
+            max-height: 300px;
+            margin-bottom: 20px;
+            padding-top: 10px;
+
+            .newsContentWrapper {
+              margin-left: 12px;
+              margin-bottom: 12px;
+              padding-right: 5px;
+              font-family: 'Arial';
+              color: $welcomeViewFontColorDark;
+
+              h2.newsTitle {
+                color: $welcomeViewFontColorDark;
+                font-family: 'Arial';
+                font-size: 18px;
+                line-height: 20px;
+                margin-bottom: 12px;
+              }
+
+              p.newsContent {
+                color: $welcomeViewFontColorDark;
+                font-family: 'Arial';
+                font-size: small;
+                margin-bottom: 4px;
+                line-height: 16px;
+              }
+
+              p.datePublished {
+                color: $welcomeViewFontColorDark;
+                opacity: 0.6;
+                font-family: 'Arial';
+              }
+
+              .svgWrapper {
+                float: left;
+                height: 24px;
+                border-radius: 0.4em;
+                background: $welcomeViewIconBGHover;
+                position: relative;
+                text-align: center;
+                color: $welcomeViewFontColorDark;
+
+                svg {
+                  opacity: 0.9;
+                  position: absolute;
+                  height: 30px;
+                  top: 50%;
+                  bottom: 50%;
+                  transform: translate(-50%, -50%);
+                  fill: $welcomeViewFontColorDark;
+
+                  .st0 {
+                    fill: none;
+                  }
+                }
+              }
+
+              .svgWrapper:hover {
+                background: $welcomeViewIconBG;
+              }
+
+              .svgWrapper:focus {
+                outline: none;
+                box-shadow: none;
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }
 
 .configContentFooter {
-    width: 90%;
+  width: 90%;
 
-    .saveBtn {
-        float: right;
-        font-weight: lighter;
-        color: $connectionButtonFontColour;
-        width: 7em;
-        background-image: unset;
-        background-color: #87A886 !important;
-        border: unset;
-        box-shadow: unset;
-        border-radius: 0.25em;
-        background: none;
-        font-weight: lighter;
-    }
+  .saveBtn {
+    float: right;
+    font-weight: lighter;
+    color: $connectionButtonFontColour;
+    width: 7em;
+    background-image: unset;
+    background-color: #87a886 !important;
+    border: unset;
+    box-shadow: unset;
+    border-radius: 0.25em;
+    background: none;
+    font-weight: lighter;
+  }
 
-    .saveBtn:hover {
-        background-color: #577856 !important;
-    }
+  .saveBtn:hover {
+    background-color: #577856 !important;
+  }
 }

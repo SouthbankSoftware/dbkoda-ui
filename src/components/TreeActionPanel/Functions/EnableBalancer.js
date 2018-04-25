@@ -30,18 +30,18 @@
 // const sprintf = require('sprintf-js').sprintf;
 
 export const EnableBalancer = {
-    // Prefill function for alter user
-    dbkoda_EnableBalancerPreFill: () => {
-        const cmd = 'sh.getBalancerState()';
-        return cmd;
-    },
-    dbkoda_EnableBalancerPreFill_parse: (res) => {
-        const outputDoc = {};
-        if (res === true) {
-            outputDoc.BalancerState = res;
-        } else {
-            outputDoc.BalancerState = false;
-        }
-        return outputDoc;
+  // Prefill function for alter user
+  dbkoda_EnableBalancerPreFill: () => {
+    const cmd = 'sh.getBalancerState()';
+    return cmd;
+  },
+  dbkoda_EnableBalancerPreFill_parse: res => {
+    const outputDoc = {};
+    if (res === true) {
+      outputDoc.BalancerState = res;
+    } else {
+      outputDoc.BalancerState = false;
     }
+    return outputDoc;
+  }
 };

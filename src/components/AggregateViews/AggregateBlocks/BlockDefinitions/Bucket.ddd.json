@@ -1,27 +1,32 @@
 {
   "Title": "Bucket",
   "DefaultValues": {},
-  "Fields": [{
+  "Fields": [
+    {
       "name": "groupBy",
       "label": "Group By Expression",
       "tooltip": "Group by expression",
       "type": "Combo",
       "lookup": "dbkodaListAttributesAgg",
-      "lookup_arguments": [{
-        "name": "prevAttributes",
-        "value": "prevAttributes"
-      }]
+      "lookup_arguments": [
+        {
+          "name": "prevAttributes",
+          "value": "prevAttributes"
+        }
+      ]
     },
     {
       "name": "lowerBounds",
       "label": "Lower Bucket bounds",
       "type": "Table",
-      "columns": [{
-        "name": "lowerBound",
-        "label": "lower bound",
-        "tooltip": "Lower bound for the bucket",
-        "type": "Text"
-      }]
+      "columns": [
+        {
+          "name": "lowerBound",
+          "label": "lower bound",
+          "tooltip": "Lower bound for the bucket",
+          "type": "Text"
+        }
+      ]
     },
     {
       "name": "defaultValue",
@@ -33,16 +38,19 @@
       "name": "AggregateKeys",
       "label": "Columns To Aggregate",
       "type": "Table",
-      "columns": [{
+      "columns": [
+        {
           "name": "AttributeName",
           "label": "Attribute",
           "tooltip": "Name of the attribute to be filtered",
           "type": "Combo",
           "lookup": "dbkodaListAttributesAgg",
-          "lookup_arguments": [{
-            "name": "prevAttributes",
-            "value": "prevAttributes"
-          }]
+          "lookup_arguments": [
+            {
+              "name": "prevAttributes",
+              "value": "prevAttributes"
+            }
+          ]
         },
         {
           "name": "Aggregation",
@@ -50,13 +58,14 @@
           "type": "Combo",
           "tooltip": "Aggregation Operation",
           "lookup": "dbkodaAggOperators",
-          "lookup_arguments": [{
-            "name": "db",
-            "value": "database"
-          }]
+          "lookup_arguments": [
+            {
+              "name": "db",
+              "value": "database"
+            }
+          ]
         }
       ]
     }
   ]
-
 }

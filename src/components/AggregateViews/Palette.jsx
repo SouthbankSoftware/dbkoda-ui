@@ -40,7 +40,7 @@ import Block from './AggregateBlocks/Block.jsx';
 import { AggregateCommands } from './AggregateCommands.js';
 
 @inject(allStores => ({
-  store: allStores.store,
+  store: allStores.store
 }))
 @observer
 export default class Palette extends React.Component {
@@ -54,8 +54,8 @@ export default class Palette extends React.Component {
         groupAndJoin: false,
         transform: false,
         other: false,
-        all: false,
-      },
+        all: false
+      }
     };
     this.blockList = this.getBlockList();
   }
@@ -63,33 +63,30 @@ export default class Palette extends React.Component {
   @action.bound
   addBlock(blockType, position) {
     if (
-      this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
-        .blockList.length === 0
+      this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList.length ===
+      0
     ) {
       position = 0;
     } else if (position === 'END') {
-      position = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId,
-      ).blockList.length;
+      position = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList
+        .length;
     } else if (position === 'START') {
       position = 1;
     }
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     // 1. Is this the first added block?
     if (position === 0) {
       position = 1;
       // a First block.
       // 2.a Get attributes.
-      this.getBlockAttributes(position).then((res) => {
+      this.getBlockAttributes(position).then(res => {
         // 3.a Add to Editor
         this.addBlockToEditor(blockType, position, res);
       });
     } else {
       this.updateShellPipeline().then(() => {
         this.updateResultSet()
-          .then((res) => {
+          .then(res => {
             res = JSON.parse(res);
             if (res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
@@ -105,17 +102,11 @@ export default class Palette extends React.Component {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
                     runInAction('Update Graphical Builder', () => {
-                      editor.blockList[index].attributeList =
-                        res.stepAttributes[attributeIndex];
+                      editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
                       editor.blockList[index].status = 'valid';
                     });
                   } else {
-                    console.error(
-                      'Result[',
-                      index,
-                      '] is invalid: ',
-                      indexValue,
-                    );
+                    console.error('Result[', index, '] is invalid: ', indexValue);
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
@@ -127,10 +118,8 @@ export default class Palette extends React.Component {
               });
 
               // 4.b Is the current latest step valid?
-              if (
-                editor.blockList[editor.blockList.length - 1].status === 'valid'
-              ) {
-                this.getBlockAttributes(position - 1).then((res) => {
+              if (editor.blockList[editor.blockList.length - 1].status === 'valid') {
+                this.getBlockAttributes(position - 1).then(res => {
                   // 3.a Add to Editor
                   this.addBlockToEditor(blockType, position, res);
                 });
@@ -143,7 +132,7 @@ export default class Palette extends React.Component {
               console.error('updateResultSet: ', res);
             }
           })
-          .catch((e) => {
+          .catch(e => {
             console.error(e);
           });
       });
@@ -176,7 +165,7 @@ export default class Palette extends React.Component {
         childNodes: [],
         onExpand: () => this.onExpand('common'),
         onCollapse: () => this.onCollapse('common'),
-        isExpanded: this.state.expanded.common,
+        isExpanded: this.state.expanded.common
       },
       {
         hasCaret: true,
@@ -185,7 +174,7 @@ export default class Palette extends React.Component {
         childNodes: [],
         onExpand: () => this.onExpand('queryAndAggregate'),
         onCollapse: () => this.onCollapse('queryAndAggregate'),
-        isExpanded: this.state.expanded.queryAndAggregate,
+        isExpanded: this.state.expanded.queryAndAggregate
       },
       {
         hasCaret: true,
@@ -194,7 +183,7 @@ export default class Palette extends React.Component {
         childNodes: [],
         onExpand: () => this.onExpand('groupAndJoin'),
         onCollapse: () => this.onCollapse('groupAndJoin'),
-        isExpanded: this.state.expanded.groupAndJoin,
+        isExpanded: this.state.expanded.groupAndJoin
       },
       {
         hasCaret: true,
@@ -203,7 +192,7 @@ export default class Palette extends React.Component {
         childNodes: [],
         onExpand: () => this.onExpand('transform'),
         onCollapse: () => this.onCollapse('transform'),
-        isExpanded: this.state.expanded.transform,
+        isExpanded: this.state.expanded.transform
       },
       {
         hasCaret: true,
@@ -212,7 +201,7 @@ export default class Palette extends React.Component {
         childNodes: [],
         onExpand: () => this.onExpand('other'),
         onCollapse: () => this.onCollapse('other'),
-        isExpanded: this.state.expanded.other,
+        isExpanded: this.state.expanded.other
       },
       {
         hasCaret: true,
@@ -221,8 +210,8 @@ export default class Palette extends React.Component {
         childNodes: [],
         onExpand: () => this.onExpand('all'),
         onCollapse: () => this.onCollapse('all'),
-        isExpanded: this.state.expanded.all,
-      },
+        isExpanded: this.state.expanded.all
+      }
     ];
 
     const groupsArray = {
@@ -230,7 +219,7 @@ export default class Palette extends React.Component {
       queryAndAggregate: [],
       groupAndJoin: [],
       transform: [],
-      other: [],
+      other: []
     };
 
     // For each object in the block types
@@ -249,17 +238,14 @@ export default class Palette extends React.Component {
                 addBlock={this.addBlock}
               />
             </Tooltip>
-          ),
+          )
         });
         // For each tag in groups array, add to group.
-        BlockTypes[keyName].groups.map((group) => {
+        BlockTypes[keyName].groups.map(group => {
           groupsArray[group].push({
             id: index,
             label: (
-              <Tooltip
-                content={BlockTypes[keyName].description}
-                position={Position.right}
-              >
+              <Tooltip content={BlockTypes[keyName].description} position={Position.right}>
                 <Block
                   key={'key-' + index} //eslint-disable-line
                   listPosition={index}
@@ -268,7 +254,7 @@ export default class Palette extends React.Component {
                   addBlock={this.addBlock}
                 />
               </Tooltip>
-            ),
+            )
           });
         });
       }
@@ -295,18 +281,14 @@ export default class Palette extends React.Component {
   updateShellPipeline() {
     return new Promise((resolve, reject) => {
       // Assemble Step Array.
-      const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId,
-      );
+      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       const stepArray = [];
       if (editor.blockList.length === 1) {
         resolve();
       } else {
-        editor.blockList.map((block) => {
+        editor.blockList.map(block => {
           if (!(block.type === 'Start')) {
-            const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
-              block.type +
-              '.hbs');
+            const formTemplate = require('./AggregateBlocks/BlockTemplates/' + block.type + '.hbs');
             const stepJSON = formTemplate(block.fields);
             try {
               stepArray.push(stepJSON.replace(/\n/g, ' '));
@@ -321,15 +303,12 @@ export default class Palette extends React.Component {
         service
           .update(editor.profileId, {
             shellId: editor.shellId, // eslint-disable-line
-            commands: AggregateCommands.SET_ALL_STEPS(
-              editor.aggregateID,
-              stepArray,
-            ),
+            commands: AggregateCommands.SET_ALL_STEPS(editor.aggregateID, stepArray)
           })
           .then(() => {
             resolve();
           })
-          .catch((e) => {
+          .catch(e => {
             reject(e);
           });
       }
@@ -343,26 +322,24 @@ export default class Palette extends React.Component {
   @action.bound
   updateResultSet() {
     return new Promise((resolve, reject) => {
-      const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId,
-      );
+      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       // Update steps in Shell:
       const service = featherClient().service('/mongo-sync-execution');
       service.timeout = 30000;
       service
         .update(editor.profileId, {
           shellId: editor.shellId, // eslint-disable-line
-          commands: AggregateCommands.GET_STATUS(editor.aggregateID),
+          commands: AggregateCommands.GET_STATUS(editor.aggregateID)
         })
-        .then((res) => {
+        .then(res => {
           resolve(res);
         })
-        .catch((e) => {
+        .catch(e => {
           console.error(e);
           NewToaster.show({
             message: globalString('aggregate_builder/no_active_connection'),
             className: 'danger',
-            icon: 'thumbs-down',
+            icon: 'thumbs-down'
           });
           reject(e);
         });
@@ -380,25 +357,20 @@ export default class Palette extends React.Component {
   getBlockAttributes(position) {
     return new Promise((resolve, reject) => {
       // Get the relevant editor object.
-      const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId,
-      );
+      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       // Fetch response from shell object for all steps up to position - 1
       const service = featherClient().service('/mongo-sync-execution');
       service.timeout = 30000;
       service
         .update(editor.profileId, {
           shellId: editor.shellId, // eslint-disable-line
-          commands: AggregateCommands.GET_ATTRIBUTES(
-            editor.aggregateID,
-            position,
-          ),
+          commands: AggregateCommands.GET_ATTRIBUTES(editor.aggregateID, position)
         })
-        .then((res) => {
+        .then(res => {
           // Check attribute List to see if we have valid attributes returned.
           resolve(res);
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
           reject(err);
         });
@@ -413,9 +385,7 @@ export default class Palette extends React.Component {
    */
   @action.bound
   addBlockToShell(blockType, position) {
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     if (position === 'END') {
       position = editor.blockList.length - 1;
     } else if (position === 'START') {
@@ -429,13 +399,9 @@ export default class Palette extends React.Component {
     service
       .update(editor.profileId, {
         shellId: editor.shellId, // eslint-disable-line
-        commands: AggregateCommands.ADD_STEP(
-          editor.aggregateID,
-          generatedCode,
-          position,
-        ),
+        commands: AggregateCommands.ADD_STEP(editor.aggregateID, generatedCode, position)
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
       });
   }
@@ -449,9 +415,7 @@ export default class Palette extends React.Component {
   @action.bound
   addBlockToEditor(blockType, position, attributeList) {
     // Get relevant editor.
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
 
     // Update block list for editor as required.
     const tmpArray = this.props.store.editors
@@ -461,31 +425,29 @@ export default class Palette extends React.Component {
       tmpArray.push({
         type: blockType,
         fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false,
+        modified: false
       });
     } else if (position === 'START') {
       tmpArray.unshift({
         type: blockType,
         fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false,
+        modified: false
       });
     } else if (position === 'END') {
       tmpArray.push({
         type: blockType,
         fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false,
+        modified: false
       });
     } else {
       tmpArray.push({
         type: blockType,
         fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false,
+        modified: false
       });
       this.moveBlock(tmpArray, tmpArray.length - 1, position);
     }
-    this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    ).blockList = tmpArray;
+    this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList = tmpArray;
 
     // Update block attributes
     editor.blockList[position].status = 'pending';
@@ -547,9 +509,7 @@ export default class Palette extends React.Component {
     return (
       <div className="aggregatePaletteWrapper">
         <nav className="aggregatePaletteToolbar pt-navbar pt-dark">
-          <h2 className="paletteHeader">
-            {globalString('aggregate_builder/palette_title')}
-          </h2>
+          <h2 className="paletteHeader">{globalString('aggregate_builder/palette_title')}</h2>
         </nav>
         <Tree
           contents={this.blockList}

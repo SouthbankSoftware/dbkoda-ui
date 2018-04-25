@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-@import "../../../styles/_defaultTheme.scss";
+@import '../../../styles/_defaultTheme.scss';
 
 .ErrorView {
   width: 100%;
@@ -38,11 +38,11 @@
     width: 100px;
     height: 100px;
 
-    fill: #8A4148;
+    fill: #8a4148;
   }
 
   .icon.warn {
-    fill: #FFC027;
+    fill: #ffc027;
   }
 
   .title {

@@ -103,9 +103,7 @@ export default class TreeActionView extends React.Component {
         if (mobxForm.fields.get(key).type == 'Text') {
           formFields.push(<TextField key={key} field={mobxForm.$(key)} />);
         } else if (mobxForm.fields.get(key).type == 'CodeMirror') {
-          formFields.push(
-            <CodeMirrorField key={key} field={mobxForm.$(key)} />
-          );
+          formFields.push(<CodeMirrorField key={key} field={mobxForm.$(key)} />);
         } else if (mobxForm.fields.get(key).type == 'Table') {
           formFields.push(<FormTable key={key} members={mobxForm.$(key)} />);
         } else if (mobxForm.fields.get(key).type == 'Select') {
@@ -143,10 +141,7 @@ export default class TreeActionView extends React.Component {
             >
               {globalString('tree/executeButton')}
             </button>
-            <button
-              className="pt-button pt-intent-primary right-button"
-              onClick={this.close}
-            >
+            <button className="pt-button pt-intent-primary right-button" onClick={this.close}>
               {globalString('tree/closeButton')}
             </button>
           </div>

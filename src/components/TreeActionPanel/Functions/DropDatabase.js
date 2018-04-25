@@ -29,11 +29,10 @@
 // import * as common from './Common.js';
 
 export const DropDatabase = {
-    // Prefill function for alter user
-    dbkoda_DropDatabasePreFill: (params) => {
-        const data = {};
-        data.Database = params.Database;
-        return (data);
-    }
+  // Prefill function for alter user
+  dbkoda_DropDatabasePreFill: params => {
+    const data = {};
+    data.Database = params.Database;
+    return data;
+  }
 };
-

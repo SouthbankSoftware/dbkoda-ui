@@ -94,9 +94,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     this._chart = d3.select(this._chartEl).attrs({
       width: '100%',
       height: '100%',
-      viewBox: this._bVertical
-        ? `0 0 ${vbHeight} ${vbWidth}`
-        : `0 0 ${vbWidth} ${vbHeight}`,
+      viewBox: this._bVertical ? `0 0 ${vbHeight} ${vbWidth}` : `0 0 ${vbWidth} ${vbHeight}`,
       perserveAspectRatio: 'xMinYMid'
     });
 
@@ -121,9 +119,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     const posTransY = vbHeight / 2 - barHeight / 2;
     // chart background
     // $FlowFixMe
-    const chartBG = this._chart
-      .append('g')
-      .attr('transform', `translate(30, ${posTransY})`);
+    const chartBG = this._chart.append('g').attr('transform', `translate(30, ${posTransY})`);
     chartBG.append('rect').attrs({
       class: 'chart-bg',
       rx: 0,
@@ -135,9 +131,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       x: 0
     });
     // $FlowFixMe
-    this._dataGroup = this._chart
-      .append('g')
-      .attr('transform', `translate(30, ${posTransY})`);
+    this._dataGroup = this._chart.append('g').attr('transform', `translate(30, ${posTransY})`);
 
     if (this._bVertical) {
       const rotatePos = vbWidth / 2 - barHeight;
@@ -217,10 +211,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
         displayOrder += 1;
         return elem;
       });
-      if (
-        !this.props.widget.firstValueIsHighWaterMark ||
-        this.props.widget.waterMarkGroup
-      ) {
+      if (!this.props.widget.firstValueIsHighWaterMark || this.props.widget.waterMarkGroup) {
         arrData = _.reverse(arrData);
       }
       if (this.props.widget.firstValueIsHighWaterMark) {
@@ -253,10 +244,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     } else {
       return;
     }
-    if (
-      this.props.widget.useHighWaterMark ||
-      !this.props.widget.firstValueIsHighWaterMark
-    ) {
+    if (this.props.widget.useHighWaterMark || !this.props.widget.firstValueIsHighWaterMark) {
       this._totalDivisor = sumOfHWM;
     }
 
@@ -394,11 +382,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       this.hasRendered = true;
     }, 200);
     return (
-      <Widget
-        performancePanel={performancePanel}
-        widget={widget}
-        widgetStyle={widgetStyle}
-      >
+      <Widget performancePanel={performancePanel} widget={widget} widgetStyle={widgetStyle}>
         <div className="ProgressBarWidget">
           <Popover2
             minimal
@@ -427,13 +411,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
             }
             target={
               <div className="container">
-                <div className="chart-label">
-                  {chartTitle && <strong>{chartTitle}</strong>}
-                </div>
-                <svg
-                  className="chart"
-                  ref={_chartEl => (this._chartEl = _chartEl)}
-                />
+                <div className="chart-label">{chartTitle && <strong>{chartTitle}</strong>}</div>
+                <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
                 <div className="chart-total">
                   <span
                     ref={_chartTotalEl => (this._chartTotalEl = _chartTotalEl)}
@@ -444,10 +423,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
             }
           />
           <div className="d3-tip-top" ref={_tipEl => (this._tipEl = _tipEl)} />
-          <div
-            className="d3-tip-right"
-            ref={_tipREl => (this._tipREl = _tipREl)}
-          />
+          <div className="d3-tip-right" ref={_tipREl => (this._tipREl = _tipREl)} />
         </div>
       </Widget>
     );

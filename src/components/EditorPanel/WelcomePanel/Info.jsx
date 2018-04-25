@@ -19,17 +19,17 @@
  */
 
 /**
-* @Author: Michael Harrison <mike>
-* @Date:   2017-04-11 13:24:35
-* @Email:  mike@southbanksoftware.com
-* @Last modified by:   mike
-* @Last modified time: 2017-04-11 13:24:39
-*/
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-04-11 13:24:35
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   mike
+ * @Last modified time: 2017-04-11 13:24:39
+ */
 
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
-import {inject, observer} from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
 /**
  * Panel for wrapping the Info List.
@@ -45,17 +45,14 @@ export default class Info extends React.Component {
       <div className="pt-dark infoPanel">
         <h3 className="optInBoldDBKoda">Getting Started...</h3>
         <div className="hotkeyItems">
-          {this
-            .state
-            .tips
-            .map((item) => {
-              return (
-                <div key={item.key} className="hotkeyItem">
-                  <h5 className="hotkeyTitle">{item.title}</h5>
-                  {item.content}
-                </div>
-              );
-            })}
+          {this.state.tips.map(item => {
+            return (
+              <div key={item.key} className="hotkeyItem">
+                <h5 className="hotkeyTitle">{item.title}</h5>
+                {item.content}
+              </div>
+            );
+          })}
         </div>
       </div>
     );

@@ -40,8 +40,7 @@ export const isImportAction = action =>
   action === BackupRestoreActions.IMPORT_DATABASE;
 
 export const isServerAction = action =>
-  BackupRestoreActions.DUMP_SERVER === action ||
-  BackupRestoreActions.DUMP_SERVER;
+  BackupRestoreActions.DUMP_SERVER === action || BackupRestoreActions.DUMP_SERVER;
 
 export const isCollectionAction = treeAction =>
   treeAction === BackupRestoreActions.EXPORT_COLLECTION ||

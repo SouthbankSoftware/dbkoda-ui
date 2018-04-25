@@ -45,17 +45,17 @@ type Props = {
 @inject(allStores => ({
   store: allStores.store,
   layout: allStores.store.layout,
-  drawer: allStores.store.drawer,
+  drawer: allStores.store.drawer
 }))
 @observer
 export default class SideNav extends React.Component<Props> {
   isItemSelected = (itemName: NavPane) => {
-    return (this.props.drawer.activeNavPane == itemName);
-  }
+    return this.props.drawer.activeNavPane == itemName;
+  };
 
   changeMenuSelected = (itemName: NavPane) => {
     this.props.store.setActiveNavPane(itemName);
-  }
+  };
 
   render() {
     return (

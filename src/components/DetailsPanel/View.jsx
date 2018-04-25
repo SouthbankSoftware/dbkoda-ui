@@ -26,7 +26,6 @@
  * @Last modified time: 2017-08-15T10:45:12+10:00
  */
 
-
 import React from 'react';
 import { action } from 'mobx';
 import { observer, inject } from 'mobx-react';
@@ -53,11 +52,11 @@ export default class DetailsView extends React.Component {
           const fieldData = viewInfo.values[field.name];
           let fld;
           if (field.type == 'Table') {
-            fld = (<TableField key={field.name} field={field} data={fieldData} />);
+            fld = <TableField key={field.name} field={field} data={fieldData} />;
           } else if (field.type == 'BarChart') {
-            fld = (<BarChartField key={field.name} field={field} data={fieldData} />);
+            fld = <BarChartField key={field.name} field={field} data={fieldData} />;
           } else if (field.type == 'PieChart') {
-            fld = (<PieChartField key={field.name} field={field} data={fieldData} />);
+            fld = <PieChartField key={field.name} field={field} data={fieldData} />;
           }
 
           if (field.groupBy) {
@@ -66,7 +65,9 @@ export default class DetailsView extends React.Component {
             } else {
               fldGroups[field.groupBy] = [];
               fldGroups[field.groupBy].push(fld);
-              const grpDiv = (<div style={field.width && { width: field.width }}>{fldGroups[field.groupBy]}</div>);
+              const grpDiv = (
+                <div style={field.width && { width: field.width }}>{fldGroups[field.groupBy]}</div>
+              );
               detailsFields.push(grpDiv);
             }
           } else {
@@ -78,9 +79,7 @@ export default class DetailsView extends React.Component {
     return (
       <div className="pt-dark ">
         <p className="details-title">{title}</p>
-        <div className="details-fields">
-          {detailsFields}
-        </div>
+        <div className="details-fields">{detailsFields}</div>
         {/* <div className="form-button-panel">
           <button
             className="pt-button pt-intent-primary right-button"

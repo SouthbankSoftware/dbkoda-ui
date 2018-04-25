@@ -1,37 +1,43 @@
 {
-    "Title": "Compact Collection",
-    "DefaultValues": {
-        "function": "dbkoda_CompactCollectionPreFill",
-        "arguments": [{
-            "name": "Database",
-            "value": "treeNode.parentDB"
-        }, {
-            "name": "CollectionName",
-            "value": "treeNode"
-        }]
-    },
-    "Fields": [{
-            "name": "Database",
-            "type": "Text",
-            "readOnly": true
-        },
-        {
-            "name": "CollectionName",
-            "label": "Collection Name",
-            "type": "Text",
-            "readOnly": true,
-            "lookup": "dbkoda_listcollections",
-            "lookup_arguments": [{
-                "name": "db",
-                "value": "treeNode.parentDB"
-            }]
-        },
-        {
-            "name": "Force",
-            "label": "Force",
-            "type": "Boolean",
-            "default": "force",
-            "tooltip": "If true, compact can run on primary in Replica Set"
-        }
+  "Title": "Compact Collection",
+  "DefaultValues": {
+    "function": "dbkoda_CompactCollectionPreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode.parentDB"
+      },
+      {
+        "name": "CollectionName",
+        "value": "treeNode"
+      }
     ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true
+    },
+    {
+      "name": "CollectionName",
+      "label": "Collection Name",
+      "type": "Text",
+      "readOnly": true,
+      "lookup": "dbkoda_listcollections",
+      "lookup_arguments": [
+        {
+          "name": "db",
+          "value": "treeNode.parentDB"
+        }
+      ]
+    },
+    {
+      "name": "Force",
+      "label": "Force",
+      "type": "Boolean",
+      "default": "force",
+      "tooltip": "If true, compact can run on primary in Replica Set"
+    }
+  ]
 }

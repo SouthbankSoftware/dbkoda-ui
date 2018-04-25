@@ -32,7 +32,7 @@ import { ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
 import {
   DEFAULT_AXIS_VALUE_SCHEMA_PATH,
   OTHER_CATEGORY_LABEL,
-  getDisplaySchemaPath,
+  getDisplaySchemaPath
 } from './Panel';
 import styles from './BarChart.scss';
 
@@ -46,7 +46,7 @@ export type ChartComponent = {
   name: ChartComponentName,
   valueSchemaPath: string,
   valueType: 'string' | 'number',
-  values?: string[],
+  values?: string[]
 };
 type ChartDataElement = string | number | { [string]: number };
 export type ChartData = { ['x' | 'y']: ChartDataElement }[];
@@ -62,7 +62,7 @@ type Props = {
   showOtherInCategoricalAxis: boolean,
   showOtherInCenter: boolean,
   onToggleShowOtherInCategoricalAxis: () => void,
-  onToggleShowOtherInCenter: () => void,
+  onToggleShowOtherInCenter: () => void
 };
 
 class YAxisTick extends React.PureComponent<*> {
@@ -103,18 +103,16 @@ export default class BarChart extends React.PureComponent<Props> {
       showOtherInCategoricalAxis,
       showOtherInCenter,
       onToggleShowOtherInCategoricalAxis,
-      onToggleShowOtherInCenter,
+      onToggleShowOtherInCenter
     } = this.props;
 
     const menu = (
       <Menu>
         <MenuItem
           onClick={onToggleShowOtherInCategoricalAxis}
-          text={`${showOtherInCategoricalAxis
-            ? 'Hide'
-            : 'Show'} ${OTHER_CATEGORY_LABEL} in ${componentX.valueType === 'string'
-            ? 'X axis'
-            : 'Y axis'}`}
+          text={`${showOtherInCategoricalAxis ? 'Hide' : 'Show'} ${OTHER_CATEGORY_LABEL} in ${
+            componentX.valueType === 'string' ? 'X axis' : 'Y axis'
+          }`}
         />
         <MenuItem
           onClick={onToggleShowOtherInCenter}
@@ -134,7 +132,7 @@ export default class BarChart extends React.PureComponent<Props> {
       componentCenter,
       width,
       height,
-      setBarChartGrid,
+      setBarChartGrid
     } = this.props;
 
     const centerDataKey = componentX.valueType === 'string' ? 'y' : 'x';
@@ -171,7 +169,9 @@ export default class BarChart extends React.PureComponent<Props> {
             fill={styles.defaultChartPanelText}
           >
             {componentY.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
-              ? componentY.valueType === 'string' ? '' : 'count'
+              ? componentY.valueType === 'string'
+                ? ''
+                : 'count'
               : getDisplaySchemaPath(componentY.valueSchemaPath)}
           </text>
           <text
@@ -180,7 +180,9 @@ export default class BarChart extends React.PureComponent<Props> {
             fill={styles.defaultChartPanelText}
           >
             {componentX.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
-              ? componentX.valueType === 'string' ? '' : 'count'
+              ? componentX.valueType === 'string'
+                ? ''
+                : 'count'
               : getDisplaySchemaPath(componentX.valueSchemaPath)}
           </text>
           {componentCenter.values &&
@@ -188,7 +190,7 @@ export default class BarChart extends React.PureComponent<Props> {
               return (
                 <Bar
                   key={v}
-                  dataKey={(data) => {
+                  dataKey={data => {
                     const value = data[centerDataKey][v];
                     return value === undefined ? null : value;
                   }}

@@ -33,20 +33,20 @@ export const SetLogLevel = {
   dbkodaLoggingLevelPreFill: () => {
     return 'db.getSiblingDB("admin").runCommand({  getParameter:1,"logComponentVerbosity":1}).logComponentVerbosity';
   },
-  dbkodaLoggingLevelPreFill_parse: (parmDoc) => {
+  dbkodaLoggingLevelPreFill_parse: parmDoc => {
     const outputDoc = {};
     outputDoc.verbosity = parmDoc.verbosity;
     // outputDoc.CustomData = userDoc.customData;
     outputDoc.Components = [];
-    Object.keys(parmDoc).forEach((component) => {
+    Object.keys(parmDoc).forEach(component => {
       if (component !== 'verbosity') {
         outputDoc.Components.push({
           Component: component,
-          Level: parmDoc[component].verbosity,
+          Level: parmDoc[component].verbosity
         });
       }
     });
 
     return outputDoc;
-  },
+  }
 };

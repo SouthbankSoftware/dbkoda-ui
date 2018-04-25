@@ -36,7 +36,7 @@ export default class JSONViewer extends Component {
     this.state = {
       deep: false,
       renderArrayCount: 0,
-      isContextMenuOpen: false,
+      isContextMenuOpen: false
     };
 
     this.debug = false;
@@ -135,7 +135,8 @@ export default class JSONViewer extends Component {
                       onClick={() => this.props.onCellClick('cell in array')}
                       {...this.props.tdProps}
                       style={this.constructor.styles.td}
-                    >{`${key}`}
+                    >
+                      {`${key}`}
                     </td>
                     {this.renderTd(v, key)}
                   </tr>
@@ -160,7 +161,8 @@ export default class JSONViewer extends Component {
                   onClick={() => this.props.onCellClick('cell in array')}
                   {...this.props.tdProps}
                   style={this.constructor.styles.td}
-                >{`${key}`}
+                >
+                  {`${key}`}
                 </td>
                 {this.renderTd(v, key)}
               </tr>
@@ -285,7 +287,7 @@ export default class JSONViewer extends Component {
               <tr
                 {...this.props.trProps}
                 key={j}
-                onContextMenu={(e) => {
+                onContextMenu={e => {
                   this.showContextMenu(e, j, row);
                 }}
               >
@@ -314,7 +316,7 @@ export default class JSONViewer extends Component {
         <MenuItem disabled text={'Clicked on row ' + row + 1} />
       </Menu>,
       { left: e.clientX, top: e.clientY },
-      () => this.setState({ isContextMenuOpen: false }),
+      () => this.setState({ isContextMenuOpen: false })
     );
     // indicate that context menu is open so we can add a CSS class to this element
     this.setState({ isContextMenuOpen: true });
@@ -334,7 +336,7 @@ JSONViewer.propTypes = {
   tdProps: PropTypes.object,
   thProps: PropTypes.object,
   tbodyProps: PropTypes.object,
-  theadProps: PropTypes.object,
+  theadProps: PropTypes.object
 };
 
 JSONViewer.defaultProps = {};
@@ -344,13 +346,13 @@ JSONViewer.styles = {
     border: '1px solid #cccccc',
     textAlign: 'left',
     margin: 0,
-    padding: '6px 13px',
+    padding: '6px 13px'
   },
   th: {
     border: '1px solid #cccccc',
     textAlign: 'left',
     margin: 0,
     padding: '6px 13px',
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'
+  }
 };

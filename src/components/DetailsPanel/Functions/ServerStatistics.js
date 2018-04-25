@@ -31,7 +31,7 @@ export const ServerStatistics = {
   dbkoda_ServerStatus: () => {
     return 'dbeSS.serverStatistics()';
   },
-  dbkoda_TopCollections_parse: (data) => {
+  dbkoda_TopCollections_parse: data => {
     return data;
   }
 };

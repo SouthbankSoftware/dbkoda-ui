@@ -28,12 +28,7 @@ import _ from 'lodash';
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { action } from 'mobx';
-import {
-  SelectionModes,
-  Table,
-  Utils,
-  TableLoadingOption
-} from '@blueprintjs/table';
+import { SelectionModes, Table, Utils, TableLoadingOption } from '@blueprintjs/table';
 
 import TextSortableColumn from '../Components/TextSortableColumn';
 import ProgressBarColumn from '../Components/ProgressBarColumn';
@@ -44,9 +39,7 @@ const columnsWidthsPercent = [15, 20, 10, 25, 5, 5, 15];
 export default class ProfilingView extends React.Component<Props> {
   constructor(props) {
     super(props);
-    const columnsWidths = columnsWidthsPercent.map(
-      width => width * this.props.tableWidth / 100
-    );
+    const columnsWidths = columnsWidthsPercent.map(width => width * this.props.tableWidth / 100);
     this.state = {
       lastSelectRegion: null,
       sortedIndexMap: [],
@@ -75,18 +68,12 @@ export default class ProfilingView extends React.Component<Props> {
       this.setState({ highWaterMark: nextProps.highWaterMark });
     }
     if (nextProps && nextProps.tableWidth) {
-      const columnsWidths = columnsWidthsPercent.map(
-        width => width * nextProps.tableWidth / 100
-      );
+      const columnsWidths = columnsWidthsPercent.map(width => width * nextProps.tableWidth / 100);
       this.setState({ columnsWidths });
     }
   }
 
-  getCellData = (
-    rowIndex: number,
-    columnIndex: number,
-    bUseIndex: boolen = true
-  ) => {
+  getCellData = (rowIndex: number, columnIndex: number, bUseIndex: boolen = true) => {
     if (bUseIndex) {
       const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
       if (sortedRowIndex != null) {
@@ -133,10 +120,7 @@ export default class ProfilingView extends React.Component<Props> {
     return cellValue;
   };
 
-  sortColumn = (
-    columnIndex: number,
-    comparator: (a: any, b: any) => number
-  ) => {
+  sortColumn = (columnIndex: number, comparator: (a: any, b: any) => number) => {
     const { data } = this.state;
     const sortedIndexMap = Utils.times(data.length, (i: number) => i);
     sortedIndexMap.sort((a: number, b: number) => {
@@ -172,9 +156,7 @@ export default class ProfilingView extends React.Component<Props> {
     const { ops } = this.props;
     console.log(this.props);
 
-    const columns = this.state.columns.map(col =>
-      col.getColumn(this.getCellData, this.sortColumn)
-    );
+    const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
 
     const loadingOptions = [];
     let numRows = 10;

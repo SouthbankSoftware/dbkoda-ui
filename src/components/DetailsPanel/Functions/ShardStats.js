@@ -31,7 +31,7 @@ export const ShardStats = {
   dbkoda_ShardStats: () => {
     return 'dbcShards.details()';
   },
-  dbkoda_ShardStats_parse: (data) => {
+  dbkoda_ShardStats_parse: data => {
     return data;
   }
 };

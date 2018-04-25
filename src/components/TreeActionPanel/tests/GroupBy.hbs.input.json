@@ -1,32 +1,41 @@
 {
-    "Database": "test",
-    "CollectionName": "randomCollection",
-    "InitialFilter": true,
-    "FilterKeys": [{
-            "AttributeName": "b",
-            "Value": 3
-        },
-        {
-            "AttributeName": "a",
-            "Value": 2,
-            "last": 1
-        }
-    ],
-    "GroupByKeys": [{
-        "AttributeName": "d","last":1
-    }],
-    "AggregateKeys": [{
-        "AttributeName": "e",
-        "Aggregation": "sum",
-        "last":1
-    }],
-    "Sort":true,
-    "SortKeys": [{
-        "AttributeName": "e-sum",
-        "Direction":1},
-        {
-        "AttributeName": "_id",
-        "Direction":-1,
-        "last":1
-    }]
+  "Database": "test",
+  "CollectionName": "randomCollection",
+  "InitialFilter": true,
+  "FilterKeys": [
+    {
+      "AttributeName": "b",
+      "Value": 3
+    },
+    {
+      "AttributeName": "a",
+      "Value": 2,
+      "last": 1
+    }
+  ],
+  "GroupByKeys": [
+    {
+      "AttributeName": "d",
+      "last": 1
+    }
+  ],
+  "AggregateKeys": [
+    {
+      "AttributeName": "e",
+      "Aggregation": "sum",
+      "last": 1
+    }
+  ],
+  "Sort": true,
+  "SortKeys": [
+    {
+      "AttributeName": "e-sum",
+      "Direction": 1
+    },
+    {
+      "AttributeName": "_id",
+      "Direction": -1,
+      "last": 1
+    }
+  ]
 }

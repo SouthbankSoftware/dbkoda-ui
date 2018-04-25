@@ -41,37 +41,37 @@ export type Schema = {
   [string]: | {
         path: string,
         type: 'string' | 'number',
-        dataTreePath: ?string, // updated by DataTree
+        dataTreePath: ?string // updated by DataTree
       }
     | {
         path: string,
         type: 'object',
         dataTreePath: ?string, // updated by DataTree
         isExpanded: boolean, // updated by Panel & DataTree
-        childSchema: Schema,
-      },
+        childSchema: Schema
+      }
 };
 export type ChartComponentOperation = {
   action: 'load' | 'unload',
-  target: ChartComponentName | 'all',
+  target: ChartComponentName | 'all'
 };
 export type ChartComponentChangeHandler = (
   operation: ChartComponentOperation,
   valueSchemaPath: ?$PropertyType<ChartComponent, 'valueSchemaPath'>,
-  valueType: ?$PropertyType<ChartComponent, 'valueType'>,
+  valueType: ?$PropertyType<ChartComponent, 'valueType'>
 ) => void;
 export type GetAllowedChartComponentOperations = (
   targetValueSchemaPath: string,
-  targetValueType: 'string' | 'number',
+  targetValueType: 'string' | 'number'
 ) => ChartComponentOperation[];
 export type DragAndDropHandler = (
   isDragging: boolean,
   valueSchemaPath: ?string,
-  valueType: 'string' | 'number' | null,
+  valueType: 'string' | 'number' | null
 ) => void;
 export type SchemaPathTypeChangeHandler = (
   valueSchemaPath: string,
-  newValuePath: 'string' | 'number',
+  newValuePath: 'string' | 'number'
 ) => void;
 
 type Props = {
@@ -82,11 +82,11 @@ type Props = {
   onChartComponentChange: ChartComponentChangeHandler,
   getAllowedChartComponentOperations: GetAllowedChartComponentOperations,
   onDragAndDrop: DragAndDropHandler,
-  onSchemaPathTypeChange: SchemaPathTypeChangeHandler,
+  onSchemaPathTypeChange: SchemaPathTypeChangeHandler
 };
 
 type State = {
-  nodes: ITreeNode[],
+  nodes: ITreeNode[]
 };
 
 const dataTreeSource = {
@@ -97,7 +97,7 @@ const dataTreeSource = {
 
     return {
       valueSchemaPath,
-      valueType,
+      valueType
     };
   },
 
@@ -110,14 +110,14 @@ const dataTreeSource = {
     }
 
     onDragAndDrop(false, null, null);
-  },
+  }
 };
 
 // $FlowIssue
 @DragSource(DragItemTypes.CHART_DATA_TREE_NODE, dataTreeSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   connectDragPreview: connect.dragPreview(),
-  isDragging: monitor.isDragging(),
+  isDragging: monitor.isDragging()
 }))
 class DraggableLabel extends React.PureComponent<*> {
   componentDidMount() {
@@ -126,7 +126,7 @@ class DraggableLabel extends React.PureComponent<*> {
     this.props.connectDragPreview(getEmptyImage(), {
       // IE fallback: specify that we'd rather screenshot the node
       // when it already knows it's being dragged so we can hide it with CSS.
-      captureDraggingState: true,
+      captureDraggingState: true
     });
   }
 
@@ -141,14 +141,19 @@ export default class DataTree extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    const { schemaRef: { schema }, chartComponentX, chartComponentY, chartComponentCenter } = props;
+    const {
+      schemaRef: { schema },
+      chartComponentX,
+      chartComponentY,
+      chartComponentCenter
+    } = props;
     const nodes = this._buildTreeFromSchema(schema);
     this._checkAndUpdateTreeForChartComponent(null, chartComponentX, schema, nodes);
     this._checkAndUpdateTreeForChartComponent(null, chartComponentY, schema, nodes);
     this._checkAndUpdateTreeForChartComponent(null, chartComponentCenter, schema, nodes);
 
     this.state = {
-      nodes,
+      nodes
     };
   }
 
@@ -156,13 +161,13 @@ export default class DataTree extends React.Component<Props, State> {
     schemaRef: nextSchemaRef,
     chartComponentX: nextChartComponentX,
     chartComponentY: nextChartComponentY,
-    chartComponentCenter: nextChartComponentCenter,
+    chartComponentCenter: nextChartComponentCenter
   }: Props) {
     const {
       schemaRef: prevSchemaRef,
       chartComponentX,
       chartComponentY,
-      chartComponentCenter,
+      chartComponentCenter
     } = this.props;
 
     let nodes;
@@ -184,23 +189,23 @@ export default class DataTree extends React.Component<Props, State> {
       loadOnly ? null : chartComponentX,
       nextChartComponentX,
       schema,
-      nodes,
+      nodes
     );
     this._checkAndUpdateTreeForChartComponent(
       loadOnly ? null : chartComponentY,
       nextChartComponentY,
       schema,
-      nodes,
+      nodes
     );
     this._checkAndUpdateTreeForChartComponent(
       loadOnly ? null : chartComponentCenter,
       nextChartComponentCenter,
       schema,
-      nodes,
+      nodes
     );
 
     this.setState({
-      nodes,
+      nodes
     });
   }
 
@@ -208,7 +213,7 @@ export default class DataTree extends React.Component<Props, State> {
     chartComponent: ?ChartComponent,
     nextChartComponent: ?ChartComponent,
     schema: Schema,
-    nodes: ITreeNode[],
+    nodes: ITreeNode[]
   ): void {
     if (!_.isEqual(chartComponent, nextChartComponent)) {
       if (chartComponent) {
@@ -217,7 +222,7 @@ export default class DataTree extends React.Component<Props, State> {
         if (node != null) {
           node.secondaryLabel = DataTree._removeSecondaryLabel(
             node.secondaryLabel,
-            chartComponent.name,
+            chartComponent.name
           );
           node.isSelected = Boolean(node.secondaryLabel);
         }
@@ -228,7 +233,7 @@ export default class DataTree extends React.Component<Props, State> {
         if (node != null) {
           node.secondaryLabel = DataTree._addSecondaryLabel(
             node.secondaryLabel,
-            nextChartComponent.name,
+            nextChartComponent.name
           );
           node.isSelected = true;
           node.className = nextChartComponent.name;
@@ -240,7 +245,7 @@ export default class DataTree extends React.Component<Props, State> {
   _getTreeNodeForChartComponent(
     component: ChartComponent,
     schema: Schema,
-    nodes: ITreeNode[],
+    nodes: ITreeNode[]
   ): ?ITreeNode {
     const { valueSchemaPath } = component;
 
@@ -268,7 +273,7 @@ export default class DataTree extends React.Component<Props, State> {
       label
         .replace(
           new RegExp(`(?:, )?${escapeStringRegexp(DataTree._getSecondaryLabel(target))}`, 'g'),
-          '',
+          ''
         )
         .replace(/^, /, '') || null
     );
@@ -302,7 +307,7 @@ export default class DataTree extends React.Component<Props, State> {
           isExpanded,
           childNodes: nodes,
           type,
-          label: k,
+          label: k
         };
       } else {
         const { onDragAndDrop, onChartComponentChange } = this.props;
@@ -318,23 +323,23 @@ export default class DataTree extends React.Component<Props, State> {
             >
               {k}
             </DraggableLabel>
-          ),
+          )
         };
 
         if (type === 'string') {
           _.assign(node, {
             icon: 'pt-icon-font',
-            type: 'string',
+            type: 'string'
           });
         } else if (type === 'number') {
           _.assign(node, {
             icon: 'pt-icon-numerical',
-            type: 'number',
+            type: 'number'
           });
         } else {
           _.assign(node, {
             icon: 'pt-icon-error',
-            type,
+            type
           });
           console.error(`Unsupported data tree node type: ${v}`);
         }
@@ -344,7 +349,7 @@ export default class DataTree extends React.Component<Props, State> {
       index += 1;
 
       _.assign(node, {
-        id: path,
+        id: path
       });
       nodes.push(node);
     });
@@ -353,7 +358,9 @@ export default class DataTree extends React.Component<Props, State> {
   };
 
   _onNodeCollapse = (node: ITreeNode) => {
-    const { schemaRef: { schema } } = this.props;
+    const {
+      schemaRef: { schema }
+    } = this.props;
     const { id } = node;
 
     const schemaNode = _.get(schema, String(id));
@@ -369,7 +376,9 @@ export default class DataTree extends React.Component<Props, State> {
   };
 
   _onNodeExpand = (node: ITreeNode) => {
-    const { schemaRef: { schema } } = this.props;
+    const {
+      schemaRef: { schema }
+    } = this.props;
     const { id } = node;
 
     const schemaNode = _.get(schema, String(id));
@@ -416,7 +425,7 @@ export default class DataTree extends React.Component<Props, State> {
         chartComponentCenter,
         onChartComponentChange,
         getAllowedChartComponentOperations,
-        onSchemaPathTypeChange,
+        onSchemaPathTypeChange
       } = this.props;
 
       let shouldShowUnloadAllMenuItem;

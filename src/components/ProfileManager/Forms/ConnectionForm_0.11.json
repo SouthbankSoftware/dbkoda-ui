@@ -1,7 +1,9 @@
 {
   "basic": {
     "name": "Basic Connection",
-    "tips": ["For simple connections, you can enter all the connection details on this page.  If you are connecting to a replica set or sharded cluster, you might want to visit the \"Cluster Congifuration\" page.  For an operating system terminal, to connect via an SSH tunnel or to monitor operating system statistics, checkout the \"SSH Options\""],
+    "tips": [
+      "For simple connections, you can enter all the connection details on this page.  If you are connecting to a replica set or sharded cluster, you might want to visit the \"Cluster Congifuration\" page.  For an operating system terminal, to connect via an SSH tunnel or to monitor operating system statistics, checkout the \"SSH Options\""
+    ],
     "fields": [
       {
         "name": "alias",
@@ -36,7 +38,9 @@
         "name": "database",
         "label": "Database",
         "value": "admin",
-        "options": {"tooltip": "The database in which this connection will initially be established"},
+        "options": {
+          "tooltip": "The database in which this connection will initially be established"
+        },
         "type": "text",
         "column": 1
       },
@@ -73,7 +77,7 @@
       {
         "name": "authenticationDatabase",
         "label": "Authentication Database",
-        "options": {"tooltip": "The database in which this user was created"},
+        "options": { "tooltip": "The database in which this user was created" },
         "type": "text",
         "value": "",
         "column": 2,
@@ -103,7 +107,9 @@
   },
   "cluster": {
     "name": "Cluster Configuration",
-    "tips": ["This page allows you to configure items specific to a replica set. Specify a comma seperated list of the hosts and ports in the replica set to get started.  Eg 'host1:port1, host2:port2, host3:port3'"],
+    "tips": [
+      "This page allows you to configure items specific to a replica set. Specify a comma seperated list of the hosts and ports in the replica set to get started.  Eg 'host1:port1, host2:port2, host3:port3'"
+    ],
     "fields": [
       {
         "name": "hostsList",
@@ -124,7 +130,7 @@
       {
         "name": "w",
         "label": "w (write concern w option)",
-        "options": {"tooltip": "write concern: specifiy a number, 'majority' or a tagSet"},
+        "options": { "tooltip": "write concern: specifiy a number, 'majority' or a tagSet" },
         "value": "",
         "type": "text",
         "column": 2,
@@ -133,7 +139,7 @@
       {
         "name": "wTimeout",
         "label": "wtimeout",
-        "options": {"tooltip": "Time in ms to wait for write concern. 0=no timeout"},
+        "options": { "tooltip": "Time in ms to wait for write concern. 0=no timeout" },
         "value": 0,
         "type": "number",
         "column": 2,
@@ -142,7 +148,9 @@
       {
         "name": "journal",
         "label": "Journal",
-        "options": {"tooltip": "Write concern 'j' option.  If true writes must journal before returning"},
+        "options": {
+          "tooltip": "Write concern 'j' option.  If true writes must journal before returning"
+        },
         "value": true,
         "type": "checkbox",
         "column": 2
@@ -192,8 +200,10 @@
   },
   "ssh": {
     "name": "SSH Options",
-    "tips": ["Configure an SSH connection to your mongodb server here.  This can be used to establish a tunnel to a MongoDB server behind a firewall, or to estalish an SSH terminal to issue commands like 'top', or to collection OS statistics in the performance panel",
-            "For details on establishing a SSH tunnel, see the FAQ item https://dbkoda.useresponse.com/knowledge-base/article/what-is-ssh-tunneling-and-how-do-i-set-it-up"],
+    "tips": [
+      "Configure an SSH connection to your mongodb server here.  This can be used to establish a tunnel to a MongoDB server behind a firewall, or to estalish an SSH terminal to issue commands like 'top', or to collection OS statistics in the performance panel",
+      "For details on establishing a SSH tunnel, see the FAQ item https://dbkoda.useresponse.com/knowledge-base/article/what-is-ssh-tunneling-and-how-do-i-set-it-up"
+    ],
     "fields": [
       {
         "name": "ssh",
@@ -263,7 +273,10 @@
       {
         "name": "sshKeyFile",
         "label": "PEM Certificate Key File",
-        "options": {"tooltip": "This is the same file as you would use to establish an ssh command line to your host"},
+        "options": {
+          "tooltip":
+            "This is the same file as you would use to establish an ssh command line to your host"
+        },
         "type": "file",
         "value": "",
         "column": 2,
@@ -273,7 +286,7 @@
       {
         "name": "passPhrase",
         "label": "Password for PEM File",
-        "options": {"tooltip": "Leave it blank if there is no password on the file"},
+        "options": { "tooltip": "Leave it blank if there is no password on the file" },
         "type": "password",
         "value": "",
         "column": 2,

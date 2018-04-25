@@ -26,8 +26,6 @@
  * @Last modified time: 2017-04-07T15:51:51+10:00
  */
 
-
-
- module.exports = function(object) {
-   return JSON.stringify(object);
- };
+module.exports = function(object) {
+  return JSON.stringify(object);
+};

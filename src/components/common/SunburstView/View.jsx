@@ -40,10 +40,10 @@ const b = {
   w: 75,
   h: 30,
   s: 3,
-  t: 10,
+  t: 10
 };
 
-const getColour = (startColour) => {
+const getColour = startColour => {
   if (!getColour._colours) {
     getColour._idx = 0;
     // colour palette
@@ -73,7 +73,7 @@ const getColour = (startColour) => {
       '#e26847',
       '#e0a767',
       '#a5a11b',
-      '#58595b',
+      '#58595b'
     ];
   }
 
@@ -97,7 +97,7 @@ global.d3 = d3;
 export default class View extends React.Component {
   static defaultProps = {
     width: 750,
-    height: 600,
+    height: 600
   };
 
   static propTypes = {
@@ -107,7 +107,7 @@ export default class View extends React.Component {
     selectedNode: PropTypes.object.isRequired,
     onClick: PropTypes.func,
     onDblClick: PropTypes.func,
-    onBreadCrumbClick: PropTypes.func,
+    onBreadCrumbClick: PropTypes.func
   };
 
   constructor(props) {
@@ -132,11 +132,11 @@ export default class View extends React.Component {
         data: props.data,
         radius,
         width,
-        height,
+        height
       };
       this.updateData();
     }
-    observe(store.layout, (change) => {
+    observe(store.layout, change => {
       this.handleResize();
     });
   }
@@ -164,11 +164,9 @@ export default class View extends React.Component {
     if (this.dataRoot && nextProps.data) {
       // This codition checks if new data is available and we have to recompute the hierarchy
       const newDataRoot = d3.hierarchy(nextProps.data);
-      if (
-        newDataRoot.descendants().length != this.dataRoot.descendants().length
-      ) {
+      if (newDataRoot.descendants().length != this.dataRoot.descendants().length) {
         this.setState({
-          data: nextProps.data,
+          data: nextProps.data
         });
         this.lastSelectedRoot = this.root; // keeping the reference of last selected node so that we can redraw the view at similar node level after new hierarchy is computed
         this.root = null;
@@ -195,14 +193,14 @@ export default class View extends React.Component {
     let lastParent = null;
     this.dataRoot = d3
       .hierarchy(this.state.data)
-      .sum((d) => {
+      .sum(d => {
         return d.size;
       })
       .sort((a, b) => {
         // sorting alphabatically to keep the colors same even after additional data ia populated
         return a.data.name.localeCompare(b.data.name);
       })
-      .each((node) => {
+      .each(node => {
         // skip root node
         if (!node.parent) {
           node.colour = '#494849';
@@ -263,23 +261,23 @@ export default class View extends React.Component {
       .size([2 * Math.PI, this.state.radius * this.state.radius / divisor]);
     const arc = d3
       .arc()
-      .startAngle((d) => {
+      .startAngle(d => {
         return d.x0;
       })
-      .endAngle((d) => {
+      .endAngle(d => {
         return d.x1;
       })
-      .innerRadius((d) => {
+      .innerRadius(d => {
         return Math.sqrt(d.y0);
       })
-      .outerRadius((d) => {
+      .outerRadius(d => {
         return Math.sqrt(d.y1);
       });
 
     // For efficiency, filter nodes to keep only those large enough to see.
     const nodes = partition(this.root)
       .descendants()
-      .filter((d) => {
+      .filter(d => {
         return d.x1 - d.x0 > 0.005; // 0.005 radians = 0.29 degrees
       });
 
@@ -348,8 +346,9 @@ export default class View extends React.Component {
       .style('color', '#FFFFFF')
       .html(
         d =>
-          `<th><svg width="20" height="20"></svg></th><th>${d.data
-            .name}</th><th>${filesize(d.value)}</th>`,
+          `<th><svg width="20" height="20"></svg></th><th>${d.data.name}</th><th>${filesize(
+            d.value
+          )}</th>`
       )
       .select('svg')
       .append('g')
@@ -388,14 +387,14 @@ export default class View extends React.Component {
       tr
         .append('td')
         .classed('tdDataName', true)
-        .text((d) => {
+        .text(d => {
           return d.data.name;
         });
 
       tr
         .append('td')
         .classed('tdDataSize', true)
-        .text((d) => {
+        .text(d => {
           return filesize(d.value);
         });
     }
@@ -412,9 +411,7 @@ export default class View extends React.Component {
     } else {
       this.view.select('.parent').text(this.root.data.name);
     }
-    this.view
-      .select('.explanation')
-      .style('color', this.getTextColor(this.root.colour));
+    this.view.select('.explanation').style('color', this.getTextColor(this.root.colour));
     this.view.select('.explanation').style('visibility', '');
   }
 
@@ -431,7 +428,7 @@ export default class View extends React.Component {
 
     // Then highlight only those that are an ancestor of the current segment.
     paths
-      .filter((node) => {
+      .filter(node => {
         return sequenceArray.indexOf(node) >= 0;
       })
       .style('opacity', 1);
@@ -489,10 +486,8 @@ export default class View extends React.Component {
     const rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (rgb) {
       const o = Math.round(
-        (parseInt(rgb[1], 16) * 299 +
-          parseInt(rgb[2], 16) * 587 +
-          parseInt(rgb[3], 16) * 114) /
-          1000,
+        (parseInt(rgb[1], 16) * 299 + parseInt(rgb[2], 16) * 587 + parseInt(rgb[3], 16) * 114) /
+          1000
       );
       if (o > 125) {
         return '#202020';
@@ -512,7 +507,7 @@ export default class View extends React.Component {
     const trail = this.view
       .select('.trail')
       .selectAll('g')
-      .data(nodeArray, (d) => {
+      .data(nodeArray, d => {
         return d.data.name + d.depth;
       });
 
@@ -530,16 +525,16 @@ export default class View extends React.Component {
 
     entering
       .append('svg:text')
-      .attr('x', (d) => {
+      .attr('x', d => {
         return (this.getBreadcrumbWidth(d) + b.t) / 2;
       })
       .attr('y', b.h / 2)
       .attr('dy', '0.35em')
       .attr('text-anchor', 'middle')
-      .text((d) => {
+      .text(d => {
         return d.data.name;
       })
-      .style('fill', (d) => {
+      .style('fill', d => {
         return this.getTextColor(d.colour);
       })
       .style('cursor', 'pointer')
@@ -571,7 +566,7 @@ export default class View extends React.Component {
       this.setState({
         width: dimentions.width,
         height: dimentions.height,
-        radius: dimentions.radius,
+        radius: dimentions.radius
       });
     }
   }
@@ -593,10 +588,7 @@ export default class View extends React.Component {
     const { width, height } = this.state;
     const trailWidth = width + 400;
     return (
-      <div
-        ref={viewEl => (this.viewEl = viewEl)}
-        className="StorageSunburstView"
-      >
+      <div ref={viewEl => (this.viewEl = viewEl)} className="StorageSunburstView">
         <div className="main">
           <div className="sequence">
             <svg className="trail" width={trailWidth} height={50}>
@@ -609,15 +601,14 @@ export default class View extends React.Component {
               style={{
                 visibility: 'hidden',
                 top: height / 2 - 40 + 'px',
-                left: width / 2 - 70 + 'px',
+                left: width / 2 - 70 + 'px'
               }}
             >
               <span className="name" /> takes
               <br />
               <span className="percentage" />
               <br />
-              (<span className="filesize" />) of the <span className="parent" />{' '}
-              storage
+              (<span className="filesize" />) of the <span className="parent" /> storage
             </div>
             <svg width={width} height={height}>
               <g

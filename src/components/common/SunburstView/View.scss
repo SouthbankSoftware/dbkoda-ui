@@ -4,8 +4,6 @@
 // @Last modified by:   wahaj
 // @Last modified time: 2017-08-18T15:38:23+10:00
 
-
-
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,7 +23,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-@import "../../../styles/_defaultTheme.scss";
+@import '../../../styles/_defaultTheme.scss';
 
 .StorageSunburstView {
   font-family: 'Open Sans', sans-serif;
@@ -73,7 +71,6 @@
         }
       }
     }
-
   }
   .chartSeperator {
     display: inline-block;
@@ -89,7 +86,7 @@
     display: inline-block;
     top: calc(10%);
     position: relative;
-    color: #BFBEC0;
+    color: #bfbec0;
     max-height: calc(79%);
     overflow: auto;
 
@@ -110,7 +107,8 @@
     }
 
     table {
-      th, td {
+      th,
+      td {
         text-align: left;
         padding: 2px;
       }
@@ -118,6 +116,6 @@
   }
 
   .list::-webkit-scrollbar {
-      width: 5px;
+    width: 5px;
   }
 }

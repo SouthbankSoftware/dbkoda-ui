@@ -25,5 +25,5 @@ export const Bucket = {
   dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
   dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse,
   dbkodaAggOperators: common.dbkodaAggOperators,
-  dbkodaAggOperators_parse: common.dbkodaAggOperators_parse,
+  dbkodaAggOperators_parse: common.dbkodaAggOperators_parse
 };

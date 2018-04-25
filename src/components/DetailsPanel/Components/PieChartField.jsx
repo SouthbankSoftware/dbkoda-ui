@@ -28,14 +28,7 @@
 
 import React from 'react';
 import { observer } from 'mobx-react';
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default observer(({ field, data }) => {
   const COLORS = [
@@ -50,7 +43,7 @@ export default observer(({ field, data }) => {
     '#1E282D',
     '#465061',
     '#1E423C',
-    '#701535',
+    '#701535'
   ];
 
   if (!field.height) {

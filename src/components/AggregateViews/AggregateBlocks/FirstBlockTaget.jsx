@@ -37,34 +37,34 @@ import '../style.scss';
 const blockTarget = {
   drop() {
     return {
-      type: 'firstBlock',
+      type: 'firstBlock'
     };
-  },
+  }
 };
 const collectTarget = (connect, monitor) => {
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
+    isOver: monitor.isOver()
   };
 };
 /** ============================= * */
 
 @inject(allStores => ({
-  store: allStores.store,
+  store: allStores.store
 }))
 @observer
 @DropTarget(DragItemTypes.VISUAL_BLOCK, blockTarget, collectTarget)
 export default class FirstBlockTarget extends React.Component {
   static propTypes = {
     connectDropTarget: PropTypes.func.isRequired,
-    isOver: PropTypes.bool.isRequired,
+    isOver: PropTypes.bool.isRequired
   };
   constructor(props) {
     super(props);
     this.state = {
       listPosition: props.listPosition,
       type: props.type,
-      concrete: props.concrete,
+      concrete: props.concrete
     };
   }
 

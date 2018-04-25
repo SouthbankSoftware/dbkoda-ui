@@ -26,7 +26,7 @@ import './style.scss';
 import { generateComments } from './ExplainStep';
 import { getWorstShardStages } from './Utils';
 
-const getExamined = (stage) => {
+const getExamined = stage => {
   if (stage.stage === 'IXSCAN') {
     return stage.keysExamined;
   }
@@ -53,7 +53,7 @@ export const StageStepsTable = ({ stages, shard, shardMergeStage }) => {
     shardName = worstShardStages.shardName;
     fStages.push(shardMergeStage);
   }
-  fStages.map((stage) => {
+  fStages.map(stage => {
     if (stage.constructor === Array) {
       mergedStages = mergedStages.concat(stage);
     } else {

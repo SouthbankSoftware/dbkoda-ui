@@ -49,7 +49,7 @@ export default observer(({ field, controls = {} }) => (
         label={field.label}
         text="Add"
         icon="icon-add"
-        onClick={(e) => {
+        onClick={e => {
           field.onAdd(e);
           field.state.form.submit();
         }}
@@ -61,7 +61,7 @@ export default observer(({ field, controls = {} }) => (
         label={field.label}
         text="Remove"
         icon="icon-delete"
-        onClick={(e) => {
+        onClick={e => {
           field.onDel(e);
           field.state.form.submit();
         }}
@@ -73,7 +73,7 @@ export default observer(({ field, controls = {} }) => (
         label={field.label}
         text="Clear"
         icon="icon-trash"
-        onClick={(e) => {
+        onClick={e => {
           field.onClear(e);
           field.state.form.submit();
         }}
@@ -85,7 +85,7 @@ export default observer(({ field, controls = {} }) => (
         label={field.label}
         text="Reset"
         icon="icon-refresh"
-        onClick={(e) => {
+        onClick={e => {
           field.onReset(e);
           field.state.form.submit();
         }}

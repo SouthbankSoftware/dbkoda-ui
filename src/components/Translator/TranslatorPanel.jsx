@@ -29,39 +29,39 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CodeMirror from '#/common/LegacyCodeMirror';
 import CM from 'codemirror';
-import {action} from 'mobx';
-import {MongoShellTranslator, SyntaxType} from 'mongo-shell-translator';
+import { action } from 'mobx';
+import { MongoShellTranslator, SyntaxType } from 'mongo-shell-translator';
 import { Broker, EventType } from '~/helpers/broker';
-import {Button, ContextMenuTarget, Intent, MenuItem, Menu} from '@blueprintjs/core';
+import { Button, ContextMenuTarget, Intent, MenuItem, Menu } from '@blueprintjs/core';
 import Prettier from 'prettier-standalone';
 import _ from 'lodash';
 
 import 'codemirror/theme/material.css';
 import CMOptions from './CMOptions';
 import './translator.scss';
-import {DBKodaToaster} from '../common/Toaster';
-import {featherClient} from '../../helpers/feathers';
+import { DBKodaToaster } from '../common/Toaster';
+import { featherClient } from '../../helpers/feathers';
 
 @ContextMenuTarget
 export default class TranslatorPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {syntax: SyntaxType.callback, value: '', shellCode: '', syntaxErrors: []};
+    this.state = { syntax: SyntaxType.callback, value: '', shellCode: '', syntaxErrors: [] };
     Broker.emit(EventType.FEATURE_USE, 'NodeTranslator');
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.syntax !== this.state.syntax) {
-      this.setState({syntax: nextProps.syntax});
+      this.setState({ syntax: nextProps.syntax });
     }
     if (nextProps.value !== this.state.value) {
-      this.setState({shellCode: nextProps.value});
+      this.setState({ shellCode: nextProps.value });
       this.translate(this.state.syntax, nextProps.value);
     }
   }
 
   componentDidMount() {
-    this.setState({shellCode: this.props.value});
+    this.setState({ shellCode: this.props.value });
     this.translate(this.state.syntax, this.props.value);
   }
 
@@ -71,7 +71,7 @@ export default class TranslatorPanel extends React.Component {
 
   clearErrors() {
     if (this.props.editorCodeMirror) {
-      _.times(this.props.editorCodeMirror.lineCount(), (l) => {
+      _.times(this.props.editorCodeMirror.lineCount(), l => {
         this.props.editorCodeMirror.removeLineClass(l, 'background', 'error-syntax-translator');
       });
     }
@@ -92,20 +92,24 @@ export default class TranslatorPanel extends React.Component {
         msg += `<br>${_err.description} on line ${_err.lineNumber}`;
         if (this.props.editorCodeMirror) {
           this.props.editorCodeMirror.focus();
-          this.props.editorCodeMirror.setCursor({line: _err.lineNumber - 1});
-          this.props.editorCodeMirror.addLineClass(_err.lineNumber - 1, 'background', 'error-syntax-translator');
-          newSyntaxErrors.push({lineNumber: _err.lineNumber - 1});
+          this.props.editorCodeMirror.setCursor({ line: _err.lineNumber - 1 });
+          this.props.editorCodeMirror.addLineClass(
+            _err.lineNumber - 1,
+            'background',
+            'error-syntax-translator'
+          );
+          newSyntaxErrors.push({ lineNumber: _err.lineNumber - 1 });
         }
       }
       // failed to translate code
       const toaster = DBKodaToaster();
       toaster.show({
-        message: (<span dangerouslySetInnerHTML={{__html: msg}} />), // eslint-disable-line react/no-danger
+        message: <span dangerouslySetInnerHTML={{ __html: msg }} />, // eslint-disable-line react/no-danger
         className: 'danger',
         icon: 'thumbs-down'
       });
     }
-    this.setState({syntaxErrors : newSyntaxErrors});
+    this.setState({ syntaxErrors: newSyntaxErrors });
     if (newValue === null) {
       return;
     }
@@ -114,30 +118,31 @@ export default class TranslatorPanel extends React.Component {
     } catch (_err) {
       //
     }
-    this.setState({value: newValue, syntax});
+    this.setState({ value: newValue, syntax });
   }
 
   @action.bound
   syntaxChange(e) {
     this.translate(e.target.value, this.state.shellCode);
-    this.setState({syntax: e.target.value});
+    this.setState({ syntax: e.target.value });
   }
 
   @action.bound
   executeCommands() {
     const service = featherClient().service('/mongo-driver');
     service.timeout = 30000;
-    service.update(this.props.profileId, {commands: this.state.value, shellId: this.props.shellId})
-      .then((_doc) => {
-      }).catch((err) => {
+    service
+      .update(this.props.profileId, { commands: this.state.value, shellId: this.props.shellId })
+      .then(_doc => {})
+      .catch(err => {
         console.error(err.message);
         logToMain('error', 'Failed to execute commands through driver: ' + err);
-      DBKodaToaster().show({
-          message: (<span dangerouslySetInnerHTML={{__html: err.message}} />), // eslint-disable-line react/no-danger
+        DBKodaToaster().show({
+          message: <span dangerouslySetInnerHTML={{ __html: err.message }} />, // eslint-disable-line react/no-danger
           className: 'danger',
           icon: 'thumbs-down'
         });
-    });
+      });
   }
 
   renderContextMenu() {
@@ -160,21 +165,21 @@ export default class TranslatorPanel extends React.Component {
       <div>
         <div className="pt-label">Syntax</div>
         <div className="pt-select">
-          <select
-            onChange={this.syntaxChange}
-            className="pt-intent-primary"
-          >
-            <option value={SyntaxType.callback}>{globalString('translator/tooltip/callback')}</option>
+          <select onChange={this.syntaxChange} className="pt-intent-primary">
+            <option value={SyntaxType.callback}>
+              {globalString('translator/tooltip/callback')}
+            </option>
             <option value={SyntaxType.promise}>{globalString('translator/tooltip/promise')}</option>
             <option value={SyntaxType.await}>{globalString('translator/tooltip/await')}</option>
           </select>
         </div>
-      </div>);
+      </div>
+    );
   }
 
   render() {
-    const {value} = this.state;
-    const options = {...CMOptions};
+    const { value } = this.state;
+    const options = { ...CMOptions };
     return (
       <div className="ReactCodeMirror translate-codemirror">
         <div className="syntax-selection">
@@ -183,7 +188,7 @@ export default class TranslatorPanel extends React.Component {
         </div>
         <CodeMirror
           className="CodeMirror-scroll"
-          ref={(r) => {
+          ref={r => {
             this.codeMirror = r;
           }}
           options={options}
@@ -199,11 +204,11 @@ export default class TranslatorPanel extends React.Component {
 TranslatorPanel.defaultProps = {
   value: '',
   profileId: '',
-  shellId: '',
+  shellId: ''
 };
 
 TranslatorPanel.propTypes = {
   value: PropTypes.string,
   profileId: PropTypes.string,
-  shellId: PropTypes.string,
+  shellId: PropTypes.string
 };

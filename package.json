@@ -18,9 +18,7 @@
     "postinstall": "yarn patch:globalize-webpack-plugin",
     "patch:globalize-webpack-plugin":
       "shx cp ./patch/globalize-webpack-plugin/DevelopmentModePlugin.js ./node_modules/globalize-webpack-plugin",
-    "dev:x": "webpack-dev-server --config webpack/dev.js",
-    "dev":
-      "webpack-dashboard -m -- node --max-old-space-size=2048 ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack/dev.js",
+    "dev": "webpack-dev-server --config webpack/dev.js",
     "dev:test": "UAT=true yarn run dev",
     "dev:install": "yarn install --ignore-scripts",
     "dev:prod": "yarn run postinstall && yarn start",
@@ -44,7 +42,7 @@
     "flow": "flow",
     "flow:install": "flow-typed install --overwrite --skip --ignoreDeps mobx",
     "format":
-      "bash -c 'INPUT=$(echo -e \"$0\n$@\" | egrep '\"'\"'\\.jsx?$|\\.json$|\\.scss$'\"'\"'); if [[ ! -z \"$INPUT\" ]]; then prettier --write $INPUT; fi; INPUT=$(echo \"$0\n$@\" | egrep '\"'\"'\\.jsx?$'\"'\"'); if [[ ! -z \"$INPUT\" ]]; then eslint --fix $INPUT; fi'",
+      "bash -c 'INPUT=$(IFS=\"\n\"; echo \"$0\n$*\"); FI=$(egrep '\"'\"'\\.jsx?$|\\.json$|\\.scss$'\"'\"' <<< \"$INPUT\"); if [[ ! -z \"$FI\" ]]; then prettier --write $FI; fi; FI=$(egrep '\"'\"'\\.jsx?$'\"'\"' <<< \"$INPUT\"); if [[ ! -z \"$FI\" ]]; then eslint --fix $FI; fi'",
     "prepush": "yarn flow",
     "precommit":
       "INPUT=$(git diff --name-only --cached); if [[ ! -z \"$INPUT\" ]]; then yarn format $INPUT; git add $INPUT; fi"
@@ -104,7 +102,7 @@
     "eslint": "^4.12.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-import-resolver-node": "^0.3.0",
-    "eslint-plugin-flowtype": "^2.46.1",
+    "eslint-plugin-flowtype": "^2.46.3",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.5.1",
@@ -115,7 +113,7 @@
     "feathers-primus": "^2.2.0",
     "file-loader": "^1.1.5",
     "filesize": "^3.5.10",
-    "flow-bin": "^0.68.0",
+    "flow-bin": "^0.70.0",
     "flow-typed": "^2.4.0",
     "fuzzysearch": "^1.0.3",
     "global": "^4.3.2",
@@ -192,7 +190,6 @@
     "validatorjs": "^3.11.0",
     "webpack": "^3.11.0",
     "webpack-bundle-analyzer": "^2.8.2",
-    "webpack-dashboard": "^1.1.1",
     "webpack-dev-server": "^2.11.1",
     "webpack-jarvis": "^0.3.2",
     "webpack-merge": "^4.1.0",

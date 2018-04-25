@@ -26,7 +26,6 @@
  * @Last modified time: 2017-03-29T15:05:55+11:00
  */
 
-
 /**
  * [treeNode description]
  * To run this test first you have to precompile the handlebar templates.
@@ -38,7 +37,7 @@
 import TreeDropActions from '#/TreePanel/model/TreeDropActions';
 
 describe('TreeState', () => {
-  const treeNode = { type: 'config', label: 'localhost:37017'};
+  const treeNode = { type: 'config', label: 'localhost:37017' };
 
   test('should generate context for passing to template', () => {
     const context = TreeDropActions.getContext(treeNode);

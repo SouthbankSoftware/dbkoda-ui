@@ -67,9 +67,7 @@ export default class WelcomeView extends React.Component {
             <div className="welcomeMenuWrapper">
               <WelcomeMenu />
             </div>
-            <div className="welcomeContentWrapper">
-              {this.renderWelcomePage()}
-            </div>
+            <div className="welcomeContentWrapper">{this.renderWelcomePage()}</div>
           </div>
         </div>
       </div>

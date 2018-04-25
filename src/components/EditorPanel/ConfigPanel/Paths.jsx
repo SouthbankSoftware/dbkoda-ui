@@ -29,9 +29,7 @@ import { observer } from 'mobx-react';
 import { Button } from '@blueprintjs/core';
 import path from 'path';
 
-const { dialog, BrowserWindow } = IS_ELECTRON
-  ? window.require('electron').remote
-  : {};
+const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
 @observer
 export default class Paths extends React.Component {
@@ -50,8 +48,7 @@ export default class Paths extends React.Component {
     const existingPath = this.props.settings[fieldName]
       ? path.resolve(this.props.settings[fieldName])
       : '';
-    const dlgProperties =
-      fieldName == 'drillCmd' ? 'openDirectory' : 'openFile';
+    const dlgProperties = fieldName == 'drillCmd' ? 'openDirectory' : 'openFile';
     if (IS_ELECTRON) {
       dialog.showOpenDialog(
         BrowserWindow.getFocusedWindow(),
@@ -72,12 +69,8 @@ export default class Paths extends React.Component {
   render() {
     return (
       <div className="formContentWrapper">
-        <div className="sectionHeader">
-          {globalString('editor/config/sections/paths')}
-        </div>
-        <div className="form-row">
-          {this.props.renderFieldLabel('mongoCmd')}
-        </div>
+        <div className="sectionHeader">{globalString('editor/config/sections/paths')}</div>
+        <div className="form-row">{this.props.renderFieldLabel('mongoCmd')}</div>
         <div className="fileInput">
           <input
             type="text"
@@ -94,9 +87,7 @@ export default class Paths extends React.Component {
             {globalString('general/browse')}
           </Button>
         </div>
-        <div className="form-row">
-          {this.props.renderFieldLabel('drillCmd')}
-        </div>
+        <div className="form-row">{this.props.renderFieldLabel('drillCmd')}</div>
         <div className="fileInput">
           <input
             type="text"

@@ -48,7 +48,7 @@ describe('DragLabel', () => {
 
   const treeState = {
     filter: '',
-    setFilter: (value) => {
+    setFilter: value => {
       treeState.filter = value;
     }
   };
@@ -56,7 +56,12 @@ describe('DragLabel', () => {
   class DragLabelTest extends React.Component {
     render() {
       return (
-        <DragLabel id={this.props.id} label={this.props.label} type={this.props.type} treeState={this.props.treeState} />
+        <DragLabel
+          id={this.props.id}
+          label={this.props.label}
+          type={this.props.type}
+          treeState={this.props.treeState}
+        />
       );
     }
   }
@@ -69,14 +74,14 @@ describe('DragLabel', () => {
 
   test('check label text', () => {
     const label = mount(
-      <DDCDragLabel id={props.id} label={props.label} type={props.type} treeState={treeState} />,
+      <DDCDragLabel id={props.id} label={props.label} type={props.type} treeState={treeState} />
     );
     expect(label.find('span').text()).toEqual('long:8888');
   });
 
   test('matches snapshot', () => {
     const testLabel = renderer.create(
-      <DDCDragLabel id={props.id} label={props.label} type={props.type} treeState={treeState} />,
+      <DDCDragLabel id={props.id} label={props.label} type={props.type} treeState={treeState} />
     );
 
     expect(testLabel).toMatchSnapshot();
@@ -85,17 +90,15 @@ describe('DragLabel', () => {
   test('check label text with filter', () => {
     treeState.setFilter('south');
     const label = mount(
-      <DDCDragLabel id={props.id} label={props.label} type={props.type} treeState={treeState} />,
+      <DDCDragLabel id={props.id} label={props.label} type={props.type} treeState={treeState} />
     );
 
-    expect(label.find('mark').text()).toEqual(
-      treeState.filter,
-    );
+    expect(label.find('mark').text()).toEqual(treeState.filter);
   });
 
   test('check label text with filter', () => {
     const label1 = mount(
-      <DDCDragLabel id={props1.id} label={props1.label} type={props1.type} treeState={treeState} />,
+      <DDCDragLabel id={props1.id} label={props1.label} type={props1.type} treeState={treeState} />
     );
 
     expect(label1.find('span').text()).toEqual(props1.label);

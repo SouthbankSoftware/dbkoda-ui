@@ -1,52 +1,57 @@
 {
-    "Title": "Drop Unecessary Indexes",
-    "AutoRefresh": true,
-    "DefaultValues": {
-        "function": "dbkoda_RedundantDBPreFill",
-        "arguments": [{
-            "name": "Database",
-            "value": "treeNode"
-        }]
-    },
-    "Fields": [{
-        "name": "UnecessaryIndexes",
-        "type": "Table",
-        "columns": [{
-                "name": "dbName",
-                "label": "db",
-                "readOnly": true,
-                "type": "Text"
-            },
-            {
-                "name": "collection",
-                "label": "collection",
-                "readOnly": true,
-                "type": "Text"
-            },
-            {
-                "name": "indexName",
-                "label": "indexName",
-                "readOnly": true,
-                "type": "Text"
-            },
-            {
-                "name": "key",
-                "label": "key",
-                "readOnly": true,
-                "type": "Text"
-            },
-            {
-                "name": "becauseIndex",
-                "label": "becauseIndex",
-                "readOnly": true,
-                "type": "Text"
-            },
-            {
-                "name": "becauseKeys",
-                "label": "becauseKeys",
-                "readOnly": true,
-                "type": "Text"
-            }
-        ]
-    }]
+  "Title": "Drop Unecessary Indexes",
+  "AutoRefresh": true,
+  "DefaultValues": {
+    "function": "dbkoda_RedundantDBPreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode"
+      }
+    ]
+  },
+  "Fields": [
+    {
+      "name": "UnecessaryIndexes",
+      "type": "Table",
+      "columns": [
+        {
+          "name": "dbName",
+          "label": "db",
+          "readOnly": true,
+          "type": "Text"
+        },
+        {
+          "name": "collection",
+          "label": "collection",
+          "readOnly": true,
+          "type": "Text"
+        },
+        {
+          "name": "indexName",
+          "label": "indexName",
+          "readOnly": true,
+          "type": "Text"
+        },
+        {
+          "name": "key",
+          "label": "key",
+          "readOnly": true,
+          "type": "Text"
+        },
+        {
+          "name": "becauseIndex",
+          "label": "becauseIndex",
+          "readOnly": true,
+          "type": "Text"
+        },
+        {
+          "name": "becauseKeys",
+          "label": "becauseKeys",
+          "readOnly": true,
+          "type": "Text"
+        }
+      ]
+    }
+  ]
 }

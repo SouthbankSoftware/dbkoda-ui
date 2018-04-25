@@ -54,12 +54,8 @@ const strokeWidth = width * 0.04;
 const halfStrokeWidth = strokeWidth / 2;
 const headTailY = (height - strokeWidth) * headYPropotion + halfStrokeWidth;
 const arrowMaskPathDes = `M${width / 2},${halfStrokeWidth}L${width -
-  halfStrokeWidth},${headTailY}H${(width - strokeWidth) *
-  (1 + tailXPropotion) /
-  2 +
-  halfStrokeWidth}V${height - halfStrokeWidth}H${(width - strokeWidth) *
-  (1 - tailXPropotion) /
-  2 +
+  halfStrokeWidth},${headTailY}H${(width - strokeWidth) * (1 + tailXPropotion) / 2 +
+  halfStrokeWidth}V${height - halfStrokeWidth}H${(width - strokeWidth) * (1 - tailXPropotion) / 2 +
   halfStrokeWidth}V${headTailY}H${halfStrokeWidth}Z`;
 
 type Props = {
@@ -205,8 +201,7 @@ export default class ArrowWidget extends React.Component<Props, State> {
 
       this._autorunDisposer = autorun(() => {
         const { items, values } = this.props.widget;
-        const latestValue =
-          values.length > 0 ? values[values.length - 1].value : {};
+        const latestValue = values.length > 0 ? values[values.length - 1].value : {};
 
         if (items.length !== 1) {
           console.error('ArrowWidget only supports single item');
@@ -243,9 +238,7 @@ export default class ArrowWidget extends React.Component<Props, State> {
     const { performancePanel, widget, widgetStyle } = this.props;
     const { text } = this.state;
     const latestValue =
-      widget.values.length > 0
-        ? widget.values[widget.values.length - 1].value
-        : {};
+      widget.values.length > 0 ? widget.values[widget.values.length - 1].value : {};
     return (
       <Widget
         className="ArrowWidget"
@@ -280,10 +273,7 @@ export default class ArrowWidget extends React.Component<Props, State> {
           }
           target={
             <div className="popoverTargetWrapper">
-              <svg
-                className="chart"
-                ref={_chartEl => (this._chartEl = _chartEl)}
-              />
+              <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
               <div className="text" ref={_textEl => (this._textEl = _textEl)}>
                 {text}
               </div>

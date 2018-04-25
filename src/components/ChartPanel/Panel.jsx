@@ -166,7 +166,12 @@ export default class ChartPanel extends React.Component<Props, State> {
     this.reactions.push(
       reaction(
         () => {
-          const { store: { outputPanel: { currentTab } }, tabId } = this.props;
+          const {
+            store: {
+              outputPanel: { currentTab }
+            },
+            tabId
+          } = this.props;
 
           return currentTab === tabId;
         },

@@ -32,11 +32,11 @@ import * as common from './Common.js';
 
 export const SimpleQuery = {
   executeCommand: null,
-  setExecuteFunction: (cbFuncExecute) => {
+  setExecuteFunction: cbFuncExecute => {
     SimpleQuery.executeCommand = cbFuncExecute;
   },
   // Prefill function for alter user
-  dbkoda_SimpleQueryPreFill: (params) => {
+  dbkoda_SimpleQueryPreFill: params => {
     const data = {};
     data.Database = params.Database;
     data.CollectionName = params.CollectionName;
@@ -44,9 +44,9 @@ export const SimpleQuery = {
     data.IncludeProjection = true;
     data.Projections = [];
     data.Projections.push({});
-    data.Projections.push({AttributeName:'_id', 'AttributeProjectionValue':0});
+    data.Projections.push({ AttributeName: '_id', AttributeProjectionValue: 0 });
     data.FilterKeys = [];
-    data.FilterKeys.push({AttributeName:'_id', Operator:'$eq', Value:'""'});
+    data.FilterKeys.push({ AttributeName: '_id', Operator: '$eq', Value: '""' });
     data.Sort = false;
     data.Count = false;
     return data;
@@ -70,5 +70,5 @@ export const SimpleQuery = {
   dbkodaListAttributes: common.dbkodaListAttributes,
   dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
   dbkodaMatchOperators: common.dbkodaMatchOperators,
-  dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse,
+  dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse
 };

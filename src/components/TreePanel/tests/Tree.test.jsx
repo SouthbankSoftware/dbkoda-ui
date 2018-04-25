@@ -66,8 +66,8 @@ describe('Tree View and Toolbar', () => {
     const view = mount(<DDCTreeView treeState={treeState} store={store} />);
     view.find('input').simulate('change', {
       target: {
-        value: 'south',
-      },
+        value: 'south'
+      }
     });
     expect(treeState.filter).toEqual('south');
   });

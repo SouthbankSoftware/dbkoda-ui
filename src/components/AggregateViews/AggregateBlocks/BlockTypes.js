@@ -31,8 +31,8 @@ export const BlockTypes = {
     type: 'Start',
     description: 'Use this block to configure your pipeline before it begins.',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   MATCH: {
     type: 'Match',
@@ -40,8 +40,8 @@ export const BlockTypes = {
     description: 'Reduce your pipeline results using a match on a field.',
     columns: 2,
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   GROUP: {
     type: 'Group',
@@ -49,8 +49,8 @@ export const BlockTypes = {
     secondGroup: 'groupAndJoin',
     description: 'Group your results by a certain predicate',
     fields: {
-      ID: '',
-    },
+      ID: ''
+    }
   },
   SORT: {
     type: 'Sort',
@@ -58,8 +58,8 @@ export const BlockTypes = {
     secondGroup: 'queryAndAggregate',
     description: 'Sort the results from your pipeline',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   PROJECT: {
     type: 'Project',
@@ -67,8 +67,8 @@ export const BlockTypes = {
     secondGroup: 'queryAndAggregate',
     description: 'Select and/or rename columns',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   UNWIND: {
     type: 'Unwind',
@@ -76,8 +76,8 @@ export const BlockTypes = {
     secondGroup: 'groupAndJoin',
     description: 'Unwind an array of data',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   LIMIT: {
     type: 'Limit',
@@ -85,111 +85,111 @@ export const BlockTypes = {
     secondGroup: 'queryAndAggregate',
     description: 'Limit the results to a specific number of documents',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   SKIP: {
     type: 'Skip',
     groups: ['queryAndAggregate'],
     description: 'Skip ahead in the results',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   SAMPLE: {
     type: 'Sample',
     groups: ['queryAndAggregate'],
     description: 'Obtain a random sample of databases',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   LOOKUP: {
     type: 'Lookup',
     groups: ['common', 'groupAndJoin'],
     description: 'Join one collection to another',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   GRAPHLOOKUP: {
     type: 'GraphLookup',
     groups: ['groupAndJoin'],
     description: 'Perform a recursive graph join',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   COUNT: {
     type: 'Count',
     groups: ['common', 'groupAndJoin'],
     description: 'Count the number of documents',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   OUT: {
     type: 'Out',
     groups: ['other'],
     description: 'Send the output to a new collection',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   ADDFIELDS: {
     type: 'AddFields',
     groups: ['transform'],
     description: 'Add derived fields to your results',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   SORTBYCOUNT: {
     type: 'SortByCount',
     groups: ['queryAndAggregate'],
     description: 'Perform a group,count and sort in a single step',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   BUCKET: {
     type: 'Bucket',
     groups: ['transform'],
     description: 'Aggregate data into range groups',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   BUCKETAUTO: {
     type: 'BucketAuto',
     groups: ['transform'],
     description: 'Aggregate data into equally size groups',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   REPLACEROOT: {
     type: 'ReplaceRoot',
     groups: ['other'],
     description: 'Promote an embedded document to the top level',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   FACET: {
     type: 'Facet',
     groups: ['transform'],
     description: 'Process multiple pipelines in a single stage',
     fields: {
-      Expression: '',
-    },
+      Expression: ''
+    }
   },
   REDACT: {
     type: 'Redact',
     groups: ['transform'],
     description: 'Restrict visibility of items',
     fields: {
-      Expression: '',
-    },
-  },
+      Expression: ''
+    }
+  }
 };

@@ -32,11 +32,11 @@ export default class DetailsBuilder {
   treeNode: null;
   editor: null;
   /**
-    * Resolve the prefetch arguments and return them as params
-    * @param  {Array}  args     Arguments array as provided from DDD file
-    * @return {Object}          Object containing params for prefetch function
-    */
-  resolveArguments = (args) => {
+   * Resolve the prefetch arguments and return them as params
+   * @param  {Array}  args     Arguments array as provided from DDD file
+   * @return {Object}          Object containing params for prefetch function
+   */
+  resolveArguments = args => {
     const params = {};
     if (args.length > 0 && this.treeNode) {
       for (let i = 0; i < args.length; i += 1) {
@@ -74,10 +74,7 @@ export default class DetailsBuilder {
         }
 
         let PrefilledValues;
-        if (
-          ddd.DefaultValues.arguments &&
-          ddd.DefaultValues.arguments.length > 0
-        ) {
+        if (ddd.DefaultValues.arguments && ddd.DefaultValues.arguments.length > 0) {
           PrefilledValues = formFunctions[ddd.DefaultValues.function](params);
         } else {
           PrefilledValues = formFunctions[ddd.DefaultValues.function]();
@@ -86,19 +83,14 @@ export default class DetailsBuilder {
         if (typeof PrefilledValues === 'string') {
           let parseFunction;
           if (formFunctions[ddd.DefaultValues.function + '_parse']) {
-            parseFunction =
-              formFunctions[ddd.DefaultValues.function + '_parse'];
+            parseFunction = formFunctions[ddd.DefaultValues.function + '_parse'];
           } else {
-            parseFunction = (values) => {
+            parseFunction = values => {
               return values;
             };
           }
-          SyncService.executeQuery(
-            PrefilledValues,
-            this.editor.shellId,
-            this.editor.profileId,
-          )
-            .then((res) => {
+          SyncService.executeQuery(PrefilledValues, this.editor.shellId, this.editor.profileId)
+            .then(res => {
               try {
                 const parsedValues = parseFunction(res);
                 if (parsedValues.error) {
@@ -106,12 +98,10 @@ export default class DetailsBuilder {
                 }
                 resolve(parsedValues);
               } catch (err) {
-                reject(
-                  'Unable to parse response from the provided parse function.',
-                );
+                reject('Unable to parse response from the provided parse function.');
               }
             })
-            .catch((reason) => {
+            .catch(reason => {
               reject('Error in SyncService: ' + reason);
             });
         } else if (typeof PrefilledValues === 'object') {
@@ -123,11 +113,11 @@ export default class DetailsBuilder {
     });
   };
   /**
-    * Function to create a dynamic form based on the tree action.
-    * @param  {Object}   detailsStore       Store which contains all the information about selected tree action
-    * @param  {Function} updateDynamicFormCode Callback function to send the generated code back to editor
-    * @return {Promise}                        Promise which will be resolved once all the queries for prefetching are resolved.
-    */
+   * Function to create a dynamic form based on the tree action.
+   * @param  {Object}   detailsStore       Store which contains all the information about selected tree action
+   * @param  {Function} updateDynamicFormCode Callback function to send the generated code back to editor
+   * @return {Promise}                        Promise which will be resolved once all the queries for prefetching are resolved.
+   */
   createDetailsView = (detailsStore, editorForDetails) => {
     return new Promise((resolve, reject) => {
       try {
@@ -138,44 +128,39 @@ export default class DetailsBuilder {
         const ddd = require('./DetailsDefinitions/' + treeAction + '.ddd.json'); //eslint-disable-line
 
         // Load the form functions to support the definitions dynamically
-        const formFunctions = require('./Functions/' + treeAction + '.js')[ //eslint-disable-line
-          treeAction
-        ];
+        const formFunctions = require('./Functions/' + treeAction + '.js')[treeAction]; //eslint-disable-line
 
         const detailsViewInfo = {
           title: ddd.Title,
-          fields: ddd.Fields,
+          fields: ddd.Fields
         };
 
         if (detailsViewInfo.title.indexOf('%') > 0) {
           const regTitle = /\%\w*\.*\w*\%/g;
-          const titleArgs = detailsViewInfo.title.match(regTitle).map((value) => {
+          const titleArgs = detailsViewInfo.title.match(regTitle).map(value => {
             return { name: value, value: value.replace(/%/g, '') };
           });
           const titleParams = this.resolveArguments(titleArgs);
           for (const key in titleParams) {
             if (titleParams[key]) {
-              detailsViewInfo.title = detailsViewInfo.title.replace(
-                key,
-                titleParams[key],
-              );
+              detailsViewInfo.title = detailsViewInfo.title.replace(key, titleParams[key]);
             }
           }
         }
 
-        const updatePrefilledData = (data) => {
+        const updatePrefilledData = data => {
           detailsViewInfo.values = data;
         };
 
         this.getPrefilledData(ddd, formFunctions)
-          .then((detData) => {
+          .then(detData => {
             updatePrefilledData(detData);
             detailsStore.lastTreeNode = this.treeNode;
             detailsStore.lastTreeAction = treeAction;
             detailsStore.detailsViewInfo = detailsViewInfo;
             resolve(detailsViewInfo);
           })
-          .catch((reason) => {
+          .catch(reason => {
             reject(globalString('details/error', reason));
           });
       } catch (e) {

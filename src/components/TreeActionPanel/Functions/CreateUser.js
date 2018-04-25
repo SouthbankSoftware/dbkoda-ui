@@ -34,10 +34,10 @@ export const CreateUser = {
     const data = {};
     data.Database = 'admin';
     data.Roles = [];
-    data.Roles.push({ Database:'admin', Role:'read'});
+    data.Roles.push({ Database: 'admin', Role: 'read' });
     return data;
   },
-  dbkoda_validateUser: (inputDoc) => {
+  dbkoda_validateUser: inputDoc => {
     if (!Object.prototype.hasOwnProperty.call(inputDoc, 'Roles')) {
       throw new Error('dbkoda: Alter user should include as least one role');
     }

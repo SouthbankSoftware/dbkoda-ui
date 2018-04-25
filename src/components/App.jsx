@@ -138,9 +138,7 @@ class App extends React.Component {
           showDialog={this.props.store.password.showDialog}
           verifyPassword={this.props.store.password.verifyPassword}
         />
-        <NewFeaturesDialog
-          showDialog={this.props.store.editorPanel.showNewFeaturesDialog}
-        />
+        <NewFeaturesDialog showDialog={this.props.store.editorPanel.showNewFeaturesDialog} />
         <PasswordResetDialog />
         <SplitPane
           className="RootSplitPane"
@@ -151,10 +149,7 @@ class App extends React.Component {
         >
           <SideNav />
           <div className="fullPanel">
-            {store.drawer &&
-              store.drawer.activeNavPane == NavPanes.PROFILE && (
-                <ProfileManager />
-              )}
+            {store.drawer && store.drawer.activeNavPane == NavPanes.PROFILE && <ProfileManager />}
             {!store.drawer ||
               (store.drawer.activeNavPane == NavPanes.EDITOR && (
                 <SplitPane
@@ -192,9 +187,7 @@ class App extends React.Component {
                 performancePanelStatuses.background
               )
             }
-            resetHighWaterMark={() =>
-              api.resetHighWaterMark(store.performancePanel.profileId)
-            }
+            resetHighWaterMark={() => api.resetHighWaterMark(store.performancePanel.profileId)}
             resetPerformancePanel={() => {
               api.resetPerformancePanel(store.performancePanel.profileId);
               console.log('!!!');

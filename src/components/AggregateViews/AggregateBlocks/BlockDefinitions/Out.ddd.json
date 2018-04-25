@@ -2,7 +2,6 @@
   "Title": "Out",
   "DefaultValues": {},
   "Fields": [
-
     {
       "name": "output-collection",
       "label": "Output Collection",

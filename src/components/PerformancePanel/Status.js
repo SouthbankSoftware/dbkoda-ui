@@ -21,4 +21,4 @@
  * Created by joey on 27/3/18.
  */
 
-export default {NORMAL: 0, CONNECTION_BROKEN: 1, NOT_ENABLED: 2, UNSUPPORTED_STATS_OS: 3};
+export default { NORMAL: 0, CONNECTION_BROKEN: 1, NOT_ENABLED: 2, UNSUPPORTED_STATS_OS: 3 };

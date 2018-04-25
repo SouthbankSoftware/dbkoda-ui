@@ -16,7 +16,11 @@ export default class StaticApi {
   static mongoProtocol = 'mongodb://';
   static getRandomPort() {
     if (IS_ELECTRON) {
-      return window.require('electron').remote.getGlobal('findAvailablePort')(6000, 7000, '127.0.0.1');
+      return window.require('electron').remote.getGlobal('findAvailablePort')(
+        6000,
+        7000,
+        '127.0.0.1'
+      );
     }
     return new Promise().resolve(Math.floor(Math.random() * 7000) + 6000);
   }
@@ -127,25 +131,14 @@ export default class StaticApi {
           // Lets try removing the incorrect json before hand.
           console.warn('Initial: ', jsonStr);
           jsonStr = jsonStr.replace(/^.*\);?/gm, '');
-          console.warn(
-            'Right click action returned invalid result, tried replacing.'
-          );
+          console.warn('Right click action returned invalid result, tried replacing.');
           console.warn('Replaced: ', jsonStr);
         }
       }
 
       // Get document below our starting point.
-      while (
-        linesBelow.status !== 'Invalid' &&
-        totalDocumentCount < MAX_DOCUMENTS
-      ) {
-        const docBelow = this.getDocumentAtLine(
-          outputId,
-          linesBelow.end + 1,
-          1,
-          linesBelow,
-          cm
-        );
+      while (linesBelow.status !== 'Invalid' && totalDocumentCount < MAX_DOCUMENTS) {
+        const docBelow = this.getDocumentAtLine(outputId, linesBelow.end + 1, 1, linesBelow, cm);
         if (!docBelow.match(/^ *{/gm)) {
           // Probably not Valid.
           linesBelow.status = 'Invalid';
@@ -170,17 +163,8 @@ export default class StaticApi {
       }
 
       // Get document above our starting point.
-      while (
-        linesAbove.status !== 'Invalid' &&
-        totalDocumentCount < MAX_DOCUMENTS
-      ) {
-        const docAbove = this.getDocumentAtLine(
-          outputId,
-          linesAbove.start - 1,
-          -1,
-          linesAbove,
-          cm
-        );
+      while (linesAbove.status !== 'Invalid' && totalDocumentCount < MAX_DOCUMENTS) {
+        const docAbove = this.getDocumentAtLine(outputId, linesAbove.start - 1, -1, linesAbove, cm);
         if (
           docAbove.match(/.*;$/gm) ||
           docAbove.match(/ *{}\);?$/) ||
@@ -212,7 +196,7 @@ export default class StaticApi {
         }
       }
 
-        const finalDocument =
+      const finalDocument =
         '[' +
         documentsAbove
           .reverse()
@@ -235,21 +219,11 @@ export default class StaticApi {
     console.log(lines.start);
     const startLine = cm.getLine(lineNumber);
     // Skip these lines to continue reading result set
-    if (
-      ['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(
-        startLine
-      )
-    ) {
+    if (['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(startLine)) {
       if (!direction) {
         direction = 1;
       }
-      return this.getDocumentAtLine(
-        editorId,
-        lineNumber + direction,
-        direction,
-        lines,
-        cm
-      );
+      return this.getDocumentAtLine(editorId, lineNumber + direction, direction, lines, cm);
     }
     if (!startLine || startLine.indexOf('dbKoda>') !== -1) {
       lines.status = 'Invalid';
@@ -276,10 +250,7 @@ export default class StaticApi {
         (!['[', ',', ':', '{'].includes(prevLine[prevLine.length - 1]) ||
           prevLine.indexOf('dbKoda>') === 0)
       ) {
-        if (
-          (nextLine && nextLine[0] === '{') ||
-          ![']', ',', '}'].includes(nextLine[0])
-        ) {
+        if ((nextLine && nextLine[0] === '{') || ![']', ',', '}'].includes(nextLine[0])) {
           // This is a single-line document
           lines.start = lineNumber;
           lines.end = lineNumber;
@@ -332,17 +303,13 @@ export default class StaticApi {
       }
     } else if (direction === 1 && line[line.length - 1] === '}') {
       const nextLine = cm.getLine(lineNumber + 1).trim();
-      if (
-        (nextLine && nextLine[0] === '{') ||
-        ![']', ',', '}'].includes(nextLine[0])
-      ) {
+      if ((nextLine && nextLine[0] === '{') || ![']', ',', '}'].includes(nextLine[0])) {
         lines.end = lineNumber;
         return line;
       }
     }
     if (direction === -1) {
-      line =
-        this._getLineText(cm, lineNumber + direction, direction, lines) + line;
+      line = this._getLineText(cm, lineNumber + direction, direction, lines) + line;
     } else {
       line += this._getLineText(cm, lineNumber + direction, direction, lines);
     }
@@ -352,20 +319,24 @@ export default class StaticApi {
   static convertJsonToCsv(jsonArray) {
     let fields;
     let headings = [];
-    const csv = jsonArray.map((row) => {
+    const csv = jsonArray.map(row => {
       fields = Object.keys(row);
       headings = _.union(headings, fields);
-      const newRow = fields.map((fieldName) => {
-        if (typeof row[fieldName] === 'string' ||
+      const newRow = fields
+        .map(fieldName => {
+          if (
+            typeof row[fieldName] === 'string' ||
             typeof row[fieldName] === 'number' ||
             typeof row[fieldName] === 'boolean'
           ) {
-          console.log(`${fieldName}: ${JSON.stringify(row[fieldName])}`);
-          return JSON.stringify(row[fieldName]);
-        }
-        console.log(`${fieldName}: "${JSON.stringify(row[fieldName]).replace(/"/g, '\'')}"`);
-        return `"${JSON.stringify(row[fieldName]).replace(/"/g, '\'')}"`;
-      }).join(',').concat('\r\n');
+            console.log(`${fieldName}: ${JSON.stringify(row[fieldName])}`);
+            return JSON.stringify(row[fieldName]);
+          }
+          console.log(`${fieldName}: "${JSON.stringify(row[fieldName]).replace(/"/g, "'")}"`);
+          return `"${JSON.stringify(row[fieldName]).replace(/"/g, "'")}"`;
+        })
+        .join(',')
+        .concat('\r\n');
       return newRow;
     });
     console.log(headings.join(','));

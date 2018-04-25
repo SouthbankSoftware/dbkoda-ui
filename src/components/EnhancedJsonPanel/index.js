@@ -25,4 +25,4 @@
  * @Last modified time: 2017-07-19T12:34:59+10:00
  */
 
- export EnhancedJson from './Panel.jsx';
+export EnhancedJson from './Panel.jsx';

@@ -34,14 +34,14 @@ function getItemStyles(props) {
   const { initialOffset, currentOffset } = props;
   if (!initialOffset || !currentOffset) {
     return {
-      display: 'none',
+      display: 'none'
     };
   }
 
   const { x, y } = currentOffset;
 
   return {
-    transform: `translate(${x}px,${y}px)`,
+    transform: `translate(${x}px,${y}px)`
   };
 }
 
@@ -50,7 +50,7 @@ function getItemStyles(props) {
   item: monitor.getItem(),
   initialOffset: monitor.getInitialSourceClientOffset(),
   currentOffset: monitor.getSourceClientOffset(),
-  isDragging: monitor.isDragging(),
+  isDragging: monitor.isDragging()
 }))
 export default class DataTreeDataNodeDragLayer extends React.PureComponent<*> {
   render() {

@@ -102,7 +102,7 @@ export const OutputHotkeys = {
     combo: 'Control + L', // Standard Linux hotkey.
     keys: 'ctrl+l',
     description: 'Clear the Output.',
-    action: 'clearOutput', // In Codemirror by Default.
+    action: 'clearOutput' // In Codemirror by Default.
   },
   showMore: {
     combo: 'Control + M',
@@ -115,170 +115,133 @@ export const EditorHotkeys = [
   {
     combo: 'Control + F',
     keys: 'ctrl+f',
-    description: 'Search.',
-  }, {
+    description: 'Search.'
+  },
+  {
     combo: 'Control + B',
     keys: 'ctrl+b',
-    description: 'Format All.',
-  }, {
+    description: 'Format All.'
+  },
+  {
     combo: 'Control + Shift + F',
     keys: 'ctrl+shift+f',
-    description: 'Format Selection',
-  }, {
+    description: 'Format Selection'
+  },
+  {
     combo: 'Control + Space',
     keys: 'ctrl+space',
-    description: 'Auto-Complete',
+    description: 'Auto-Complete'
   }
 ];
 
 export const CodeMirrorHotkeys = {
   moveCursorToStart: {
     combo: 'control + A', // Standard Linux hotkey.
-    keys: [
-      'control', 'a'
-    ],
+    keys: ['control', 'a'],
     description: 'Move Cursor to start of Line.',
-    action: null, // In Codemirror by Default.
+    action: null // In Codemirror by Default.
   },
   moveCursorToEnd: {
     combo: 'control + E', // Standard Linux hotkey.
-    keys: [
-      'control', 'e'
-    ],
+    keys: ['control', 'e'],
     description: 'Move Cursor to end of Line.',
-    action: null, // In Codemirror by Default.
+    action: null // In Codemirror by Default.
   },
   moveCursorBackOne: {
     combo: 'control + B', // Standard Linux hotkey.
-    keys: [
-      'control', 'b'
-    ],
+    keys: ['control', 'b'],
     description: 'Move Cursor back one character.',
-    action: null, // In Codemirror by Default.
+    action: null // In Codemirror by Default.
   },
   moveCursorBackOneEnd: {
     combo: 'Alt + B', // Standard Linux hotkey.
-    keys: [
-      'alt', 'b'
-    ],
+    keys: ['alt', 'b'],
     description: 'Move Cursor back one word.',
-    action: null, // In Codemirror by Default.
+    action: null // In Codemirror by Default.
   },
   moveCursorForwardOne: {
     combo: 'control + F', // Standard Linux hotkey.
-    keys: [
-      'control', 'f'
-    ],
+    keys: ['control', 'f'],
     description: 'Move Cursor forward one character.',
-    action: null, // In Codemirror by Default.
+    action: null // In Codemirror by Default.
   },
   deleteOneChar: {
     combo: 'control + D', // Standard Linux hotkey.
-    keys: [
-      'control', 'd'
-    ],
+    keys: ['control', 'd'],
     description: 'Delete the character under the cursor.',
-    action: null, // In Codemirror by Default.
+    action: null // In Codemirror by Default.
   },
   deleteOneWord: {
     combo: 'Alt + D', // Standard Linux hotkey.
-    keys: [
-      'alt', 'd'
-    ],
+    keys: ['alt', 'd'],
     description: 'Delete the word under the cursor.',
-    action: null, // In Codemirror by Default.
+    action: null // In Codemirror by Default.
   },
   swapTheLastTwoChar: {
     combo: 'control + T', // Standard Linux hotkey.
-    keys: [
-      'control', 't'
-    ],
+    keys: ['control', 't'],
     description: 'Swap the last two characters before the cursor.',
-    action: null, // In Codemirror by Default.
+    action: null // In Codemirror by Default.
   },
   cutWord: {
     combo: 'control + W', // Standard Linux hotkey.
-    keys: [
-      'control', 'w'
-    ],
+    keys: ['control', 'w'],
     description: 'Cut the word before the cursor to clipboard.',
-    action: null, // In Codemirror by Default.
+    action: null // In Codemirror by Default.
   },
   selectAll: {
     combo: 'Command + A',
-    keys: [
-      'meta', 'a'
-    ],
+    keys: ['meta', 'a'],
     description: 'Select All'
   },
   deleteLine: {
     combo: 'Command + D',
-    keys: [
-      'meta', 'd'
-    ],
+    keys: ['meta', 'd'],
     description: 'Delete Current Line.'
   },
   undo: {
     combo: 'Command + Z',
-    keys: [
-      'meta', 'z'
-    ],
+    keys: ['meta', 'z'],
     description: 'Undo last action.'
   },
   redo: {
     combo: 'Command + Shift + Z',
-    keys: [
-      'meta', 'shift', 'z'
-    ],
+    keys: ['meta', 'shift', 'z'],
     description: 'Redo last action.'
   },
   goToTop: {
     combo: 'Command + UpArrow',
-    keys: [
-      'meta', 'uparrow'
-    ],
+    keys: ['meta', 'uparrow'],
     description: 'Navigate to top of document'
   },
   goToEnd: {
     combo: 'Command + DownArrow',
-    keys: [
-      'meta', 'downarrow'
-    ],
+    keys: ['meta', 'downarrow'],
     description: 'Navigate to bottom of document'
   },
   find: {
     combo: 'Command + F',
-    keys: [
-      'meta', 'f'
-    ],
+    keys: ['meta', 'f'],
     description: 'Open find menu.'
   },
   findNext: {
     combo: 'Command + G',
-    keys: [
-      'meta', 'g'
-    ],
+    keys: ['meta', 'g'],
     description: 'Find the next instance.'
   },
   findPrev: {
     combo: 'Shift + Alt +  G',
-    keys: [
-      'shift', 'alt', 'f'
-    ],
+    keys: ['shift', 'alt', 'f'],
     description: 'Find the previous instance.'
   },
   replace: {
     combo: 'Command + Alt + F',
-    keys: [
-      'meta', 'alt', 'f'
-    ],
+    keys: ['meta', 'alt', 'f'],
     description: 'Replace a found instance.'
   },
   replaceAll: {
     combo: 'Shift + Command + Alt + F',
-    keys: [
-      'shift', 'meta', 'alt', 'f'
-    ],
+    keys: ['shift', 'meta', 'alt', 'f'],
     description: 'Replace all found instances.'
   }
 };

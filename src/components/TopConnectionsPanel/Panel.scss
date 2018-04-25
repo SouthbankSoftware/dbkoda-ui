@@ -95,7 +95,7 @@
 
   .pt-table-top-container {
     .pt-table-column-headers {
-      background-color: #425F58;
+      background-color: #425f58;
       color: $tableHeaderText;
 
       .pt-table-header {
@@ -111,7 +111,7 @@
       }
 
       .pt-table-header:hover {
-        background-color: darken(#425F58, 10%);
+        background-color: darken(#425f58, 10%);
       }
 
       .pt-table-header:hover::before {

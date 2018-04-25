@@ -6,11 +6,12 @@
       "name": "AddFields",
       "label": "Fields to add",
       "type": "Table",
-      "columns": [{
+      "columns": [
+        {
           "name": "AttributeName",
           "label": "Attribute",
           "tooltip": "Name of the new Attribute",
-          "type": "Text" 
+          "type": "Text"
         },
         {
           "name": "Expression",

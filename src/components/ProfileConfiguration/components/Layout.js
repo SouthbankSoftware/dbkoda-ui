@@ -26,7 +26,7 @@ export default [
     y: 0,
     w: 12,
     h: 1,
-    static: true,
+    static: true
   },
   {
     i: 'title',
@@ -35,7 +35,7 @@ export default [
     y: 1,
     w: 3,
     h: 1,
-    static: true,
+    static: true
   },
   {
     i: 'buttons',
@@ -44,7 +44,7 @@ export default [
     y: 1,
     w: 6,
     h: 1,
-    static: true,
+    static: true
   },
   {
     i: 'db-list',
@@ -53,7 +53,7 @@ export default [
     y: 2,
     w: 3,
     h: 2,
-    static: true,
+    static: true
   },
   {
     i: 'db-profile',
@@ -62,7 +62,7 @@ export default [
     y: 2,
     w: 5,
     h: 4,
-    static: true,
+    static: true
   },
   {
     i: 'profile-tips',
@@ -71,6 +71,6 @@ export default [
     y: 2,
     w: 3,
     h: 4,
-    static: true,
-  },
+    static: true
+  }
 ];

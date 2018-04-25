@@ -34,7 +34,7 @@ describe('App', () => {
   const layout = observable({
     overallSplitPos: '30%',
     leftSplitPos: '50%',
-    rightSplitPos: '70%',
+    rightSplitPos: '70%'
   });
 
   beforeAll(() => {
@@ -42,10 +42,14 @@ describe('App', () => {
     globalizeInit();
     app = shallow(
       <App.wrappedComponent
-        store={{ password: { showDialog: false, verifyPassword: false }, editorPanel: { showNewFeaturesDialog: false } }}
-        config={{settings: { showNewFeaturesDialogOnStart: false } }}
-        layout={layout} />
-      );
+        store={{
+          password: { showDialog: false, verifyPassword: false },
+          editorPanel: { showNewFeaturesDialog: false }
+        }}
+        config={{ settings: { showNewFeaturesDialogOnStart: false } }}
+        layout={layout}
+      />
+    );
   });
 
   test('has 1 split panel', () => {

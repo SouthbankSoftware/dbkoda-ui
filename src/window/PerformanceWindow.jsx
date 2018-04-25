@@ -58,11 +58,7 @@ class PerformanceWindow extends React.Component {
       bProfiling: false
     };
 
-    document.addEventListener(
-      'visibilitychange',
-      this._handleVisibilityChange,
-      false
-    );
+    document.addEventListener('visibilitychange', this._handleVisibilityChange, false);
 
     window.onbeforeunload = this._handleNavigatingAway;
   }

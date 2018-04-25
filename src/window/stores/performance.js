@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-04-24T15:49:24+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-04-24T14:26:33+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,7 +28,7 @@ import _ from 'lodash';
 import { observable, action } from 'mobx';
 import { restore } from 'dumpenvy';
 import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
-import { ProfilingConstants } from '#/common/constants';
+import { ProfilingConstants } from '#/common/Constants';
 import { handleNewData, attachToMobx } from '~/api/PerformancePanel';
 
 const electron = window.require('electron');

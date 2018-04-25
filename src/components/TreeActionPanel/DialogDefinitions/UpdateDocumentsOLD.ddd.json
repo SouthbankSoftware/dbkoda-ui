@@ -3,15 +3,19 @@
   "AutoExecute": true,
   "DefaultValues": {
     "function": "dbkoda_UpdateDocumentsPreFill",
-    "arguments": [{
-      "name": "Database",
-      "value": "treeNode.parentDB"
-    }, {
-      "name": "CollectionName",
-      "value": "treeNode"
-    }]
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode.parentDB"
+      },
+      {
+        "name": "CollectionName",
+        "value": "treeNode"
+      }
+    ]
   },
-  "Fields": [{
+  "Fields": [
+    {
       "name": "Database",
       "type": "Text",
       "readOnly": true,
@@ -50,13 +54,15 @@
       "label": "Filter conditions",
       "type": "Table",
       "maxColumns": 3,
-      "columns": [{
+      "columns": [
+        {
           "name": "AttributeName",
           "label": "Attribute",
           "tooltip": "Name of the attribute to be filtered",
           "type": "Text",
           "lookup": "dbkodaListAttributes",
-          "lookup_arguments": [{
+          "lookup_arguments": [
+            {
               "name": "db",
               "value": "treeNode.parentDB"
             },
@@ -72,10 +78,12 @@
           "tooltip": "Operator to apply to value",
           "type": "Combo",
           "lookup": "dbkodaMatchOperators",
-          "lookup_arguments": [{
-            "name": "db",
-            "value": "database"
-          }]
+          "lookup_arguments": [
+            {
+              "name": "db",
+              "value": "database"
+            }
+          ]
         },
         {
           "name": "Value",

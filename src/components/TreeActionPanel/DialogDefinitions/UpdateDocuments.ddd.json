@@ -134,16 +134,14 @@
           "name": "UpValue",
           "label": "Value to apply",
           "type": "Text",
-          "tooltip":
-            "Enter the value for the operator (strings in quotes please)"
+          "tooltip": "Enter the value for the operator (strings in quotes please)"
         }
       ]
     },
     {
       "name": "Replace",
       "label": "Replace Entire Document",
-      "tooltip":
-        "If selected, entire document will be replaced with that below",
+      "tooltip": "If selected, entire document will be replaced with that below",
       "type": "Boolean",
       "readOnly": false
     },

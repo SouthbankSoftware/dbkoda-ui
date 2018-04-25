@@ -31,7 +31,7 @@ import { Dialog, AnchorButton, Intent } from '@blueprintjs/core';
 
 type Props = {
   api: *,
-  store: *,
+  store: *
 };
 
 @inject(allStores => ({

@@ -1,23 +1,27 @@
 {
-	"Title": "Server Statistics ",
-	"DefaultValues": {
-		"function": "dbkoda_ServerStatus" 
-	},
-	"Fields": [
-		{
-			"name": "statistics",
-			"label": "Statistics",
-			"type": "Table",
-			"columns": [{
-				"name": "statistic",
-				"label": "Statistic"
-			}, {
-				"name": "value",
-				"label": "Value"
-			}, {
-				"name": "ratePs",
-				"label": "Rate per second"
-			}]
-		}
-	]
+  "Title": "Server Statistics ",
+  "DefaultValues": {
+    "function": "dbkoda_ServerStatus"
+  },
+  "Fields": [
+    {
+      "name": "statistics",
+      "label": "Statistics",
+      "type": "Table",
+      "columns": [
+        {
+          "name": "statistic",
+          "label": "Statistic"
+        },
+        {
+          "name": "value",
+          "label": "Value"
+        },
+        {
+          "name": "ratePs",
+          "label": "Rate per second"
+        }
+      ]
+    }
+  ]
 }

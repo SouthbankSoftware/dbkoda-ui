@@ -27,12 +27,12 @@
  */
 
 /**
-  * @Author: Wahaj Shamim <wahaj>
-  * @Date:   2017-04-19T15:43:32+10:00
-  * @Email:  wahaj@southbanksoftware.com
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-04-19T15:43:32+10:00
+ * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
  * @Last modified time: 2018-01-12T11:53:06+11:00
-  */
+ */
 
 import React from 'react';
 import { observer } from 'mobx-react';
@@ -40,13 +40,8 @@ import { runInAction } from 'mobx';
 
 import { Intent, Position, Tooltip, Checkbox } from '@blueprintjs/core';
 
-export default observer(({
-  field,
-  formGroup = false
-}) => {
-  const fldClassName = formGroup
-    ? 'pt-form-group form-group-inline'
-    : 'pt-form-group pt-top-level';
+export default observer(({ field, formGroup = false }) => {
+  const fldClassName = formGroup ? 'pt-form-group form-group-inline' : 'pt-form-group pt-top-level';
   let inputClassName = '';
   let tooltipClassName = 'pt-tooltip-indicator pt-tooltip-indicator-form';
 
@@ -65,30 +60,31 @@ export default observer(({
     <div className={fldClassName}>
       <div className="pt-form-content pt-form-content-reverse">
         {field.options &&
-          field.options.tooltip &&
-          <Tooltip
-            className={tooltipClassName}
-            content={field.options.tooltip}
-            hoverOpenDelay={1000}
-            inline
-            intent={Intent.PRIMARY}
-            position={Position.TOP}
-          >
-            <Checkbox
-              className={inputClassName}
-              {...field.bind({ type: 'checkbox' })}
-              checked={field.value}
-              label={field.label}
-            />
-
-          </Tooltip>}
-        {(!field.options || !field.options.tooltip) &&
+          field.options.tooltip && (
+            <Tooltip
+              className={tooltipClassName}
+              content={field.options.tooltip}
+              hoverOpenDelay={1000}
+              inline
+              intent={Intent.PRIMARY}
+              position={Position.TOP}
+            >
+              <Checkbox
+                className={inputClassName}
+                {...field.bind({ type: 'checkbox' })}
+                checked={field.value}
+                label={field.label}
+              />
+            </Tooltip>
+          )}
+        {(!field.options || !field.options.tooltip) && (
           <Checkbox
             className={inputClassName}
             {...field.bind({ type: 'checkbox' })}
             checked={field.value}
             label={field.label}
-          />}
+          />
+        )}
         <p className="pt-form-helper-text">{field.error}</p>
       </div>
     </div>

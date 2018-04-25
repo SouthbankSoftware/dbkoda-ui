@@ -37,7 +37,7 @@ import {
   MenuItem,
   Popover,
   Position,
-  Tooltip,
+  Tooltip
 } from '@blueprintjs/core';
 import { action } from 'mobx';
 import { Broker, EventType } from '../../helpers/broker/index';
@@ -50,7 +50,7 @@ const ALL_PLANS_EXECUTION = 'allPlansExecution';
 /**
  * set executing explain state
  */
-const sendQueryCommand = action((param) => {
+const sendQueryCommand = action(param => {
   Broker.emit(EventType.FEATURE_USE, 'ExplainView');
   const event = EventType.EXECUTION_EXPLAIN_EVENT;
   Broker.emit(event, param);

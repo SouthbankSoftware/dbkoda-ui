@@ -44,9 +44,9 @@ dbe.sampleCollection = (dbName, collectionName) => {
       .aggregate([
         {
           $sample: {
-            size: 20,
-          },
-        },
+            size: 20
+          }
+        }
       ])
       .toArray();
   } else {
@@ -59,8 +59,8 @@ dbe.sampleCollection = (dbName, collectionName) => {
   }
 
   const attributes = {};
-  data.forEach((doc) => {
-    Object.keys(doc).forEach((key) => {
+  data.forEach(doc => {
+    Object.keys(doc).forEach(key => {
       let keytype = typeof doc[key];
       if (doc[key]) {
         if (doc[key].constructor === Array) {
@@ -71,15 +71,15 @@ dbe.sampleCollection = (dbName, collectionName) => {
       if (keytype == 'object') {
         const obj = doc[key];
         if (obj) {
-          Object.keys(obj).forEach((nestedKey) => {
+          Object.keys(obj).forEach(nestedKey => {
             attributes[key + '.' + nestedKey] = typeof obj[nestedKey];
           });
         }
       } else if (keytype === 'array') {
         const docarray = doc[key];
-        docarray.forEach((nestedDoc) => {
+        docarray.forEach(nestedDoc => {
           const obj = nestedDoc;
-          Object.keys(obj).forEach((nestedKey) => {
+          Object.keys(obj).forEach(nestedKey => {
             attributes[key + '.' + nestedKey] = typeof obj[nestedKey];
           });
         });

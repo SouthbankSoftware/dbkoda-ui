@@ -40,8 +40,7 @@
         "label": "Database",
         "value": "admin",
         "options": {
-          "tooltip":
-            "The database in which this connection will initially be established"
+          "tooltip": "The database in which this connection will initially be established"
         },
         "type": "text",
         "column": 1
@@ -131,7 +130,9 @@
   "cluster": {
     "name": "Cluster Configuration",
     "value": "cluster",
-    "tips": ["This page allows you to configure items specific to a replica set. Specify a comma seperated list of the hosts and ports in the replica set to get started.  Eg 'host1:port1, host2:port2, host3:port3'"],
+    "tips": [
+      "This page allows you to configure items specific to a replica set. Specify a comma seperated list of the hosts and ports in the replica set to get started.  Eg 'host1:port1, host2:port2, host3:port3'"
+    ],
     "fields": [
       {
         "name": "useClusterConfig",
@@ -147,7 +148,9 @@
         "name": "hostsList",
         "label": "List of hosts:ports",
         "placeholder": "e.g. localhost:27017, localhost:27016",
-        "options": {"tooltip": "If blank, we'll connect to nominated host and deduce the host list"},
+        "options": {
+          "tooltip": "If blank, we'll connect to nominated host and deduce the host list"
+        },
         "value": "",
         "type": "text",
         "column": 1,
@@ -168,7 +171,7 @@
       {
         "name": "w",
         "label": "w (write concern w option)",
-        "options": {"tooltip": "write concern: specifiy a number, 'majority' or a tagSet"},
+        "options": { "tooltip": "write concern: specifiy a number, 'majority' or a tagSet" },
         "value": "",
         "type": "text",
         "column": 2,
@@ -179,7 +182,7 @@
       {
         "name": "wtimeoutMS",
         "label": "wtimeoutMS",
-        "options": {"tooltip": "Time in ms to wait for write concern. 0=no timeout"},
+        "options": { "tooltip": "Time in ms to wait for write concern. 0=no timeout" },
         "value": 0,
         "type": "number",
         "column": 2,
@@ -190,7 +193,9 @@
       {
         "name": "journal",
         "label": "Journal",
-        "options": {"tooltip": "Write concern 'j' option.  If true writes must journal before returning"},
+        "options": {
+          "tooltip": "Write concern 'j' option.  If true writes must journal before returning"
+        },
         "value": false,
         "type": "checkbox",
         "column": 2,
@@ -201,7 +206,16 @@
         "name": "readPref",
         "label": "Read Preference",
         "value": "",
-        "options": {"dropdown": ["", "primary", "primaryPreferred", "secondary", "secondaryPreferred", "nearest"]},
+        "options": {
+          "dropdown": [
+            "",
+            "primary",
+            "primaryPreferred",
+            "secondary",
+            "secondaryPreferred",
+            "nearest"
+          ]
+        },
         "type": "select",
         "column": 2,
         "disabled": true,
@@ -239,17 +253,10 @@
       {
         "name": "ssh",
         "value": false,
-        "label":
-          "Establish Direct OS Connection (for terminal and performance monitoring)",
+        "label": "Establish Direct OS Connection (for terminal and performance monitoring)",
         "type": "checkbox",
         "column": 1,
-        "refFields": [
-          "remoteHost",
-          "remoteUser",
-          "remotePass",
-          "sshPort",
-          "sshTunnel"
-        ]
+        "refFields": ["remoteHost", "remoteUser", "remotePass", "sshPort", "sshTunnel"]
       },
       {
         "name": "remoteHost",

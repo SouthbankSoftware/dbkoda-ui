@@ -1,11 +1,11 @@
 {
-	"Database":"test",
-	"CollectionName":"randomCollectionName",
-	"capped":true,
-	"autoIndexId":true,
-	"size":10485760,
-	"max":104857600,
-	"validator":"{  phone: { $exists: true }  }",
-	"validationLevel":"strict",
-	"validationAction":"error"
+  "Database": "test",
+  "CollectionName": "randomCollectionName",
+  "capped": true,
+  "autoIndexId": true,
+  "size": 10485760,
+  "max": 104857600,
+  "validator": "{  phone: { $exists: true }  }",
+  "validationLevel": "strict",
+  "validationAction": "error"
 }

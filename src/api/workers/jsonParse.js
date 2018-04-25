@@ -27,8 +27,8 @@
 
 self.addEventListener(
   'message',
-  (e) => {
-    const {jsonStr} = e.data;
+  e => {
+    const { jsonStr } = e.data;
     let message = '';
     let json = jsonStr
       .replace(/ObjectId\("?([0-9a-z]*)"?\)/gm, '"$1"')
@@ -38,7 +38,7 @@ self.addEventListener(
       .replace(/ISODate\("?([0-9a-zA-Z\-:\.]*)"?\)/gm, '"$1"')
       .replace(/Timestamp\("?([0-9], *)"?\)/gm, '"$1"')
       .replace(/\n/gm, '')
-      .replace(/<(.*)>/gm, (contents) => {
+      .replace(/<(.*)>/gm, contents => {
         return contents
           .replace(/(<[^>])*\/([^>]>)*/gm, '$1\\/$2')
           .replace(/="([^"]*)"/gm, '=\\"$1\\"');
@@ -48,12 +48,12 @@ self.addEventListener(
       // eslint-disable-next-line no-undef
       json = JSOL.parse(json);
     } catch (e) {
-      ({message} = e);
+      ({ message } = e);
     }
     self.postMessage([json, message]);
     self.close();
   },
-  false,
+  false
 );
 
 /*
@@ -107,12 +107,9 @@ JSOL.parse = function(text) {
     /^[\],:{}\s]*$/.test(
       text
         .replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@')
-        .replace(
-          /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,
-          ']',
-        )
+        .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
         .replace(/(?:^|:|,)(?:\s*\[)+/g, ':')
-        .replace(/\w*\s*\:/g, ':'),
+        .replace(/\w*\s*\:/g, ':')
     )
   ) {
     return new Function('return ' + text)(); // eslint-disable-line

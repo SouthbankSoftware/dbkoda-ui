@@ -38,7 +38,7 @@ export const GetLog = {
   dbkodaGetLogArgs: () => {
     return 'db.adminCommand({getLog: "*" }).names';
   },
-  dbkodaGetLogArgs_parse: (res) => {
+  dbkodaGetLogArgs_parse: res => {
     return res;
-  },
+  }
 };

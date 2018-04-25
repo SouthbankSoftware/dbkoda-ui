@@ -31,12 +31,10 @@ export default class TreeApi {
   @action.bound
   openNewTableViewForCollection(targetData, limit) {
     // Set up broken to listen on result.
-    const editor = this.store.editors.get(
-      this.store.editorPanel.activeEditorId,
-    );
+    const editor = this.store.editors.get(this.store.editorPanel.activeEditorId);
     Broker.on(
       EventType.createAggregatorResultReceived(editor.id + '_table'),
-      this._onAggregatorResultReceived,
+      this._onAggregatorResultReceived
     );
 
     // Send request to Feathers:
@@ -48,32 +46,30 @@ export default class TreeApi {
         database: targetData.database,
         collection: targetData.collection,
         pipeline: [{ $limit: limit }],
-        options: { allowDiskUse: true },
+        options: { allowDiskUse: true }
       })
       .catch(this._handleError);
     // Render Table:
     this.api.outputApi.createJSONTableViewFromJSONArray(
       [{ loading: 'isLoading' }],
       editor.id,
-      targetData,
+      targetData
     );
   }
 
   @action.bound
   _onAggregatorResultReceived(result) {
-    const editor = this.store.editors.get(
-      this.store.editorPanel.activeEditorId,
-    );
+    const editor = this.store.editors.get(this.store.editorPanel.activeEditorId);
     const output = this.store.outputs.get(editor.id);
 
     this.api.outputApi.createJSONTableViewFromJSONArray(result, editor.id, {
       collection: output.tableJson.collection,
-      database: output.tableJson.database,
+      database: output.tableJson.database
     });
 
     Broker.off(
       EventType.createAggregatorResultReceived(editor.id + '_table'),
-      this._onAggregatorResultReceived,
+      this._onAggregatorResultReceived
     );
   }
 
@@ -92,10 +88,7 @@ export default class TreeApi {
           shouldFocus: true
         }
       });
-      this.profileStore.profiles.set(
-        selectedProfile.id,
-        this.store.profileList.selectedProfile
-      );
+      this.profileStore.profiles.set(selectedProfile.id, this.store.profileList.selectedProfile);
     });
   };
 }

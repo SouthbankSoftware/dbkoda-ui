@@ -1,5 +1,5 @@
 {
-    "Database": "test",
-    "CollectionName": "randomCollectionName",
-    "IndexName":"randomIndexName" 
+  "Database": "test",
+  "CollectionName": "randomCollectionName",
+  "IndexName": "randomIndexName"
 }

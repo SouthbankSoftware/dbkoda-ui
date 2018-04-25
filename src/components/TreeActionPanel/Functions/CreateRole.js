@@ -28,7 +28,7 @@ import * as common from './Common.js';
 
 export const CreateRole = {
   // Prefill function for create role
-  dbkoda_CreateRolePreFill: (params) => {
+  dbkoda_CreateRolePreFill: params => {
     if (params.Database === 'Roles') {
       params.Database = '';
     }
@@ -38,14 +38,15 @@ export const CreateRole = {
     data.Privileges = [];
     return data;
   },
-  dbkoda_validateRole: (inputDoc) => {
+  dbkoda_validateRole: inputDoc => {
     if (!Object.prototype.hasOwnProperty.call(inputDoc, 'Database')) {
       throw new Error('dbkoda: Create Role requires a database to be selected');
     }
     if (!Object.prototype.hasOwnProperty.call(inputDoc, 'RoleName')) {
       throw new Error('dbkoda: Create Role requires a role name');
     }
-    if (!Object.prototype.hasOwnProperty.call(inputDoc, 'Roles') &&
+    if (
+      !Object.prototype.hasOwnProperty.call(inputDoc, 'Roles') &&
       !Object.prototype.hasOwnProperty.call(inputDoc, 'Privileges')
     ) {
       throw new Error('dbkoda: Create Role should include at least one role or privilege');

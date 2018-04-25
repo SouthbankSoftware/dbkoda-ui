@@ -43,7 +43,9 @@ describe('Editor Panel', () => {
     const store = new Store();
     const profileStore = new Profiles();
     const api = new DataCenter(store, profileStore);
-    app = shallow(<EditorPanel.wrappedComponent store={store} api={api} profileStore={profileStore} />);
+    app = shallow(
+      <EditorPanel.wrappedComponent store={store} api={api} profileStore={profileStore} />
+    );
   });
 
   test('has tabs', () => {
@@ -66,7 +68,9 @@ describe('Toolbar', () => {
     store = new Store();
     profileStore = new Profiles();
     api = new DataCenter(store, profileStore);
-    app = mount(<EditorToolbar.wrappedComponent store={store} api={api} profileStore={profileStore} />);
+    app = mount(
+      <EditorToolbar.wrappedComponent store={store} api={api} profileStore={profileStore} />
+    );
   });
 
   test('has buttons', () => {
@@ -74,10 +78,30 @@ describe('Toolbar', () => {
   });
 
   test('has disabled buttons', () => {
-    expect(app.find('.executeLineButton').at(0).prop('disabled'));
-    expect(app.find('.executeAllButton').at(0).prop('disabled'));
-    expect(app.find('.explainPlanButton').at(0).prop('disabled'));
-    expect(app.find('.stopExecutionButton').at(0).prop('disabled'));
+    expect(
+      app
+        .find('.executeLineButton')
+        .at(0)
+        .prop('disabled')
+    );
+    expect(
+      app
+        .find('.executeAllButton')
+        .at(0)
+        .prop('disabled')
+    );
+    expect(
+      app
+        .find('.explainPlanButton')
+        .at(0)
+        .prop('disabled')
+    );
+    expect(
+      app
+        .find('.stopExecutionButton')
+        .at(0)
+        .prop('disabled')
+    );
   });
 
   test('has a dropdown', () => {

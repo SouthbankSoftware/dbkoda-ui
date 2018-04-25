@@ -29,8 +29,8 @@
 import { Aggregate } from './Aggregate';
 
 export const rsstepdown = {
-    executeCommand: null,
-    setExecuteFunction: (cbFuncExecute) => {
-        Aggregate.executeCommand = cbFuncExecute;
-    }
+  executeCommand: null,
+  setExecuteFunction: cbFuncExecute => {
+    Aggregate.executeCommand = cbFuncExecute;
+  }
 };

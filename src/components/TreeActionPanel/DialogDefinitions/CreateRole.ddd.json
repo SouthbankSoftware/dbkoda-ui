@@ -60,8 +60,7 @@
           "name": "Cluster",
           "type": "Boolean",
           "readOnly": false,
-          "tooltip":
-            "Applies actions to the cluster (Overrides Database and Collection)",
+          "tooltip": "Applies actions to the cluster (Overrides Database and Collection)",
           "rules": "boolean"
         },
         {

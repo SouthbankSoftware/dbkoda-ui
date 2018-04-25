@@ -131,9 +131,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
         minValue / (StackedRadialWidget.ringGapScaleFactor * this.scaleFactor)
       );
     }
-    return (
-      StackedRadialWidget.minRadius + this.state.width / (8 * this.scaleFactor)
-    );
+    return StackedRadialWidget.minRadius + this.state.width / (8 * this.scaleFactor);
   }
 
   _getOuterRadiusSize(layer: number) {
@@ -165,8 +163,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
       );
     } else {
       xTranslate += parseInt(
-        this._getOuterRadiusSize(this.props.widget.items.length) +
-          this.state.width,
+        this._getOuterRadiusSize(this.props.widget.items.length) + this.state.width,
         10
       );
     }
@@ -182,10 +179,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
       .attr('width', this.state.width)
       .attr('height', this.state.height)
       .append('g')
-      .attr(
-        'transform',
-        'translate(' + xTranslate + ',' + this.state.height / 2 + ')'
-      );
+      .attr('transform', 'translate(' + xTranslate + ',' + this.state.height / 2 + ')');
 
     let tooltip = '?';
     let count = 0;
@@ -317,9 +311,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
         .innerRadius(this._getInnerRadiusSize(data.index))
         .outerRadius(this._getOuterRadiusSize(data.index))
         .cornerRadius(
-          (this._getOuterRadiusSize(data.index) -
-            this._getInnerRadiusSize(data.index)) /
-            2
+          (this._getOuterRadiusSize(data.index) - this._getInnerRadiusSize(data.index)) / 2
         );
     } catch (e) {
       console.error('Caught Error: ', e);
@@ -400,14 +392,10 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
         lblValue = convertUnits(sumOfItems, this.props.widget.unit, 3);
         return lblValue.value + ' ' + lblValue.unit;
       });
-      field.field
-        .select('text.completed')
-        .attr('transform', 'translate(0, 0), scale(0.4, 0.4)');
+      field.field.select('text.completed').attr('transform', 'translate(0, 0), scale(0.4, 0.4)');
     }
 
-    field.field
-      .select('title')
-      .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
+    field.field.select('title').attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
   }
 
   @action.bound
@@ -424,10 +412,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
         // If fixedValue is null, give a 0 value so it will render straight away.
         this.itemValues[key] = fixedValue;
         const { hwm } = stats[key];
-        this.maxValue = parseInt(
-          Math.max(hwm, fixedValue, this.maxValue, 0),
-          10
-        );
+        this.maxValue = parseInt(Math.max(hwm, fixedValue, this.maxValue, 0), 10);
       });
 
       this.fields.map(field => {
@@ -447,11 +432,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
     }
   });
 
-  getMaximumValueFromHistory(
-    values: Array<Object>,
-    item: string,
-    key: string
-  ): number {
+  getMaximumValueFromHistory(values: Array<Object>, item: string, key: string): number {
     let prev = null;
     let max = 0;
     values.forEach(value => {
@@ -482,12 +463,9 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
       this._autorunDisposer = autorun(() => {
         const { items, values } = this.props.widget;
 
-        const latestValue =
-          values.length > 0 ? values[values.length - 1].value : {};
+        const latestValue = values.length > 0 ? values[values.length - 1].value : {};
         if (items.length == 1) {
-          console.error(
-            'Please use Radial and not StackedRadial for single item metrics.'
-          );
+          console.error('Please use Radial and not StackedRadial for single item metrics.');
           return;
         }
         if (latestValue === undefined) return;
@@ -544,11 +522,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
 
     // $FlowIssue
     return (
-      <Widget
-        widget={widget}
-        widgetStyle={widgetStyle}
-        onResize={this._onResize}
-      >
+      <Widget widget={widget} widgetStyle={widgetStyle} onResize={this._onResize}>
         <div
           className="StackedRadialWidget"
           // $FlowFixMe
@@ -586,12 +560,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
                 <div className="display-name">{displayName}</div>
                 {this.props.widget.items.map((item, count) => {
                   const key = item + count;
-                  const classes =
-                    'radial radial-' +
-                    (count + 1) +
-                    ' ' +
-                    (count + 1) +
-                    ' item';
+                  const classes = 'radial radial-' + (count + 1) + ' ' + (count + 1) + ' item';
                   return <div key={key} className={classes} />;
                 })}
               </div>

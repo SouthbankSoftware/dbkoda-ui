@@ -19,12 +19,12 @@
  */
 
 /**
-* @Author: Wahaj Shamim <wahaj>
-* @Date:   2017-03-07T11:38:53+11:00
-* @Email:  wahaj@southbanksoftware.com
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-03-07T11:38:53+11:00
+ * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
  * @Last modified time: 2018-01-19T11:29:27+11:00
-*/
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -40,7 +40,7 @@ import TreeView from './View.jsx';
 
 @inject(allStores => ({
   store: allStores.store,
-  treeState: allStores.treeState,
+  treeState: allStores.treeState
 }))
 @observer
 export default class TreePanel extends React.Component {
@@ -68,35 +68,32 @@ export default class TreePanel extends React.Component {
             });
             service
               .get(profile.id)
-              .then((res) => {
+              .then(res => {
                 runInAction(() => {
                   this.props.store.treePanel.isRefreshing = false;
                   this.props.store.treePanel.isRefreshDisabled = false;
                   this.props.store.topology.isChanged = false;
                 });
 
-                if (
-                  this.props.store.profileList.selectedProfile.id ==
-                  res.profileId
-                ) {
+                if (this.props.store.profileList.selectedProfile.id == res.profileId) {
                   this.props.store.updateTopology(res);
                   this.updateStatus('LOADED');
                 } else {
                   DBKodaToaster(Position.LEFT_BOTTOM).show({
                     message: 'Profile got changed before loading completes.',
                     className: 'warning',
-                    icon: 'thumbs-down',
+                    icon: 'thumbs-down'
                   });
                   this.updateStatus('FAILED');
                 }
               })
-              .catch((err) => {
+              .catch(err => {
                 console.error(err.stack);
                 this.updateStatus('FAILED');
                 DBKodaToaster(Position.LEFT_BOTTOM).show({
                   message: err.message,
                   className: 'danger',
-                  icon: 'thumbs-down',
+                  icon: 'thumbs-down'
                 });
               });
           }
@@ -117,7 +114,7 @@ export default class TreePanel extends React.Component {
      */
     this.reactionToProfile = reaction(
       () => this.props.store.profileList.selectedProfile,
-      () => onSelectProfile(),
+      () => onSelectProfile()
     );
     /**
      * Reaction to update tree when topology is changed
@@ -127,19 +124,16 @@ export default class TreePanel extends React.Component {
     this.reactionToTopology = reaction(
       () => this.props.store.topology.isChanged,
       () => {
-        if (
-          this.props.store.topology.isChanged &&
-          this.props.store.topology.json !== null
-        ) {
+        if (this.props.store.topology.isChanged && this.props.store.topology.json !== null) {
           this.props.treeState.parseJson(
             this.props.store.topology.json,
-            this.props.store.topology.profileId,
+            this.props.store.topology.profileId
           );
           runInAction('update topology isChanged', () => {
             this.props.store.topology.isChanged = false;
           });
         }
-      },
+      }
     );
 
     onSelectProfile();
@@ -157,7 +151,7 @@ export default class TreePanel extends React.Component {
   @observable treeStatus = 'NEW';
   render() {
     const divStyle = {
-      height: '100%',
+      height: '100%'
     };
     return (
       <div style={divStyle}>
@@ -197,5 +191,5 @@ export default class TreePanel extends React.Component {
 }
 
 TreePanel.propTypes = {
-  store: PropTypes.instanceOf(Store),
+  store: PropTypes.instanceOf(Store)
 };

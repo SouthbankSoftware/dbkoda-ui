@@ -62,11 +62,11 @@ describe('test explain view', () => {
             indexBounds: {
               'address.zipcode': ['["18882", "18882"]'],
               cuisine: ['[MinKey, MaxKey]'],
-              stars: ['[MinKey, MaxKey]'],
-            },
-          },
+              stars: ['[MinKey, MaxKey]']
+            }
+          }
         },
-        rejectedPlans: [],
+        rejectedPlans: []
       },
       executionStats: {
         executionSuccess: true,
@@ -112,29 +112,27 @@ describe('test explain view', () => {
             indexBounds: {
               'address.zipcode': ['["18882", "18882"]'],
               cuisine: ['[MinKey, MaxKey]'],
-              stars: ['[MinKey, MaxKey]'],
+              stars: ['[MinKey, MaxKey]']
             },
             keysExamined: 8,
             seeks: 1,
             dupsTested: 0,
             dupsDropped: 0,
-            seenInvalidated: 0,
-          },
+            seenInvalidated: 0
+          }
         },
-        allPlansExecution: [],
+        allPlansExecution: []
       },
       serverInfo: {
         host: 'e8d1597fe5e4',
         port: 27017,
         version: '3.4.0',
-        gitVersion: 'f4240c60f005be757399042dc12f6addbc3170c1',
+        gitVersion: 'f4240c60f005be757399042dc12f6addbc3170c1'
       },
-      ok: 1,
+      ok: 1
     };
 
-    let stages = getExecutionStages(
-      explainOutput.executionStats.executionStages,
-    );
+    let stages = getExecutionStages(explainOutput.executionStats.executionStages);
     assert.equal(stages.length, 2);
     assert.equal(stages[1].stage, 'FETCH');
     assert.equal(stages[0].stage, 'IXSCAN');
@@ -147,7 +145,7 @@ describe('test explain view', () => {
 
   it('test plain explain output ', () => {
     const output = JSON.parse(
-      '{"queryPlanner" : {"plannerVersion" : 1,"namespace" : "m102.restaurants","indexFilterSet" : false,"parsedQuery" : {},"winningPlan" : {"stage" : "COLLSCAN","direction" : "forward"},"rejectedPlans" : [ ]},"executionStats" : {"executionSuccess" : true,"nReturned" : 1000000,"executionTimeMillis" : 196,"totalKeysExamined" : 0,"totalDocsExamined" : 1000000,"executionStages" : {"stage" : "COLLSCAN","nReturned" : 1000000,"executionTimeMillisEstimate" : 74,"works" : 1000002,"advanced" : 1000000,"needTime" : 1,"needYield" : 0,"saveState" : 7816,"restoreState" : 7816,"isEOF" : 1,"invalidates" : 0,"direction" : "forward","docsExamined" : 1000000},"allPlansExecution" : [ ]},"serverInfo" : {"host" : "e8d1597fe5e4","port" : 27017,"version" : "3.4.0","gitVersion" : "f4240c60f005be757399042dc12f6addbc3170c1"},"ok" : 1}',
+      '{"queryPlanner" : {"plannerVersion" : 1,"namespace" : "m102.restaurants","indexFilterSet" : false,"parsedQuery" : {},"winningPlan" : {"stage" : "COLLSCAN","direction" : "forward"},"rejectedPlans" : [ ]},"executionStats" : {"executionSuccess" : true,"nReturned" : 1000000,"executionTimeMillis" : 196,"totalKeysExamined" : 0,"totalDocsExamined" : 1000000,"executionStages" : {"stage" : "COLLSCAN","nReturned" : 1000000,"executionTimeMillisEstimate" : 74,"works" : 1000002,"advanced" : 1000000,"needTime" : 1,"needYield" : 0,"saveState" : 7816,"restoreState" : 7816,"isEOF" : 1,"invalidates" : 0,"direction" : "forward","docsExamined" : 1000000},"allPlansExecution" : [ ]},"serverInfo" : {"host" : "e8d1597fe5e4","port" : 27017,"version" : "3.4.0","gitVersion" : "f4240c60f005be757399042dc12f6addbc3170c1"},"ok" : 1}'
     );
     const stages = getExecutionStages(output.queryPlanner.winningPlan);
     assert.equal(stages.length, 1);
@@ -178,11 +176,11 @@ describe('test explain view', () => {
           "email" : /net/\
         }\
       ]\
-    }}',
+    }}'
     );
     assert.equal(
       p,
-      '{"plannerVersion":1,"namespace":"m102.people","indexFilterSet":false,"parsedQuery":{"$and":[{"last_name":{"$eq":"Pham"}},{"email":"/net/"}]}}',
+      '{"plannerVersion":1,"namespace":"m102.people","indexFilterSet":false,"parsedQuery":{"$and":[{"last_name":{"$eq":"Pham"}},{"email":"/net/"}]}}'
     );
 
     p = parseOutput('{"a":/b/,"c":/d/}');
@@ -217,8 +215,8 @@ describe('test explain view', () => {
           parsedQuery: {
             $and: [
               { subFolder: { $eq: 'enron_power/interviews' } },
-              { $nor: [{ mailbox: { $eq: '*' } }] },
-            ],
+              { $nor: [{ mailbox: { $eq: '*' } }] }
+            ]
           },
           winningPlan: {
             stage: 'FETCH',
@@ -235,11 +233,9 @@ describe('test explain view', () => {
               indexVersion: 2,
               direction: 'forward',
               indexBounds: {
-                subFolder: [
-                  '["enron_power/interviews","enron_power/interviews"]',
-                ],
-              },
-            },
+                subFolder: ['["enron_power/interviews","enron_power/interviews"]']
+              }
+            }
           },
           rejectedPlans: [
             {
@@ -256,10 +252,10 @@ describe('test explain view', () => {
                 isPartial: false,
                 indexVersion: 2,
                 direction: 'forward',
-                indexBounds: { mailbox: ['[MinKey,"*")', '("*",MaxKey]'] },
-              },
-            },
-          ],
+                indexBounds: { mailbox: ['[MinKey,"*")', '("*",MaxKey]'] }
+              }
+            }
+          ]
         },
         executionStats: {
           executionSuccess: true,
@@ -304,16 +300,14 @@ describe('test explain view', () => {
               indexVersion: 2,
               direction: 'forward',
               indexBounds: {
-                subFolder: [
-                  '["enron_power/interviews","enron_power/interviews"]',
-                ],
+                subFolder: ['["enron_power/interviews","enron_power/interviews"]']
               },
               keysExamined: 8,
               seeks: 1,
               dupsTested: 0,
               dupsDropped: 0,
-              seenInvalidated: 0,
-            },
+              seenInvalidated: 0
+            }
           },
           allPlansExecution: [
             {
@@ -362,9 +356,9 @@ describe('test explain view', () => {
                   seeks: 1,
                   dupsTested: 0,
                   dupsDropped: 0,
-                  seenInvalidated: 0,
-                },
-              },
+                  seenInvalidated: 0
+                }
+              }
             },
             {
               nReturned: 8,
@@ -408,32 +402,30 @@ describe('test explain view', () => {
                   indexVersion: 2,
                   direction: 'forward',
                   indexBounds: {
-                    subFolder: [
-                      '["enron_power/interviews","enron_power/interviews"]',
-                    ],
+                    subFolder: ['["enron_power/interviews","enron_power/interviews"]']
                   },
                   keysExamined: 8,
                   seeks: 1,
                   dupsTested: 0,
                   dupsDropped: 0,
-                  seenInvalidated: 0,
-                },
-              },
-            },
-          ],
+                  seenInvalidated: 0
+                }
+              }
+            }
+          ]
         },
         serverInfo: {
           host: 'e8d1597fe5e4',
           port: 27017,
           version: '3.4.0',
-          gitVersion: 'f4240c60f005be757399042dc12f6addbc3170c1',
+          gitVersion: 'f4240c60f005be757399042dc12f6addbc3170c1'
         },
-        ok: 1,
+        ok: 1
       },
       type: 'allPlansExecution',
       command:
         'db.enron_messages.find({"mailbox" :{$ne: "*"},"subFolder": "enron_power/interviews"}).explain("allPlansExecution")',
-      viewType: 0,
+      viewType: 0
     };
     explain.command = undefined;
     const app = mount(<ExplainView explains={explain} />);
@@ -454,8 +446,8 @@ describe('test explain view', () => {
           $or: [
             { filename: { $eq: '1046.' } },
             { 'headers.From': { $eq: 'eric.bass@enron.com' } },
-            { 'headers.To': { $eq: '' } },
-          ],
+            { 'headers.To': { $eq: '' } }
+          ]
         },
         winningPlan: {
           stage: 'SUBPLAN',
@@ -475,7 +467,7 @@ describe('test explain view', () => {
                   isPartial: false,
                   indexVersion: 2,
                   direction: 'forward',
-                  indexBounds: { filename: ['["1046.","1046."]'] },
+                  indexBounds: { filename: ['["1046.","1046."]'] }
                 },
                 {
                   stage: 'IXSCAN',
@@ -488,7 +480,7 @@ describe('test explain view', () => {
                   isPartial: false,
                   indexVersion: 2,
                   direction: 'forward',
-                  indexBounds: { 'headers.To': ['["",""]'] },
+                  indexBounds: { 'headers.To': ['["",""]'] }
                 },
                 {
                   stage: 'IXSCAN',
@@ -502,16 +494,14 @@ describe('test explain view', () => {
                   indexVersion: 2,
                   direction: 'forward',
                   indexBounds: {
-                    'headers.From': [
-                      '["eric.bass@enron.com","eric.bass@enron.com"]',
-                    ],
-                  },
-                },
-              ],
-            },
-          },
+                    'headers.From': ['["eric.bass@enron.com","eric.bass@enron.com"]']
+                  }
+                }
+              ]
+            }
+          }
         },
-        rejectedPlans: [],
+        rejectedPlans: []
       },
       executionStats: {
         executionSuccess: true,
@@ -587,7 +577,7 @@ describe('test explain view', () => {
                   seeks: 1,
                   dupsTested: 0,
                   dupsDropped: 0,
-                  seenInvalidated: 0,
+                  seenInvalidated: 0
                 },
                 {
                   stage: 'IXSCAN',
@@ -615,7 +605,7 @@ describe('test explain view', () => {
                   seeks: 1,
                   dupsTested: 0,
                   dupsDropped: 0,
-                  seenInvalidated: 0,
+                  seenInvalidated: 0
                 },
                 {
                   stage: 'IXSCAN',
@@ -639,29 +629,27 @@ describe('test explain view', () => {
                   indexVersion: 2,
                   direction: 'forward',
                   indexBounds: {
-                    'headers.From': [
-                      '["eric.bass@enron.com","eric.bass@enron.com"]',
-                    ],
+                    'headers.From': ['["eric.bass@enron.com","eric.bass@enron.com"]']
                   },
                   keysExamined: 76,
                   seeks: 1,
                   dupsTested: 0,
                   dupsDropped: 0,
-                  seenInvalidated: 0,
-                },
-              ],
-            },
-          },
+                  seenInvalidated: 0
+                }
+              ]
+            }
+          }
         },
-        allPlansExecution: [],
+        allPlansExecution: []
       },
       serverInfo: {
         host: 'e8d1597fe5e4',
         port: 27017,
         version: '3.4.0',
-        gitVersion: 'f4240c60f005be757399042dc12f6addbc3170c1',
+        gitVersion: 'f4240c60f005be757399042dc12f6addbc3170c1'
       },
-      ok: 1,
+      ok: 1
     };
     const stages = getExecutionStages(jsonData.executionStats.executionStages);
     assert.equal(stages.length, 4);
@@ -683,8 +671,8 @@ describe('test explain view', () => {
           $or: [
             { filename: { $eq: '1046.' } },
             { 'headers.From': { $eq: 'eric.bass@enron.com' } },
-            { 'headers.To': { $eq: '' } },
-          ],
+            { 'headers.To': { $eq: '' } }
+          ]
         },
         winningPlan: {
           stage: 'SUBPLAN',
@@ -704,7 +692,7 @@ describe('test explain view', () => {
                   isPartial: false,
                   indexVersion: 2,
                   direction: 'forward',
-                  indexBounds: { filename: ['["1046.","1046."]'] },
+                  indexBounds: { filename: ['["1046.","1046."]'] }
                 },
                 {
                   stage: 'IXSCAN',
@@ -717,7 +705,7 @@ describe('test explain view', () => {
                   isPartial: false,
                   indexVersion: 2,
                   direction: 'forward',
-                  indexBounds: { 'headers.To': ['["",""]'] },
+                  indexBounds: { 'headers.To': ['["",""]'] }
                 },
                 {
                   stage: 'IXSCAN',
@@ -731,16 +719,14 @@ describe('test explain view', () => {
                   indexVersion: 2,
                   direction: 'forward',
                   indexBounds: {
-                    'headers.From': [
-                      '["eric.bass@enron.com","eric.bass@enron.com"]',
-                    ],
-                  },
-                },
-              ],
-            },
-          },
+                    'headers.From': ['["eric.bass@enron.com","eric.bass@enron.com"]']
+                  }
+                }
+              ]
+            }
+          }
         },
-        rejectedPlans: [],
+        rejectedPlans: []
       },
       executionStats: {
         executionSuccess: true,
@@ -816,7 +802,7 @@ describe('test explain view', () => {
                   seeks: 1,
                   dupsTested: 0,
                   dupsDropped: 0,
-                  seenInvalidated: 0,
+                  seenInvalidated: 0
                 },
                 {
                   stage: 'IXSCAN',
@@ -844,7 +830,7 @@ describe('test explain view', () => {
                   seeks: 1,
                   dupsTested: 0,
                   dupsDropped: 0,
-                  seenInvalidated: 0,
+                  seenInvalidated: 0
                 },
                 {
                   stage: 'IXSCAN',
@@ -868,29 +854,27 @@ describe('test explain view', () => {
                   indexVersion: 2,
                   direction: 'forward',
                   indexBounds: {
-                    'headers.From': [
-                      '["eric.bass@enron.com","eric.bass@enron.com"]',
-                    ],
+                    'headers.From': ['["eric.bass@enron.com","eric.bass@enron.com"]']
                   },
                   keysExamined: 76,
                   seeks: 1,
                   dupsTested: 0,
                   dupsDropped: 0,
-                  seenInvalidated: 0,
-                },
-              ],
-            },
-          },
+                  seenInvalidated: 0
+                }
+              ]
+            }
+          }
         },
-        allPlansExecution: [],
+        allPlansExecution: []
       },
       serverInfo: {
         host: 'e8d1597fe5e4',
         port: 27017,
         version: '3.4.0',
-        gitVersion: 'f4240c60f005be757399042dc12f6addbc3170c1',
+        gitVersion: 'f4240c60f005be757399042dc12f6addbc3170c1'
       },
-      ok: 1,
+      ok: 1
     };
     const explain = { command: undefined, output: jsonData };
     const app = mount(<ExplainView explains={explain} />);

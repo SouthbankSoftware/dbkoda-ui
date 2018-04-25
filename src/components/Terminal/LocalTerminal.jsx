@@ -37,7 +37,7 @@ import Terminal from './Terminal';
 
 type Props = {
   id: UUID,
-  tabId: string,
+  tabId: string
 };
 
 export default class LocalTerminal extends React.PureComponent<Props> {
@@ -63,8 +63,8 @@ export default class LocalTerminal extends React.PureComponent<Props> {
         type: terminalTypes.local,
         size: {
           rows: xterm.rows,
-          cols: xterm.cols,
-        },
+          cols: xterm.cols
+        }
       })
       .then(({ payload: { new: isNew } }) => {
         if (!isNew) {
@@ -75,7 +75,7 @@ export default class LocalTerminal extends React.PureComponent<Props> {
       .catch(error => {
         Broker.emit(EventType.TERMINAL_ERROR(id), {
           error: error.message,
-          level: terminalErrorLevels.error,
+          level: terminalErrorLevels.error
         });
       });
 
@@ -112,7 +112,7 @@ export default class LocalTerminal extends React.PureComponent<Props> {
     IS_DEVELOPMENT && console.debug('Sending: ', JSON.stringify(code));
 
     this.terminalService.patch(id, {
-      cmd: code,
+      cmd: code
     });
   };
 
