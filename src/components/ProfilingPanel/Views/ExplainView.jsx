@@ -52,6 +52,8 @@ import 'codemirror-formatting';
 import '#/common/MongoScript.js';
 
 import StageProgress from '#/ExplainPanel/StageProgress';
+// import { StageStepsTable } from '#/ExplainPanel/StageStepsTable';
+import { getExecutionStages } from '#/ExplainPanel/ExplainStep';
 // import ShardsStageProgress from '#/ExplainPanel/ShardsStageProgress';
 import 'codemirror/theme/material.css';
 
@@ -68,8 +70,14 @@ export default class OperationDetails extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.operation) {
-      this.state.operation = JSON.stringify(nextProps.operation, null, 2);
-      console.debug('Op: ', this.state.operaion);
+      this.state.operation = nextProps.operation;
+      console.debug('Op: ', JSON.stringify(nextProps.operation, null, 2));
+
+      const stages = getExecutionStages(this.state.operation.execStats);
+      console.debug('Stages: ', stages);
+      if (stages) {
+        this.setState({ stages });
+      }
       // Get the stages.
 
       // Fetch an explain plan
@@ -93,7 +101,13 @@ export default class OperationDetails extends React.Component {
         </nav>
         <span className="explainBody" style={{ height: '100%' }}>
           {this.state.stages && <StageProgress stages={this.state.stages} />}
-          {this.state.operation}
+          {/*           {false && (
+            <StageStepsTable
+              stages={stages}
+              shardMergeStage={executionStages}
+              shard={executionStages.shards !== undefined}
+            />
+          )} */}
         </span>
       </div>
     );

@@ -32,10 +32,7 @@ import { Cell, Column, ColumnHeaderCell } from '@blueprintjs/table';
 import ProgressBar from './ProgressBar';
 
 export type ICellLookup = (rowIndex: number, columnIndex: number) => any;
-export type ISortCallback = (
-  columnIndex: number,
-  comparator: (a: any, b: any) => number
-) => void;
+export type ISortCallback = (columnIndex: number, comparator: (a: any, b: any) => number) => void;
 
 export default class ProgressBarColumn {
   constructor(name: string, key: string, index: number) {
@@ -50,7 +47,6 @@ export default class ProgressBarColumn {
       if (!dataJson) {
         return <Cell />;
       }
-      console.log(dataJson);
       let data = JSON.parse(dataJson);
       const waterMark = data.highWaterMark;
       data = _.pick(data, this.key);
