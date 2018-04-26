@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T17:49:06+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-27T09:56:20+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,6 +31,7 @@ import { NewToaster } from '#/common/Toaster';
 import { EditorTypes, DrawerPanes, ProfileStatus } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import camelise from '~/helpers/camelise';
+import { NavPanes } from '#/common/Constants';
 
 import StaticApi from './static';
 
@@ -122,6 +123,7 @@ export default class EditorApi {
   @action.bound
   openHomeTab() {
     // this.store.configPage.isOpen = true;
+    this.store.setActiveNavPane(NavPanes.EDITOR);
     this.store.welcomePage.isOpen = true;
     this.store.editorPanel.activeEditorId = 'Default';
   }

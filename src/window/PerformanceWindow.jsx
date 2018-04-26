@@ -3,7 +3,7 @@
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-27T09:09:26+10:00
+ * @Last modified time: 2018-04-27T09:44:13+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,7 +31,6 @@ import { PerformancePanel } from '#/PerformancePanel';
 import { TopConnectionsPanel } from '#/TopConnectionsPanel';
 import { ProfilingPanel } from '#/ProfilingPanel';
 import { NewToaster } from '#/common/Toaster';
-import SplitPane from 'react-split-pane';
 import { SideNav } from '#/SideNav';
 import { NavPanes } from '#/common/Constants';
 import { attachToMobx, detachFromMobx } from '~/api/PerformancePanel';
@@ -43,6 +42,7 @@ import '@blueprintjs/table/lib/css/table.css';
 import '~/styles/global.scss';
 import '~/styles/fonts/index.css';
 import '#/App.scss';
+
 import ProfileConfiguration from '../components/ProfileConfiguration';
 import Status from '../components/PerformancePanel/Status';
 
@@ -159,13 +159,7 @@ class PerformanceWindow extends React.Component {
     const { store } = this.props;
 
     return (
-      <SplitPane
-        className="RootSplitPane"
-        split="vertical"
-        defaultSize={60}
-        minSize={60}
-        maxSize={60}
-      >
+      <div className="mainContainer">
         <SideNav menuItems={[NavPanes.PERFORMANCE, NavPanes.TOP_COMMANDS, NavPanes.PROFILING]} />
         <div className="fullPanel">
           {store.drawer &&
@@ -214,7 +208,7 @@ class PerformanceWindow extends React.Component {
               />
             )}
         </div>
-      </SplitPane>
+      </div>
     );
   }
 }

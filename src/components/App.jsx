@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-26T13:16:53+10:00
+ * @Last modified time: 2018-04-27T09:46:47+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -140,15 +140,9 @@ class App extends React.Component {
         />
         <NewFeaturesDialog showDialog={this.props.store.editorPanel.showNewFeaturesDialog} />
         <PasswordResetDialog />
-        <SplitPane
-          className="RootSplitPane"
-          split="vertical"
-          defaultSize={60}
-          minSize={60}
-          maxSize={60}
-        >
+        <div className="mainContainer">
           <SideNav menuItems={[NavPanes.EDITOR, NavPanes.PROFILE]} />
-          <div className="fullPanel">
+          <div className="fullPanel hasStatusbar">
             {store.drawer && store.drawer.activeNavPane == NavPanes.PROFILE && <ProfileManager />}
             {!store.drawer ||
               (store.drawer.activeNavPane == NavPanes.EDITOR && (
@@ -176,7 +170,7 @@ class App extends React.Component {
                 </SplitPane>
               ))}
           </div>
-        </SplitPane>
+        </div>
         <StatusPanel className="statusPanel" />
         {store.performancePanel ? (
           <PerformancePanel
