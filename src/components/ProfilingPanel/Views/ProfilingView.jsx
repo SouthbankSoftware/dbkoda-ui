@@ -33,7 +33,7 @@ import { SelectionModes, Table, Utils, TableLoadingOption } from '@blueprintjs/t
 import TextSortableColumn from '../Components/TextSortableColumn';
 import ProgressBarColumn from '../Components/ProgressBarColumn';
 
-const columnsWidthsPercent = [15, 20, 10, 25, 5, 5, 15];
+const columnsWidthsPercent = [15, 12, 12, 30, 6, 9, 10];
 
 @observer
 export default class ProfilingView extends React.Component<Props> {
@@ -43,16 +43,16 @@ export default class ProfilingView extends React.Component<Props> {
     this.state = {
       lastSelectRegion: null,
       sortedIndexMap: [],
-      data: null,
+      data: this.props.ops || null,
       highWaterMark: null,
       columns: [
         new TextSortableColumn('Id', 0),
         new TextSortableColumn('ns', 1),
         new TextSortableColumn('Plan Summary', 2),
         new TextSortableColumn('Plan Stack', 3),
-        new TextSortableColumn('Count', 4),
+        new TextSortableColumn('#', 4),
         new TextSortableColumn('ms', 5),
-        new ProgressBarColumn('', 'us', 6)
+        new ProgressBarColumn('', 'millis', 6)
       ],
       columnsWidths
     };
@@ -93,21 +93,22 @@ export default class ProfilingView extends React.Component<Props> {
         cellValue = this.state.data[rowIndex].ns;
         break;
       case 2:
-        cellValue = this.state.data[rowIndex].planSummary;
+        cellValue = this.state.data[rowIndex].plansSummary;
         break;
       case 3:
-        cellValue = this.state.data[rowIndex].planStack;
+        cellValue = this.state.data[rowIndex].planQuery.join(', ');
         break;
       case 4:
         cellValue = this.state.data[rowIndex].count;
         break;
       case 5:
-        cellValue = this.state.data[rowIndex].ms;
+        cellValue = this.state.data[rowIndex].millis;
         break;
       case 6:
-        cellValue = _.pick(this.state.data[rowIndex], 'us');
+        cellValue = _.pick(this.state.data[rowIndex], 'millis');
+        console.log('!!! A - ', this.state.highWaterMark);
         if (this.state.highWaterMark) {
-          cellValue.highWaterMark = this.state.highWaterMark.us;
+          cellValue.highWaterMark = this.state.highWaterMark.millis;
         }
         break;
       default:
@@ -154,7 +155,6 @@ export default class ProfilingView extends React.Component<Props> {
 
   render() {
     const { ops } = this.props;
-    console.log(this.props);
 
     const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
 

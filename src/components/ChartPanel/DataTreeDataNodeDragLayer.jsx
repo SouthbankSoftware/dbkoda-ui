@@ -27,6 +27,8 @@
 
 import * as React from 'react';
 import { DragLayer } from 'react-dnd';
+// $FlowFixMe
+import { DragItemTypes } from '#/common/Constants.js';
 import { getDisplaySchemaPath } from './Panel';
 import './DataTreeDataNodeDragLayer.scss';
 
@@ -48,15 +50,16 @@ function getItemStyles(props) {
 // $FlowIssue
 @DragLayer(monitor => ({
   item: monitor.getItem(),
+  itemType: monitor.getItemType(),
   initialOffset: monitor.getInitialSourceClientOffset(),
   currentOffset: monitor.getSourceClientOffset(),
   isDragging: monitor.isDragging()
 }))
 export default class DataTreeDataNodeDragLayer extends React.PureComponent<*> {
   render() {
-    const { item, isDragging } = this.props;
+    const { item, itemType, isDragging } = this.props;
 
-    if (!isDragging) {
+    if (!isDragging || itemType != DragItemTypes.CHART_DATA_TREE_NODE) {
       return null;
     }
 

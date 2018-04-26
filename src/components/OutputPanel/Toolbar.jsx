@@ -714,7 +714,9 @@ export default class Toolbar extends React.Component {
         'TableView-' + this.props.store.editorPanel.activeEditorId;
       return;
     }
-    editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
+    editor = this.props.store.outputPanel.editorRefs[
+      this.props.store.editorPanel.activeEditorId
+    ];
     const cm = editor.getCodeMirror();
 
     // Get the last line that we think is valid:
@@ -732,7 +734,7 @@ export default class Toolbar extends React.Component {
       const lines = { start: 0, end: 0, status: '' };
 
       const currentJson = this.props.getDocumentAtLine(
-        this.props.store.outputPanel.currentTab,
+        this.props.store.editorPanel.activeEditorId,
         lineNumber,
         0,
         lines
@@ -740,7 +742,7 @@ export default class Toolbar extends React.Component {
 
       this.props.api.initJsonView(
         currentJson,
-        this.props.store.outputPanel.currentTab,
+        this.props.store.editorPanel.activeEditorId,
         'tableJson',
         lines,
         editor,

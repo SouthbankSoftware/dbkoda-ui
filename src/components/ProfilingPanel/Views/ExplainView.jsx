@@ -50,6 +50,11 @@ import 'codemirror/addon/hint/javascript-hint.js';
 import 'codemirror/keymap/sublime.js';
 import 'codemirror-formatting';
 import '#/common/MongoScript.js';
+
+import StageProgress from '#/ExplainPanel/StageProgress';
+import { StageStepsTable } from '#/ExplainPanel/StageStepsTable';
+import { getExecutionStages } from '#/ExplainPanel/ExplainStep';
+// import ShardsStageProgress from '#/ExplainPanel/ShardsStageProgress';
 import 'codemirror/theme/material.css';
 
 @observer
@@ -57,52 +62,46 @@ export default class OperationDetails extends React.Component {
   static propTypes = {};
   constructor(props) {
     super(props);
-
-    this.cmOptions = {
-      value: '',
-      theme: 'material',
-      // lineNumbers: 'false',
-      indentUnit: 2,
-      styleActiveLine: 'true',
-      scrollbarStyle: null,
-      smartIndent: true,
-      styleSelectedText: false,
-      tabSize: 2,
-      matchBrackets: true,
-      autoCloseBrackets: true,
-      // foldOptions: {
-      //   widget: '...',
-      // },
-      // foldGutter: false,
-      // gutters: [
-      //   'CodeMirror-linenumbers',
-      //   'CodeMirror-foldgutter', // , 'CodeMirror-lint-markers'
-      // ],
-      keyMap: 'sublime',
-      mode: 'MongoScript'
-    };
-
     this.state = {
-      code: ''
+      operation: null,
+      stages: null
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.operation) {
-      this.setState({ code: JSON.stringify(nextProps.operation, null, 2) });
+      this.state.operation = nextProps.operation;
+
+      const stages = getExecutionStages(this.state.operation.execStats);
+      if (stages) {
+        this.setState({ stages });
+      }
     }
   }
 
   render() {
+    const executionStages = this.state.stages;
     return (
-      <div style={{ height: '100%' }}>
-        <nav className="pt-navbar connectionsToolbar">
-          <div className="pt-navbar-group pt-align-left">
-            <div className="pt-navbar-heading" />
+      <div className="explainView" style={{ height: '100%' }}>
+        <nav className="pt-navbar explainToolbar">
+          <div className="pt-navbar-group exampleGroup pt-align-left">
+            <div className="pt-navbar-heading">
+              <span className="explainTitle">
+                {' '}
+                {globalString('performance/profiling/results/explainTitle')}
+              </span>
+            </div>
           </div>
         </nav>
-        <div style={{ height: '100%' }}>
-          <div className="editorView" />
+        <div className="explainBody explain-statistic-container-view" style={{ height: '100%' }}>
+          {this.state.stages && <StageProgress stages={this.state.stages} />}
+          {this.state.stages && (
+            <StageStepsTable
+              stages={this.state.stages}
+              shardMergeStage={this.state.stages}
+              shard={executionStages.shards !== undefined}
+            />
+          )}
         </div>
       </div>
     );

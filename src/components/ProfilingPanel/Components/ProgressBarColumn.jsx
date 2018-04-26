@@ -47,7 +47,6 @@ export default class ProgressBarColumn {
       if (!dataJson) {
         return <Cell />;
       }
-      console.log(dataJson);
       let data = JSON.parse(dataJson);
       const waterMark = data.highWaterMark;
       data = _.pick(data, this.key);

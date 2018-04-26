@@ -63,6 +63,7 @@ export default class OperationDetails extends React.Component {
       theme: 'material',
       // lineNumbers: 'false',
       indentUnit: 2,
+      readOnly: true,
       styleActiveLine: 'true',
       scrollbarStyle: null,
       smartIndent: true,
@@ -89,16 +90,23 @@ export default class OperationDetails extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.operation) {
-      this.setState({ code: JSON.stringify(nextProps.operation, null, 2) });
+      this.setState({
+        code: JSON.stringify(nextProps.operation.example, null, 2)
+      });
     }
   }
 
   render() {
     return (
       <div style={{ height: '100%' }}>
-        <nav className="pt-navbar connectionsToolbar">
-          <div className="pt-navbar-group pt-align-left">
-            <div className="pt-navbar-heading" />
+        <nav className="pt-navbar exampleToolbar">
+          <div className="pt-navbar-group exampleGroup pt-align-left">
+            <div className="pt-navbar-heading">
+              <span className="exampleTitle">
+                {' '}
+                {globalString('performance/profiling/results/exampleTitle')}
+              </span>
+            </div>
           </div>
         </nav>
         <div style={{ height: '100%' }}>
