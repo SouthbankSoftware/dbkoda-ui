@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-04-24T14:26:08+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-26T15:46:42+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -45,8 +45,8 @@ import './Panel.scss';
 }))
 @observer
 export default class ProfilingPanel extends React.Component<Props> {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       selectedDatabase: null,
       databaseList: [],
@@ -54,6 +54,7 @@ export default class ProfilingPanel extends React.Component<Props> {
       bottomSplitPos: 1000,
       topSplitPos: window.innerWidth
     };
+    this.props.store.api.getProfilingDataBases();
   }
   componentDidMount() {
     window.addEventListener('resize', debounce(this.handleResize, 400));
@@ -81,7 +82,7 @@ export default class ProfilingPanel extends React.Component<Props> {
   };
 
   render() {
-    const { store, showPerformancePanel } = this.props;
+    const { store, showProfileConfiguration } = this.props;
     const { profilingPanel } = store;
     const { selectedDatabase, selectedOperation } = this.state;
     const ops = this.props.store.profilingPanel.payload;
@@ -122,20 +123,22 @@ export default class ProfilingPanel extends React.Component<Props> {
               <div className="pt-navbar-heading">Profiling Results</div>
             </div>
             <div className="pt-navbar-group pt-align-right">
-              <Tooltip
-                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-                content="Show Performance Panel"
-                hoverOpenDelay={1000}
-                inline
-                intent={Intent.PRIMARY}
-                position={Position.BOTTOM}
-              >
-                <Button
-                  className="reset-button pt-button pt-intent-primary"
-                  text="Performance"
-                  onClick={showPerformancePanel}
-                />
-              </Tooltip>
+              {showProfileConfiguration && (
+                <Tooltip
+                  className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                  content={globalString('performance/profiling/profile-configuration-button-text')}
+                  hoverOpenDelay={1000}
+                  inline
+                  intent={Intent.PRIMARY}
+                  position={Position.BOTTOM}
+                >
+                  <Button
+                    className="top-con-button reset-button pt-button pt-intent-primary"
+                    text={globalString('performance/profiling/profile-configuration-button-text')}
+                    onClick={showProfileConfiguration}
+                  />
+                </Tooltip>
+              )}
             </div>
           </nav>
           <div className="tableWrapper">
@@ -161,7 +164,6 @@ export default class ProfilingPanel extends React.Component<Props> {
                 ops={ops}
                 highWaterMark={highWaterMarkProfile}
                 onSelect={onOperationSelection}
-                showPerformancePanel={showPerformancePanel}
                 tableWidth={this.state.topSplitPos}
               />
             ) : (

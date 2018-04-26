@@ -3,7 +3,7 @@
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-18T15:17:48+10:00
+ * @Last modified time: 2018-04-26T15:31:57+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,6 +31,9 @@ import { PerformancePanel } from '#/PerformancePanel';
 import { TopConnectionsPanel } from '#/TopConnectionsPanel';
 import { ProfilingPanel } from '#/ProfilingPanel';
 import { NewToaster } from '#/common/Toaster';
+import SplitPane from 'react-split-pane';
+import { SideNav } from '#/SideNav';
+import { NavPanes } from '#/common/Constants';
 import { attachToMobx, detachFromMobx } from '~/api/PerformancePanel';
 
 import 'normalize.css/normalize.css';
@@ -53,9 +56,8 @@ class PerformanceWindow extends React.Component {
     this.state = {
       sshStatus: Status.NORMAL,
       mongoStatus: Status.NORMAL,
-      bTopConnection: false,
       bProfileConfiguration: false,
-      bProfiling: false
+      bProfiling: true
     };
 
     document.addEventListener('visibilitychange', this._handleVisibilityChange, false);
@@ -131,44 +133,32 @@ class PerformanceWindow extends React.Component {
     }
   }
 
-  showTopConnectionPanel = show => {
-    if (show) {
-      const { store } = this.props;
-      this.setState({
-        bTopConnection: true,
-        bProfileConfiguration: false,
-        bProfiling: false
-      });
-      store.api.getTopConnections();
-    }
-  };
-
+  @action.bound
   showProfileConfiguration = show => {
     if (show) {
       const { store } = this.props;
       this.setState({
         bProfileConfiguration: true,
-        bTopConnection: false,
         bProfiling: false
       });
       store.api.getProfilingDataBases();
     }
   };
 
+  @action.bound
   showPerformancePanel = () => {
     this.setState({
       bProfiling: false,
-      bProfileConfiguration: false,
-      bTopConnection: false
+      bProfileConfiguration: false
     });
   };
 
+  @action.bound
   showProfiling = show => {
     if (show) {
       const { store } = this.props;
       this.setState({
         bProfileConfiguration: false,
-        bTopConnection: false,
         bProfiling: true
       });
       store.api.getProfilingDataBases();
@@ -179,64 +169,65 @@ class PerformanceWindow extends React.Component {
     const { store } = this.props;
 
     return (
-      <div>
-        {!this.state.bTopConnection &&
-          !this.state.bProfiling &&
-          !this.state.bProfileConfiguration && (
-            <div>
-              {store.performancePanel ? (
-                <PerformancePanel
-                  performancePanel={store.performancePanel}
-                  onClose={null}
-                  resetHighWaterMark={store.api.resetHighWaterMark}
-                  resetPerformancePanel={() => {
-                    this.setState({
-                      sshStatus: Status.NORMAL,
-                      mongoStatus: Status.NORMAL
-                    });
-                    store.api.resetPerformancePanel();
-                  }}
-                  showTopConnections={() => {
-                    this.showTopConnectionPanel(true);
-                  }}
-                  showProfiling={() => {
-                    this.showProfiling(true);
-                  }}
-                  showProfileConfiguration={() => {
-                    this.showProfileConfiguration(true);
-                  }}
-                  sshStatus={this.state.sshStatus}
-                  mongoStatus={this.state.mongoStatus}
-                />
-              ) : (
-                <div>
-                  <span>Loading Performance Panel...</span>
-                </div>
-              )}
-            </div>
-          )}
-        {this.state.bTopConnection && (
-          <TopConnectionsPanel
-            showPerformancePanel={() => {
-              this.showPerformancePanel();
-            }}
-          />
-        )}
-        {this.state.bProfiling && (
-          <ProfilingPanel
-            showPerformancePanel={() => {
-              this.showPerformancePanel();
-            }}
-          />
-        )}
-        {this.state.bProfileConfiguration && (
-          <ProfileConfiguration
-            showPerformancePanel={() => {
-              this.showPerformancePanel();
-            }}
-          />
-        )}
-      </div>
+      <SplitPane
+        className="RootSplitPane"
+        split="vertical"
+        defaultSize={60}
+        minSize={60}
+        maxSize={60}
+      >
+        <SideNav menuItems={[NavPanes.PERFORMANCE, NavPanes.TOP_COMMANDS, NavPanes.PROFILING]} />
+        <div className="fullPanel">
+          {store.drawer &&
+            store.drawer.activeNavPane == NavPanes.PERFORMANCE && (
+              <div>
+                {store.performancePanel ? (
+                  <PerformancePanel
+                    performancePanel={store.performancePanel}
+                    onClose={null}
+                    resetHighWaterMark={store.api.resetHighWaterMark}
+                    resetPerformancePanel={() => {
+                      this.setState({
+                        sshStatus: Status.NORMAL,
+                        mongoStatus: Status.NORMAL
+                      });
+                      store.api.resetPerformancePanel();
+                    }}
+                    sshStatus={this.state.sshStatus}
+                    mongoStatus={this.state.mongoStatus}
+                  />
+                ) : (
+                  <div>
+                    <span>Loading Performance Panel...</span>
+                  </div>
+                )}
+              </div>
+            )}
+          {store.drawer &&
+            store.drawer.activeNavPane == NavPanes.TOP_COMMANDS && <TopConnectionsPanel />}
+          {store.drawer &&
+            store.drawer.activeNavPane == NavPanes.PROFILING &&
+            this.state.bProfiling && (
+              <ProfilingPanel
+                showProfiling={() => {
+                  this.showProfiling(true);
+                }}
+                showProfileConfiguration={() => {
+                  this.showProfileConfiguration(true);
+                }}
+              />
+            )}
+          {store.drawer &&
+            store.drawer.activeNavPane == NavPanes.PROFILING &&
+            this.state.bProfileConfiguration && (
+              <ProfileConfiguration
+                showProfiling={() => {
+                  this.showProfiling(true);
+                }}
+              />
+            )}
+        </div>
+      </SplitPane>
     );
   }
 }

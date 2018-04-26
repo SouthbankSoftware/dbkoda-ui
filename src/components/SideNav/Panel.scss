@@ -1,9 +1,28 @@
-// @Author: Chris Trott <christrott>
-// @Date:   2018-04-17T13:32:12+10:00
-// @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   christrott
-// @Last modified time: 2018-04-17T13:38:53+10:00
-
+/**
+ * @Author: Christrott <chris>
+ * @Date:   2018-04-24T12:23:31+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-26T14:15:28+10:00
+ *
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
 @import '../../styles/_defaultTheme.scss';
 
 .sideNav {
@@ -14,11 +33,12 @@
     width: 60px;
     height: 60px;
 
-    .pt-popover-wrapper,
-    .pt-popover-target {
+    .pt-popover-target,
+    .pt-popover-wrapper {
       width: 100%;
       height: 100%;
     }
+
     .pt-button {
       width: 100%;
       height: 100%;
@@ -33,12 +53,18 @@
       width: 30px;
       height: 30px;
       transform: translate(-50%, -50%);
+      position: absolute;
+      top: 50%;
+      bottom: 50%;
+      fill: #58595b;
     }
   }
+
   .menuItem.selected .pt-button {
     background-image: unset;
     background-color: $sideNavButtonSelected;
   }
+
   .menuItem:hover .pt-button {
     background-image: unset;
     background-color: $sideNavButtonSelected;

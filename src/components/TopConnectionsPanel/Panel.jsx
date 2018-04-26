@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-24T15:42:49+10:00
+ * @Last modified time: 2018-04-26T15:15:31+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -42,12 +42,13 @@ import './Panel.scss';
 }))
 @observer
 export default class TopConnectionsPanel extends React.Component<Props> {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       bottomSplitPos: 1000,
       topSplitPos: window.innerWidth
     };
+    this.props.api.getTopConnections();
   }
   componentDidMount() {
     window.addEventListener('resize', debounce(this.handleResize, 400));
@@ -94,7 +95,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
             <ConnectionsView
               onSelect={this.onConnectionSelection}
               showPerformancePanel={showPerformancePanel}
-              tableWidth={this.state.topSplitPos}
+              tableWidth={this.state.topSplitPos - 61}
             />
           </div>
           <SplitPane

@@ -4,8 +4,8 @@
  * @Author: Chris Trott <christrott>
  * @Date:   2018-04-16T14:56:12+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   christrott
- * @Last modified time: 2018-04-16T15:04:47+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-26T13:51:15+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,12 +26,17 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { NavPanes } from '#/common/Constants';
 import MenuItem from '#/common/MenuItem.jsx';
 import EditorIcon from '~/styles/icons/home-icon.svg';
 import ProfileIcon from '~/styles/icons/connection-icon.svg';
+import PerformanceIcon from '~/styles/icons/performance-icon-2.svg';
+import ProfilingIcon from '~/styles/icons/profiling-icon-2.svg';
+import TopCommandsIcon from '~/styles/icons/top-commands-icon.svg';
+
 import './Panel.scss';
 
 type NavPane = string;
@@ -39,16 +44,26 @@ type NavPane = string;
 type Props = {
   store: *,
   api: *,
-  drawer: { activeNavPane: NavPane }
+  drawer: { activeNavPane: NavPane },
+  menuItems: *
 };
 
 @inject(allStores => ({
   store: allStores.store,
-  layout: allStores.store.layout,
   drawer: allStores.store.drawer
 }))
 @observer
 export default class SideNav extends React.Component<Props> {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      menuItems: []
+    };
+    if (props.menuItems) {
+      this.state.menuItems = props.menuItems;
+    }
+  }
   isItemSelected = (itemName: NavPane) => {
     return this.props.drawer.activeNavPane == itemName;
   };
@@ -58,22 +73,59 @@ export default class SideNav extends React.Component<Props> {
   };
 
   render() {
+    const checkMenuItem = itemName => {
+      const idx = _.findIndex(this.state.menuItems, item => {
+        return item === itemName;
+      });
+      return idx >= 0;
+    };
     return (
       <div className="sideNav">
-        <MenuItem
-          name={NavPanes.EDITOR}
-          isSelected={this.isItemSelected}
-          changeMenu={this.changeMenuSelected}
-        >
-          <EditorIcon className="dbKodaSVG" />
-        </MenuItem>
-        <MenuItem
-          name={NavPanes.PROFILE}
-          isSelected={this.isItemSelected}
-          changeMenu={this.changeMenuSelected}
-        >
-          <ProfileIcon className="dbKodaSVG" />
-        </MenuItem>
+        {checkMenuItem(NavPanes.EDITOR) && (
+          <MenuItem
+            name={NavPanes.EDITOR}
+            isSelected={this.isItemSelected}
+            changeMenu={this.changeMenuSelected}
+          >
+            <EditorIcon className="dbKodaSVG" />
+          </MenuItem>
+        )}
+        {checkMenuItem(NavPanes.PROFILE) && (
+          <MenuItem
+            name={NavPanes.PROFILE}
+            isSelected={this.isItemSelected}
+            changeMenu={this.changeMenuSelected}
+          >
+            <ProfileIcon className="dbKodaSVG" />
+          </MenuItem>
+        )}
+        {checkMenuItem(NavPanes.PERFORMANCE) && (
+          <MenuItem
+            name={NavPanes.PERFORMANCE}
+            isSelected={this.isItemSelected}
+            changeMenu={this.changeMenuSelected}
+          >
+            <PerformanceIcon className="dbKodaSVG" />
+          </MenuItem>
+        )}
+        {checkMenuItem(NavPanes.TOP_COMMANDS) && (
+          <MenuItem
+            name={NavPanes.TOP_COMMANDS}
+            isSelected={this.isItemSelected}
+            changeMenu={this.changeMenuSelected}
+          >
+            <TopCommandsIcon className="dbKodaSVG" />
+          </MenuItem>
+        )}
+        {checkMenuItem(NavPanes.PROFILING) && (
+          <MenuItem
+            name={NavPanes.PROFILING}
+            isSelected={this.isItemSelected}
+            changeMenu={this.changeMenuSelected}
+          >
+            <ProfilingIcon className="dbKodaSVG" />
+          </MenuItem>
+        )}
       </div>
     );
   }

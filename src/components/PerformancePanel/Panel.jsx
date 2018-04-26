@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-13T11:26:39+10:00
+ * @Last modified time: 2018-04-26T15:24:25+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -128,7 +128,7 @@ export default class PerformancePanel extends React.Component<Props> {
               {profileAlias}
               {isUnresponsive && ' (Not Responding)'}
             </div>
-            {showTopConnections && (
+            {showProfiling && (
               <Tooltip
                 className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
                 content={globalString('performance/profiling/profilingButtonText')}
@@ -141,22 +141,6 @@ export default class PerformancePanel extends React.Component<Props> {
                   className="top-con-button reset-button pt-button pt-intent-primary"
                   text={globalString('performance/profiling/profilingButtonText')}
                   onClick={showProfiling}
-                />
-              </Tooltip>
-            )}
-            {showProfiling && (
-              <Tooltip
-                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-                content="Show Top Connections"
-                hoverOpenDelay={1000}
-                inline
-                intent={Intent.PRIMARY}
-                position={Position.BOTTOM}
-              >
-                <Button
-                  className="top-con-button reset-button pt-button pt-intent-primary"
-                  text="Top Connections"
-                  onClick={showTopConnections}
                 />
               </Tooltip>
             )}

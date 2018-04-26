@@ -1,4 +1,10 @@
 /**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2018-04-26T09:55:47+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-26T15:42:20+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -20,7 +26,7 @@
 
 import React from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
-
+import { Tooltip, Intent, Position } from '@blueprintjs/core';
 import './styles.scss';
 import Button from './Button';
 import DatabaseList from './DatabaseList';
@@ -75,18 +81,29 @@ export default class ProfileConfiguration extends React.Component {
   };
 
   createButtonPanels(layout) {
-    const { showPerformancePanel } = this.props;
+    const { showProfiling } = this.props;
     return (
       <div key={layout.i} className={layout.className} data-grid={layout}>
         <Button
           className={`${layout.className}-button`}
           text={globalString('performance/profiling/configuration/analyse')}
         />
-        <Button
-          className={`${layout.className}-button`}
-          onClick={showPerformancePanel}
-          text={globalString('performance/profiling/configuration/performance')}
-        />
+        {showProfiling && (
+          <Tooltip
+            className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+            content={globalString('performance/profiling/profilingButtonText')}
+            hoverOpenDelay={1000}
+            inline
+            intent={Intent.PRIMARY}
+            position={Position.BOTTOM}
+          >
+            <Button
+              className="top-con-button reset-button pt-button pt-intent-primary"
+              text={globalString('performance/profiling/profilingButtonText')}
+              onClick={showProfiling}
+            />
+          </Tooltip>
+        )}
       </div>
     );
   }
@@ -123,7 +140,7 @@ export default class ProfileConfiguration extends React.Component {
           <div key={layout.i} className={layout.className} data-grid={layout}>
             <Profile
               selectedDb={this.state.selectedDb}
-              showPerformancePanel={this.props.showPerformancePanel}
+              showProfiling={this.props.showProfiling}
               commitProfileConfiguration={this.commitProfileConfiguration}
             />
           </div>

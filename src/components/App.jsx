@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-21T14:14:02+11:00
+ * @Last modified time: 2018-04-26T13:16:53+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -147,7 +147,7 @@ class App extends React.Component {
           minSize={60}
           maxSize={60}
         >
-          <SideNav />
+          <SideNav menuItems={[NavPanes.EDITOR, NavPanes.PROFILE]} />
           <div className="fullPanel">
             {store.drawer && store.drawer.activeNavPane == NavPanes.PROFILE && <ProfileManager />}
             {!store.drawer ||

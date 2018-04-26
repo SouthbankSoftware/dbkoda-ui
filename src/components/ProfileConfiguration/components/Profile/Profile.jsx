@@ -1,4 +1,10 @@
 /**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2018-04-26T09:55:47+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-26T15:42:36+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -194,7 +200,7 @@ export default class Profile extends React.Component {
           </button>
           <button
             className="profile-button profile-button-cancel"
-            onClick={() => this.props.showPerformancePanel()}
+            onClick={() => this.props.showProfiling()}
           >
             {globalString('performance/profiling/configuration/cancel')}
           </button>

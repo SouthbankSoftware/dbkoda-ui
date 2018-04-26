@@ -1,4 +1,10 @@
 /**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2018-04-24T12:23:31+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-26T15:40:12+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -17,6 +23,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 import { autorun, action } from 'mobx';
@@ -67,7 +74,7 @@ class ProfileConfigurationContainer extends React.Component {
       <ProfileConfiguration
         databases={this.state.databases}
         selectDatabase={this.selectDatabase}
-        showPerformancePanel={this.props.showPerformancePanel}
+        showProfiling={this.props.showProfiling}
         performancePanel={this.props.store.performancePanel}
         commitProfileConfiguration={this.commitProfileConfiguration}
       />

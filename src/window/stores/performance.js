@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-04-24T14:26:33+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-26T14:03:51+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,7 +28,7 @@ import _ from 'lodash';
 import { observable, action } from 'mobx';
 import { restore } from 'dumpenvy';
 import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
-import { ProfilingConstants } from '#/common/Constants';
+import { ProfilingConstants, NavPanes } from '#/common/Constants';
 import { handleNewData, attachToMobx } from '~/api/PerformancePanel';
 
 const electron = window.require('electron');
@@ -157,6 +157,11 @@ export default class Store {
     { deep: false }
   );
 
+  @observable
+  drawer = observable({
+    activeNavPane: NavPanes.PERFORMANCE
+  });
+
   toasterCallback = null;
   errorHandler = null;
 
@@ -168,6 +173,10 @@ export default class Store {
     this.profileId = id;
     this.api.setProfileId(id);
   }
+  @action.bound
+  setActiveNavPane = value => {
+    this.drawer.activeNavPane = value;
+  };
   @action.bound
   handleDataSync = (event, args) => {
     if (args.command === 'mw_setProfileId') {
