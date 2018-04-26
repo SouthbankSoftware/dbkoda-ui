@@ -3,7 +3,7 @@
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-24T15:00:30+10:00
+ * @Last modified time: 2018-04-26T16:20:53+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,7 +29,6 @@ import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
 import { SelectionModes, Table, Utils, TableLoadingOption } from '@blueprintjs/table';
-import { Button, Intent, Position, Tooltip } from '@blueprintjs/core';
 
 import TextSortableColumn from '../Components/TextSortableColumn';
 import ProgressBarColumn from '../Components/ProgressBarColumn';
@@ -165,7 +164,7 @@ export default class ConnectionsView extends React.Component<Props> {
   }
 
   render() {
-    const { connections, showPerformancePanel } = this.props;
+    const { connections } = this.props;
     console.log('connections::', connections);
 
     const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
@@ -183,22 +182,7 @@ export default class ConnectionsView extends React.Component<Props> {
           <div className="pt-navbar-group pt-align-left">
             <div className="pt-navbar-heading">Connections</div>
           </div>
-          <div className="pt-navbar-group pt-align-right">
-            <Tooltip
-              className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-              content="Show Performance Panel"
-              hoverOpenDelay={1000}
-              inline
-              intent={Intent.PRIMARY}
-              position={Position.BOTTOM}
-            >
-              <Button
-                className="reset-button pt-button pt-intent-primary"
-                text="Performance"
-                onClick={showPerformancePanel}
-              />
-            </Tooltip>
-          </div>
+          <div className="pt-navbar-group pt-align-right" />
         </nav>
         <div style={{ height: 'calc(100% - 50px)' }}>
           <Table
