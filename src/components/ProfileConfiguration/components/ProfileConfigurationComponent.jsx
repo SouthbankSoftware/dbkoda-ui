@@ -3,7 +3,7 @@
  * @Date:   2018-04-26T09:55:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-26T15:42:20+10:00
+ * @Last modified time: 2018-04-27T09:13:58+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,7 +26,6 @@
 
 import React from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
-import { Tooltip, Intent, Position } from '@blueprintjs/core';
 import './styles.scss';
 import Button from './Button';
 import DatabaseList from './DatabaseList';
@@ -89,20 +88,11 @@ export default class ProfileConfiguration extends React.Component {
           text={globalString('performance/profiling/configuration/analyse')}
         />
         {showProfiling && (
-          <Tooltip
-            className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-            content={globalString('performance/profiling/profilingButtonText')}
-            hoverOpenDelay={1000}
-            inline
-            intent={Intent.PRIMARY}
-            position={Position.BOTTOM}
-          >
-            <Button
-              className="top-con-button reset-button pt-button pt-intent-primary"
-              text={globalString('performance/profiling/profilingButtonText')}
-              onClick={showProfiling}
-            />
-          </Tooltip>
+          <Button
+            className={`${layout.className}-button`}
+            onClick={showProfiling}
+            text={globalString('performance/profiling/configuration/close')}
+          />
         )}
       </div>
     );

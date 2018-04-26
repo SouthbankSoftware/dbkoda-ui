@@ -3,7 +3,7 @@
  * @Date:   2018-04-24T12:23:31+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-26T15:40:12+10:00
+ * @Last modified time: 2018-04-27T09:03:50+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -53,6 +53,7 @@ class ProfileConfigurationContainer extends React.Component {
   }
 
   componentWillUnmount() {
+    this.props.showProfiling();
     this._autorunDisposer && this._autorunDisposer();
   }
 

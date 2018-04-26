@@ -3,7 +3,7 @@
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-26T15:31:57+10:00
+ * @Last modified time: 2018-04-27T09:09:26+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -146,22 +146,12 @@ class PerformanceWindow extends React.Component {
   };
 
   @action.bound
-  showPerformancePanel = () => {
-    this.setState({
-      bProfiling: false,
-      bProfileConfiguration: false
-    });
-  };
-
-  @action.bound
   showProfiling = show => {
     if (show) {
-      const { store } = this.props;
       this.setState({
         bProfileConfiguration: false,
         bProfiling: true
       });
-      store.api.getProfilingDataBases();
     }
   };
 
@@ -209,9 +199,6 @@ class PerformanceWindow extends React.Component {
             store.drawer.activeNavPane == NavPanes.PROFILING &&
             this.state.bProfiling && (
               <ProfilingPanel
-                showProfiling={() => {
-                  this.showProfiling(true);
-                }}
                 showProfileConfiguration={() => {
                   this.showProfileConfiguration(true);
                 }}

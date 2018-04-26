@@ -63,6 +63,7 @@
           "setup": "Setup Profiling",
           "analyse": "Analyse Profiling",
           "performance": "Performance",
+          "close": "Close",
           "database-list-title": "Database to Profile",
           "profile-mode": "Profile Mode",
           "operation-exceeds": "Operation exceeding time limit",

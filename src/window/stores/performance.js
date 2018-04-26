@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-26T14:03:51+10:00
+ * @Last modified time: 2018-04-27T09:07:03+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -101,6 +101,7 @@ class PerformanceWindowApi {
 
   @action.bound
   getProfilingDataBases = () => {
+    console.log('getProfilingDataBases');
     this.store.profilingPanel.enabledDatabases = [];
     this.store.profilingPanel.selectedDatabase = null;
     this.sendCommandToMainProcess('pw_getProfilingDataBases');
