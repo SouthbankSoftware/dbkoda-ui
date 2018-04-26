@@ -66,7 +66,7 @@ export default class TreeDropActions {
       case 'index':
         context = {
           db: treeNode.refParent.refParent.text,
-          col: treeNode.refParent.text,
+          col: treeNode.refParent.text
         };
         break;
       case 'user':

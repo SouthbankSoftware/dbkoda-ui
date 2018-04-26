@@ -44,14 +44,8 @@ export default class Password {
     this.store = store;
     this.api = api;
     this.config = config;
-    Broker.on(
-      EventType.MASTER_PASSWORD_REQUIRED,
-      this.showPasswordDialog.bind(this)
-    );
-    Broker.on(
-      EventType.PASSWORD_STORE_RESET,
-      this.onPasswordReset.bind(this)
-    );
+    Broker.on(EventType.MASTER_PASSWORD_REQUIRED, this.showPasswordDialog.bind(this));
+    Broker.on(EventType.PASSWORD_STORE_RESET, this.onPasswordReset.bind(this));
   }
 
   @action.bound
@@ -68,7 +62,7 @@ export default class Password {
   showPasswordDialog(verify: boolean = false) {
     console.log('Show Password Dialog');
     this._setupKeyBind();
-    this.store.password.verifyPassword = (verify === true);
+    this.store.password.verifyPassword = verify === true;
     this.store.password.showDialog = true;
   }
 
@@ -96,11 +90,8 @@ export default class Password {
   }
 
   verifyPassword() {
-    const {initialPassword, repeatPassword} = this.store.password;
-    return (
-      initialPassword === repeatPassword &&
-      initialPassword.length >= this.MIN_PASSWORD_LENGTH
-    );
+    const { initialPassword, repeatPassword } = this.store.password;
+    return initialPassword === repeatPassword && initialPassword.length >= this.MIN_PASSWORD_LENGTH;
   }
 
   @action.bound
@@ -114,9 +105,9 @@ export default class Password {
     */
     const { initialPassword } = this.store.password;
     const masterHash = this.hashPassword(initialPassword);
-    const profileSshIds = _.filter([...this.store.profileStore.profiles.entries()], (value) => {
-      return (value[1].ssh || value[1].keyRadio);
-    }).map((value) => {
+    const profileSshIds = _.filter([...this.store.profileStore.profiles.entries()], value => {
+      return value[1].ssh || value[1].keyRadio;
+    }).map(value => {
       return `${value[1].id}-s`;
     });
     const profileIds = _.concat([...this.store.profileStore.profiles.keys()], profileSshIds);
@@ -139,13 +130,13 @@ export default class Password {
           NewToaster.show({
             message: `${globalString('password_dialog/login_error_message')}`,
             className: 'danger',
-            icon: 'thumbs-down',
+            icon: 'thumbs-down'
           });
         } else {
           NewToaster.show({
             message: `${globalString('password_dialog/general_error_message')}`,
             className: 'danger',
-            icon: 'thumbs-down',
+            icon: 'thumbs-down'
           });
         }
       });
@@ -164,7 +155,7 @@ export default class Password {
         NewToaster.show({
           message: `Could not remove password store: ${error.message}`,
           className: 'danger',
-          icon: 'thumbs-down',
+          icon: 'thumbs-down'
         });
       });
   }
@@ -176,10 +167,16 @@ export default class Password {
   }
 
   removeMissingStoreId(profileId: string) {
-    _.remove(this.store.password.missingProfiles, id => { return id === profileId; });
+    _.remove(this.store.password.missingProfiles, id => {
+      return id === profileId;
+    });
   }
 
   isProfileMissingFromStore(profileId: string) {
-    return (_.findIndex(this.store.password.missingProfiles, id => { return id === profileId; }) > -1);
+    return (
+      _.findIndex(this.store.password.missingProfiles, id => {
+        return id === profileId;
+      }) > -1
+    );
   }
 }

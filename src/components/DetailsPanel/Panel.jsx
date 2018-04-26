@@ -49,10 +49,7 @@ export default class DetailsPanel extends React.Component {
     if (!nextProps.isVisible) {
       this.showView(nextProps.isVisible);
     }
-    if (
-      (this.props.editor != nextProps.editor || this.bDetView == false) &&
-      nextProps.isVisible
-    ) {
+    if ((this.props.editor != nextProps.editor || this.bDetView == false) && nextProps.isVisible) {
       this.renderDetails(nextProps.editor);
     }
   }
@@ -62,10 +59,12 @@ export default class DetailsPanel extends React.Component {
   @observable msg = 'Loading Details...';
   @observable bLoading = false;
   @observable bDetView = false;
-  @action showView(value) {
+  @action
+  showView(value) {
     this.bDetView = value;
   }
-  @action updateMsg(value) {
+  @action
+  updateMsg(value) {
     this.msg = value;
     if (value === 'Loading Details...') {
       this.bLoading = true;
@@ -73,7 +72,8 @@ export default class DetailsPanel extends React.Component {
       this.bLoading = false;
     }
   }
-  @action.bound close(e) {
+  @action.bound
+  close(e) {
     if (e) {
       e.preventDefault();
     }
@@ -94,16 +94,13 @@ export default class DetailsPanel extends React.Component {
         this.showView(true);
       } else {
         const detailsBuilder = new DetailsBuilder();
-        this.detailsPromise = detailsBuilder.createDetailsView(
-          detailsPanel,
-          editor
-        );
+        this.detailsPromise = detailsBuilder.createDetailsView(detailsPanel, editor);
         this.detailsPromise
-          .then((res) => {
+          .then(res => {
             this.detailsViewInfo = res;
             this.showView(true);
           })
-          .catch((reason) => {
+          .catch(reason => {
             this.updateMsg(reason);
           });
       }
@@ -114,26 +111,23 @@ export default class DetailsPanel extends React.Component {
   render() {
     return (
       <div className="details-view">
-        {this.bDetView &&
-          <View
-            title={this.detailsViewInfo.title}
-            viewInfo={this.detailsViewInfo}
-          />}
-        {!this.bDetView &&
+        {this.bDetView && (
+          <View title={this.detailsViewInfo.title} viewInfo={this.detailsViewInfo} />
+        )}
+        {!this.bDetView && (
           <div>
             <div className="details-msg-div">
               <div className="messageWrapper">
-                {this.bLoading &&
+                {this.bLoading && (
                   <div className="iconWrapper">
                     <div className="loader" />
-                  </div>}
-                {!this.bLoading &&
-                  <span className="failureText">
-                    {this.msg}
-                  </span>}
+                  </div>
+                )}
+                {!this.bLoading && <span className="failureText">{this.msg}</span>}
               </div>
             </div>
-          </div>}
+          </div>
+        )}
       </div>
     );
   }

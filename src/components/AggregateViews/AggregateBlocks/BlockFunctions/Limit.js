@@ -20,5 +20,5 @@
 import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
 export const Limit = {
-  dbkodaListAttributes: common.dbkodaListAttributes,
+  dbkodaListAttributes: common.dbkodaListAttributes
 };

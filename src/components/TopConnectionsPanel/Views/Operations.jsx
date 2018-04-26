@@ -28,17 +28,8 @@ import _ from 'lodash';
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
-import {
-  SelectionModes,
-  Table,
-  Utils,
-  TableLoadingOption
-} from '@blueprintjs/table';
-import {
-  AnchorButton,
-  Intent,
-  Dialog
-} from '@blueprintjs/core';
+import { SelectionModes, Table, Utils, TableLoadingOption } from '@blueprintjs/table';
+import { AnchorButton, Intent, Dialog } from '@blueprintjs/core';
 import autobind from 'autobind-decorator';
 
 import TextSortableColumn from '../Components/TextSortableColumn';
@@ -53,9 +44,7 @@ const columnsWidthsPercent = [15, 20, 20, 15, 20, 10];
 export default class OperationsView extends React.Component<Props> {
   constructor(props) {
     super(props);
-    const columnsWidths = columnsWidthsPercent.map(
-      width => width * this.props.tableWidth / 100
-    );
+    const columnsWidths = columnsWidthsPercent.map(width => width * this.props.tableWidth / 100);
     this.state = {
       lastSelectRegion: null,
       sortedIndexMap: [],
@@ -85,9 +74,7 @@ export default class OperationsView extends React.Component<Props> {
       this.setState({ data: operations });
     }
     if (nextProps && nextProps.tableWidth) {
-      const columnsWidths = columnsWidthsPercent.map(
-        width => width * nextProps.tableWidth / 100
-      );
+      const columnsWidths = columnsWidthsPercent.map(width => width * nextProps.tableWidth / 100);
       this.setState({ columnsWidths });
     }
   }
@@ -101,11 +88,7 @@ export default class OperationsView extends React.Component<Props> {
     });
   }
 
-  getCellData = (
-    rowIndex: number,
-    columnIndex: number,
-    bUseIndex: boolen = true
-  ) => {
+  getCellData = (rowIndex: number, columnIndex: number, bUseIndex: boolen = true) => {
     if (bUseIndex) {
       const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
       if (sortedRowIndex != null) {
@@ -136,7 +119,10 @@ export default class OperationsView extends React.Component<Props> {
       case 5:
         cellValue = {
           opId: this.state.data[rowIndex].opId,
-          bDelete: (this.state.lastSelectRegion && this.state.lastSelectRegion[0].rows && this.state.lastSelectRegion[0].rows[0] === rowIndex)
+          bDelete:
+            this.state.lastSelectRegion &&
+            this.state.lastSelectRegion[0].rows &&
+            this.state.lastSelectRegion[0].rows[0] === rowIndex
         };
         break;
       default:
@@ -149,10 +135,7 @@ export default class OperationsView extends React.Component<Props> {
     return cellValue;
   };
 
-  sortColumn = (
-    columnIndex: number,
-    comparator: (a: any, b: any) => number
-  ) => {
+  sortColumn = (columnIndex: number, comparator: (a: any, b: any) => number) => {
     const { data } = this.state;
     const sortedIndexMap = Utils.times(data.length, (i: number) => i);
     sortedIndexMap.sort((a: number, b: number) => {
@@ -188,7 +171,7 @@ export default class OperationsView extends React.Component<Props> {
 
   @autobind
   hideRemoveOperationAlert() {
-    this.setState({removeOperationAlert: false});
+    this.setState({ removeOperationAlert: false });
   }
 
   @autobind
@@ -201,9 +184,7 @@ export default class OperationsView extends React.Component<Props> {
   }
 
   render() {
-    const columns = this.state.columns.map(col =>
-      col.getColumn(this.getCellData, this.sortColumn)
-    );
+    const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
     const loadingOptions = [];
     let numRows = 10;
     if (this.state.data && this.state.data.length) {

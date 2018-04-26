@@ -393,15 +393,13 @@ export default class OutputApi {
         });
       },
       error => {
-        runInAction(
-          () => {
-            NewToaster.show({
-              message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
-              className: 'danger',
-              icon: ''
-            });
-          }
-        );
+        runInAction(() => {
+          NewToaster.show({
+            message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+            className: 'danger',
+            icon: ''
+          });
+        });
       }
     );
   }
@@ -429,8 +427,8 @@ export default class OutputApi {
       lines.start = this.store.outputs.get(outputId).currentExecStartLine;
       // $FlowFixMe
       lines.end = cm.lineCount();
-      StaticApi.parseDefaultTableJson(jsonStr, lines, cm, outputId)
-        .then(result => {
+      StaticApi.parseDefaultTableJson(jsonStr, lines, cm, outputId).then(
+        result => {
           console.log(result);
           runInAction(() => {
             this.store.outputs.get(outputId)[displayType] = {
@@ -439,7 +437,8 @@ export default class OutputApi {
               lastLine: lines.end
             };
           });
-        }, () => {
+        },
+        () => {
           runInAction(() => {
             // Revert to raw view if table view JSON can't be parsed
             NewToaster.show({
@@ -449,7 +448,8 @@ export default class OutputApi {
             });
             this.openView(OutputToolbarContexts.RAW);
           });
-        });
+        }
+      );
     } else if (singleLine) {
       // Single line implemention
       StaticApi.parseShellJson(jsonStr).then(
@@ -463,15 +463,13 @@ export default class OutputApi {
           });
         },
         error => {
-          runInAction(
-            () => {
-              NewToaster.show({
-                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
-                className: 'danger',
-                icon: ''
-              });
-            }
-          );
+          runInAction(() => {
+            NewToaster.show({
+              message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+              className: 'danger',
+              icon: ''
+            });
+          });
         }
       );
     } else {
@@ -486,20 +484,18 @@ export default class OutputApi {
           });
         },
         error => {
-          runInAction(
-            () => {
-              NewToaster.show({
-                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
-                className: 'danger',
-                icon: ''
-              });
-              this.store.outputs.get(outputId)[displayType] = {
-                json: false,
-                firstLine: false,
-                lastLine: false
-              };
-            }
-          );
+          runInAction(() => {
+            NewToaster.show({
+              message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+              className: 'danger',
+              icon: ''
+            });
+            this.store.outputs.get(outputId)[displayType] = {
+              json: false,
+              firstLine: false,
+              lastLine: false
+            };
+          });
         }
       );
     }

@@ -1,44 +1,50 @@
 {
-    "Title": "Rename Collection",
-    "DefaultValues": {
-        "function": "dbkoda_ValidateCollectionPreFill",
-        "arguments": [{
-            "name": "Database",
-            "value": "treeNode.parentDB"
-        }, {
-            "name": "CollectionName",
-            "value": "treeNode"
-        }]
-    },
-    "Fields": [{
-            "name": "Database",
-            "type": "Text",
-            "readOnly": true
-        },
-        {
-            "name": "CollectionName",
-            "label" : "Collection Name",
-            "type": "Text",
-            "readOnly": true,
-            "lookup": "dbkoda_listcollections",
-            "lookup_arguments": [{
-                "name": "db",
-                "value": "treeNode.parentDB"
-            }]
-        },
-        {
-            "name": "full",
-            "label": "Full?",
-            "type": "Boolean",
-            "tooltip": "Perform a more thorough scan of data", 
-            "default":false
-        }  ,
-        {
-            "name": "scandata",
-            "label": "Scan Data?",
-            "type": "Boolean",
-            "tooltip": "If false, skips scan of collection without skpping indexes", 
-            "default":false
-        }
+  "Title": "Rename Collection",
+  "DefaultValues": {
+    "function": "dbkoda_ValidateCollectionPreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode.parentDB"
+      },
+      {
+        "name": "CollectionName",
+        "value": "treeNode"
+      }
     ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true
+    },
+    {
+      "name": "CollectionName",
+      "label": "Collection Name",
+      "type": "Text",
+      "readOnly": true,
+      "lookup": "dbkoda_listcollections",
+      "lookup_arguments": [
+        {
+          "name": "db",
+          "value": "treeNode.parentDB"
+        }
+      ]
+    },
+    {
+      "name": "full",
+      "label": "Full?",
+      "type": "Boolean",
+      "tooltip": "Perform a more thorough scan of data",
+      "default": false
+    },
+    {
+      "name": "scandata",
+      "label": "Scan Data?",
+      "type": "Boolean",
+      "tooltip": "If false, skips scan of collection without skpping indexes",
+      "default": false
+    }
+  ]
 }

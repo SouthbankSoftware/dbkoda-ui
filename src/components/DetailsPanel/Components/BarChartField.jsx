@@ -36,7 +36,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
+  ResponsiveContainer
 } from 'recharts';
 
 export default observer(({ field, data }) => {
@@ -52,7 +52,7 @@ export default observer(({ field, data }) => {
     '#1E282D',
     '#465061',
     '#1E423C',
-    '#701535',
+    '#701535'
   ];
 
   let chartBars = [];
@@ -128,11 +128,7 @@ export default observer(({ field, data }) => {
         {field.label}
       </label>
       <ResponsiveContainer width="100%" height={field.height}>
-        <BarChart
-          layout="vertical"
-          data={data}
-          margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
-        >
+        <BarChart layout="vertical" data={data} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
           <XAxis type="number" />
           <YAxis
             dataKey={field.YAxis.key}

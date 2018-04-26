@@ -38,7 +38,7 @@ import './style.scss';
 
 @inject(allStores => ({
   store: allStores.store,
-  api: allStores.api,
+  api: allStores.api
 }))
 export default class Panel extends React.Component {
   constructor(props, context) {
@@ -48,28 +48,25 @@ export default class Panel extends React.Component {
       expandAll: false,
       collapseAll: false,
       isLoading: false,
-      arrayState: { 0: true },
+      arrayState: { 0: true }
     };
 
     // Enables developer console logging.
     this.debug = false;
     Broker.emit(EventType.FEATURE_USE, 'TableView');
 
-    if (
-      this.props.store.outputPanel.expandTable ||
-      this.props.store.outputPanel.collapseTable
-    ) {
+    if (this.props.store.outputPanel.expandTable || this.props.store.outputPanel.collapseTable) {
       this.props.store.outputPanel.expandTable = false;
       this.props.store.outputPanel.collapseTable = false;
     }
     this.reactionToExpandAll = reaction(
       () => this.props.store.outputPanel.expandTable,
-      () => this.expandAll(),
+      () => this.expandAll()
     );
 
     this.reactionToCollapseAll = reaction(
       () => this.props.store.outputPanel.collapseTable,
-      () => this.collapseAll(),
+      () => this.collapseAll()
     );
   }
 
@@ -128,24 +125,16 @@ export default class Panel extends React.Component {
   @action.bound
   openEnhancedJsonView(json) {
     json = JSON.stringify(json);
-    this.props.api.initJsonView(
-      json,
-      this.props.store.editorPanel.activeEditorId,
-      'enhancedJson',
-      {
-        start: 0,
-        end: 0,
-        status: '',
-        type: 'SINGLE',
-      },
-    );
+    this.props.api.initJsonView(json, this.props.store.editorPanel.activeEditorId, 'enhancedJson', {
+      start: 0,
+      end: 0,
+      status: '',
+      type: 'SINGLE'
+    });
   }
 
   render() {
-    if (
-      this.props.tableJson.json[0] &&
-      this.props.tableJson.json[0].loading === 'isLoading'
-    ) {
+    if (this.props.tableJson.json[0] && this.props.tableJson.json[0].loading === 'isLoading') {
       // Probably loading. ;)
       this.state.isLoading = true;
     } else {
@@ -170,9 +159,7 @@ export default class Panel extends React.Component {
     if (this.props.tableJson.json === false) {
       return (
         <div className="table-json-panel">
-          <h2 className="errorMessage">
-            {globalString('output/editor/tabularError')}
-          </h2>
+          <h2 className="errorMessage">{globalString('output/editor/tabularError')}</h2>
         </div>
       );
     }

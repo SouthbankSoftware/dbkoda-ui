@@ -164,10 +164,7 @@ class View extends React.Component {
           cm.foldCode(cm.getCursor());
         }
       },
-      mode:
-        this.editorObject.type == EditorTypes.DRILL
-          ? 'text/x-mariadb'
-          : 'MongoScript'
+      mode: this.editorObject.type == EditorTypes.DRILL ? 'text/x-mariadb' : 'MongoScript'
     };
 
     this.reactions = [];
@@ -191,9 +188,7 @@ class View extends React.Component {
             Broker.emit(EventType.FEATURE_USE, 'ExecuteAll');
             // Listen for completion
             this.props.store.editors.get(editor.id).executing = true;
-            this.props.store.editors.get(
-              editor.id
-            ).lastExecutionStart = Date.now();
+            this.props.store.editors.get(editor.id).lastExecutionStart = Date.now();
             this.props.store.editors.get(editor.id).lastExecutionFailed = false;
             this.props.store.editorToolbar.isActiveExecuting = true;
             // Send request to feathers client
@@ -240,12 +235,8 @@ class View extends React.Component {
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
                     this.props.store.editors.get(editor.id).lastExecutionTime =
-                      Date.now() -
-                      this.props.store.editors.get(editor.id)
-                        .lastExecutionStart;
-                    this.props.store.editors.get(
-                      editor.id
-                    ).lastExecutionFailed = false;
+                      Date.now() - this.props.store.editors.get(editor.id).lastExecutionStart;
+                    this.props.store.editors.get(editor.id).lastExecutionFailed = false;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                   });
                 })
@@ -269,30 +260,22 @@ class View extends React.Component {
                     }
 
                     const strOutput = JSON.stringify(err, null, 2);
-                    const editorObject = this.props.store.editors.get(
-                      editor.id
-                    );
+                    const editorObject = this.props.store.editors.get(editor.id);
                     const totalOutput =
                       this.props.store.outputs.get(editor.id).output +
                       editorObject.doc.lineSep +
                       'ERROR:' +
                       editorObject.doc.lineSep +
                       strOutput;
-                    this.props.store.outputs.get(
-                      editor.id
-                    ).output = totalOutput;
+                    this.props.store.outputs.get(editor.id).output = totalOutput;
                     this.props.store.outputPanel.currentTab = editor.id;
                   });
 
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
                     this.props.store.editors.get(editor.id).lastExecutionTime =
-                      Date.now() -
-                      this.props.store.editors.get(editor.id)
-                        .lastExecutionStart;
-                    this.props.store.editors.get(
-                      editor.id
-                    ).lastExecutionFailed = true;
+                      Date.now() - this.props.store.editors.get(editor.id).lastExecutionStart;
+                    this.props.store.editors.get(editor.id).lastExecutionFailed = true;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                     NewToaster.show({
                       message: globalString('drill/execution_failed'),
@@ -323,28 +306,20 @@ class View extends React.Component {
                     };
 
                     const strOutput = JSON.stringify(err, null, 2);
-                    const editorObject = this.props.store.editors.get(
-                      editor.id
-                    );
+                    const editorObject = this.props.store.editors.get(editor.id);
                     const totalOutput =
                       this.props.store.outputs.get(editor.id).output +
                       editorObject.doc.lineSep +
                       'ERROR:' +
                       editorObject.doc.lineSep +
                       strOutput;
-                    this.props.store.outputs.get(
-                      editor.id
-                    ).output = totalOutput;
+                    this.props.store.outputs.get(editor.id).output = totalOutput;
                     this.props.store.outputPanel.currentTab = editor.id;
                   });
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).lastExecutionTime =
-                      now() -
-                      this.props.store.editors.get(editor.id)
-                        .lastExecutionStart;
-                    this.props.store.editors.get(
-                      editor.id
-                    ).lastExecutionFailed = true;
+                      now() - this.props.store.editors.get(editor.id).lastExecutionStart;
+                    this.props.store.editors.get(editor.id).lastExecutionFailed = true;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                     let message = globalString('drill/execution_failed');
                     if (err && err.statusCode === 602) {
@@ -395,9 +370,7 @@ class View extends React.Component {
               content = cm.getLine(cm.getCursor().line);
             }
             this.props.store.editors.get(editor.id).executing = true;
-            this.props.store.editors.get(
-              editor.id
-            ).lastExecutionStart = Date.now();
+            this.props.store.editors.get(editor.id).lastExecutionStart = Date.now();
             this.props.store.editors.get(editor.id).lastExecutionFailed = false;
             this.props.store.editorToolbar.isActiveExecuting = true;
 
@@ -438,12 +411,8 @@ class View extends React.Component {
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
                     this.props.store.editors.get(editor.id).lastExecutionTime =
-                      Date.now() -
-                      this.props.store.editors.get(editor.id)
-                        .lastExecutionStart;
-                    this.props.store.editors.get(
-                      editor.id
-                    ).lastExecutionFailed = false;
+                      Date.now() - this.props.store.editors.get(editor.id).lastExecutionStart;
+                    this.props.store.editors.get(editor.id).lastExecutionFailed = false;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                   });
                 })
@@ -495,30 +464,22 @@ class View extends React.Component {
                     }
 
                     const strOutput = JSON.stringify(err, null, 2);
-                    const editorObject = this.props.store.editors.get(
-                      editor.id
-                    );
+                    const editorObject = this.props.store.editors.get(editor.id);
                     const totalOutput =
                       this.props.store.outputs.get(editor.id).output +
                       editorObject.doc.lineSep +
                       'ERROR:' +
                       editorObject.doc.lineSep +
                       strOutput;
-                    this.props.store.outputs.get(
-                      editor.id
-                    ).output = totalOutput;
+                    this.props.store.outputs.get(editor.id).output = totalOutput;
                     this.props.store.outputPanel.currentTab = editor.id;
                   });
 
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
                     this.props.store.editors.get(editor.id).lastExecutionTime =
-                      Date.now() -
-                      this.props.store.editors.get(editor.id)
-                        .lastExecutionStart;
-                    this.props.store.editors.get(
-                      editor.id
-                    ).lastExecutionFailed = true;
+                      Date.now() - this.props.store.editors.get(editor.id).lastExecutionStart;
+                    this.props.store.editors.get(editor.id).lastExecutionFailed = true;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                     let message = globalString('drill/execution_failed');
                     if (err && err.statusCode === 602) {
@@ -552,9 +513,7 @@ class View extends React.Component {
                 }
                 if (hasError) {
                   NewToaster.show({
-                    message: globalString(
-                      'editor/toolbar/possibleMultiLineCommand'
-                    ),
+                    message: globalString('editor/toolbar/possibleMultiLineCommand'),
                     className: 'warning',
                     icon: 'pEmilt-icon-thumbs-down'
                   });
@@ -576,9 +535,7 @@ class View extends React.Component {
                   runInAction(() => {
                     this.finishedExecution({ id: profileId, shellId: shell });
                     NewToaster.show({
-                      message: globalString(
-                        'editor/toolbar/executionScriptFailed'
-                      ),
+                      message: globalString('editor/toolbar/executionScriptFailed'),
                       className: 'danger',
                       icon: 'thumbs-down'
                     });
@@ -596,15 +553,10 @@ class View extends React.Component {
       reaction(
         () => this.props.store.dragItem.dragDrop,
         dragDrop => {
-          if (
-            this.props.store.editorPanel.activeEditorId === this.props.id &&
-            dragDrop
-          ) {
+          if (this.props.store.editorPanel.activeEditorId === this.props.id && dragDrop) {
             if (this.props.store.dragItem.item) {
               const { item } = this.props.store.dragItem;
-              if (
-                this.props.store.editors.get(this.props.id).type === 'drill'
-              ) {
+              if (this.props.store.editors.get(this.props.id).type === 'drill') {
                 console.log('SQL DnD');
                 this.insertAtCursor(TreeDropActions.getSQLForTreeNode(item));
               } else {
@@ -623,10 +575,7 @@ class View extends React.Component {
       reaction(
         () => this.props.store.outputPanel.sendingCommand,
         sendingCommand => {
-          if (
-            sendingCommand &&
-            this.props.store.editorPanel.activeEditorId === this.props.id
-          ) {
+          if (sendingCommand && this.props.store.editorPanel.activeEditorId === this.props.id) {
             this.insertAtCursor(sendingCommand);
             this.props.store.outputPanel.sendingCommand = '';
           }
@@ -676,16 +625,9 @@ class View extends React.Component {
                 this.finishedExecution({ id, shellId: shell });
               })
               .catch(reason => {
-                console.error(
-                  `Stopping Execution failed for ${id} / ${shell}! ${
-                    reason.message
-                  }`
-                );
+                console.error(`Stopping Execution failed for ${id} / ${shell}! ${reason.message}`);
                 NewToaster.show({
-                  message: globalString(
-                    'editor/view/executionStoppedError',
-                    reason.message
-                  ),
+                  message: globalString('editor/view/executionStoppedError', reason.message),
                   className: 'danger',
                   icon: 'thumbs-down'
                 });
@@ -701,10 +643,7 @@ class View extends React.Component {
       reaction(
         () => this.props.store.treeActionPanel.isNewFormValues,
         isNewFormValues => {
-          if (
-            isNewFormValues &&
-            this.props.store.editorPanel.activeEditorId === this.props.id
-          ) {
+          if (isNewFormValues && this.props.store.editorPanel.activeEditorId === this.props.id) {
             try {
               const cm = this.editor.getCodeMirror();
               cm.setValue(this.props.store.treeActionPanel.formValues);
@@ -751,8 +690,7 @@ class View extends React.Component {
       cm.on('change', _.debounce(CodeMirror.commands.autocomplete, 200));
     }
 
-    const _updateUnsavedFileIndicator = _.debounce(
-      () => {
+    const _updateUnsavedFileIndicator = _.debounce(() => {
       const elem = document.querySelector(`#unsavedFileIndicator_${this.id}`);
       if (elem) {
         elem.style.opacity = this.doc.isClean() ? 0 : 1;
@@ -778,14 +716,8 @@ class View extends React.Component {
       });
     }
 
-    Broker.on(
-      EventType.EXECUTION_EXPLAIN_EVENT,
-      this.executingExplain.bind(this)
-    );
-    Broker.on(
-      EventType.SWAP_SHELL_CONNECTION,
-      this.swapShellConnection.bind(this)
-    );
+    Broker.on(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain.bind(this));
+    Broker.on(EventType.SWAP_SHELL_CONNECTION, this.swapShellConnection.bind(this));
     if (this.props.editor) {
       const { profileId, shellId } = this.props.editor;
       Broker.on(
@@ -802,10 +734,7 @@ class View extends React.Component {
     this.editor.getCodeMirror().off('change', this._updateUnsavedFileIndicator);
     this._updateUnsavedFileIndicator = null;
 
-    Broker.removeListener(
-      EventType.EXECUTION_EXPLAIN_EVENT,
-      this.executingExplain
-    );
+    Broker.removeListener(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain);
     if (this.props.editor) {
       const { profileId, shellId } = this.props.editor;
       Broker.removeListener(
@@ -820,10 +749,7 @@ class View extends React.Component {
       const currentLine = cm.getLine(cm.getCursor().line);
       let start = cm.getCursor().ch;
       let end = start;
-      while (
-        end < currentLine.length &&
-        /[\w|.$]+/.test(currentLine.charAt(end))
-      ) {
+      while (end < currentLine.length && /[\w|.$]+/.test(currentLine.charAt(end))) {
         end -= 1;
       }
       while (start && /[\w|.$]+/.test(currentLine.charAt(start - 1))) {
@@ -850,10 +776,7 @@ class View extends React.Component {
             return;
           }
           const cursor = cm.getDoc().getCursor();
-          const from = new CodeMirror.Pos(
-            cursor.line,
-            cursor.ch - curWord.length
-          );
+          const from = new CodeMirror.Pos(cursor.line, cursor.ch - curWord.length);
           const options = {
             hint() {
               return {
@@ -875,23 +798,15 @@ class View extends React.Component {
   @action.bound
   setExecStartLine() {
     const { activeEditorId } = this.props.store.editorPanel;
-    const outputCm = this.props.store.outputPanel.editorRefs[
-      activeEditorId
-    ].getCodeMirror();
-    this.props.store.outputs.get(
-      activeEditorId
-    ).currentExecStartLine = outputCm.lineCount();
+    const outputCm = this.props.store.outputPanel.editorRefs[activeEditorId].getCodeMirror();
+    this.props.store.outputs.get(activeEditorId).currentExecStartLine = outputCm.lineCount();
     console.log(
-      `Output Exec Start Line: ${
-        this.props.store.outputs.get(activeEditorId).currentExecStartLine
-      }`
+      `Output Exec Start Line: ${this.props.store.outputs.get(activeEditorId).currentExecStartLine}`
     );
   }
 
   getActiveProfileId() {
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     if (editor) {
       const shell = editor.shellId;
       return { id: editor.profileId, shell };
@@ -923,10 +838,7 @@ class View extends React.Component {
         ),
         this.finishedExecution
       );
-      Broker.on(
-        EventType.createShellExecutionFinishEvent(id, shellId),
-        this.finishedExecution
-      );
+      Broker.on(EventType.createShellExecutionFinishEvent(id, shellId), this.finishedExecution);
       this.props.api.swapOutputShellConnection(event);
     }
   }
@@ -942,9 +854,7 @@ class View extends React.Component {
       explainParam
     ) {
       // Get current Editor and Profile.
-      const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      );
+      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       const { id, shell } = this.getActiveProfileId();
 
       // Extract the query to explain.
@@ -978,10 +888,7 @@ class View extends React.Component {
           linesBelow += cm.getLine(currentLine + 1);
           currentLine += 1;
         }
-        if (
-          cm.getLine(currentLine + 1) &&
-          cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gim)
-        ) {
+        if (cm.getLine(currentLine + 1) && cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gim)) {
           linesBelow += cm.getLine(currentLine + 1);
         }
 
@@ -994,11 +901,7 @@ class View extends React.Component {
       const service = featherClient().service('/mongo-sync-execution');
       const filteredContent = content.replace(/\t/g, '  ');
       const saveExplainCommand =
-        'var explain_' +
-        editor.id.replace(/\-/g, '_') +
-        ' = ' +
-        filteredContent +
-        ';';
+        'var explain_' + editor.id.replace(/\-/g, '_') + ' = ' + filteredContent + ';';
       service.timeout = 300000;
       this.props.store.editorToolbar.isActiveExecuting = true;
       service.update(id, {
@@ -1085,10 +988,7 @@ class View extends React.Component {
       const commentMongoCommandLinesRegex = /^[^\S\x0a\x0d]*(?:show|help|use|it|exit)(?:[^\S\x0a\x0d]+\S+|)$/gm;
       const commentMongoCommandLinesReplacement = '//DBKODA//$&';
       this._prettify.preprocess = code => {
-        code = code.replace(
-          commentMongoCommandLinesRegex,
-          commentMongoCommandLinesReplacement
-        );
+        code = code.replace(commentMongoCommandLinesRegex, commentMongoCommandLinesReplacement);
 
         return code;
       };
@@ -1108,15 +1008,9 @@ class View extends React.Component {
       const fixFunctionChainingReplacement = '$1.$2$3';
 
       this._prettify.postprocess = code => {
-        code = code.replace(
-          uncommentMongoCommandLinesRegex,
-          uncommentMongoCommandLinesReplacement
-        );
+        code = code.replace(uncommentMongoCommandLinesRegex, uncommentMongoCommandLinesReplacement);
 
-        code = code.replace(
-          fixFunctionChainingRegex,
-          fixFunctionChainingReplacement
-        );
+        code = code.replace(fixFunctionChainingRegex, fixFunctionChainingReplacement);
 
         return code;
       };
@@ -1131,9 +1025,7 @@ class View extends React.Component {
    */
   prettifyAll() {
     try {
-      const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      );
+      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       if (editor.type === 'drill') {
         this.setEditorValue(this._prettifySQL(this.getEditorValue()));
       } else {
@@ -1154,9 +1046,7 @@ class View extends React.Component {
   prettifySelection() {
     const cm = this.editor.getCodeMirror();
     try {
-      const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      );
+      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       if (editor.type === 'drill') {
         cm.replaceSelection(this._prettifySQL(cm.getSelection()).trim());
       } else {
@@ -1179,9 +1069,7 @@ class View extends React.Component {
       // if there is no selection, translate all code on the editor
       shellCode = this.getEditorValue();
     }
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     if (editor) {
       editor.openTranslator = true;
       try {
@@ -1210,8 +1098,8 @@ class View extends React.Component {
       }
     });
     if (
-      this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
-        .shellId === event.shellId
+      this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).shellId ===
+      event.shellId
     ) {
       runInAction('Execution has copleted on current editor.', () => {
         this.props.store.editorToolbar.isActiveExecuting = false;
@@ -1282,8 +1170,7 @@ class View extends React.Component {
             intent={Intent.NONE}
           />
         </div>
-        {this.props.store.editors.get(this.props.id).type !=
-          EditorTypes.DRILL && (
+        {this.props.store.editors.get(this.props.id).type != EditorTypes.DRILL && (
           <div className="menuItemWrapper translator">
             <MenuItem
               onClick={this.translateToNativeCode}
@@ -1299,9 +1186,7 @@ class View extends React.Component {
 
   @action.bound
   closeTranslatorPanel() {
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     editor.openTranslator = false;
     this.setState({ openTranslator: false });
   }
@@ -1311,9 +1196,7 @@ class View extends React.Component {
    */
   render() {
     const { connectDropTarget, isOver } = this.props; // eslint-disable-line
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     if (editor && editor.openTranslator && this.editor) {
       let cm = null;
       if (this.editor) {
@@ -1321,12 +1204,7 @@ class View extends React.Component {
       }
       return connectDropTarget(
         <div className="editorView translator-open">
-          <SplitPane
-            split="vertical"
-            primary="second"
-            defaultSize={512}
-            minSize={200}
-          >
+          <SplitPane split="vertical" primary="second" defaultSize={512} minSize={200}>
             <CodeMirrorEditor
               ref={ref => (this.editor = ref)}
               codeMirrorInstance={CodeMirror}

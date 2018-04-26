@@ -23,7 +23,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-@import "./_defaultTheme.scss";
+@import './_defaultTheme.scss';
 
 span.cm-invalidchar {
   display: none;
@@ -32,10 +32,12 @@ span.cm-invalidchar {
 body {
   background-color: $panelLeftBackground;
   overflow: hidden !important;
-  font-family: -apple-system, 'BlinkMacSystemFont', 'Arial', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', 'Icons16', sans-serif;
+  font-family: -apple-system, 'BlinkMacSystemFont', 'Arial', 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', 'Icons16', sans-serif;
 }
 
-#root div {}
+#root div {
+}
 
 .aggregateTabInnerWrapper {
   .vertical {

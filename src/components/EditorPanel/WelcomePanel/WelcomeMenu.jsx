@@ -123,11 +123,7 @@ export default class Panel extends React.Component {
               className="welcomeMenuButton openConfigBtn"
               onClick={this.props.api.openHomeTab}
             >
-              <ConfigDatabaseIcon
-                className="dbKodaSVG"
-                width={30}
-                height={30}
-              />
+              <ConfigDatabaseIcon className="dbKodaSVG" width={30} height={30} />
               Preferences
             </AnchorButton>
           </div>

@@ -18,7 +18,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "../../styles/_defaultTheme.scss";
+@import '../../styles/_defaultTheme.scss';
 
 .ChartPanel {
   background: $tabBackgroundSelected;
@@ -42,7 +42,8 @@
     right: auto !important;
   }
 
-  .DataTree, .BarChart {
+  .DataTree,
+  .BarChart {
     width: 100%;
     height: 100%;
   }

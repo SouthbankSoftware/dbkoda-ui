@@ -73,12 +73,8 @@ export default class NewFeaturesDialog extends React.Component<Props, State> {
     const newFeatures = [];
     for (let count = 1; count <= numberOfFeatures; count += 1) {
       newFeatures.push({
-        title: globalString(
-          'general/newFeaturesDialog/newFeature' + count + 'Title'
-        ),
-        body: globalString(
-          'general/newFeaturesDialog/newFeature' + count + 'Body'
-        )
+        title: globalString('general/newFeaturesDialog/newFeature' + count + 'Title'),
+        body: globalString('general/newFeaturesDialog/newFeature' + count + 'Body')
       });
     }
 
@@ -93,9 +89,7 @@ export default class NewFeaturesDialog extends React.Component<Props, State> {
               {globalString('general/newFeaturesDialog/title')}
               <p className="versionNumber">{this.props.store.version}</p>
             </p>
-            <p className="subtitle">
-              {globalString('general/newFeaturesDialog/subTitle')}
-            </p>
+            <p className="subtitle">{globalString('general/newFeaturesDialog/subTitle')}</p>
           </div>
           <div className="body">
             {newFeatures.map(obj => {

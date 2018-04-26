@@ -1,36 +1,48 @@
 {
-    "Title": "Replica Set Statistics",
-    "DefaultValues": {
-        "function": "dbkoda_ReplicaStats"
+  "Title": "Replica Set Statistics",
+  "DefaultValues": {
+    "function": "dbkoda_ReplicaStats"
+  },
+  "Fields": [
+    {
+      "name": "lags",
+      "label": "Replica Set Lag time",
+      "type": "BarChart",
+      "XAxis": [
+        {
+          "key": "lag",
+          "label": "Lag time (s)",
+          "color": "#82ca9d"
+        }
+      ],
+      "YAxis": {
+        "key": "host",
+        "width": 300
+      },
+      "width": "100%"
     },
-    "Fields": [{
-            "name": "lags",
-            "label": "Replica Set Lag time",
-            "type": "BarChart",
-            "XAxis": [{
-                "key": "lag",
-                "label": "Lag time (s)",
-                "color": "#82ca9d"
-            }],
-            "YAxis": {
-                "key": "host",
-                "width":300
-            },
-            "width": "100%"
+    {
+      "name": "members",
+      "label": "Replica Set Members",
+      "type": "Table",
+      "columns": [
+        {
+          "name": "name",
+          "label": "Host"
         },
         {
-            "name": "members",
-            "label": "Replica Set Members",
-            "type": "Table",
-            "columns": [{
-                "name": "name","label":"Host"
-            }, {
-                "name": "state","label":"State"
-            }, {
-                "name": "uptimeHrs","label":"Uptime (Hrs)"
-            }, {
-                "name": "opttime","label":"Op Log Timestamp"
-            }]
+          "name": "state",
+          "label": "State"
+        },
+        {
+          "name": "uptimeHrs",
+          "label": "Uptime (Hrs)"
+        },
+        {
+          "name": "opttime",
+          "label": "Op Log Timestamp"
         }
-    ]
+      ]
+    }
+  ]
 }

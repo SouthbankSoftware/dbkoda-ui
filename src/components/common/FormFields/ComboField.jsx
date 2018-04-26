@@ -83,9 +83,7 @@ export default class ComboField extends React.Component {
       this.multiValues = field.value.split('|');
     }
     const onChange = newValue => {
-      const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      );
+      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       if (this.options[0].value !== '') {
         // A new option has been added.
         if (editor.type === 'aggregate') {
@@ -93,21 +91,15 @@ export default class ComboField extends React.Component {
           // Do custom fields exist
           if (block.customFields) {
             if (block.customFields[field.path.replace(/.[0-9]./g, '[].')]) {
-              block.customFields[field.path.replace(/.[0-9]./g, '[].')].push(
-                newValue.value
-              );
+              block.customFields[field.path.replace(/.[0-9]./g, '[].')].push(newValue.value);
             } else {
               block.customFields[field.path.replace(/.[0-9]./g, '[].')] = [];
-              block.customFields[field.path.replace(/.[0-9]./g, '[].')].push(
-                newValue.value
-              );
+              block.customFields[field.path.replace(/.[0-9]./g, '[].')].push(newValue.value);
             }
           } else {
             block.customFields = {};
             block.customFields[field.path.replace(/.[0-9]./g, '[].')] = [];
-            block.customFields[field.path.replace(/.[0-9]./g, '[].')].push(
-              newValue.value
-            );
+            block.customFields[field.path.replace(/.[0-9]./g, '[].')].push(newValue.value);
           }
         }
       }
@@ -148,10 +140,7 @@ export default class ComboField extends React.Component {
             {field.label}
           </label>
         )}
-        <div
-          className="pt-form-content"
-          label={field.label ? field.label : field.name}
-        >
+        <div className="pt-form-content" label={field.label ? field.label : field.name}>
           {field.options &&
             field.options.tooltip && (
               <Tooltip

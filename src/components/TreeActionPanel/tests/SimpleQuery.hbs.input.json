@@ -2,26 +2,31 @@
   "Database": "test",
   "CollectionName": "randomCollectionName",
   "UseOr": true,
-  "FilterKeys": [{
+  "FilterKeys": [
+    {
       "AttributeName": "a",
-      "Operator":"$eq",
+      "Operator": "$eq",
       "Value": 1
     },
     {
       "AttributeName": "b",
-      "Operator":"$eq",
+      "Operator": "$eq",
       "Value": 3,
       "last": 1
     }
   ],
-  "Projections": [{
-    "AttributeName": "d",
-    "AttributeProjectionValue":1
-  }],
-  "SortKeys": [{
-    "AttributeName": "a",
-    "Direction": -1
-  }],
+  "Projections": [
+    {
+      "AttributeName": "d",
+      "AttributeProjectionValue": 1
+    }
+  ],
+  "SortKeys": [
+    {
+      "AttributeName": "a",
+      "Direction": -1
+    }
+  ],
   "Limit": 10,
   "Count": false
 }

@@ -27,7 +27,7 @@ import {
   TerminalHotkeys,
   OutputHotkeys,
   EditorHotkeys,
-  CodeMirrorHotkeys,
+  CodeMirrorHotkeys
 } from '#/common/hotkeys/hotkeyList.jsx';
 
 /**
@@ -41,7 +41,7 @@ export default class LearnShortcuts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentGroup: 'global',
+      currentGroup: 'global'
     };
 
     this.getToolbarHotkeys = this.getToolbarHotkeys.bind();
@@ -54,7 +54,7 @@ export default class LearnShortcuts extends React.Component {
 
   getToolbarHotkeys(item) {
     let jsxObj = {};
-    Object.values(item).map((subItem) => {
+    Object.values(item).map(subItem => {
       jsxObj += (
         <div className="hotkeyItem" key={subItem.description}>
           <h4 className="hotkeyTitle">{subItem.combo}</h4>
@@ -92,7 +92,7 @@ export default class LearnShortcuts extends React.Component {
       case 'global':
         return (
           <div className="globalHotkeys">
-            {globalShortcuts.map((item) => {
+            {globalShortcuts.map(item => {
               if ('saveFile' in item) {
                 return;
               }
@@ -103,7 +103,7 @@ export default class LearnShortcuts extends React.Component {
                 </div>
               );
             })}
-            {subkeys.map((item) => {
+            {subkeys.map(item => {
               return (
                 <div className="hotkeyItem" key={item.description}>
                   <h4 className="hotkeyTitle">{item.combo}</h4>
@@ -117,7 +117,7 @@ export default class LearnShortcuts extends React.Component {
       case 'terminal':
         return (
           <div className="terminalHotkeys">
-            {terminalShortcuts.map((item) => {
+            {terminalShortcuts.map(item => {
               return (
                 <div className="hotkeyItem" key={item.description}>
                   <h4 className="hotkeyTitle">{item.combo}</h4>
@@ -130,7 +130,7 @@ export default class LearnShortcuts extends React.Component {
       case 'output':
         return (
           <div className="outputHotkeys">
-            {outputShortcuts.map((item) => {
+            {outputShortcuts.map(item => {
               return (
                 <div className="hotkeyItem" key={item.description}>
                   <h4 className="hotkeyTitle">{item.combo}</h4>
@@ -143,7 +143,7 @@ export default class LearnShortcuts extends React.Component {
       case 'editor':
         return (
           <div className="editorHotkeys">
-            {editorShortcuts.map((item) => {
+            {editorShortcuts.map(item => {
               return (
                 <div className="hotkeyItem" key={item.description}>
                   <h4 className="hotkeyTitle">{item.combo}</h4>
@@ -156,7 +156,7 @@ export default class LearnShortcuts extends React.Component {
       case 'codemirror':
         return (
           <div className="codemirrorHotkeys">
-            {codemirrorShortcuts.map((item) => {
+            {codemirrorShortcuts.map(item => {
               return (
                 <div className="hotkeyItem" key={item.description}>
                   <h4 className="hotkeyTitle">{item.combo}</h4>

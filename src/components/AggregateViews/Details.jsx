@@ -59,9 +59,7 @@ export default class Details extends React.Component {
     );
 
     // Get variables for action:
-    this.editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     this.debug = false;
 
     /**
@@ -71,9 +69,7 @@ export default class Details extends React.Component {
      *
      */
     this.resolveArguments = args => {
-      const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      );
+      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       const params = {};
       let myCount = 1;
       if (args.length > 0) {
@@ -81,18 +77,13 @@ export default class Details extends React.Component {
           const arg = args[i];
           if (arg.reference) {
             // Field references another field in the form.
-            params[arg.name] =
-              editor.blockList[editor.selectedBlock].fields[arg.reference];
+            params[arg.name] = editor.blockList[editor.selectedBlock].fields[arg.reference];
             // Create a list of references so the editor knows when to re-fetch results.
             if (editor.blockList[editor.selectedBlock].references) {
-              editor.blockList[editor.selectedBlock].references[
-                arg.reference
-              ] = true;
+              editor.blockList[editor.selectedBlock].references[arg.reference] = true;
             } else {
               editor.blockList[editor.selectedBlock].references = {};
-              editor.blockList[editor.selectedBlock].references[
-                arg.reference
-              ] = true;
+              editor.blockList[editor.selectedBlock].references[arg.reference] = true;
             }
           } else {
             switch (arg.value) {
@@ -104,14 +95,10 @@ export default class Details extends React.Component {
                 break;
               case 'prevAttributes':
                 // Check if attributeList has been gathered, if so, return, if not, wait
-                while (
-                  !editor.blockList[editor.selectedBlock].attributeList &&
-                  myCount < 10000
-                ) {
+                while (!editor.blockList[editor.selectedBlock].attributeList && myCount < 10000) {
                   myCount += 1;
                 }
-                params[arg.name] =
-                  editor.blockList[editor.selectedBlock].attributeList;
+                params[arg.name] = editor.blockList[editor.selectedBlock].attributeList;
                 break;
               default:
                 console.error(
@@ -163,9 +150,7 @@ export default class Details extends React.Component {
       }
     }
     // Update Editor Contents.
-    this.props.store.treeActionPanel.formValues = this.generateCode(
-      editorObject
-    );
+    this.props.store.treeActionPanel.formValues = this.generateCode(editorObject);
     this.props.store.treeActionPanel.isNewFormValues = true;
   }
 
@@ -181,8 +166,7 @@ export default class Details extends React.Component {
       newLine = '\r\n';
     }
 
-    let codeString =
-      'use ' + editorObject.collection.refParent.text + ';' + newLine;
+    let codeString = 'use ' + editorObject.collection.refParent.text + ';' + newLine;
 
     // First add Start block.
     if (
@@ -191,14 +175,9 @@ export default class Details extends React.Component {
       editorObject.blockList[0].type.toUpperCase() === 'START'
     ) {
       const formTemplate = require('./AggregateBlocks/BlockTemplates/Start.hbs');
-      codeString +=
-        formTemplate(editorObject.blockList[0].fields) + ';' + newLine;
+      codeString += formTemplate(editorObject.blockList[0].fields) + ';' + newLine;
     }
-    codeString +=
-      'db.getCollection("' +
-      editorObject.collection.text +
-      '").aggregate([' +
-      newLine;
+    codeString += 'db.getCollection("' + editorObject.collection.text + '").aggregate([' + newLine;
     let pipelineString = '[';
 
     const selectedBlockIndex = editorObject.selectedBlock;
@@ -210,11 +189,7 @@ export default class Details extends React.Component {
             block.code.replace(/\r\n/g, newLine);
             block.code.replace(/\n/g, newLine);
             if (index > selectedBlockIndex) {
-              const blockString =
-                '/*' +
-                block.code.replace(/\r\n/g, newLine) +
-                ', */' +
-                newLine;
+              const blockString = '/*' + block.code.replace(/\r\n/g, newLine) + ', */' + newLine;
               codeString += blockString;
               pipelineString += blockString;
             } else {
@@ -225,9 +200,7 @@ export default class Details extends React.Component {
           }
         } else {
           // eslint-disable-next-line
-          const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
-            block.type +
-            '.hbs');
+          const formTemplate = require('./AggregateBlocks/BlockTemplates/' + block.type + '.hbs');
           if (index > selectedBlockIndex) {
             codeString += '/*' + formTemplate(block.fields) + ', */' + newLine;
             pipelineString += '/*' + formTemplate(block.fields) + ', */' + newLine;
@@ -248,14 +221,15 @@ export default class Details extends React.Component {
       editorObject.blockList[0] &&
       editorObject.blockList[0].type.toUpperCase() === 'START'
     ) {
-      codeString +=
-        'allowDiskUse: ' + editorObject.blockList[0].fields.DiskUsage;
+      codeString += 'allowDiskUse: ' + editorObject.blockList[0].fields.DiskUsage;
     }
     codeString += '}';
     codeString += ');';
 
     if (this.props.store.aggregateBuilder.includeCreateView) {
-      codeString += `${newLine}${newLine}db.createView('${this.props.store.aggregateBuilder.viewName}','${editorObject.collection.text}', ${pipelineString});${newLine}`;
+      codeString += `${newLine}${newLine}db.createView('${
+        this.props.store.aggregateBuilder.viewName
+      }','${editorObject.collection.text}', ${pipelineString});${newLine}`;
     }
 
     return codeString;
@@ -282,9 +256,7 @@ export default class Details extends React.Component {
   @action.bound
   byoCode() {
     // Get current block.
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     editor.blockList[editor.selectedBlock].byoCode = true;
     // eslint-disable-next-line
     const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
@@ -299,17 +271,13 @@ export default class Details extends React.Component {
   @action.bound
   nonBYOCode() {
     // Get current block.
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     editor.blockList[editor.selectedBlock].byoCode = false;
     this.forceUpdate();
   }
 
   render() {
-    const activeEditor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    const activeEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     this.currentDB = this.editor.collection.refParent.text;
     this.currentCollection = this.editor.collection.text;
     const blockIndex = activeEditor.selectedBlock;
@@ -322,9 +290,7 @@ export default class Details extends React.Component {
       // Update Handlebars first:
       // Update Editor Contents.
       runInAction(() => {
-        this.props.store.treeActionPanel.formValues = this.generateCode(
-          activeEditor
-        );
+        this.props.store.treeActionPanel.formValues = this.generateCode(activeEditor);
         this.props.store.treeActionPanel.isNewFormValues = true;
       });
       return (
@@ -382,8 +348,7 @@ export default class Details extends React.Component {
     // Check if activeBlock has changed, if so, rebuild the form.
     if (
       activeBlock &&
-      (activeBlock !== this.state.previousActiveBlock ||
-        this.state.reproduceCode)
+      (activeBlock !== this.state.previousActiveBlock || this.state.reproduceCode)
     ) {
       this.state.reproduceCode = false;
       this.state.previousActiveBlock = activeBlock;
@@ -417,9 +382,7 @@ export default class Details extends React.Component {
     return (
       <div className="aggregateDetailsWrapper">
         <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
-          <h2 className="currentBlockChoice">
-            {globalString('aggregate_builder/details_title')}
-          </h2>
+          <h2 className="currentBlockChoice">{globalString('aggregate_builder/details_title')}</h2>
           <div className="pt-align-right">
             <Tooltip
               intent={Intent.PRIMARY}
@@ -459,9 +422,7 @@ export default class Details extends React.Component {
           </div>
         </nav>
         <div className="aggregateDetailsContent">
-          {activeBlock && (
-            <h2 className="aggregateBlockType">{activeBlock.type}</h2>
-          )}
+          {activeBlock && <h2 className="aggregateBlockType">{activeBlock.type}</h2>}
           {activeBlock && (
             <p className="aggregateBlockDescription">
               {BlockTypes[activeBlock.type.toUpperCase()].description}
@@ -469,9 +430,7 @@ export default class Details extends React.Component {
           )}
           {activeBlock && (
             <div className={'dynamic-form columns-' + maxColumns + '-max'}>
-              {this.state.form && (
-                <View mobxForm={this.state.form.mobxForm} isAggregate />
-              )}
+              {this.state.form && <View mobxForm={this.state.form.mobxForm} isAggregate />}
               {!this.bForm && (
                 <div>
                   <div className="tree-msg-div">

@@ -118,10 +118,7 @@ export default class ProfileManager extends React.Component<Props, State> {
   }
 
   renderUIFields(column: number) {
-    const fields = this.form.getSubformFields(
-      this.state.selectedSubform,
-      column
-    );
+    const fields = this.form.getSubformFields(this.state.selectedSubform, column);
     const uiFields = [];
     if (fields) {
       fields.forEach(field => {
@@ -135,7 +132,7 @@ export default class ProfileManager extends React.Component<Props, State> {
         } else if (field.type == 'file') {
           uiField = <FileField key={field.name} field={field} />;
         } else if (field.type == 'select') {
-            uiField = <SelectField key={field.name} field={field} />;
+          uiField = <SelectField key={field.name} field={field} />;
         }
 
         uiFields.push(uiField);
@@ -252,9 +249,7 @@ export default class ProfileManager extends React.Component<Props, State> {
               static: true
             }}
           >
-            <TipsField
-              tips={this.form.getSubformTips(this.state.selectedSubform)}
-            />
+            <TipsField tips={this.form.getSubformTips(this.state.selectedSubform)} />
           </div>
           <div
             key="rowBottom"

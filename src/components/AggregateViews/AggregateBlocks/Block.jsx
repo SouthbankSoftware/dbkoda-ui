@@ -46,7 +46,7 @@ const blockSource = {
       type: props.type,
       listPosition: props.listPosition,
       concrete: props.concrete,
-      position: props.listPosition,
+      position: props.listPosition
     };
   },
   @action
@@ -66,33 +66,33 @@ const blockSource = {
         props.addBlock(item.type, dropResult.listPosition);
       }
     }
-  },
+  }
 };
 const blockTarget = {
   drop(props) {
     return {
       type: props.type,
       listPosition: props.listPosition,
-      concrete: props.concrete,
+      concrete: props.concrete
     };
-  },
+  }
 };
 const collectSource = (connect, monitor) => {
   return {
     connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging(),
+    isDragging: monitor.isDragging()
   };
 };
 const collectTarget = (connect, monitor) => {
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
+    isOver: monitor.isOver()
   };
 };
 /** ============================= * */
 
 @inject(allStores => ({
-  store: allStores.store,
+  store: allStores.store
 }))
 @DragSource(DragItemTypes.VISUAL_BLOCK, blockSource, collectSource)
 @DropTarget(DragItemTypes.VISUAL_BLOCK, blockTarget, collectTarget)
@@ -101,7 +101,7 @@ export default class Block extends React.Component {
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired,
-    isOver: PropTypes.bool.isRequired,
+    isOver: PropTypes.bool.isRequired
   };
   constructor(props) {
     super(props);
@@ -111,7 +111,7 @@ export default class Block extends React.Component {
       type: props.type,
       status: props.status,
       concrete: props.concrete,
-      color: this.props.color,
+      color: this.props.color
     };
   }
 
@@ -134,26 +134,23 @@ export default class Block extends React.Component {
       blockColorClasses = 'dbKodaSVG ' + this.props.positionType + ' invalid';
       closeColorClasses = 'closeBlockIcon invalid';
     } else {
-      blockColorClasses =
-        'dbKodaSVG ' + this.props.positionType + ' ' + this.state.color;
+      blockColorClasses = 'dbKodaSVG ' + this.props.positionType + ' ' + this.state.color;
       closeColorClasses = 'closeBlockIcon ' + this.state.color;
     }
 
     return connectDropTarget(
       <div className={classes}>
         {this.state.concrete &&
-          this.props.positionType === 'START' &&
-          <div className="blockBuilderWrapper">
-            <BlockTopIcon
-              className={blockColorClasses}
-              onClick={() =>
-                this.props.onClickCallback(this.state.listPosition)}
-            />
-            <p className="aggregateBlockTitle">
-              {this.props.type}
-            </p>
-          </div>}
-      </div>,
+          this.props.positionType === 'START' && (
+            <div className="blockBuilderWrapper">
+              <BlockTopIcon
+                className={blockColorClasses}
+                onClick={() => this.props.onClickCallback(this.state.listPosition)}
+              />
+              <p className="aggregateBlockTitle">{this.props.type}</p>
+            </div>
+          )}
+      </div>
     );
   }
 
@@ -180,14 +177,13 @@ export default class Block extends React.Component {
       blockColorClasses = 'dbKodaSVG ' + this.props.positionType + ' invalid';
       closeColorClasses = 'closeBlockIcon invalid';
     } else {
-      blockColorClasses =
-        'dbKodaSVG ' + this.props.positionType + ' ' + this.state.color;
+      blockColorClasses = 'dbKodaSVG ' + this.props.positionType + ' ' + this.state.color;
       closeColorClasses = 'closeBlockIcon ' + this.state.color;
     }
     return connectDragSource(
       connectDropTarget(
         <div className={classes}>
-          {!this.state.concrete &&
+          {!this.state.concrete && (
             <div className="blockPalletteWrapper">
               <DragIcon
                 width={50}
@@ -195,63 +191,53 @@ export default class Block extends React.Component {
                 className="dbKodaSVG"
                 onClick={() => this.props.addBlock(this.state.type, 'END')}
               />
-              <p className="aggregateBlockTitle">
-                {this.props.type}
-              </p>
-            </div>}
+              <p className="aggregateBlockTitle">{this.props.type}</p>
+            </div>
+          )}
           {this.state.concrete &&
-            this.props.positionType === 'MIDDLE' &&
-            <div className="blockBuilderWrapper">
-              <BlockIcon
-                className={blockColorClasses}
-                onClick={() =>
-                  this.props.onClickCallback(this.state.listPosition)}
-              />
-              <p className="aggregateBlockTitle">
-                ${this.props.type.toLowerCase()}
-              </p>
-              <CloseIcon
-                className={closeColorClasses}
-                onClick={() =>
-                  this.props.onClickCloseCallback(this.state.listPosition)}
-              />
-            </div>}
+            this.props.positionType === 'MIDDLE' && (
+              <div className="blockBuilderWrapper">
+                <BlockIcon
+                  className={blockColorClasses}
+                  onClick={() => this.props.onClickCallback(this.state.listPosition)}
+                />
+                <p className="aggregateBlockTitle">${this.props.type.toLowerCase()}</p>
+                <CloseIcon
+                  className={closeColorClasses}
+                  onClick={() => this.props.onClickCloseCallback(this.state.listPosition)}
+                />
+              </div>
+            )}
           {this.state.concrete &&
-            this.props.positionType === 'END' &&
-            <div className="blockBuilderWrapper">
-              <BlockBottomIcon
-                className={blockColorClasses}
-                onClick={() =>
-                  this.props.onClickCallback(this.state.listPosition)}
-              />
-              <p className="aggregateBlockTitle">
-                ${this.props.type.toLowerCase()}
-              </p>
-              <CloseIcon
-                className={closeColorClasses}
-                onClick={() =>
-                  this.props.onClickCloseCallback(this.state.listPosition)}
-              />
-            </div>}
+            this.props.positionType === 'END' && (
+              <div className="blockBuilderWrapper">
+                <BlockBottomIcon
+                  className={blockColorClasses}
+                  onClick={() => this.props.onClickCallback(this.state.listPosition)}
+                />
+                <p className="aggregateBlockTitle">${this.props.type.toLowerCase()}</p>
+                <CloseIcon
+                  className={closeColorClasses}
+                  onClick={() => this.props.onClickCloseCallback(this.state.listPosition)}
+                />
+              </div>
+            )}
           {this.state.concrete &&
-            this.props.positionType === 'START' &&
-            <div className="blockBuilderWrapper">
-              <BlockTopIcon
-                className={blockColorClasses}
-                onClick={() =>
-                  this.props.onClickCallback(this.state.listPosition)}
-              />
-              <p className="aggregateBlockTitle">
-                ${this.props.type.toLowerCase()}
-              </p>
-              <CloseIcon
-                className={closeColorClasses}
-                onClick={() =>
-                  this.props.onClickCloseCallback(this.state.listPosition)}
-              />
-            </div>}
-        </div>,
-      ),
+            this.props.positionType === 'START' && (
+              <div className="blockBuilderWrapper">
+                <BlockTopIcon
+                  className={blockColorClasses}
+                  onClick={() => this.props.onClickCallback(this.state.listPosition)}
+                />
+                <p className="aggregateBlockTitle">${this.props.type.toLowerCase()}</p>
+                <CloseIcon
+                  className={closeColorClasses}
+                  onClick={() => this.props.onClickCloseCallback(this.state.listPosition)}
+                />
+              </div>
+            )}
+        </div>
+      )
     );
   }
 }

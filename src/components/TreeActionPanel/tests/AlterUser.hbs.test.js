@@ -28,8 +28,7 @@
 // Unit test for AlterUser template
 //
 // TODO: Fix dependency on local mongo (use mlaunch?)
-const templateToBeTested =
-  './src/components/TreeActionPanel/Templates/AlterUser.hbs';
+const templateToBeTested = './src/components/TreeActionPanel/Templates/AlterUser.hbs';
 const templateInput = require('./AlterUser.hbs.input.json');
 const hbs = require('handlebars');
 const fs = require('fs');
@@ -51,36 +50,32 @@ templateInput.UserName = randomUser;
 // Command to create the user
 const createUserCmd = sprintf(
   'db.getSiblingDB("admin").createUser(    {user: "%s" ,    pwd:  "password" ,   roles:[]}   ,{w: "majority"}  );\n',
-  randomUser,
+  randomUser
 );
 
 // Command to drop the user
 const dropUserCmd = sprintf(
   'db.getSiblingDB("admin").dropUser(   "%s",{w: "majority"}) ;\n',
-  randomUser,
+  randomUser
 );
 
 // Command that checks the user is OK
 const validateUsesrCmd = sprintf(
   '\nvar  userDoc=db.getSiblingDB("admin").system.users.find({_id:"%s"}).toArray()[0];\n  if (userDoc.roles.length==4) print (userDoc._id+" updated ok"); \n',
-  adminRandomUser,
+  adminRandomUser
 );
 
 // Run the test
-test('Alter User template', (done) => {
+test('Alter User template', done => {
   fs.readFile(templateToBeTested, (err, data) => {
     if (!err) {
       const templateSource = data.toString();
       const compiledTemplate = hbs.compile(templateSource);
       const AlterUsercommands = compiledTemplate(templateInput);
       const mongoCommands =
-        createUserCmd +
-        AlterUsercommands +
-        validateUsesrCmd +
-        dropUserCmd +
-        '\nexit\n';
+        createUserCmd + AlterUsercommands + validateUsesrCmd + dropUserCmd + '\nexit\n';
       const matchString = sprintf('%s updated ok', adminRandomUser);
-      common.mongoOutput(mongoCommands).then((output) => {
+      common.mongoOutput(mongoCommands).then(output => {
         expect(output).toEqual(expect.stringMatching(matchString));
         done();
       });

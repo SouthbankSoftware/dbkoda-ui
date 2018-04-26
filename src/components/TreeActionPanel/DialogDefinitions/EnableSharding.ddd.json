@@ -1,16 +1,19 @@
 {
-    "Title": "Enable Sharding on Database",
-    "DefaultValues": {
-        "function": "dbkoda_EnableShardingPreFill",
-        "arguments": [{
-            "name": "Database",
-            "value": "treeNode"
-        }]
-    },
-    "Fields": [{
-            "name": "Database",
-            "type": "Text",
-            "readOnly": true
-        }
+  "Title": "Enable Sharding on Database",
+  "DefaultValues": {
+    "function": "dbkoda_EnableShardingPreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode"
+      }
     ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true
+    }
+  ]
 }

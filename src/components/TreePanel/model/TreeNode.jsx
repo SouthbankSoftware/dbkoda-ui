@@ -98,11 +98,7 @@ export default class TreeNode {
     switch (this.type) {
       case 'shards':
         this.secondaryLabel = (
-          <RootShardsIcon
-            className="dbKodaSVG shardsIcon"
-            width={30}
-            height={30}
-          />
+          <RootShardsIcon className="dbKodaSVG shardsIcon" width={30} height={30} />
         );
         break;
       case 'group_shards':
@@ -111,17 +107,11 @@ export default class TreeNode {
         );
         break;
       case 'shard':
-        this.secondaryLabel = (
-          <ShardIcon className="dbKodaSVG shardIcon" width={30} height={30} />
-        );
+        this.secondaryLabel = <ShardIcon className="dbKodaSVG shardIcon" width={30} height={30} />;
         break;
       case 'configservers':
         this.secondaryLabel = (
-          <ConfigServersIcon
-            className="dbKodaSVG configServersIcon"
-            width={30}
-            height={30}
-          />
+          <ConfigServersIcon className="dbKodaSVG configServersIcon" width={30} height={30} />
         );
         break;
       case 'config':
@@ -131,11 +121,7 @@ export default class TreeNode {
         break;
       case 'routers':
         this.secondaryLabel = (
-          <RoutersIcon
-            className="dbKodaSVG routersIcon"
-            width={30}
-            height={30}
-          />
+          <RoutersIcon className="dbKodaSVG routersIcon" width={30} height={30} />
         );
         break;
       case 'mongos':
@@ -145,117 +131,67 @@ export default class TreeNode {
         break;
       case 'databases':
         this.secondaryLabel = (
-          <DatabasesIcon
-            className="dbKodaSVG databasesIcon"
-            width={30}
-            height={30}
-          />
+          <DatabasesIcon className="dbKodaSVG databasesIcon" width={30} height={30} />
         );
         break;
       case 'database':
         this.secondaryLabel = (
-          <DatabaseIcon
-            className="dbKodaSVG databaseIcon"
-            width={30}
-            height={30}
-          />
+          <DatabaseIcon className="dbKodaSVG databaseIcon" width={30} height={30} />
         );
         break;
       case 'collection':
         this.secondaryLabel = (
-          <CollectionIcon
-            className="dbKodaSVG collectionIcon"
-            width={30}
-            height={30}
-          />
+          <CollectionIcon className="dbKodaSVG collectionIcon" width={30} height={30} />
         );
         break;
       case 'index':
-        this.secondaryLabel = (
-          <IndexIcon className="dbKodaSVG indexIcon" width={30} height={30} />
-        );
+        this.secondaryLabel = <IndexIcon className="dbKodaSVG indexIcon" width={30} height={30} />;
         break;
       case 'users':
-        this.secondaryLabel = (
-          <UsersIcon className="dbKodaSVG usersIcon" width={30} height={30} />
-        );
+        this.secondaryLabel = <UsersIcon className="dbKodaSVG usersIcon" width={30} height={30} />;
         break;
       case 'user':
-        this.secondaryLabel = (
-          <UserIcon className="dbKodaSVG userIcon" width={30} height={30} />
-        );
+        this.secondaryLabel = <UserIcon className="dbKodaSVG userIcon" width={30} height={30} />;
         break;
       case 'roles':
-        this.secondaryLabel = (
-          <RolesIcon className="dbKodaSVG rolesIcon" width={30} height={30} />
-        );
+        this.secondaryLabel = <RolesIcon className="dbKodaSVG rolesIcon" width={30} height={30} />;
         break;
       case 'role':
-        this.secondaryLabel = (
-          <RoleIcon className="dbKodaSVG roleIcon" width={30} height={30} />
-        );
+        this.secondaryLabel = <RoleIcon className="dbKodaSVG roleIcon" width={30} height={30} />;
         break;
       case 'property':
         this.secondaryLabel = (
-          <PropertyIcon
-            className="dbKodaSVG propertyIcon"
-            width={30}
-            height={30}
-          />
+          <PropertyIcon className="dbKodaSVG propertyIcon" width={30} height={30} />
         );
         break;
       case 'properties':
         this.secondaryLabel = (
-          <PropertiesIcon
-            className="dbKodaSVG propertiesIcon"
-            width={30}
-            height={30}
-          />
+          <PropertiesIcon className="dbKodaSVG propertiesIcon" width={30} height={30} />
         );
         break;
       case 'replicaset':
         this.secondaryLabel = (
-          <ReplicaSetIcon
-            className="dbKodaSVG replicaSetIcon"
-            width={30}
-            height={30}
-          />
+          <ReplicaSetIcon className="dbKodaSVG replicaSetIcon" width={30} height={30} />
         );
         break;
       case 'primary':
         this.secondaryLabel = (
-          <PrimaryIcon
-            className="dbKodaSVG primaryIcon"
-            width={30}
-            height={30}
-          />
+          <PrimaryIcon className="dbKodaSVG primaryIcon" width={30} height={30} />
         );
         break;
       case 'secondary':
         this.secondaryLabel = (
-          <SecondaryIcon
-            className="dbKodaSVG secondaryIcon"
-            width={30}
-            height={30}
-          />
+          <SecondaryIcon className="dbKodaSVG secondaryIcon" width={30} height={30} />
         );
         break;
       case 'arbiter':
         this.secondaryLabel = (
-          <ArbiterIcon
-            className="dbKodaSVG arbiterIcon"
-            width={30}
-            height={30}
-          />
+          <ArbiterIcon className="dbKodaSVG arbiterIcon" width={30} height={30} />
         );
         break;
       case 'replica_member':
         this.secondaryLabel = (
-          <ReplicaMemberIcon
-            className="dbKodaSVG replicaMemberIcon"
-            width={30}
-            height={30}
-          />
+          <ReplicaMemberIcon className="dbKodaSVG replicaMemberIcon" width={30} height={30} />
         );
         break;
       default:
@@ -325,11 +261,7 @@ export default class TreeNode {
             const icon = this.getIconFor(objAction.icon);
             if (icon != null) {
               Menus.push(
-                <div
-                  className="menuItemWrapper"
-                  key={objAction.name}
-                  data-id={objAction.name}
-                >
+                <div className="menuItemWrapper" key={objAction.name} data-id={objAction.name}>
                   <MenuItem
                     onClick={this.handleTreeActionClick}
                     text={objAction.text}
@@ -341,11 +273,7 @@ export default class TreeNode {
               );
             } else {
               Menus.push(
-                <div
-                  className="menuItemWrapper"
-                  key={objAction.name}
-                  data-id={objAction.name}
-                >
+                <div className="menuItemWrapper" key={objAction.name} data-id={objAction.name}>
                   <MenuItem
                     onClick={this.handleTreeActionClick}
                     text={objAction.text}
@@ -363,12 +291,7 @@ export default class TreeNode {
 
     this.label = (
       <div className="labelWrapper">
-        <DragLabel
-          label={this.text}
-          id={this.id}
-          type={this.type}
-          refParent={this.refParent}
-        />
+        <DragLabel label={this.text} id={this.id} type={this.type} refParent={this.refParent} />
         <span className="additionalActions">
           <Popover
             minimal
@@ -382,11 +305,7 @@ export default class TreeNode {
                   console.log('Open Context Menu');
                 }}
               >
-                <DropdownIcon
-                  className="pt-icon dbKodaSVG"
-                  width={16}
-                  height={16}
-                />
+                <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />
               </AnchorButton>
             }
           />
@@ -411,47 +330,23 @@ export default class TreeNode {
   getIconFor(icon) {
     switch (icon) {
       case 'settings':
-        return (
-          <SettingsIcon className="pt-icon dbKodaSVG" width={16} height={16} />
-        );
+        return <SettingsIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'document':
-        return (
-          <DocumentIcon className="pt-icon dbKodaSVG" width={16} height={16} />
-        );
+        return <DocumentIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'user':
-        return (
-          <UserIcon className="pt-icon dbKodaSVG" width={16} height={16} />
-        );
+        return <UserIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'remove-user':
-        return (
-          <RemoveUserIcon
-            className="pt-icon dbKodaSVG"
-            width={16}
-            height={16}
-          />
-        );
+        return <RemoveUserIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'add':
         return <AddIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'close':
-        return (
-          <CloseIcon className="pt-icon dbKodaSVG" width={16} height={16} />
-        );
+        return <CloseIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'shards':
-        return (
-          <ShardsIcon className="pt-icon dbKodaSVG" width={16} height={16} />
-        );
+        return <ShardsIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'collection':
-        return (
-          <CollectionIcon
-            className="pt-icon dbKodaSVG"
-            width={16}
-            height={16}
-          />
-        );
+        return <CollectionIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'dropdown':
-        return (
-          <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />
-        );
+        return <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       default:
         return null;
     }
@@ -467,10 +362,7 @@ export default class TreeNode {
     this.isFiltered = false;
     this.isExpanded = false;
     this.childNodes = undefined;
-    if (
-      this.text.toLowerCase().indexOf(filter) >= 0 ||
-      (parent && parent.isFiltered)
-    ) {
+    if (this.text.toLowerCase().indexOf(filter) >= 0 || (parent && parent.isFiltered)) {
       this.isFiltered = true;
     }
     if (filter != '' && !this.isFiltered) {

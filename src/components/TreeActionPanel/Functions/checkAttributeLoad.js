@@ -29,8 +29,8 @@ function dbkodaListAttributes_parse(res) {
   //eslint-disable-line
   // Print attributes to one level (eg xxx.yyy but not xxx.yyy.zzz)
   const attributes = {};
-  res.forEach((doc) => {
-    Object.keys(doc).forEach((key) => {
+  res.forEach(doc => {
+    Object.keys(doc).forEach(key => {
       let keytype = typeof doc[key];
       if (doc[key]) {
         if (doc[key].constructor === Array) {
@@ -41,15 +41,15 @@ function dbkodaListAttributes_parse(res) {
       if (keytype == 'object') {
         const obj = doc[key];
         if (obj) {
-          Object.keys(obj).forEach((nestedKey) => {
+          Object.keys(obj).forEach(nestedKey => {
             attributes[key + '.' + nestedKey] = typeof obj[nestedKey];
           });
         }
       } else if (keytype === 'array') {
         const docarray = doc[key];
-        docarray.forEach((nestedDoc) => {
+        docarray.forEach(nestedDoc => {
           const obj = nestedDoc;
-          Object.keys(obj).forEach((nestedKey) => {
+          Object.keys(obj).forEach(nestedKey => {
             attributes[key + '.' + nestedKey] = typeof obj[nestedKey];
           });
         });
@@ -63,7 +63,7 @@ function dbkodaListAttributes_parse(res) {
 db
   .getSiblingDB('SampleCollections')
   .getCollectionNames()
-  .forEach((collection) => {
+  .forEach(collection => {
     print(collection);
     const x = db
       .getSiblingDB('SampleCollections')
@@ -71,12 +71,12 @@ db
       .aggregate([
         {
           $sample: {
-            size: 20,
-          },
-        },
+            size: 20
+          }
+        }
       ])
       .toArray();
-    dbkodaListAttributes_parse(x).forEach((att) => {
+    dbkodaListAttributes_parse(x).forEach(att => {
       print('   ' + att);
     });
   });

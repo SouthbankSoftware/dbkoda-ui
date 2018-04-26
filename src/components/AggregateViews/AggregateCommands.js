@@ -19,12 +19,12 @@
  */
 
 /**
-* @Author: Michael Harrison
-* @Date:   2017-08-08 17:04:16
-* @Email:  mike@southbanksoftware.com
+ * @Author: Michael Harrison
+ * @Date:   2017-08-08 17:04:16
+ * @Email:  mike@southbanksoftware.com
  * @Last modified by:   mike
  * @Last modified time: 2017-08-08 17:04:26
-*/
+ */
 
 export const AggregateCommands = {
   NEW_AGG_BUILDER: (db, coll) => {
@@ -39,15 +39,13 @@ export const AggregateCommands = {
   SET_ALL_STEPS: (id, stepArray) => {
     return "dbk_agg.setAllSteps('" + id + "',[" + stepArray + '])';
   },
-  GET_STATUS: (id) => {
+  GET_STATUS: id => {
     return "dbk_agg.getAggStatus('" + id + "')";
   },
   GET_RESULTS: (id, stepIndex, reset) => {
-    return (
-      "dbk_agg.getResults('" + id + "','" + stepIndex + "','" + reset + "')"
-    );
+    return "dbk_agg.getResults('" + id + "','" + stepIndex + "','" + reset + "')";
   },
-  VALIDATE_STEP: (step) => {
+  VALIDATE_STEP: step => {
     return 'dbk_agg.validateStep(' + step + ')';
-  },
+  }
 };

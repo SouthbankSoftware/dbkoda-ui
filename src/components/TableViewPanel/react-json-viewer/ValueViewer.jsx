@@ -27,30 +27,26 @@ class ValueViewer extends Component {
       case 'String':
         if (this.props.value.length <= 80) {
           return (
-            <span className="string noWrap" style={{ color: 'rgb(255, 65, 60)' }}>{`"${
-              this.props.value
-            }"`}
+            <span className="string noWrap" style={{ color: 'rgb(255, 65, 60)' }}>
+              {`"${this.props.value}"`}
             </span>
           );
         }
         return (
-          <span className="string" style={{ color: 'rgb(255, 65, 60)' }}>{`"${
-            this.props.value
-          }"`}
+          <span className="string" style={{ color: 'rgb(255, 65, 60)' }}>
+            {`"${this.props.value}"`}
           </span>
         );
       case 'Boolean':
         return (
-          <span className="boolean" style={{ color: 'rgb(31, 48, 255)' }}>{`${
-            this.props.value
-          }`}
+          <span className="boolean" style={{ color: 'rgb(31, 48, 255)' }}>
+            {`${this.props.value}`}
           </span>
         );
       case 'Number':
         return (
-          <span className="number" style={{ color: 'rgb(31, 49, 255)' }}>{`${
-            this.props.value
-          }`}
+          <span className="number" style={{ color: 'rgb(31, 49, 255)' }}>
+            {`${this.props.value}`}
           </span>
         );
       case 'Undefined':
@@ -67,9 +63,8 @@ class ValueViewer extends Component {
         );
       case 'Date':
         return (
-          <i className="date" style={{ color: '#007bc7;' }}>{`${JSON.stringify(
-            this.props.value,
-          )}`}
+          <i className="date" style={{ color: '#007bc7;' }}>
+            {`${JSON.stringify(this.props.value)}`}
           </i>
         );
       default:

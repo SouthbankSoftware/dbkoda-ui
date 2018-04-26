@@ -30,15 +30,7 @@ import * as React from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import { autorun, type IObservableArray } from 'mobx';
-import {
-  LineChart,
-  Line,
-  Brush as BaseBrush,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend
-} from 'recharts';
+import { LineChart, Line, Brush as BaseBrush, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import type { WidgetValue } from '~/api/Widget';
 import type { Projection } from './Widget';
 // $FlowFixMe
@@ -46,9 +38,7 @@ import { convertUnits, convertToTarget, reduceName } from '../Utils';
 import styles from './HistoryView.scss';
 
 // $FlowFixMe
-const COLOUR_PALETTE: string[] = _.filter(styles, (v, k) =>
-  k.startsWith('colour')
-);
+const COLOUR_PALETTE: string[] = _.filter(styles, (v, k) => k.startsWith('colour'));
 const DEBOUNCED_ENABLE_UPDATE_DELAY = 500;
 
 const { primaryColour, primaryColourLighten30, backgroundColour } = styles;
@@ -140,8 +130,7 @@ export default class HistoryView extends React.PureComponent<Props, State> {
 
       if (
         this._shouldUpdate &&
-        (this._brushEndIdx == null ||
-          this._brushEndIdx >= this.state.data.length)
+        (this._brushEndIdx == null || this._brushEndIdx >= this.state.data.length)
       ) {
         // if brush right handle is at the rightmost edge, we update the view in realtime
 
@@ -156,8 +145,7 @@ export default class HistoryView extends React.PureComponent<Props, State> {
 
   _onBrushChange = ({ startIndex, endIndex }) => {
     this._brushSize = endIndex - startIndex + 1;
-    this._brushEndIdx =
-      endIndex === this.state.data.length - 1 ? null : endIndex;
+    this._brushEndIdx = endIndex === this.state.data.length - 1 ? null : endIndex;
   };
 
   _debouncedEnableUpdate = _.debounce(() => {
@@ -249,13 +237,10 @@ export default class HistoryView extends React.PureComponent<Props, State> {
                   let conversionUnit = unit;
                   // @TODO - Hacky fix for Radial Widgets that are not using the schema units properly,
                   // we should upgrade the radial widget in the 0.11 release to use common unit conversion.
-                  if (
-                    this.props.name === 'Network' ||
-                    this.props.name === 'Disk'
-                  ) {
+                  if (this.props.name === 'Network' || this.props.name === 'Disk') {
                     conversionUnit = 'b/s';
                   }
-                  const {value} = convertToTarget(v(data), conversionUnit, maxUnit, 3);
+                  const { value } = convertToTarget(v(data), conversionUnit, maxUnit, 3);
                   return typeof value === 'number' ? value : null;
                 }}
                 name={name}

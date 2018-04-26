@@ -29,6 +29,6 @@
 import * as common from './Common.js';
 
 export const SetParameter = {
-    dbkodaParameterList: common.dbkodaParameterList,
-    dbkodaParameterList_parse: common.dbkodaParameterList_parse
+  dbkodaParameterList: common.dbkodaParameterList,
+  dbkodaParameterList_parse: common.dbkodaParameterList_parse
 };

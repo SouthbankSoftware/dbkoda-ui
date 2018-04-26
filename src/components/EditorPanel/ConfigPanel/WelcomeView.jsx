@@ -54,8 +54,6 @@ export default class WelcomeView extends React.Component {
   }
 
   render() {
-    return (
-      <div className="welcomeContentWrapper">{this.renderWelcomePage()}</div>
-    );
+    return <div className="welcomeContentWrapper">{this.renderWelcomePage()}</div>;
   }
 }

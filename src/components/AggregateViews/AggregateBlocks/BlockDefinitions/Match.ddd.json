@@ -1,7 +1,8 @@
 {
   "Title": "Match",
   "DefaultValues": {},
-  "Fields": [{
+  "Fields": [
+    {
       "name": "UseOr",
       "label": "Use Or?",
       "tooltip": "If true, will us OR across filter conditions",
@@ -12,16 +13,19 @@
       "name": "FilterKeys",
       "label": "Filter conditions",
       "type": "Table",
-      "columns": [{
+      "columns": [
+        {
           "name": "AttributeName",
           "label": "Attribute",
           "tooltip": "Name of the attribute to be filtered",
           "type": "Combo",
           "lookup": "dbkodaListAttributesAgg",
-          "lookup_arguments": [{
-            "name": "prevAttributes",
-            "value": "prevAttributes"
-          }]
+          "lookup_arguments": [
+            {
+              "name": "prevAttributes",
+              "value": "prevAttributes"
+            }
+          ]
         },
         {
           "name": "Operator",
@@ -29,10 +33,11 @@
           "tooltip": "Operator to apply to value",
           "type": "Combo",
           "lookup": "dbkodaMatchOperators",
-          "lookup_arguments": [{
+          "lookup_arguments": [
+            {
               "name": "db",
               "value": "database"
-              }
+            }
           ]
         },
         {

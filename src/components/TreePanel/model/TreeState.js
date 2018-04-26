@@ -189,8 +189,7 @@ export default class TreeState {
   sampleCollection(nodeRightClicked) {
     const db = nodeRightClicked.refParent.text;
     const queryFirst = 'use ' + db + '\n'; // eslint-disable-line
-    const querySecond =
-      'db.' + nodeRightClicked.text + '.find().limit(20).toArray()'; //
+    const querySecond = 'db.' + nodeRightClicked.text + '.find().limit(20).toArray()'; //
     const profile = this.updateCallback2();
     if (profile.shellVersion) {
       if (
@@ -226,11 +225,7 @@ export default class TreeState {
                   if (!nodeRightClicked.allChildNodes) {
                     nodeRightClicked.allChildNodes = new Map();
                   }
-                  const child = new TreeNode(
-                    sampleJSON,
-                    nodeRightClicked,
-                    this.store
-                  );
+                  const child = new TreeNode(sampleJSON, nodeRightClicked, this.store);
                   nodeRightClicked.isExpanded = true;
                   child.isExpanded = true;
                   nodeRightClicked.setFilter(this.filter);

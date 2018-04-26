@@ -39,15 +39,15 @@ const barChartDropTarget = {
 
     return {
       target,
-      action,
+      action
     };
-  },
+  }
 };
 
 // $FlowIssue
 @DropTarget(DragItemTypes.CHART_DATA_TREE_NODE, barChartDropTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
-  over: monitor.isOver({ shallow: true }),
+  over: monitor.isOver({ shallow: true })
 }))
 class BarChartDropTarget extends React.PureComponent<*> {
   render() {
@@ -57,7 +57,7 @@ class BarChartDropTarget extends React.PureComponent<*> {
       chartHeight: height,
       height: gridHeight,
       x: gridX,
-      y: gridY,
+      y: gridY
     } = grid.props;
     const gridOriginX = gridX;
     const gridOriginY = gridY + gridHeight;
@@ -72,7 +72,7 @@ class BarChartDropTarget extends React.PureComponent<*> {
           <text transform={`translate(${gridOriginX}, ${gridOriginY / 2})rotate(-90)`}>
             {`${unload ? 'Unload from' : 'Load to'} Y axis`}
           </text>
-        </g>,
+        </g>
       );
     } else if (target === 'x') {
       return connectDropTarget(
@@ -83,7 +83,7 @@ class BarChartDropTarget extends React.PureComponent<*> {
           <text transform={`translate(${(width - gridOriginX) / 2 + gridOriginX}, ${gridOriginY})`}>
             {`${unload ? 'Unload from' : 'Load to'} X axis`}
           </text>
-        </g>,
+        </g>
       );
     } else if (target === 'center') {
       return connectDropTarget(
@@ -92,7 +92,7 @@ class BarChartDropTarget extends React.PureComponent<*> {
           <text transform={`translate(${(width - centerX) / 2 + centerX}, ${centerY / 2})`}>
             {`${unload ? 'Unload from' : 'Load to'} center`}
           </text>
-        </g>,
+        </g>
       );
     }
     return null;

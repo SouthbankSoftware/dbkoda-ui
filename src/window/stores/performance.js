@@ -25,7 +25,7 @@
  */
 
 import _ from 'lodash';
-import { observable, action } from 'mobx';
+import { observable, action, runInAction } from 'mobx';
 import { restore } from 'dumpenvy';
 import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
 import { ProfilingConstants } from '#/common/Constants';
@@ -214,8 +214,6 @@ export default class Store {
             }
             allDbs.push(db);
           });
-          console.log('DB List: ', dbList);
-          console.log('All DB List: ', allDbs);
           this.profilingPanel.databases = allDbs;
           this.profilingPanel.enabledDatabases = dbList;
         } else if (args.command === 'mw_profilingData') {
@@ -245,10 +243,14 @@ export default class Store {
                 opsArray.push(op);
               });
             }
-            this.profilingPanel.payload = opsArray;
-            this.profilingPanel.highWaterMarkProfile = _.maxBy(this.profilingPanel.payload, op => {
-              return op.us;
+            this.profilingPanel.highWaterMarkProfile = _.maxBy(opsArray, op => {
+              return op.millis;
             });
+            setTimeout(() => {
+              runInAction(() => {
+                this.profilingPanel.payload = opsArray;
+              });
+            }, 0);
           }
         } else if (args.command === 'mw_updateDatabaseConfiguration') {
           console.log('update database configuration res:', args);

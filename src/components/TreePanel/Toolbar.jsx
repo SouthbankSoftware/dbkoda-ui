@@ -125,12 +125,8 @@ export default class TreeToolbar extends React.Component {
       <nav className=" treeToolbar pt-navbar pt-dark .modifier">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-navbar-heading">
-            {this.props.treeState.profileAlias.length >=
-            MAX_PROFILE_NAME_DISPLAYED
-              ? this.props.treeState.profileAlias.substring(
-                  0,
-                  MAX_PROFILE_NAME_DISPLAYED
-                ) + '...'
+            {this.props.treeState.profileAlias.length >= MAX_PROFILE_NAME_DISPLAYED
+              ? this.props.treeState.profileAlias.substring(0, MAX_PROFILE_NAME_DISPLAYED) + '...'
               : this.props.treeState.profileAlias}
           </div>
           <input

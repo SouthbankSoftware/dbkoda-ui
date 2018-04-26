@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-04-13T15:54:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-04-13T16:39:15+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-04-24T16:53:46+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,63 +25,66 @@
  */
 
 import _ from 'lodash';
- import * as React from 'react';
- import { Menu, MenuItem } from '@blueprintjs/core';
- import { Cell, Column, ColumnHeaderCell } from '@blueprintjs/table';
+import * as React from 'react';
+import { Menu, MenuItem } from '@blueprintjs/core';
+import { Cell, Column, ColumnHeaderCell } from '@blueprintjs/table';
 
- import ProgressBar from './ProgressBar';
+import ProgressBar from './ProgressBar';
 
- export type ICellLookup = (rowIndex: number, columnIndex: number) => any;
- export type ISortCallback = (
-   columnIndex: number,
-   comparator: (a: any, b: any) => number
- ) => void;
+export type ICellLookup = (rowIndex: number, columnIndex: number) => any;
+export type ISortCallback = (columnIndex: number, comparator: (a: any, b: any) => number) => void;
 
- export default class ProgressBarColumn {
-   constructor(name: string, key: string, index: number) {
-     this.name = name;
-     this.key = key;
-     this.index = index;
-   }
+export default class ProgressBarColumn {
+  constructor(name: string, key: string, index: number) {
+    this.name = name;
+    this.key = key;
+    this.index = index;
+  }
 
-   getColumn(getCellData: ICellLookup, sortColumn: ISortCallback) {
-     const cellRenderer = (rowIndex: number, columnIndex: number) => {
-       const dataJson = getCellData(rowIndex, columnIndex);
-       if (!dataJson) {
-         return <Cell />;
-       }
-       let data = JSON.parse(dataJson);
-       const waterMark = data.highWaterMark;
-       data = _.pick(data, this.key);
-       return <Cell className="progressBarCell"><ProgressBar waterMark={waterMark} value={data} unit={this.key} /></Cell>;
-     };
-     const menuRenderer = this.renderMenu.bind(this, sortColumn);
-     const columnHeaderCellRenderer = () => ( <ColumnHeaderCell name={this.name} menuRenderer={menuRenderer} /> ); // eslint-disable-line
-     return (
-       <Column
-         cellRenderer={cellRenderer}
-         columnHeaderCellRenderer={columnHeaderCellRenderer}
-         key={this.index}
-         name={this.name}
-       />
-     );
-   }
+  getColumn(getCellData: ICellLookup, sortColumn: ISortCallback) {
+    const cellRenderer = (rowIndex: number, columnIndex: number) => {
+      const dataJson = getCellData(rowIndex, columnIndex);
+      if (!dataJson) {
+        return <Cell />;
+      }
+      let data = JSON.parse(dataJson);
+      const waterMark = data.highWaterMark;
+      data = _.pick(data, this.key);
+      return (
+        <Cell className="progressBarCell">
+          <ProgressBar waterMark={waterMark} value={data} unit={this.key} />
+        </Cell>
+      );
+    };
+    const menuRenderer = this.renderMenu.bind(this, sortColumn);
+    const columnHeaderCellRenderer = () => (
+      <ColumnHeaderCell name={this.name} menuRenderer={menuRenderer} /> // eslint-disable-line
+    );
+    return (
+      <Column
+        cellRenderer={cellRenderer}
+        columnHeaderCellRenderer={columnHeaderCellRenderer}
+        key={this.index}
+        name={this.name}
+      />
+    );
+  }
 
-   renderMenu(sortColumn: ISortCallback) {
-     const sortAsc = () => sortColumn(this.index, (a, b) => this.compare(a, b));
-     const sortDesc = () => sortColumn(this.index, (a, b) => this.compare(b, a));
-     return (
-       <Menu>
-         <MenuItem icon="sort-asc" onClick={sortAsc} text="Sort Asc" />
-         <MenuItem icon="sort-desc" onClick={sortDesc} text="Sort Desc" />
-       </Menu>
-     );
-   }
+  renderMenu(sortColumn: ISortCallback) {
+    const sortAsc = () => sortColumn(this.index, (a, b) => this.compare(a, b));
+    const sortDesc = () => sortColumn(this.index, (a, b) => this.compare(b, a));
+    return (
+      <Menu>
+        <MenuItem icon="sort-asc" onClick={sortAsc} text="Sort Asc" />
+        <MenuItem icon="sort-desc" onClick={sortDesc} text="Sort Desc" />
+      </Menu>
+    );
+  }
 
-   compare(a: any, b: any) {
-     if (typeof a === 'number' && typeof b === 'number') {
-       return a - b;
-     }
-     return a.toString().localeCompare(b.toString(), { numeric: true });
-   }
- }
+  compare(a: any, b: any) {
+    if (typeof a === 'number' && typeof b === 'number') {
+      return a - b;
+    }
+    return a.toString().localeCompare(b.toString(), { numeric: true });
+  }
+}

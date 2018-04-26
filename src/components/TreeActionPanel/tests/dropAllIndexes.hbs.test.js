@@ -28,8 +28,7 @@
 // Unit test for AlterUser template
 //
 // TODO: Fix dependency on local mongo (use mlaunch?)
-const templateToBeTested =
-  './src/components/TreeActionPanel/Templates/DropAllIndexes.hbs';
+const templateToBeTested = './src/components/TreeActionPanel/Templates/DropAllIndexes.hbs';
 const templateInput = require('./DropAllIndexes.hbs.input.json');
 const hbs = require('handlebars');
 const fs = require('fs');
@@ -40,8 +39,7 @@ const jsonHelper = require('../../../helpers/handlebars/json.js');
 hbs.registerHelper('json', jsonHelper);
 
 // Random collection for the test
-const randomCollectionName =
-  'collection' + Math.floor(Math.random() * 10000000);
+const randomCollectionName = 'collection' + Math.floor(Math.random() * 10000000);
 const randomIndexName = randomCollectionName + '_i';
 
 templateInput.CollectionName = randomCollectionName;
@@ -52,39 +50,31 @@ const setupCollectionCommands = [];
 setupCollectionCommands.push(sprintf('use test\n'));
 setupCollectionCommands.push(sprintf('db.%s.drop();\n', randomCollectionName));
 setupCollectionCommands.push(
-  sprintf('db.%s.insertOne({a:1,b:1,c:{d:1,e:1}});\n', randomCollectionName),
+  sprintf('db.%s.insertOne({a:1,b:1,c:{d:1,e:1}});\n', randomCollectionName)
 );
 setupCollectionCommands.push(
-  sprintf(
-    'db.%s.createIndex({a:1},{"name":"%s"});\n',
-    randomCollectionName,
-    randomIndexName,
-  ),
+  sprintf('db.%s.createIndex({a:1},{"name":"%s"});\n', randomCollectionName, randomIndexName)
 );
 setupCollectionCommands.push(
-  sprintf(
-    'db.%s.createIndex({b:1},{"name":"%s1"});\n',
-    randomCollectionName,
-    randomIndexName,
-  ),
+  sprintf('db.%s.createIndex({b:1},{"name":"%s1"});\n', randomCollectionName, randomIndexName)
 );
 
 // Command that checks the indexes exist
 const validateIndexCmd = sprintf(
   '\n print (db.%s.getIndexes().length +" Indexes created");',
-  randomCollectionName,
+  randomCollectionName
 );
 const dropCollectionCmd = sprintf('\ndb.%s.drop();\n', randomCollectionName);
 
 // Run the test
-test('Drop all index template', (done) => {
+test('Drop all index template', done => {
   fs.readFile(templateToBeTested, (err, data) => {
     if (!err) {
       const templateSource = data.toString();
       const compiledTemplate = hbs.compile(templateSource);
       const DropIndexCommands = compiledTemplate(templateInput);
       let mongoCommands = '';
-      setupCollectionCommands.forEach((c) => {
+      setupCollectionCommands.forEach(c => {
         mongoCommands += c;
       });
       mongoCommands += validateIndexCmd;
@@ -92,7 +82,7 @@ test('Drop all index template', (done) => {
       mongoCommands += dropCollectionCmd + '\nexit\n';
       const matchString = sprintf('3 Indexes created'); // indexes were created
       const matchString2 = 'non-_id indexes dropped for collection'; // indexes were dropped
-      common.mongoOutput(mongoCommands).then((output) => {
+      common.mongoOutput(mongoCommands).then(output => {
         expect(output).toEqual(expect.stringMatching(matchString));
         expect(output).toEqual(expect.stringMatching(matchString2));
         done();

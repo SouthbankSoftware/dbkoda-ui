@@ -31,14 +31,13 @@ import * as common from './Common.js';
 // const sprintf = require('sprintf-js').sprintf;
 
 export const DeleteDocuments = {
-
-  dbkoda_DeleteDocumentsPreFill: (params) => {
+  dbkoda_DeleteDocumentsPreFill: params => {
     // console.log('invoked dbkoda_DeleteDocumentsPreFill');
     const data = {};
     data.Database = params.Database;
     data.CollectionName = params.CollectionName;
     data.FilterKeys = [];
-    data.FilterKeys.push({AttributeName:'_id', Operator:'$eq', Value:'"SomeValue"'});
+    data.FilterKeys.push({ AttributeName: '_id', Operator: '$eq', Value: '"SomeValue"' });
     data.DeleteMany = false;
     data.UseOr = false;
     // console.log('returns', data);
@@ -51,5 +50,5 @@ export const DeleteDocuments = {
   dbkodaListAttributes: common.dbkodaListAttributes,
   dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
   dbkodaMatchOperators: common.dbkodaMatchOperators,
-  dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse,
+  dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse
 };

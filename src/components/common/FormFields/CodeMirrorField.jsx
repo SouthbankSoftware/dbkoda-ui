@@ -80,9 +80,7 @@ export default observer(({ field, showLabel = true, formGroup = false }) => {
     mode: 'MongoScript'
   };
 
-  const fldClassName = formGroup
-    ? 'pt-form-group form-group-inline'
-    : 'pt-form-group pt-top-level';
+  const fldClassName = formGroup ? 'pt-form-group form-group-inline' : 'pt-form-group pt-top-level';
   let inputClassName = 'pt-input codemirrorInput';
   let tooltipClassName = 'pt-tooltip-indicator pt-tooltip-indicator-form';
   if (formGroup) {

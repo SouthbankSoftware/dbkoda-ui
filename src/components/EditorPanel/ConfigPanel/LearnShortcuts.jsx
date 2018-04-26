@@ -180,10 +180,7 @@ export default class LearnShortcuts extends React.Component {
       <div className="learnShortcutsWrapper">
         <div className="groupsList">
           <div className={'welcomeButtonWrapper selected_' + global}>
-            <AnchorButton
-              className="welcomeMenuButton welcomePageButton"
-              onClick={this.showGlobal}
-            >
+            <AnchorButton className="welcomeMenuButton welcomePageButton" onClick={this.showGlobal}>
               Global
             </AnchorButton>
           </div>
@@ -196,26 +193,17 @@ export default class LearnShortcuts extends React.Component {
             </AnchorButton>
           </div>
           <div className={'welcomeButtonWrapper selected_' + output}>
-            <AnchorButton
-              className="welcomeMenuButton welcomePageButton"
-              onClick={this.showOutput}
-            >
+            <AnchorButton className="welcomeMenuButton welcomePageButton" onClick={this.showOutput}>
               Output
             </AnchorButton>
           </div>
           <div className={'welcomeButtonWrapper selected_' + editor}>
-            <AnchorButton
-              className="welcomeMenuButton welcomePageButton"
-              onClick={this.showEditor}
-            >
+            <AnchorButton className="welcomeMenuButton welcomePageButton" onClick={this.showEditor}>
               Editor
             </AnchorButton>
           </div>
           <div className={'welcomeButtonWrapper selected_' + textEditing}>
-            <AnchorButton
-              className="welcomeMenuButton welcomePageButton"
-              onClick={this.showCM}
-            >
+            <AnchorButton className="welcomeMenuButton welcomePageButton" onClick={this.showCM}>
               Text Editing
             </AnchorButton>
           </div>

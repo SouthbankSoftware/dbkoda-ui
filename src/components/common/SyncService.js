@@ -26,43 +26,42 @@
  * @Last modified time: 2017-08-23T14:09:37+10:00
  */
 
-
 import { featherClient } from '~/helpers/feathers';
 
- export const SyncService = {
-   executeQuery: (query, shellId, profileId) => {
-     if (shellId && profileId && shellId != '' && profileId != '') {
-       const service = featherClient().service('/mongo-sync-execution');
-       service.timeout = 60000;
-       return new Promise((resolve, reject) => {
-         service
-           .update(profileId, {
-             shellId,
-             commands: query
-           })
-           .then((res) => {
-             if (typeof res == 'string') {
-               res = res.replace(/[\r\n\t]*/g, '');
-               res = res.replace(/ObjectId\((\"\w*\")\)/g, '$1');
-               res = res.replace(/(BinData\(\d*?\W)(\")(.*?)(\")(\))/g, '"$1\\$2$3\\$4$5"');
-               res = res.replace(/NumberLong\(\"?(\d*)\"?\)/g, '$1');
-               res = res.replace(/Timestamp\((\d*)[\w|\W]*?\)/g, '$1');
-               res = res.replace(/\bNaN\b/g, '"NaN"');
-               try {
-                 const ejson = JSON.parse(res);
-                 resolve(ejson);
-               } catch (e) {
-                 resolve(res);
-               }
-             } else {
-               resolve(res);
-             }
-           })
-           .catch((reason) => {
-             reject(reason);
-           });
-       });
-     }
-     return null;
-   }
- };
+export const SyncService = {
+  executeQuery: (query, shellId, profileId) => {
+    if (shellId && profileId && shellId != '' && profileId != '') {
+      const service = featherClient().service('/mongo-sync-execution');
+      service.timeout = 60000;
+      return new Promise((resolve, reject) => {
+        service
+          .update(profileId, {
+            shellId,
+            commands: query
+          })
+          .then(res => {
+            if (typeof res == 'string') {
+              res = res.replace(/[\r\n\t]*/g, '');
+              res = res.replace(/ObjectId\((\"\w*\")\)/g, '$1');
+              res = res.replace(/(BinData\(\d*?\W)(\")(.*?)(\")(\))/g, '"$1\\$2$3\\$4$5"');
+              res = res.replace(/NumberLong\(\"?(\d*)\"?\)/g, '$1');
+              res = res.replace(/Timestamp\((\d*)[\w|\W]*?\)/g, '$1');
+              res = res.replace(/\bNaN\b/g, '"NaN"');
+              try {
+                const ejson = JSON.parse(res);
+                resolve(ejson);
+              } catch (e) {
+                resolve(res);
+              }
+            } else {
+              resolve(res);
+            }
+          })
+          .catch(reason => {
+            reject(reason);
+          });
+      });
+    }
+    return null;
+  }
+};

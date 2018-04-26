@@ -54,11 +54,7 @@ export default class Menu extends React.Component {
   render() {
     return (
       <div className="configMenu">
-        <MenuItem
-          name="Home"
-          isSelected={this.isItemSelected}
-          changeMenu={this.changeMenuSelected}
-        >
+        <MenuItem name="Home" isSelected={this.isItemSelected} changeMenu={this.changeMenuSelected}>
           <HomeSectionIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
         <MenuItem
@@ -73,11 +69,7 @@ export default class Menu extends React.Component {
           isSelected={this.isItemSelected}
           changeMenu={this.changeMenuSelected}
         >
-          <ApplicationSectionIcon
-            className="dbKodaSVG"
-            width={20}
-            height={20}
-          />
+          <ApplicationSectionIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
         <MenuItem
           name="PasswordStore"
@@ -91,11 +83,7 @@ export default class Menu extends React.Component {
           isSelected={this.isItemSelected}
           changeMenu={this.changeMenuSelected}
         >
-          <PerformanceSectionIcon
-            className="dbKodaSVG"
-            width={20}
-            height={20}
-          />
+          <PerformanceSectionIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
         <MenuItem
           name="Shortcuts"

@@ -42,11 +42,11 @@ const CodeMirror = createReactClass({
     options: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     path: PropTypes.string,
     value: PropTypes.string,
-    preserveScrollPosition: PropTypes.bool,
+    preserveScrollPosition: PropTypes.bool
   },
   getDefaultProps() {
     return {
-      preserveScrollPosition: false,
+      preserveScrollPosition: false
     };
   },
   getCodeMirrorInstance() {
@@ -54,18 +54,13 @@ const CodeMirror = createReactClass({
   },
   getInitialState() {
     return {
-      isFocused: false,
+      isFocused: false
     };
   },
   componentWillMount() {
-    this.componentWillReceiveProps = debounce(
-      this.componentWillReceiveProps,
-      0,
-    );
+    this.componentWillReceiveProps = debounce(this.componentWillReceiveProps, 0);
     if (this.props.path) {
-      console.error(
-        'Warning: react-codemirror: the `path` prop has been changed to `name`',
-      );
+      console.error('Warning: react-codemirror: the `path` prop has been changed to `name`');
     }
   },
   componentDidMount() {
@@ -86,25 +81,19 @@ const CodeMirror = createReactClass({
       this.codeMirror &&
       nextProps.value !== undefined &&
       nextProps.value !== this.props.value &&
-      normalizeLineEndings(this.codeMirror.getValue()) !==
-        normalizeLineEndings(nextProps.value)
+      normalizeLineEndings(this.codeMirror.getValue()) !== normalizeLineEndings(nextProps.value)
     ) {
       if (this.props.preserveScrollPosition) {
         const prevScrollPosition = this.codeMirror.getScrollInfo();
         this.codeMirror.setValue(nextProps.value);
-        this.codeMirror.scrollTo(
-          prevScrollPosition.left,
-          prevScrollPosition.top,
-        );
+        this.codeMirror.scrollTo(prevScrollPosition.left, prevScrollPosition.top);
       } else {
         this.codeMirror.setValue(nextProps.value);
       }
     }
     if (typeof nextProps.options === 'object') {
       for (const optionName in nextProps.options) {
-        if (
-          Object.prototype.hasOwnProperty.call(nextProps.options, optionName)
-        ) {
+        if (Object.prototype.hasOwnProperty.call(nextProps.options, optionName)) {
           this.setOptionIfChanged(optionName, nextProps.options[optionName]);
         }
       }
@@ -126,7 +115,7 @@ const CodeMirror = createReactClass({
   },
   focusChanged(focused) {
     this.setState({
-      isFocused: focused,
+      isFocused: focused
     });
     this.props.onFocusChange && this.props.onFocusChange(focused);
   },
@@ -145,15 +134,10 @@ const CodeMirror = createReactClass({
     const editorClassName = className(
       'ReactCodeMirror',
       this.state.isFocused ? 'ReactCodeMirror--focused' : null,
-      this.props.className,
+      this.props.className
     );
-    return (
-      <div
-        className={editorClassName}
-        ref={ref => (this.editorElement = ref)}
-      />
-    );
-  },
+    return <div className={editorClassName} ref={ref => (this.editorElement = ref)} />;
+  }
 });
 
 export default CodeMirror;

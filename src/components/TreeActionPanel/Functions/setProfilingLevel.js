@@ -30,21 +30,21 @@
 const sprintf = require('sprintf-js').sprintf;
 
 export const setProfilingLevel = {
-    // Prefill function for alter user
-    dbkoda_setProfilingLevelPreFill: (params) => {
-        const dbName = params.dbName;
-        const cmd = sprintf('dbe.profileLevels("%s");', dbName);
-        return cmd;
-    },
-    dbkoda_setProfilingLevelPreFill_parse: (res) => {
-        const outputDoc = {};
-        if (res.mongos) {
-            outputDoc.Database = 'Not supported on Mongos';
-        } else {
-            outputDoc.Database = res.dbName;
-            outputDoc.level = res.was;
-            outputDoc.slowms = res.slowms;
-        }
-        return outputDoc;
+  // Prefill function for alter user
+  dbkoda_setProfilingLevelPreFill: params => {
+    const dbName = params.dbName;
+    const cmd = sprintf('dbe.profileLevels("%s");', dbName);
+    return cmd;
+  },
+  dbkoda_setProfilingLevelPreFill_parse: res => {
+    const outputDoc = {};
+    if (res.mongos) {
+      outputDoc.Database = 'Not supported on Mongos';
+    } else {
+      outputDoc.Database = res.dbName;
+      outputDoc.level = res.was;
+      outputDoc.slowms = res.slowms;
     }
+    return outputDoc;
+  }
 };

@@ -25,8 +25,8 @@
 
 /* eslint-disable react/no-string-refs */
 /* eslint-disable no-unused-vars */
-import {observer, inject} from 'mobx-react';
-import {observe, action, reaction} from 'mobx';
+import { observer, inject } from 'mobx-react';
+import { observe, action, reaction } from 'mobx';
 import EventLogging from './EventLogging.js';
 
 const React = require('react');
@@ -37,9 +37,9 @@ const instance = false;
  * Panel for wrapping the Editor View and EditorToolbar.
  */
 @inject(allStores => ({
-   store: allStores.store,
-   config: allStores.config,
- }))
+  store: allStores.store,
+  config: allStores.config
+}))
 @observer
 export default class EventReaction extends React.Component {
   constructor(props) {
@@ -48,13 +48,26 @@ export default class EventReaction extends React.Component {
     const typeEnum = EventLogging.getTypeEnum();
     const fragmentEnum = EventLogging.getFragmentEnum();
     const { store, config } = this.props.store;
-    const editorPanelObserver = observe(store.editorPanel, change => this.observeEditorPanel(change, typeEnum, fragmentEnum));
-    const profilePanelObserver = observe(store.profileList, change => this.observeProfilePanel(change, typeEnum, fragmentEnum));
-    const profileOutputObserver = observe(store.outputPanel, change => this.observeOutputPanel(change, typeEnum, fragmentEnum));
-    const userPreferencesObserver = observe(config.settings, change => this.observeUserPreferences(change, typeEnum, fragmentEnum));
+    const editorPanelObserver = observe(store.editorPanel, change =>
+      this.observeEditorPanel(change, typeEnum, fragmentEnum)
+    );
+    const profilePanelObserver = observe(store.profileList, change =>
+      this.observeProfilePanel(change, typeEnum, fragmentEnum)
+    );
+    const profileOutputObserver = observe(store.outputPanel, change =>
+      this.observeOutputPanel(change, typeEnum, fragmentEnum)
+    );
+    const userPreferencesObserver = observe(config.settings, change =>
+      this.observeUserPreferences(change, typeEnum, fragmentEnum)
+    );
 
     if (this.props.config.settings.telemtryEnabled) {
-      EventLogging.recordEvent(typeEnum.EVENT.APP.OPEN, fragmentEnum.PROFILES, 'dbKoda App started.', '');
+      EventLogging.recordEvent(
+        typeEnum.EVENT.APP.OPEN,
+        fragmentEnum.PROFILES,
+        'dbKoda App started.',
+        ''
+      );
     }
   }
 
@@ -65,41 +78,96 @@ export default class EventReaction extends React.Component {
           switch (change.name) {
             case 'creatingNewEditor':
               if (!change.oldValue) {
-                EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.NEW_EDITOR.START, fragmentEnum.EDITOR_PANEL, 'Create new Editor event Started.', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.EDITOR_PANEL.NEW_EDITOR.START,
+                  fragmentEnum.EDITOR_PANEL,
+                  'Create new Editor event Started.',
+                  change
+                );
               } else {
-                EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.NEW_EDITOR.FINISH, fragmentEnum.EDITOR_PANEL, 'Create new Editor event Finished.', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.EDITOR_PANEL.NEW_EDITOR.FINISH,
+                  fragmentEnum.EDITOR_PANEL,
+                  'Create new Editor event Finished.',
+                  change
+                );
               }
               break;
             case 'activeEditorId':
-              EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.CHANGE_ACTIVE_EDITOR, fragmentEnum.EDITOR_PANEL, 'Swapped Editor Tab.', change);
+              EventLogging.recordEvent(
+                typeEnum.EVENT.EDITOR_PANEL.CHANGE_ACTIVE_EDITOR,
+                fragmentEnum.EDITOR_PANEL,
+                'Swapped Editor Tab.',
+                change
+              );
               break;
             case 'activeDropdownId':
-              EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.CHANGE_DROPDOWN, fragmentEnum.EDITOR_PANEL, 'Swapped Dropdown Selection.', change);
+              EventLogging.recordEvent(
+                typeEnum.EVENT.EDITOR_PANEL.CHANGE_DROPDOWN,
+                fragmentEnum.EDITOR_PANEL,
+                'Swapped Dropdown Selection.',
+                change
+              );
               break;
             case 'executingEditorAll':
               if (!change.oldValue) {
-                EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_ALL.START, fragmentEnum.EDITOR_PANEL, 'Execute All event Started.', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_ALL.START,
+                  fragmentEnum.EDITOR_PANEL,
+                  'Execute All event Started.',
+                  change
+                );
               } else {
-                EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_ALL.FINISH, fragmentEnum.EDITOR_PANEL, 'Execute All event finished.', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_ALL.FINISH,
+                  fragmentEnum.EDITOR_PANEL,
+                  'Execute All event finished.',
+                  change
+                );
               }
               break;
             case 'executingEditorLines':
               if (!change.oldValue) {
-                EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_LINE.START, fragmentEnum.EDITOR_PANEL, 'Execute Line event Started.', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_LINE.START,
+                  fragmentEnum.EDITOR_PANEL,
+                  'Execute Line event Started.',
+                  change
+                );
               } else {
-                EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_LINE.FINISH, fragmentEnum.EDITOR_PANEL, 'Execute Line event finished.', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_LINE.FINISH,
+                  fragmentEnum.EDITOR_PANEL,
+                  'Execute Line event finished.',
+                  change
+                );
               }
               break;
             case 'tabFilter':
-              EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.CHANGE_FILTER, fragmentEnum.EDITOR_PANEL, 'Editor Filter Modified.', change);
+              EventLogging.recordEvent(
+                typeEnum.EVENT.EDITOR_PANEL.CHANGE_FILTER,
+                fragmentEnum.EDITOR_PANEL,
+                'Editor Filter Modified.',
+                change
+              );
               break;
             default:
-              EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITOR_PANEL, 'Unknown Update on EditorPanel.', change);
+              EventLogging.recordEvent(
+                typeEnum.EVENT.EVENT,
+                fragmentEnum.EDITOR_PANEL,
+                'Unknown Update on EditorPanel.',
+                change
+              );
               break;
           }
           break;
         default:
-          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITOR_PANEL, 'Unknown Change on EditorPanel.', change);
+          EventLogging.recordEvent(
+            typeEnum.EVENT.EVENT,
+            fragmentEnum.EDITOR_PANEL,
+            'Unknown Change on EditorPanel.',
+            change
+          );
           break;
       }
     }
@@ -112,21 +180,46 @@ export default class EventReaction extends React.Component {
           switch (change.name) {
             case 'creatingNewProfile':
               if (!change.oldValue) {
-                EventLogging.recordEvent(typeEnum.EVENT.CONNECTION_PANEL.NEW_PROFILE.START, fragmentEnum.PROFILES, 'Create new Profile event Started.', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.CONNECTION_PANEL.NEW_PROFILE.START,
+                  fragmentEnum.PROFILES,
+                  'Create new Profile event Started.',
+                  change
+                );
               } else {
-                EventLogging.recordEvent(typeEnum.EVENT.CONNECTION_PANEL.NEW_PROFILE.FINISH, fragmentEnum.PROFILES, 'Create new Profile event Finished.', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.CONNECTION_PANEL.NEW_PROFILE.FINISH,
+                  fragmentEnum.PROFILES,
+                  'Create new Profile event Finished.',
+                  change
+                );
               }
               break;
             case 'selectedProfile':
-              EventLogging.recordEvent(typeEnum.EVENT.CONNECTION_PANEL.CHANGE_PROFILE_SELECTION, fragmentEnum.PROFILES, 'Change Profile Event.', change);
+              EventLogging.recordEvent(
+                typeEnum.EVENT.CONNECTION_PANEL.CHANGE_PROFILE_SELECTION,
+                fragmentEnum.PROFILES,
+                'Change Profile Event.',
+                change
+              );
               break;
             default:
-              EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.PROFILES, 'Unknown Update on ProfilePanel.', change);
+              EventLogging.recordEvent(
+                typeEnum.EVENT.EVENT,
+                fragmentEnum.PROFILES,
+                'Unknown Update on ProfilePanel.',
+                change
+              );
               break;
           }
           break;
         default:
-          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.PROFILES, 'Unknown Change on ProfilePanel.', change);
+          EventLogging.recordEvent(
+            typeEnum.EVENT.EVENT,
+            fragmentEnum.PROFILES,
+            'Unknown Change on ProfilePanel.',
+            change
+          );
           break;
       }
     }
@@ -139,25 +232,55 @@ export default class EventReaction extends React.Component {
           switch (change.name) {
             case 'executingShowMore':
               if (!change.oldValue) {
-                EventLogging.recordEvent(typeEnum.EVENT.OUTPUT_PANEL.SHOW_MORE.START, fragmentEnum.PROFILES, 'Show More Event Started.', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.OUTPUT_PANEL.SHOW_MORE.START,
+                  fragmentEnum.PROFILES,
+                  'Show More Event Started.',
+                  change
+                );
               } else {
-                EventLogging.recordEvent(typeEnum.EVENT.OUTPUT_PANEL.SHOW_MORE.FINISH, fragmentEnum.PROFILES, 'Show More Event Finished.', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.OUTPUT_PANEL.SHOW_MORE.FINISH,
+                  fragmentEnum.PROFILES,
+                  'Show More Event Finished.',
+                  change
+                );
               }
               break;
             case 'executingTerminalCmd':
               if (!change.oldValue) {
-                EventLogging.recordEvent(typeEnum.EVENT.OUTPUT_PANEL.EXECUTE_TERMINAL.START, fragmentEnum.PROFILES, 'Execute Terminal Event Started', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.OUTPUT_PANEL.EXECUTE_TERMINAL.START,
+                  fragmentEnum.PROFILES,
+                  'Execute Terminal Event Started',
+                  change
+                );
               } else {
-                EventLogging.recordEvent(typeEnum.EVENT.OUTPUT_PANEL.EXECUTE_TERMINAL.FINISH, fragmentEnum.PROFILES, 'Execute Terminal Event Finished', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.OUTPUT_PANEL.EXECUTE_TERMINAL.FINISH,
+                  fragmentEnum.PROFILES,
+                  'Execute Terminal Event Finished',
+                  change
+                );
               }
               break;
             default:
-              EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.OUTPUT, 'Unknown Update on OutputPanel.', change);
+              EventLogging.recordEvent(
+                typeEnum.EVENT.EVENT,
+                fragmentEnum.OUTPUT,
+                'Unknown Update on OutputPanel.',
+                change
+              );
               break;
           }
           break;
         default:
-          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.OUTPUT, 'Unknown Change on OutputPanel.', change);
+          EventLogging.recordEvent(
+            typeEnum.EVENT.EVENT,
+            fragmentEnum.OUTPUT,
+            'Unknown Change on OutputPanel.',
+            change
+          );
           break;
       }
     }
@@ -170,18 +293,38 @@ export default class EventReaction extends React.Component {
           switch (change.name) {
             case 'telemetryEnabled':
               if (change.oldValue) {
-                EventLogging.recordEvent(typeEnum.EVENT.USER_PREFERENCES.TELEMETRY.DISABLED, fragmentEnum.PREFERENCES, 'Telemtry Disabled.', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.USER_PREFERENCES.TELEMETRY.DISABLED,
+                  fragmentEnum.PREFERENCES,
+                  'Telemtry Disabled.',
+                  change
+                );
               } else {
-                EventLogging.recordEvent(typeEnum.EVENT.USER_PREFERENCES.TELEMETRY.ENABLED, fragmentEnum.PREFERENCES, 'Telemtry Enabled.', change);
+                EventLogging.recordEvent(
+                  typeEnum.EVENT.USER_PREFERENCES.TELEMETRY.ENABLED,
+                  fragmentEnum.PREFERENCES,
+                  'Telemtry Enabled.',
+                  change
+                );
               }
               break;
             default:
-              EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITOR_PANEL, 'Unknown Update on UserPreferences.', change);
+              EventLogging.recordEvent(
+                typeEnum.EVENT.EVENT,
+                fragmentEnum.EDITOR_PANEL,
+                'Unknown Update on UserPreferences.',
+                change
+              );
               break;
           }
           break;
         default:
-          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITOR_PANEL, 'Unknown Change on UserPreferences.', change);
+          EventLogging.recordEvent(
+            typeEnum.EVENT.EVENT,
+            fragmentEnum.EDITOR_PANEL,
+            'Unknown Change on UserPreferences.',
+            change
+          );
           break;
       }
     }

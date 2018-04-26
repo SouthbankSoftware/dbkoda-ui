@@ -1,26 +1,27 @@
 {
-    "Title": "Get parameters",
-    "DefaultValues": {
-        "function": "dbkoda_GetParametersPreFill"
+  "Title": "Get parameters",
+  "DefaultValues": {
+    "function": "dbkoda_GetParametersPreFill"
+  },
+  "Fields": [
+    {
+      "name": "AllParameters",
+      "label": "Show all parameters",
+      "type": "Boolean",
+      "tooltip": "Display all parameter values?"
     },
-    "Fields": [{
-            "name": "AllParameters",
-            "label": "Show all parameters", 
-            "type": "Boolean" ,
-            "tooltip": "Display all parameter values?"
-        },
-        {
-            "name": "Parameter",
-            "label":"Parameter",
-            "type": "Select" ,
-            "tooltip": "Show a single parameter or parameter group", 
-            "lookup": "dbkodaParameterList"
-        } ,
-        {
-            "name": "getCmdLineOpts",
-            "label": "Show command line options", 
-            "type": "Boolean" ,
-            "tooltip": "Show the arguments passed to mongodb on command line " 
-        }
-    ]
+    {
+      "name": "Parameter",
+      "label": "Parameter",
+      "type": "Select",
+      "tooltip": "Show a single parameter or parameter group",
+      "lookup": "dbkodaParameterList"
+    },
+    {
+      "name": "getCmdLineOpts",
+      "label": "Show command line options",
+      "type": "Boolean",
+      "tooltip": "Show the arguments passed to mongodb on command line "
+    }
+  ]
 }

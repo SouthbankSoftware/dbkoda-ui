@@ -49,5 +49,5 @@ export default (tooltip: (props: Object) => ?string) =>
       >
         <BaseComponent {...props} />
       </Tooltip>
-    ),
+    )
   );

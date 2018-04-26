@@ -63,13 +63,8 @@ export default class Application extends React.Component {
   render() {
     return (
       <div className="formContentWrapper ApplicationPreferences">
-        <div className="sectionHeader">
-          {' '}
-          {globalString('editor/config/sections/application')}
-        </div>
-        <div className="form-row">
-          {this.props.renderFieldLabel('telemetryEnabled')}
-        </div>
+        <div className="sectionHeader"> {globalString('editor/config/sections/application')}</div>
+        <div className="form-row">{this.props.renderFieldLabel('telemetryEnabled')}</div>
         <div className="switch">
           <Switch
             type="text"
@@ -79,13 +74,10 @@ export default class Application extends React.Component {
           />
           <div className="switchLabel">
             {this.props.settings.telemetryEnabled && globalString('general/on')}
-            {!this.props.settings.telemetryEnabled &&
-              globalString('general/off')}
+            {!this.props.settings.telemetryEnabled && globalString('general/off')}
           </div>
         </div>
-        <div className="form-row">
-          {this.props.renderFieldLabel('tableOutputDefault')}
-        </div>
+        <div className="form-row">{this.props.renderFieldLabel('tableOutputDefault')}</div>
         <div className="switch">
           <Switch
             type="text"
@@ -94,15 +86,11 @@ export default class Application extends React.Component {
             onChange={this.onCheckboxToggle}
           />
           <div className="switchLabel">
-            {this.props.settings.tableOutputDefault &&
-              globalString('general/on')}
-            {!this.props.settings.tableOutputDefault &&
-              globalString('general/off')}
+            {this.props.settings.tableOutputDefault && globalString('general/on')}
+            {!this.props.settings.tableOutputDefault && globalString('general/off')}
           </div>
         </div>
-        <div className="form-row">
-          {this.props.renderFieldLabel('automaticAutoComplete')}
-        </div>
+        <div className="form-row">{this.props.renderFieldLabel('automaticAutoComplete')}</div>
         <div className="switch">
           <Switch
             type="text"
@@ -111,10 +99,8 @@ export default class Application extends React.Component {
             onChange={this.onCheckboxToggle}
           />
           <div className="switchLabel">
-            {this.props.settings.automaticAutoComplete &&
-              globalString('general/on')}
-            {!this.props.settings.automaticAutoComplete &&
-              globalString('general/off')}
+            {this.props.settings.automaticAutoComplete && globalString('general/on')}
+            {!this.props.settings.automaticAutoComplete && globalString('general/off')}
           </div>
         </div>
         <div className="form-row">
@@ -128,10 +114,8 @@ export default class Application extends React.Component {
             onChange={this.onCheckboxToggle}
           />
           <div className="switchLabel">
-            {this.props.settings.showNewFeaturesDialogOnStart &&
-              globalString('general/on')}
-            {!this.props.settings.showNewFeaturesDialogOnStart &&
-              globalString('general/off')}
+            {this.props.settings.showNewFeaturesDialogOnStart && globalString('general/on')}
+            {!this.props.settings.showNewFeaturesDialogOnStart && globalString('general/off')}
           </div>
         </div>
       </div>

@@ -30,10 +30,8 @@
 // TODO: Fix dependency on local mongo (use mlaunch?)
 import os from 'os';
 
-const enableShardingTemplate =
-  './src/components/TreeActionPanel/Templates/EnableSharding.hbs';
-const shardCollectionTemplate =
-  './src/components/TreeActionPanel/Templates/ShardCollection.hbs';
+const enableShardingTemplate = './src/components/TreeActionPanel/Templates/EnableSharding.hbs';
+const shardCollectionTemplate = './src/components/TreeActionPanel/Templates/ShardCollection.hbs';
 const hbs = require('handlebars');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
@@ -48,12 +46,12 @@ const shardPort = Math.floor(Math.random() * 7000) + 6000;
 global.jasmine.DEFAULT_TIMEOUT_INTERVAL = 180000;
 
 describe('Shard-specific tests', () => {
-  beforeAll((done) => {
+  beforeAll(done => {
     const timeout = os.platform() === 'win32' ? 120000 : 10000;
     launchMongoInstance(
       '--replicaset',
       shardPort,
-      ' --nodes 2 --arbiter --sharded 2   --mongos 1 --config 1  --noauth',
+      ' --nodes 2 --arbiter --sharded 2   --mongos 1 --config 1  --noauth'
     );
     setTimeout(() => done(), timeout);
   });
@@ -62,11 +60,10 @@ describe('Shard-specific tests', () => {
     killMongoInstance(shardPort);
   });
 
-  test('Test sharding templates', (done) => {
+  test('Test sharding templates', done => {
     // Random database for the test
     const randomDatabase = 'database' + Math.floor(Math.random() * 10000000);
-    const randomCollection =
-      'collection' + Math.floor(Math.random() * 10000000);
+    const randomCollection = 'collection' + Math.floor(Math.random() * 10000000);
 
     const enableShadingInput = {};
     enableShadingInput.Database = randomDatabase;
@@ -77,8 +74,8 @@ describe('Shard-specific tests', () => {
     shardCollectionInput.Keys = [
       {
         AttributeName: 'a',
-        Direction: 1,
-      },
+        Direction: 1
+      }
     ];
     shardCollectionInput.Unique = false;
 
@@ -86,39 +83,27 @@ describe('Shard-specific tests', () => {
     const setupDatabaseCommands = [];
     setupDatabaseCommands.push(sprintf('use %s\n', randomDatabase));
 
-    setupDatabaseCommands.push(
-      sprintf('db.getCollection("%s").drop();\n', randomCollection),
-    );
+    setupDatabaseCommands.push(sprintf('db.getCollection("%s").drop();\n', randomCollection));
 
     setupDatabaseCommands.push(
-      sprintf(
-        'db.getCollection("%s").insertOne({a:1,b:1,c:{d:1,e:1}});\n',
-        randomCollection,
-      ),
+      sprintf('db.getCollection("%s").insertOne({a:1,b:1,c:{d:1,e:1}});\n', randomCollection)
     );
     setupDatabaseCommands.push(
-      sprintf('db.getCollection("%s").createIndex({a:1});\n', randomCollection),
+      sprintf('db.getCollection("%s").createIndex({a:1});\n', randomCollection)
     );
-    const dropDatabaseCommands = sprintf(
-      'db.getSiblingDB("%s").dropDatabase()',
-      randomDatabase,
-    );
+    const dropDatabaseCommands = sprintf('db.getSiblingDB("%s").dropDatabase()', randomDatabase);
     fs.readFile(enableShardingTemplate, (err, shardTemplate) => {
       fs.readFile(shardCollectionTemplate, (err, collectionTemplate) => {
         const enableShardingSource = shardTemplate.toString();
         const enableShardingTemplate = hbs.compile(enableShardingSource);
-        const enableShardingCommands = enableShardingTemplate(
-          enableShadingInput,
-        );
+        const enableShardingCommands = enableShardingTemplate(enableShadingInput);
 
         const shardCollectionSource = collectionTemplate.toString();
         const shardCollectionTemplate = hbs.compile(shardCollectionSource);
-        const shardCollectionCommands = shardCollectionTemplate(
-          shardCollectionInput,
-        );
+        const shardCollectionCommands = shardCollectionTemplate(shardCollectionInput);
 
         let mongoCommands = '';
-        setupDatabaseCommands.forEach((c) => {
+        setupDatabaseCommands.forEach(c => {
           mongoCommands += c;
         });
 
@@ -129,9 +114,9 @@ describe('Shard-specific tests', () => {
         const matchString = sprintf(
           '"collectionsharded" : "%s.%s", "ok" : 1',
           randomDatabase,
-          randomCollection,
+          randomCollection
         ); // database were created
-        common.mongoPortOutput(shardPort, mongoCommands).then((output) => {
+        common.mongoPortOutput(shardPort, mongoCommands).then(output => {
           expect(output).toEqual(expect.stringMatching(matchString));
           done();
         });

@@ -23,13 +23,7 @@
 
 import React from 'react';
 import _ from 'lodash';
-import {
-  Checkbox,
-  Intent,
-  Position,
-  Tooltip,
-  NumericInput
-} from '@blueprintjs/core';
+import { Checkbox, Intent, Position, Tooltip, NumericInput } from '@blueprintjs/core';
 
 import { BackupRestoreActions } from '../common/Constants';
 import './Options.scss';
@@ -107,9 +101,7 @@ const getOptions = options => {
                 )}
                 {o.inputType === 'number' && (
                   <NumericInput
-                    className={`pt-tooltip-indicator number-input db-backup-${
-                      o.name
-                    }`}
+                    className={`pt-tooltip-indicator number-input db-backup-${o.name}`}
                     value={o.value}
                     onValueChange={e => o.onChange(e)}
                   />
@@ -143,16 +135,11 @@ const getOptions = options => {
   );
 };
 
-export const AllCollectionOption = ({
-  allCollections,
-  changeAllCollections,
-  action
-}) => {
+export const AllCollectionOption = ({ allCollections, changeAllCollections, action }) => {
   const options = [
     {
       label:
-        action === BackupRestoreActions.DUMP_SERVER ||
-        action === BackupRestoreActions.EXPORT_SERVER
+        action === BackupRestoreActions.DUMP_SERVER || action === BackupRestoreActions.EXPORT_SERVER
           ? globalString('backuprestore/parameters/allDatabases/label')
           : globalString('backuprestore/parameters/allCollections/label'),
       onChange: changeAllCollections,
@@ -344,27 +331,19 @@ export const DumpOptions = ({
       label: globalString('backuprestore/parameters/dumpDbUsersAndRoles/label'),
       onChange: changeDumpDbUsersAndRoles,
       checked: dumpDbUsersAndRoles,
-      tooltips: globalString(
-        'backuprestore/parameters/dumpDbUsersAndRoles/tooltip'
-      ),
+      tooltips: globalString('backuprestore/parameters/dumpDbUsersAndRoles/tooltip'),
       name: 'dump-db-users-and-roles'
     },
     {
       label: globalString('backuprestore/parameters/viewsAsCollections/label'),
       checked: viewsAsCollections,
-      tooltips: globalString(
-        'backuprestore/parameters/viewsAsCollections/tooltip'
-      ),
+      tooltips: globalString('backuprestore/parameters/viewsAsCollections/tooltip'),
       onChange: changeViewsAsCollections,
       name: 'views-as-collections'
     },
     {
-      label: globalString(
-        'backuprestore/parameters/numParallelCollections/label'
-      ),
-      tooltips: globalString(
-        'backuprestore/parameters/numParallelCollections/tooltip'
-      ),
+      label: globalString('backuprestore/parameters/numParallelCollections/label'),
+      tooltips: globalString('backuprestore/parameters/numParallelCollections/tooltip'),
       onChange: changeNumParallelCollections,
       type: 'input',
       inputType: 'number',
@@ -478,37 +457,25 @@ export const RestoreOptions = ({
       onChange: changeNoOptionsRestore,
       value: noOptionsRestore,
       name: 'no-options-restore',
-      tooltips: globalString(
-        'backuprestore/parameters/noOptionsRestore/tooltip'
-      )
+      tooltips: globalString('backuprestore/parameters/noOptionsRestore/tooltip')
     },
     {
       label: globalString('backuprestore/parameters/keepIndexVersion/label'),
-      tooltips: globalString(
-        'backuprestore/parameters/keepIndexVersion/tooltip'
-      ),
+      tooltips: globalString('backuprestore/parameters/keepIndexVersion/tooltip'),
       onChange: changeKeepIndexVersion,
       value: keepIndexVersion,
       name: 'keep-index-version'
     },
     {
-      label: globalString(
-        'backuprestore/parameters/maintainInsertionOrder/label'
-      ),
-      tooltips: globalString(
-        'backuprestore/parameters/maintainInsertionOrder/tooltip'
-      ),
+      label: globalString('backuprestore/parameters/maintainInsertionOrder/label'),
+      tooltips: globalString('backuprestore/parameters/maintainInsertionOrder/tooltip'),
       onChange: changeMaintainInsertionOrder,
       value: maintainInsertionOrder,
       name: 'maintain-insertion-order'
     },
     {
-      label: globalString(
-        'backuprestore/parameters/numParallelCollections/label'
-      ),
-      tooltips: globalString(
-        'backuprestore/parameters/numParallelCollections/tooltip'
-      ),
+      label: globalString('backuprestore/parameters/numParallelCollections/label'),
+      tooltips: globalString('backuprestore/parameters/numParallelCollections/tooltip'),
       onChange: changeNumParallelCollections,
       value: numParallelCollections,
       type: 'input',
@@ -517,9 +484,7 @@ export const RestoreOptions = ({
     },
     {
       label: globalString('backuprestore/parameters/numInsertionWorkers/label'),
-      tooltips: globalString(
-        'backuprestore/parameters/numInsertionWorkers/tooltip'
-      ),
+      tooltips: globalString('backuprestore/parameters/numInsertionWorkers/tooltip'),
       onChange: changeNumInsertionWorkersPerCollection,
       value: numInsertionWorkersPerCollection,
       type: 'input',
@@ -534,12 +499,8 @@ export const RestoreOptions = ({
       name: 'stop-on-error'
     },
     {
-      label: globalString(
-        'backuprestore/parameters/bypassDocumentValidation/label'
-      ),
-      tooltips: globalString(
-        'backuprestore/parameters/bypassDocumentValidation/tooltip'
-      ),
+      label: globalString('backuprestore/parameters/bypassDocumentValidation/label'),
+      tooltips: globalString('backuprestore/parameters/bypassDocumentValidation/tooltip'),
       onChange: changeBypassDocumentValidation,
       value: bypassDocumentValidation,
       name: 'bypass-document-validation'
@@ -571,12 +532,8 @@ export const RestoreOptions = ({
       name: 'oplog-limit'
     },
     {
-      label: globalString(
-        'backuprestore/parameters/restoreDbUsersAndRoles/label'
-      ),
-      tooltips: globalString(
-        'backuprestore/parameters/restoreDbUsersAndRoles/tooltip'
-      ),
+      label: globalString('backuprestore/parameters/restoreDbUsersAndRoles/label'),
+      tooltips: globalString('backuprestore/parameters/restoreDbUsersAndRoles/tooltip'),
       value: restoreDbUsersAndRoles,
       onChange: changeRestoreDbUsersAndRoles,
       name: 'restore-db-users-and-roles'
@@ -670,9 +627,7 @@ export const ImportOptions = ({
     },
     {
       label: globalString('backuprestore/parameters/columnsHaveTypes/label'),
-      tooltips: globalString(
-        'backuprestore/parameters/columnsHaveTypes/tooltip'
-      ),
+      tooltips: globalString('backuprestore/parameters/columnsHaveTypes/tooltip'),
       onChange: changeColumnsHaveTypes,
       type: 'input',
       value: columnsHaveTypes,
@@ -705,21 +660,15 @@ export const ImportOptions = ({
       name: 'ignore-blanks'
     },
     {
-      label: globalString(
-        'backuprestore/parameters/maintainInsertionOrder/label'
-      ),
-      tooltips: globalString(
-        'backuprestore/parameters/maintainInsertionOrder/tooltip'
-      ),
+      label: globalString('backuprestore/parameters/maintainInsertionOrder/label'),
+      tooltips: globalString('backuprestore/parameters/maintainInsertionOrder/tooltip'),
       onChange: changeMaintainInsertionOrder,
       checked: maintainInsertionOrder,
       name: 'maintain-insertion-order'
     },
     {
       label: globalString('backuprestore/parameters/numInsertionWorkers/label'),
-      tooltips: globalString(
-        'backuprestore/parameters/numInsertionWorkers/tooltip'
-      ),
+      tooltips: globalString('backuprestore/parameters/numInsertionWorkers/tooltip'),
       type: 'input',
       inputType: 'number',
       value: numInsertionWorkers,
@@ -758,12 +707,8 @@ export const ImportOptions = ({
       name: 'write-concern'
     },
     {
-      label: globalString(
-        'backuprestore/parameters/bypassDocumentValidation/label'
-      ),
-      tooltips: globalString(
-        'backuprestore/parameters/bypassDocumentValidation/tooltip'
-      ),
+      label: globalString('backuprestore/parameters/bypassDocumentValidation/label'),
+      tooltips: globalString('backuprestore/parameters/bypassDocumentValidation/tooltip'),
       onChange: changeBypassDocumentValidation,
       checked: bypassDocumentValidation,
       name: 'bypass-document-validation'
@@ -772,10 +717,7 @@ export const ImportOptions = ({
   if (shellVersion) {
     const ver = parseFloat(shellVersion.substring(0, 3), 10);
     if (ver < 3.4) {
-      options = _.filter(
-        options,
-        o => o.name !== 'parse-grace' && o.name !== 'mode'
-      );
+      options = _.filter(options, o => o.name !== 'parse-grace' && o.name !== 'mode');
     }
   }
   return getOptions(options);

@@ -30,21 +30,21 @@ const sprintf = require('sprintf-js').sprintf;
 
 export const DbCollectionStats = {
   // Prefill function for alter user
-  dbkoda_DbCollectionStats: (params) => {
+  dbkoda_DbCollectionStats: params => {
     return sprintf('dbeCR.collStats("%s")', params.dbName);
   },
-  dbkoda_DbCollectionStats_parse: (data) => {
+  dbkoda_DbCollectionStats_parse: data => {
     // data.time = Globalize.formatNumber(data.time);
     const result = {};
     result.top10 = [];
     result.CollectionDetails = data.collStats;
-    data.collStats.forEach((cs) => {
+    data.collStats.forEach(cs => {
       result.top10.push({
         ns: cs.ns,
-        size: cs.storageSizeMB,
+        size: cs.storageSizeMB
       });
       result.top10 = result.top10.slice(0, 10);
     });
     return result;
-  },
+  }
 };

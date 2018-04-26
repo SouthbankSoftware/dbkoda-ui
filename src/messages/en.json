@@ -435,7 +435,7 @@
     },
     "profile": {
       "noProfile": "No Profile Selected",
-      "notClosed": "Connection is not closed.",
+      "notClosed": "Connection is not closed, editing will reset the open connection.",
       "removeSuccess": "Successfully Removed Connection",
       "connectionProfiles": "Connection Profiles",
       "menu": {

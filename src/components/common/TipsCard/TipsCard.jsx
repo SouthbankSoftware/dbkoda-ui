@@ -18,7 +18,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import {Card, Button} from '@blueprintjs/core';
+import { Card, Button } from '@blueprintjs/core';
 
 import './style.scss';
 
@@ -27,27 +27,27 @@ export default class TipsCard extends React.Component {
     super(props);
     this.state = {
       selectedIdx: 0,
-      tips: [],
+      tips: []
     };
   }
 
   componentDidMount() {
-    this.setState({tips: this.props.tips});
+    this.setState({ tips: this.props.tips });
   }
 
   onNextTip = () => {
     const nextIdx = this.state.selectedIdx + 1;
     this.setState({
-      selectedIdx: nextIdx,
+      selectedIdx: nextIdx
     });
-  }
+  };
 
   onPrevTip = () => {
     const prevIdx = this.state.selectedIdx - 1;
     this.setState({
-      selectedIdx: prevIdx,
+      selectedIdx: prevIdx
     });
-  }
+  };
 
   render() {
     return (
@@ -72,9 +72,7 @@ export default class TipsCard extends React.Component {
             />
             <Button
               className={
-                (this.state.selectedIdx < this.state.tips.length - 1
-                  ? 'active'
-                  : 'inactive') +
+                (this.state.selectedIdx < this.state.tips.length - 1 ? 'active' : 'inactive') +
                 ' pt-button pt-intent-primary pt-icon-chevron-right tips-card-btn'
               }
               onClick={this.onNextTip}

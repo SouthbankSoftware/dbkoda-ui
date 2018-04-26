@@ -63,10 +63,7 @@ export default class Performance extends React.Component {
   render() {
     return (
       <div className="formContentWrapper PerformancePreferences">
-        <div className="sectionHeader">
-          {' '}
-          {globalString('editor/config/sections/performance')}
-        </div>
+        <div className="sectionHeader"> {globalString('editor/config/sections/performance')}</div>
         <div className="form-row">
           {this.props.renderFieldLabel('performancePanel.preventDisplaySleep')}
         </div>
@@ -78,16 +75,13 @@ export default class Performance extends React.Component {
             onChange={this.onCheckboxToggle}
           />
           <div className="switchLabel">
-            {this.props.settings.performancePanel.preventDisplaySleep &&
-              globalString('general/on')}
+            {this.props.settings.performancePanel.preventDisplaySleep && globalString('general/on')}
             {!this.props.settings.performancePanel.preventDisplaySleep &&
               globalString('general/off')}
           </div>
         </div>
         <div className="form-row">
-          {this.props.renderFieldLabel(
-            'performancePanel.metricSmoothingWindow'
-          )}
+          {this.props.renderFieldLabel('performancePanel.metricSmoothingWindow')}
           <input
             type="text"
             id="performancePanel.metricSmoothingWindow"
@@ -96,9 +90,7 @@ export default class Performance extends React.Component {
           />
         </div>
         <div className="form-row">
-          {this.props.renderFieldLabel(
-            'performancePanel.foregroundSamplingRate'
-          )}
+          {this.props.renderFieldLabel('performancePanel.foregroundSamplingRate')}
           <input
             type="text"
             id="performancePanel.foregroundSamplingRate"
@@ -107,9 +99,7 @@ export default class Performance extends React.Component {
           />
         </div>
         <div className="form-row">
-          {this.props.renderFieldLabel(
-            'performancePanel.backgroundSamplingRate'
-          )}
+          {this.props.renderFieldLabel('performancePanel.backgroundSamplingRate')}
           <input
             type="text"
             id="performancePanel.backgroundSamplingRate"
@@ -136,9 +126,7 @@ export default class Performance extends React.Component {
           />
         </div>
         <div className="form-row">
-          {this.props.renderFieldLabel(
-            'performancePanel.alarmDisplayingWindow'
-          )}
+          {this.props.renderFieldLabel('performancePanel.alarmDisplayingWindow')}
           <input
             type="text"
             id="performancePanel.alarmDisplayingWindow"

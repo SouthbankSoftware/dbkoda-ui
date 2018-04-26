@@ -1,48 +1,53 @@
 {
-    "Title": "Shard Statistics",
-    "DefaultValues": {
-        "function": "dbkoda_ShardStats"
+  "Title": "Shard Statistics",
+  "DefaultValues": {
+    "function": "dbkoda_ShardStats"
+  },
+  "Fields": [
+    {
+      "name": "collectionChunks",
+      "label": "Chunks by collection",
+      "type": "BarChart",
+      "groupBy": ["ns", "shard"],
+      "XAxis": {
+        "key": "chunks"
+      },
+      "YAxis": {
+        "key": "ns",
+        "width": 165
+      },
+      "width": "100%"
     },
-    "Fields": [
+    {
+      "name": "chunks",
+      "label": "Chunks by shard",
+      "type": "BarChart",
+      "XAxis": [
         {
-            "name": "collectionChunks",
-            "label": "Chunks by collection",
-            "type": "BarChart",
-            "groupBy": ["ns", "shard"],
-            "XAxis": {
-                "key": "chunks"
-            },
-            "YAxis": {
-                "key": "ns",
-                "width": 165
-            },
-            "width": "100%"
-        },{
-            "name": "chunks",
-            "label": "Chunks by shard",
-            "type": "BarChart",
-            "XAxis": [{
-                "key": "chunks",
-                "label": "Number of chunks"
-            }],
-            "YAxis": {
-                "key": "shard"
-            },
-            "width": "50%"
-        },
-        {
-            "name": "threadsByHost",
-            "label": "Threads by shard host",
-            "type": "BarChart",
-            "XAxis": [{
-                "key": "created",
-                "label": "Threads created"
-            }],
-            "YAxis": {
-                "key": "host",
-                "width": 120
-            },
-            "width": "50%"
+          "key": "chunks",
+          "label": "Number of chunks"
         }
-    ]
+      ],
+      "YAxis": {
+        "key": "shard"
+      },
+      "width": "50%"
+    },
+    {
+      "name": "threadsByHost",
+      "label": "Threads by shard host",
+      "type": "BarChart",
+      "XAxis": [
+        {
+          "key": "created",
+          "label": "Threads created"
+        }
+      ],
+      "YAxis": {
+        "key": "host",
+        "width": 120
+      },
+      "width": "50%"
+    }
+  ]
 }

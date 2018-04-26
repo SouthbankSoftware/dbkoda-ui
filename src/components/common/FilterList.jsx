@@ -34,18 +34,18 @@ export default class FilterList extends React.Component {
     items: [],
     getItemTitle: null, // null to use self as title
     getItemId: null, // null to use getItemTitle, then title
-    onClick: null,
+    onClick: null
   };
 
   static propTypes = {
     items: PropTypes.array,
     getItemTitle: PropTypes.func,
     getItemId: PropTypes.func,
-    onClick: PropTypes.func,
+    onClick: PropTypes.func
   };
 
   state = {
-    items: this.props.items,
+    items: this.props.items
   };
 
   getItemTitle(item) {
@@ -65,11 +65,11 @@ export default class FilterList extends React.Component {
     return item;
   }
 
-  filterList = (event) => {
+  filterList = event => {
     const target = event.target.value.toLowerCase();
     let updatedList = this.props.items;
     updatedList = updatedList.filter(item =>
-      fuzzysearch(target, this.getItemTitle(item).toLowerCase()),
+      fuzzysearch(target, this.getItemTitle(item).toLowerCase())
     );
     this.setState({ items: updatedList });
   };
@@ -86,7 +86,7 @@ export default class FilterList extends React.Component {
           onChange={this.filterList}
         />
         <ul>
-          {this.state.items.map((item) => {
+          {this.state.items.map(item => {
             const itemTitle = this.getItemTitle(item);
             const itemId = this.getItemId(item);
             const onItemClick = onClick && onClick.bind(this, item); // eslint-disable-line react/jsx-no-bind

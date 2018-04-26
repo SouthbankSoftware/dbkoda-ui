@@ -31,14 +31,8 @@ import { observer } from 'mobx-react';
 
 import { Intent, Position, Tooltip } from '@blueprintjs/core';
 
-export default observer(({
-  field,
-  showLabel = true,
-  formGroup = false
-}) => {
-  let fldClassName = formGroup
-    ? 'pt-form-group form-group-inline'
-    : 'pt-form-group pt-top-level';
+export default observer(({ field, showLabel = true, formGroup = false }) => {
+  let fldClassName = formGroup ? 'pt-form-group form-group-inline' : 'pt-form-group pt-top-level';
 
   if (field.error) {
     fldClassName += ' pt-intent-danger';
@@ -55,25 +49,28 @@ export default observer(({
   }
   return (
     <div className={fldClassName}>
-      {showLabel &&
+      {showLabel && (
         <label className="pt-label pt-label-r-30" htmlFor={field.id}>
           {field.label}
-        </label>}
+        </label>
+      )}
       <div className="pt-form-content">
         {field.options &&
-          field.options.tooltip &&
-          <Tooltip
-            className={tooltipClassName}
-            content={field.options.tooltip}
-            hoverOpenDelay={1000}
-            inline
-            intent={Intent.PRIMARY}
-            position={Position.TOP}
-          >
-            <input className={inputClassName} {...field.bind()} />
-          </Tooltip>}
-        {(!field.options || !field.options.tooltip) &&
-          <input className={inputClassName} {...field.bind()} />}
+          field.options.tooltip && (
+            <Tooltip
+              className={tooltipClassName}
+              content={field.options.tooltip}
+              hoverOpenDelay={1000}
+              inline
+              intent={Intent.PRIMARY}
+              position={Position.TOP}
+            >
+              <input className={inputClassName} {...field.bind()} />
+            </Tooltip>
+          )}
+        {(!field.options || !field.options.tooltip) && (
+          <input className={inputClassName} {...field.bind()} />
+        )}
         <p className="pt-form-helper-text">{field.error}</p>
       </div>
     </div>

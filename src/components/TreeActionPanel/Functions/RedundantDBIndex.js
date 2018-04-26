@@ -32,27 +32,27 @@ import * as common from './Common.js';
 
 export const RedundantDBIndex = {
   // Prefill function for alter user
-  dbkoda_RedundantDBPreFill: (params) => {
+  dbkoda_RedundantDBPreFill: params => {
     const db = params.Database;
     const cmd = `dbkInx.redundantDbIndexes("${db}");`;
     console.log(cmd);
     return cmd;
   },
-  dbkoda_RedundantDBPreFill_parse: (indexList) => {
+  dbkoda_RedundantDBPreFill_parse: indexList => {
     console.log(indexList);
     const output = {};
     output.UnecessaryIndexes = [];
-    indexList.forEach(((r) => {
+    indexList.forEach(r => {
       output.UnecessaryIndexes.push({
-        dbName:r.dbName,
-        collection:r.collection,
-        indexName:r.indexName,
-        key:r.key,
-        becauseIndex:r.becauseIndex,
-        becauseKeys:r.becauseKeys
+        dbName: r.dbName,
+        collection: r.collection,
+        indexName: r.indexName,
+        key: r.key,
+        becauseIndex: r.becauseIndex,
+        becauseKeys: r.becauseKeys
       });
-    }));
+    });
     console.log(output);
-    return (output);
+    return output;
   }
 };

@@ -30,7 +30,7 @@ import * as common from './Common.js';
 
 export const CreateCollection = {
   // Prefill function for alter user
-  dbkoda_CreateCollectionPreFill: (params) => {
+  dbkoda_CreateCollectionPreFill: params => {
     const Database = params.Database;
     const data = {};
     data.Database = Database;
@@ -41,15 +41,15 @@ export const CreateCollection = {
   dbkoda_validationLevel: () => {
     return 'db';
   },
-  dbkoda_validationLevel_parse: (res) => {
+  dbkoda_validationLevel_parse: res => {
     return ['off', 'moderate', 'strict'];
   },
   dbkoda_validationAction: () => {
     return 'db';
   },
-  dbkoda_validationAction_parse: (res) => {
+  dbkoda_validationAction_parse: res => {
     return ['error', 'warn'];
   },
   dbkoda_listdb: common.dbkoda_listdb,
-  dbkoda_listdb_parse: common.dbkoda_listdb_parse,
+  dbkoda_listdb_parse: common.dbkoda_listdb_parse
 };

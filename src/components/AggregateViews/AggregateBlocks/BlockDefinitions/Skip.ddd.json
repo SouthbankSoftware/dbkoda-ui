@@ -1,11 +1,13 @@
 {
   "Title": "Skip",
-    "DefaultValues": {},
-  "Fields": [{
-    "name": "skip",
-    "label": "Skip",
-    "tooltip": "Number of documents to skip ahead",
-    "type": "Numeric",
-    "rules": "integer"
-  }]
+  "DefaultValues": {},
+  "Fields": [
+    {
+      "name": "skip",
+      "label": "Skip",
+      "tooltip": "Number of documents to skip ahead",
+      "type": "Numeric",
+      "rules": "integer"
+    }
+  ]
 }

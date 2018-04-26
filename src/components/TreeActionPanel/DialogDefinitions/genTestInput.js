@@ -25,7 +25,7 @@ let ddd = require('./' + file); // eslint-disable-line no-dynamic-require
 /* eslint-enable */
 console.log(file);
 console.log('{');
-ddd.Fields.forEach((f) => {
+ddd.Fields.forEach(f => {
   const line = sprintf('\t"%s":"%s",', f.name, f.name);
   console.log(line);
 });

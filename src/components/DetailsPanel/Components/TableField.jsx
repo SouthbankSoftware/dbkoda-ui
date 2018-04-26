@@ -58,10 +58,7 @@ export default observer(({ field, data }) => {
   }
 
   return (
-    <div
-      className="div-field-container"
-      style={field.width && { width: field.width }}
-    >
+    <div className="div-field-container" style={field.width && { width: field.width }}>
       <label htmlFor={field.name} className="pt-label pt-label-field">
         {field.label}
       </label>

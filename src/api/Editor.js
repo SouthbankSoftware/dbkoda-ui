@@ -142,11 +142,7 @@ export default class EditorApi {
     let largestFileName = -1;
 
     for (const editor of this.store.editors.values()) {
-      if (
-        !editor.path &&
-        editor.type === type &&
-        editor.fileName > largestFileName
-      ) {
+      if (!editor.path && editor.type === type && editor.fileName > largestFileName) {
         largestFileName = editor.fileName;
       }
     }
@@ -291,10 +287,7 @@ export default class EditorApi {
 
     this.store.drawer.drawerChild = DrawerPanes.DEFAULT;
     // If Editor is not clean, prompt for save.
-    if (
-      !currEditor.doc.isClean() &&
-      currEditor.type != EditorTypes.SHELL_COMMAND
-    ) {
+    if (!currEditor.doc.isClean() && currEditor.type != EditorTypes.SHELL_COMMAND) {
       this.store.editorPanel.showingSavingDialogEditorIds.push(currEditor.id);
       return;
     }
@@ -330,9 +323,7 @@ export default class EditorApi {
         const editors = [...this.store.editors.entries()];
         this.store.editorPanel.activeEditorId = editors[0][1].id;
 
-        const treeEditor = this.store.treeActionPanel.editors.get(
-          currEditor.id
-        );
+        const treeEditor = this.store.treeActionPanel.editors.get(currEditor.id);
         if (treeEditor) {
           this.store.treeActionPanel.editors.delete(treeEditor.id);
         }

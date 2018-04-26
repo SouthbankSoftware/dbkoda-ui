@@ -66,10 +66,7 @@ export default class PasswordStore extends React.Component {
   render() {
     return (
       <div className="formContentWrapper">
-        <div className="sectionHeader">
-          {' '}
-          {globalString('editor/config/sections/passwords')}
-        </div>
+        <div className="sectionHeader"> {globalString('editor/config/sections/passwords')}</div>
         <div className="form-row">
           {this.props.renderFieldLabel('passwordStoreEnabled')}
           <Dialog
@@ -78,12 +75,8 @@ export default class PasswordStore extends React.Component {
             isOpen={this.state.isConfirmOpen}
           >
             <div className="dialogContent">
-              <p>
-                {globalString('editor/config/remove_store_dialog/question')}
-              </p>
-              <p>
-                {globalString('editor/config/remove_store_dialog/qualifier')}
-              </p>
+              <p>{globalString('editor/config/remove_store_dialog/question')}</p>
+              <p>{globalString('editor/config/remove_store_dialog/qualifier')}</p>
             </div>
             <div className="dialogButtons">
               <AnchorButton
@@ -111,10 +104,8 @@ export default class PasswordStore extends React.Component {
             onChange={this.onCheckboxToggle}
           />
           <div className="switchLabel">
-            {this.props.settings.passwordStoreEnabled &&
-              globalString('general/on')}
-            {!this.props.settings.passwordStoreEnabled &&
-              globalString('general/off')}
+            {this.props.settings.passwordStoreEnabled && globalString('general/on')}
+            {!this.props.settings.passwordStoreEnabled && globalString('general/off')}
           </div>
         </div>
       </div>

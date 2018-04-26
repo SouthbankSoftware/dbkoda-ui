@@ -27,19 +27,11 @@
 import * as React from 'react';
 // import { Menu, MenuItem } from '@blueprintjs/core';
 import { Cell, Column, ColumnHeaderCell } from '@blueprintjs/table';
-import {
-  AnchorButton,
-  Intent,
-  Position,
-  Tooltip
-} from '@blueprintjs/core';
+import { AnchorButton, Intent, Position, Tooltip } from '@blueprintjs/core';
 import RemoveProfileIcon from '~/styles/icons/remove-profile-icon.svg';
 
 export type ICellLookup = (rowIndex: number, columnIndex: number) => any;
-export type ISortCallback = (
-  columnIndex: number,
-  comparator: (a: any, b: any) => number
-) => void;
+export type ISortCallback = (columnIndex: number, comparator: (a: any, b: any) => number) => void;
 
 export default class ActionsColumn {
   constructor(name: string, index: number, killAction: Function) {
@@ -72,10 +64,7 @@ export default class ActionsColumn {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}
             >
-              <AnchorButton
-                className="deleteButton"
-                onClick={() => that.killAction(this.opId)}
-              >
+              <AnchorButton className="deleteButton" onClick={() => that.killAction(this.opId)}>
                 <RemoveProfileIcon className="dbKodaSVG" width={20} height={20} />
               </AnchorButton>
             </Tooltip>
@@ -83,9 +72,7 @@ export default class ActionsColumn {
         </Cell>
       );
     };
-    const columnHeaderCellRenderer = () => (
-      <ColumnHeaderCell name={this.name} />
-    );
+    const columnHeaderCellRenderer = () => <ColumnHeaderCell name={this.name} />;
     return (
       <Column
         cellRenderer={cellRenderer}

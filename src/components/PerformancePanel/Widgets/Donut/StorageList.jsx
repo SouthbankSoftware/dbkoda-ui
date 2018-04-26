@@ -57,9 +57,7 @@ export default props => {
           <div style={styles.item} key={key}>
             <div className="leftWrapper" style={{ marginRight: '10px' }}>
               {' '}
-              <CircleIcon
-                style={{ fill: item.color, width: '5%', marginRight: '2px' }}
-              />
+              <CircleIcon style={{ fill: item.color, width: '5%', marginRight: '2px' }} />
               {item.dbName.length > 10 && (
                 <Popover2
                   minimal

@@ -31,7 +31,7 @@ export const ReplicaStats = {
   dbkoda_ReplicaStats: () => {
     return 'dbc_rsStats.details()';
   },
-  dbkoda_ReplicaStats_parse: (data) => {
+  dbkoda_ReplicaStats_parse: data => {
     return data;
   }
 };

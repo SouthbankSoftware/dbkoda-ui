@@ -29,13 +29,13 @@
 import * as common from './Common.js';
 
 export const GetParameters = {
-    // Prefill function for alter user
-    dbkoda_GetParametersPreFill: () => {
-        const data = {};
-        data.AllParameters = true;
-        data.getCmdLineOpts = true;
-        return data;
-    },
-    dbkodaParameterList: common.dbkodaParameterList,
-    dbkodaParameterList_parse: common.dbkodaParameterList_parse
+  // Prefill function for alter user
+  dbkoda_GetParametersPreFill: () => {
+    const data = {};
+    data.AllParameters = true;
+    data.getCmdLineOpts = true;
+    return data;
+  },
+  dbkodaParameterList: common.dbkodaParameterList,
+  dbkodaParameterList_parse: common.dbkodaParameterList_parse
 };

@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-@import "../../styles/_defaultTheme.scss";
+@import '../../styles/_defaultTheme.scss';
 
 .ChartPanel {
   .BarChartOverlay {
@@ -61,7 +61,7 @@
     }
 
     g.unload.over {
-      fill: lighten($buttonDangerBackground, 10%)
+      fill: lighten($buttonDangerBackground, 10%);
     }
 
     .YAxis {

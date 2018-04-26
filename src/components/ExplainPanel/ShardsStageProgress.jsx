@@ -27,20 +27,20 @@ import _ from 'lodash';
 import './style.scss';
 import StageProgress from './StageProgress';
 
-export const mergeShardsStages = (shardStages) => {
+export const mergeShardsStages = shardStages => {
   const mergedStages = [];
   let maxLength = 0;
   let maxHeight = 1; // the max height of each shard, it should be 1 unless there is or stage
   const shardHeight = {}; // store each shard height in case there is an array of stages; otherwise it should be 1
-  shardStages.map((stages) => {
+  shardStages.map(stages => {
     const ss = [];
-    stages.stages.map((s) => {
+    stages.stages.map(s => {
       if (s.constructor === Array) {
         if (maxHeight < s.length) {
           maxHeight = s.length;
         }
         shardHeight[stages.shardName] = s.length;
-        s.map((innerStage) => {
+        s.map(innerStage => {
           innerStage.shardName = stages.shardName;
         });
       } else {
@@ -59,7 +59,7 @@ export const mergeShardsStages = (shardStages) => {
   if (shardStages.length === 1) {
     return { mergedStages: [].concat(shardStages[0].stages) };
   }
-  const fillShardStages = shardStages.map((stages) => {
+  const fillShardStages = shardStages.map(stages => {
     const filtered = [].concat(stages.stages);
     const length = filtered.length;
     if (filtered.length < maxLength) {
@@ -67,7 +67,7 @@ export const mergeShardsStages = (shardStages) => {
     }
     return { stages: filtered };
   });
-  fillShardStages.map((s) => {
+  fillShardStages.map(s => {
     s.stages.map((st, j) => {
       if (!mergedStages[j]) {
         mergedStages[j] = [];
@@ -75,18 +75,14 @@ export const mergeShardsStages = (shardStages) => {
       mergedStages[j].push(st);
     });
   });
-  const finalStages = mergedStages.map((stages) => {
+  const finalStages = mergedStages.map(stages => {
     let length = 1;
-    stages.map((subStages) => {
-      if (
-        subStages &&
-        subStages.constructor === Array &&
-        subStages.length > length
-      ) {
+    stages.map(subStages => {
+      if (subStages && subStages.constructor === Array && subStages.length > length) {
         length = subStages.length;
       }
     });
-    return stages.map((subStages) => {
+    return stages.map(subStages => {
       if (subStages === null && length > 1) {
         const newStages = [];
         _.times(length, () => newStages.push(null));

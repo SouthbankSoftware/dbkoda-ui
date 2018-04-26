@@ -31,7 +31,7 @@ import * as common from './Common.js';
 
 export const ShardCollection = {
   // Prefill function for alter user
-  dbkoda_ShardCollectionPreFill: (params) => {
+  dbkoda_ShardCollectionPreFill: params => {
     const data = {};
     data.Database = params.Database;
     data.CollectionName = params.CollectionName;
@@ -41,9 +41,9 @@ export const ShardCollection = {
   dbkoda_indexOptions: () => {
     return 'db';
   },
-  dbkoda_indexOptions_parse: (res) => {
+  dbkoda_indexOptions_parse: res => {
     return [1, -1, '"hashed"'];
   },
   dbkodaListAttributes: common.dbkodaListAttributes,
-  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
+  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse
 };

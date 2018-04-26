@@ -61,12 +61,13 @@
       width: 100%;
 
       thead {
-        background-color: #5D3750;
+        background-color: #5d3750;
       }
       tbody tr:nth-child(odd) td {
         background: #222324 !important;
       }
-      td, th {
+      td,
+      th {
         color: $detailsFontColor !important;
       }
       th {
@@ -79,7 +80,7 @@
     }
     .pt-interactive {
       tbody tr:hover td {
-        background-color: #30363B !important;
+        background-color: #30363b !important;
         cursor: pointer;
       }
     }
@@ -153,8 +154,8 @@
         top: calc(50% - 50px);
         width: 100px;
         height: 100px;
-        order:1;
-        position:absolute;
+        order: 1;
+        position: absolute;
         text-align: center;
         border-radius: 50%;
         background-color: $treeIconBGColor;
@@ -173,14 +174,12 @@
       }
       div.loader {
         border: 16px solid $treeLoaderColorBG;
-        border-top: 16px
-          solid
-          $treeLoaderColor; // Second spinning icon: border-bottom: 16px solid $treeLoaderColor;
+        border-top: 16px solid $treeLoaderColor; // Second spinning icon: border-bottom: 16px solid $treeLoaderColor;
         border-radius: 50%;
-        width:100px;
-        height:100px;
-        order:1;
-        position:relative;
+        width: 100px;
+        height: 100px;
+        order: 1;
+        position: relative;
         animation: spin 2s linear infinite;
       }
       @keyframes spin {
@@ -193,7 +192,7 @@
       }
       span {
         order: 2;
-        position:absolute;
+        position: absolute;
         color: $treeMessageColor;
         padding: 10px 5px;
         display: block;
@@ -203,5 +202,4 @@
       }
     }
   }
-
 }

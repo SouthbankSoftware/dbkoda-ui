@@ -40,15 +40,15 @@ import ChartIcon from '../../styles/icons/chart-icon.svg';
 
 type Store = {
   doc: {
-    getValue: () => string,
-  },
+    getValue: () => string
+  }
 };
 
 type Props = {
   store: Store,
   api: {},
   connectionId: string,
-  editorId: string,
+  editorId: string
 };
 
 type State = {};
@@ -59,9 +59,9 @@ type State = {};
 
   return {
     store: {
-      doc,
+      doc
     },
-    api,
+    api
   };
 })
 export default class GenerateChartButton extends React.PureComponent<Props, State> {
@@ -73,14 +73,14 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
 
     Broker.on(
       EventType.createAggregatorResultReceived(props.editorId),
-      this._onAggregatorResultReceived,
+      this._onAggregatorResultReceived
     );
   }
 
   componentWillUnmount() {
     Broker.off(
       EventType.createAggregatorResultReceived(this.props.editorId),
-      this._onAggregatorResultReceived,
+      this._onAggregatorResultReceived
     );
   }
 
@@ -92,12 +92,12 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
     return eval(`(() => (${code}))()`); // eslint-disable-line no-eval
   };
 
-  _handleError = (error) => {
+  _handleError = error => {
     console.error(error);
     NewToaster.show({
       message: error.message,
       className: 'danger',
-      icon: 'thumbs-down',
+      icon: 'thumbs-down'
     });
 
     const { api } = this.props;
@@ -106,7 +106,7 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
     api.outputApi.showChartPanel(this.props.editorId, {}, 'error', error.message);
   };
 
-  _onAggregatorResultReceived = (result) => {
+  _onAggregatorResultReceived = result => {
     if (typeof result === 'string') {
       this._handleError(new Error(result));
     } else {
@@ -153,7 +153,7 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
           database,
           collection,
           pipeline,
-          options,
+          options
         })
         .catch(this._handleError);
     } else {

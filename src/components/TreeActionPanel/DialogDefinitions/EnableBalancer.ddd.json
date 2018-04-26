@@ -1,13 +1,14 @@
 {
-    "Title": "Enable or Disable balancer",
-    "DefaultValues": {
-        "function": "dbkoda_EnableBalancerPreFill"
-    },
-    "Fields": [{
-            "name": "BalancerState",
-            "label": "Enable balancer", 
-            "tooltip": "Check to enable shard balancing",
-            "type": "Boolean"
-        }
-    ]
+  "Title": "Enable or Disable balancer",
+  "DefaultValues": {
+    "function": "dbkoda_EnableBalancerPreFill"
+  },
+  "Fields": [
+    {
+      "name": "BalancerState",
+      "label": "Enable balancer",
+      "tooltip": "Check to enable shard balancing",
+      "type": "Boolean"
+    }
+  ]
 }

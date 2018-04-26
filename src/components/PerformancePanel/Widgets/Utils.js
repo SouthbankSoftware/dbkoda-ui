@@ -227,10 +227,7 @@ export const hofUnitFormatter = (unit: string, length: number) => {
 export const bytesToSize = (bytes: number) => {
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   if (bytes <= 0) return '0 B';
-  const i = _.round(
-    parseFloat(Math.floor(Math.log(bytes) / Math.log(1024))),
-    2
-  );
+  const i = _.round(parseFloat(Math.floor(Math.log(bytes) / Math.log(1024))), 2);
   if (i < 0) {
     return '0B';
   }
@@ -371,12 +368,7 @@ export const convertBytesToTarget = (
   return result;
 };
 
-export const convertToTarget = (
-  value: any,
-  unit: string,
-  targetUnit: string,
-  length: number
-) => {
+export const convertToTarget = (value: any, unit: string, targetUnit: string, length: number) => {
   // Check that unit and target unit matches:
   if (
     's|ms|μs|ms/s|μs/s|/μs|/us|/ms|/s|/m|/h|Op/s|KOp/s|MOp/s|pages/s|Kpages/s|Mpages/s| |k'.indexOf(

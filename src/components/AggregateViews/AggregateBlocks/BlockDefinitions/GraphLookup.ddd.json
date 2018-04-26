@@ -2,21 +2,26 @@
   "Title": "GraphLookup",
   "DefaultValues": {
     "function": "dbkodaGraphLookupPrefill",
-    "arguments": [{
-      "name": "collection",
-      "value": "collection"
-    }]
+    "arguments": [
+      {
+        "name": "collection",
+        "value": "collection"
+      }
+    ]
   },
-  "Fields": [{
+  "Fields": [
+    {
       "name": "collection",
       "label": "Collection to join to",
       "tooltip": "Lookup data in this collection",
       "type": "Combo",
       "lookup": "dbkoda_listcollections",
-      "lookup_arguments": [{
-        "name": "db",
-        "value": "database"
-      }]
+      "lookup_arguments": [
+        {
+          "name": "db",
+          "value": "database"
+        }
+      ]
     },
     {
       "name": "startWith",
@@ -30,10 +35,12 @@
       "tooltip": "Field in the parent document",
       "type": "Combo",
       "lookup": "dbkodaListAttributesAgg",
-      "lookup_arguments": [{
-        "name": "prevAttributes",
-        "value": "prevAttributes"
-      }]
+      "lookup_arguments": [
+        {
+          "name": "prevAttributes",
+          "value": "prevAttributes"
+        }
+      ]
     },
     {
       "name": "connectToField",
@@ -41,10 +48,12 @@
       "tooltip": "Field in the child document",
       "type": "Combo",
       "lookup": "dbkodaListAttributesAgg",
-      "lookup_arguments": [{
-        "name": "prevAttributes",
-        "value": "prevAttributes"
-      }]
+      "lookup_arguments": [
+        {
+          "name": "prevAttributes",
+          "value": "prevAttributes"
+        }
+      ]
     },
     {
       "name": "as",

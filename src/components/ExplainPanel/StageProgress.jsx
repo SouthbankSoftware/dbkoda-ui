@@ -34,7 +34,7 @@ export const Stage = ({
   maxElapseTime,
   stageNumber,
   hasInnerBranch,
-  innerMaxLength,
+  innerMaxLength
 }) => {
   const style = {};
   let className = head ? 'explain-stage explain-stage-array' : 'explain-stage';
@@ -103,14 +103,14 @@ export default ({ stages, shardNames, shardNumber }) => {
     columnHasBranch[i] = false;
     if (stage.constructor === Array && maxNumChildren < stage.length) {
       maxNumChildren = stage.length;
-      stage.map((inner) => {
+      stage.map(inner => {
         if (inner) {
           if (inner.constructor === Array && innerMaxLength < inner.length) {
             columnHasBranch[i] = true;
             innerMaxLength = inner.length;
             hasInnerBranch = true;
             stageNumber += inner.length;
-            inner.map((s) => {
+            inner.map(s => {
               minElapseTime = getMinMaxElapseTime(s, minElapseTime, maxElapseTime).minElapseTime;
               maxElapseTime = getMinMaxElapseTime(s, minElapseTime, maxElapseTime).maxElapseTime;
             });

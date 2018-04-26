@@ -18,17 +18,12 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- /* eslint no-unused-vars:warn */
+/* eslint no-unused-vars:warn */
 const file = process.argv[2];
 const sprintf = require('sprintf-js').sprintf;
 /* eslint-disable */
 let ddd = require('./' + file); // eslint-disable-line no-dynamic-require
 /* eslint-enable */
-ddd.Fields.forEach((f) => {
-  const line = sprintf(
-    '{{#if %s ~}},\n\t\t %s: {{%s}}{{/if ~}}',
-    f.name,
-    f.name,
-    f.name,
-  );
+ddd.Fields.forEach(f => {
+  const line = sprintf('{{#if %s ~}},\n\t\t %s: {{%s}}{{/if ~}}', f.name, f.name, f.name);
 });

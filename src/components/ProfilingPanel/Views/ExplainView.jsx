@@ -52,7 +52,7 @@ import 'codemirror-formatting';
 import '#/common/MongoScript.js';
 
 import StageProgress from '#/ExplainPanel/StageProgress';
-// import { StageStepsTable } from '#/ExplainPanel/StageStepsTable';
+import { StageStepsTable } from '#/ExplainPanel/StageStepsTable';
 import { getExecutionStages } from '#/ExplainPanel/ExplainStep';
 // import ShardsStageProgress from '#/ExplainPanel/ShardsStageProgress';
 import 'codemirror/theme/material.css';
@@ -71,22 +71,16 @@ export default class OperationDetails extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.operation) {
       this.state.operation = nextProps.operation;
-      console.debug('Op: ', JSON.stringify(nextProps.operation, null, 2));
 
       const stages = getExecutionStages(this.state.operation.execStats);
-      console.debug('Stages: ', stages);
       if (stages) {
         this.setState({ stages });
       }
-      // Get the stages.
-
-      // Fetch an explain plan
-
-      // Generate the fake editor.
     }
   }
 
   render() {
+    const executionStages = this.state.stages;
     return (
       <div className="explainView" style={{ height: '100%' }}>
         <nav className="pt-navbar explainToolbar">
@@ -99,16 +93,16 @@ export default class OperationDetails extends React.Component {
             </div>
           </div>
         </nav>
-        <span className="explainBody" style={{ height: '100%' }}>
+        <div className="explainBody explain-statistic-container-view" style={{ height: '100%' }}>
           {this.state.stages && <StageProgress stages={this.state.stages} />}
-          {/*           {false && (
+          {this.state.stages && (
             <StageStepsTable
-              stages={stages}
-              shardMergeStage={executionStages}
+              stages={this.state.stages}
+              shardMergeStage={this.state.stages}
               shard={executionStages.shards !== undefined}
             />
-          )} */}
-        </span>
+          )}
+        </div>
       </div>
     );
   }

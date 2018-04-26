@@ -28,13 +28,13 @@ import * as common from './Common.js';
 
 export const DropRole = {
   // Prefill function for create role
-  dbkoda_DropRolePreFill: (params) => {
+  dbkoda_DropRolePreFill: params => {
     const data = {};
     data.Database = params.parentDB;
     data.RoleName = params.RoleName;
     return data;
   },
-  dbkoda_validateDropRole: (inputDoc) => {
+  dbkoda_validateDropRole: inputDoc => {
     if (!Object.prototype.hasOwnProperty.call(inputDoc, 'RoleName')) {
       throw new Error('dbkoda: Drop Role requires the name of the role to drop');
     }

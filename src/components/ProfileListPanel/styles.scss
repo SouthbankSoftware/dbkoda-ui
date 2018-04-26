@@ -23,7 +23,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-@import "../../styles/_defaultTheme.scss";
+@import '../../styles/_defaultTheme.scss';
 
 .profileListPanel {
   width: 100%;
@@ -248,7 +248,8 @@
   }
 
   .connection-profile-cell {
-    .profileListing {}
+    .profileListing {
+    }
 
     .closedProfile {
       font-style: italic !important;
@@ -278,7 +279,8 @@ ul.profileListContextMenu {
       display: flex;
       flex-direction: row;
 
-      li {}
+      li {
+      }
     }
   }
 
@@ -286,7 +288,8 @@ ul.profileListContextMenu {
     display: flex;
     flex-direction: row;
 
-    li {}
+    li {
+    }
   }
 }
 
@@ -303,6 +306,7 @@ ul.profileListContextMenu {
   }
 
   div {
-    svg {}
+    svg {
+    }
   }
 }

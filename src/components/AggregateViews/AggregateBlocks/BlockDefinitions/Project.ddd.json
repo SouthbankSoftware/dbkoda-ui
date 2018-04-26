@@ -1,32 +1,38 @@
 {
   "Title": "Project",
-  "Fields": [{
-    "name": "Keys",
-    "label": "Project Fields",
-    "type": "Table",
-    "columns": [{
-        "name": "AttributeName",
-        "label": "Attribute",
-        "tooltip": "Name of the attribute to be Projected",
-        "type": "Combo",
-        "lookup": "dbkodaListAttributesProject",
-        "lookup_arguments": [{
-          "name": "prevAttributes",
-          "value": "prevAttributes"
-        }]
-      },
-      {
-        "name": "AttributeProjectionValue",
-        "label": "Expression",
-        "tooltip": "Expression for projection",
-        "type": "Combo",
-        "lookup": "dbkodaListAttributesProjectTarget",
-        "lookup_arguments": [{
-          "name": "prevAttributes",
-          "value": "prevAttributes"
-        }]
-      }
-    ]
-  }]
+  "Fields": [
+    {
+      "name": "Keys",
+      "label": "Project Fields",
+      "type": "Table",
+      "columns": [
+        {
+          "name": "AttributeName",
+          "label": "Attribute",
+          "tooltip": "Name of the attribute to be Projected",
+          "type": "Combo",
+          "lookup": "dbkodaListAttributesProject",
+          "lookup_arguments": [
+            {
+              "name": "prevAttributes",
+              "value": "prevAttributes"
+            }
+          ]
+        },
+        {
+          "name": "AttributeProjectionValue",
+          "label": "Expression",
+          "tooltip": "Expression for projection",
+          "type": "Combo",
+          "lookup": "dbkodaListAttributesProjectTarget",
+          "lookup_arguments": [
+            {
+              "name": "prevAttributes",
+              "value": "prevAttributes"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
- 

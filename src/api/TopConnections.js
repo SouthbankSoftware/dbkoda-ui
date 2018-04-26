@@ -92,10 +92,7 @@ export default class TopConnections {
       });
   };
 
-  killOperation = (
-    profileId: UUID,
-    opId: number
-  ) => {
+  killOperation = (profileId: UUID, opId: number) => {
     featherClient()
       .service('drivercommands')
       .patch(profileId, {

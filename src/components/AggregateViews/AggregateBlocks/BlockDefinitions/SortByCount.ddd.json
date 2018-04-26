@@ -8,10 +8,12 @@
       "tooltip": "Group and sort on this attribute",
       "type": "Combo",
       "lookup": "dbkodaListAttributesAgg",
-      "lookup_arguments": [{
-        "name": "prevAttributes",
-        "value": "prevAttributes"
-      }]
+      "lookup_arguments": [
+        {
+          "name": "prevAttributes",
+          "value": "prevAttributes"
+        }
+      ]
     }
   ]
 }

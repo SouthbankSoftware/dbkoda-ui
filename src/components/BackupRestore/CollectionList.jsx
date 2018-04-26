@@ -28,56 +28,99 @@ import './CollectionList.scss';
 
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-const Header = ({target}) => (
+const Header = ({ target }) => (
   <div className="header">
-    <span className="key">{target === 'server' ? globalString('backuprestore/database') : globalString('backuprestore/collection')}</span>
+    <span className="key">
+      {target === 'server'
+        ? globalString('backuprestore/database')
+        : globalString('backuprestore/collection')}
+    </span>
   </div>
 );
 
-const Row = ({options, selectCollection, unSelectCollection, index, colName, readOnly, target}) => (
+const Row = ({
+  options,
+  selectCollection,
+  unSelectCollection,
+  index,
+  colName,
+  readOnly,
+  target
+}) => (
   <div className="row">
     <div className="pt-select">
-      <select className="select db-backup-list-select" defaultValue={target === 'server' ? globalString('backuprestore/selectDatabase') : globalString('backuprestore/selectCollection')}
-        onChange={(item) => {
-                selectCollection(item.target.value, index);
-              }}
+      <select
+        className="select db-backup-list-select"
+        defaultValue={
+          target === 'server'
+            ? globalString('backuprestore/selectDatabase')
+            : globalString('backuprestore/selectCollection')
+        }
+        onChange={item => {
+          selectCollection(item.target.value, index);
+        }}
         disabled={readOnly}
         value={index >= 0 ? colName : ''}
       >
-        <option>{target === 'server' ? globalString('backuprestore/selectDatabase') : globalString('backuprestore/selectCollection')}</option>
-        {
-          options.map((o, i) => {
-            const id = i;
-            return (<option key={id}>{o}</option>);
-          })
-        }
+        <option>
+          {target === 'server'
+            ? globalString('backuprestore/selectDatabase')
+            : globalString('backuprestore/selectCollection')}
+        </option>
+        {options.map((o, i) => {
+          const id = i;
+          return <option key={id}>{o}</option>;
+        })}
       </select>
     </div>
-    {
-      index < 0 || readOnly ? null : <div className="field-group pt-icon-delete circleButton" role="button"
-        onClick={() => unSelectCollection(colName, index)} />
-    }
+    {index < 0 || readOnly ? null : (
+      <div
+        className="field-group pt-icon-delete circleButton"
+        role="button"
+        onClick={() => unSelectCollection(colName, index)}
+      />
+    )}
   </div>
 );
 
-export default ({collections, selectedCollections, selectCollection, unSelectCollection, readOnly, target}) => {
+export default ({
+  collections,
+  selectedCollections,
+  selectCollection,
+  unSelectCollection,
+  readOnly,
+  target
+}) => {
   const options = _.filter(collections, a => selectedCollections.indexOf(a) < 0);
   return (
     <div className="collection-list">
       <Header target={target} />
-      {
-        selectedCollections.map((col, i) => {
-          const id = i;
-          const array = options.slice();
-          array.splice(0, 0, col);
-          return (<Row key={id} index={i} colName={col} options={array} selectCollection={selectCollection}
-            unSelectCollection={unSelectCollection} readOnly={readOnly} target={target} />);
-        })
-      }
-      {
-        options.length > 0 && !readOnly ? <Row options={options} selectCollection={selectCollection} index={-1}
-          unSelectCollection={unSelectCollection} target={target} /> : null
-      }
+      {selectedCollections.map((col, i) => {
+        const id = i;
+        const array = options.slice();
+        array.splice(0, 0, col);
+        return (
+          <Row
+            key={id}
+            index={i}
+            colName={col}
+            options={array}
+            selectCollection={selectCollection}
+            unSelectCollection={unSelectCollection}
+            readOnly={readOnly}
+            target={target}
+          />
+        );
+      })}
+      {options.length > 0 && !readOnly ? (
+        <Row
+          options={options}
+          selectCollection={selectCollection}
+          index={-1}
+          unSelectCollection={unSelectCollection}
+          target={target}
+        />
+      ) : null}
     </div>
   );
 };

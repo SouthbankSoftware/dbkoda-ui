@@ -21,7 +21,6 @@
  * Created by joey on 12/9/17.
  */
 
-
 export default {
   theme: 'material',
   lineNumbers: 'true',

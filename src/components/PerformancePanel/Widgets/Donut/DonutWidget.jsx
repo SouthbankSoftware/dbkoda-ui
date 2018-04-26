@@ -2,8 +2,8 @@
  * @flow
  *
  * Created by joey on 20/2/18.
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-29T12:43:26+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-04-24T16:42:15+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -72,17 +72,21 @@ export default class DonutWidget extends React.Component<Props, State> {
 
   projection() {
     if (this.dataset.length > 0) {
-      const temp = _.map(this.dataset[0], (v, i) => ({ 'dbName': v.dbName, 'index': i }));
-      const projection = _.reduce(temp, (acc, v) => {
-        const { dbName, index } = v;
-        acc[dbName] = (data) => {
-          if (_.isEmpty(data) || _.isEmpty(data.value)) {
-            return 0;
-          }
-          return data.value.db_storage[index].dataSize;
-        };
-        return acc;
-      }, {});
+      const temp = _.map(this.dataset[0], (v, i) => ({ dbName: v.dbName, index: i }));
+      const projection = _.reduce(
+        temp,
+        (acc, v) => {
+          const { dbName, index } = v;
+          acc[dbName] = data => {
+            if (_.isEmpty(data) || _.isEmpty(data.value)) {
+              return 0;
+            }
+            return data.value.db_storage[index].dataSize;
+          };
+          return acc;
+        },
+        {}
+      );
       return projection;
     }
   }
@@ -249,10 +253,7 @@ export default class DonutWidget extends React.Component<Props, State> {
       .text(`Total: ${bytesToSize(this.totalSize)}`);
   }
 
-  getUpdatedData(
-    values: Array<Object>,
-    items: Array<Object>
-  ): Object {
+  getUpdatedData(values: Array<Object>, items: Array<Object>): Object {
     const latestValue = _.findLast(values, v => !_.isEmpty(v.value));
     // const latestValue = values.length > 0 ? values[values.length - 1] : {};
     if (!latestValue || _.isEmpty(latestValue)) {
@@ -278,6 +279,7 @@ export default class DonutWidget extends React.Component<Props, State> {
     });
     const top = normalized.slice(0, 4);
     top.forEach((norm, i) => {
+      // $FlowFixMe
       norm.color = this.colors[i];
     });
     const others = { dbName: 'others', dataSize: 0, dataPerc: 0, color: this.colors[4] };
@@ -290,7 +292,7 @@ export default class DonutWidget extends React.Component<Props, State> {
   }
 
   render() {
-    const { performancePanel, widget, widgetStyle, getContextMenu} = this.props;
+    const { performancePanel, widget, widgetStyle, getContextMenu } = this.props;
     return (
       <Widget
         performancePanel={performancePanel}

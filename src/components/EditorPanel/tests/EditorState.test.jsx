@@ -60,8 +60,8 @@ describe('Editor State Tests', () => {
         initialMsg: '',
         code: '',
         path: null,
-        type: EditorTypes.DEFAULT,
-      }),
+        type: EditorTypes.DEFAULT
+      })
     );
     const editorId2 = uuidV1();
     store.editors.set(
@@ -77,8 +77,8 @@ describe('Editor State Tests', () => {
         initialMsg: '',
         code: '',
         path: null,
-        type: EditorTypes.DEFAULT,
-      }),
+        type: EditorTypes.DEFAULT
+      })
     );
     const editor = shallow(<EditorPanel.wrappedComponent store={store} api={api} />);
     expect(editor.find('.editorPanel')).to.have.length(1);

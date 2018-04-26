@@ -12,8 +12,7 @@
         "name": "Network",
         "title": "Network",
         "colorList": ["#365F87", "#01969E"],
-        "description":
-          "Current network upload and download on the host system.",
+        "description": "Current network upload and download on the host system.",
         "infoWidget": true,
         "widgetItemKeys": ["download", "upload"],
         "widgetDisplayNames": ["Download", "Upload"],
@@ -166,20 +165,14 @@
     },
     {
       "type": "StackedRadialWidget",
-      "items": [
-        "document_returned",
-        "document_updated",
-        "document_deleted",
-        "document_inserted"
-      ],
+      "items": ["document_returned", "document_updated", "document_deleted", "document_inserted"],
       "extraState": {
         "name": "Document Operations",
         "title": "Document Operations",
         "showLegend": true,
         "showVerticalRule": true,
         "showVerticalRuleLeft": true,
-        "description":
-          "Document operations executed in Mongo per second by type.",
+        "description": "Document operations executed in Mongo per second by type.",
         "infoWidget": true,
         "unit": "/s"
       },
@@ -207,8 +200,7 @@
         "name": "Reads",
         "title": "Queues",
         "colorList": ["#7040A3", "#AC8BC0"],
-        "description":
-          "Current number of read operations and queued read operations.",
+        "description": "Current number of read operations and queued read operations.",
         "infoWidget": true,
         "chartTitle": "Reads",
         "waterMarkGroup": ["queue_writersActive", "queue_writersQueued"],
@@ -235,18 +227,13 @@
         "showHorizontalRule": true,
         "waterMarkGroup": ["queue_readersActive", "queue_readersQueued"],
         "maintainOrder": true,
-        "description":
-          "Current number of Write operations and queued Write operations.",
+        "description": "Current number of Write operations and queued Write operations.",
         "unit": " "
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": [
-        "latency_writeWaitUsPs",
-        "latency_readWaitUsPs",
-        "latency_commandWaitUsPs"
-      ],
+      "items": ["latency_writeWaitUsPs", "latency_readWaitUsPs", "latency_commandWaitUsPs"],
       "layout": {
         "x": 37,
         "y": 18,
@@ -270,8 +257,7 @@
       "items": ["wtCache_readRequestsPs"],
       "extraState": {
         "name": "Cache Requests",
-        "description":
-          "Number of pages requested from WiredTiger cache per second.",
+        "description": "Number of pages requested from WiredTiger cache per second.",
         "rowText": "Cache activity",
         "unit": "/s"
       },
@@ -346,8 +332,7 @@
         "infoWidget": true,
         "showVerticalRuleLeft": true,
         "showVerticalRule": true,
-        "description":
-          "Percentage of WiredTiger read/write transactions in use.",
+        "description": "Percentage of WiredTiger read/write transactions in use.",
         "unit": "%"
       }
     },
@@ -367,8 +352,7 @@
         "title": "Miss Rate",
         "colorList": ["#365F87"],
         "infoWidget": true,
-        "description":
-          "Percentage of time a requested page is not found in WiredTiger cache",
+        "description": "Percentage of time a requested page is not found in WiredTiger cache",
         "unit": "%",
         "showHorizontalRule": true,
         "showAlarms": "wiredtiger",
@@ -432,18 +416,13 @@
     },
     {
       "type": "StackedRadialWidget",
-      "items": [
-        "wtIO_diskToCacheUsPs",
-        "wtIO_cacheToDiskUsPs",
-        "wtIO_logSyncTimeUsPs"
-      ],
+      "items": ["wtIO_diskToCacheUsPs", "wtIO_cacheToDiskUsPs", "wtIO_logSyncTimeUsPs"],
       "extraState": {
         "name": "Disk Time",
         "title": "Disk Time",
         "colorList": ["#913856", "#42BB6D", "#A5A11B"],
         "infoWidget": true,
-        "description":
-          "WiredTiger disk to cache, cache to disk and log sync time per second.",
+        "description": "WiredTiger disk to cache, cache to disk and log sync time per second.",
         "unit": "μs/s",
         "showLegend": true,
         "showVerticalRule": true,

@@ -3,7 +3,7 @@
  *
  * Created by joey on 17/1/18.
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-28T13:48:04+11:00
+ * @Last modified time: 2018-04-24T16:41:51+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -74,6 +74,7 @@ export default class RadialWidget extends React.Component<Props, State> {
   }
 
   dataset() {
+    // $FlowFixMe
     return this.itemValue.map(v => {
       return { ...v };
     });
@@ -493,7 +494,8 @@ export default class RadialWidget extends React.Component<Props, State> {
         } else {
           _.forOwn(v, (vv, kk) => {
             if (stats[k][kk]) {
-              latestValue[k][`${kk}hwm`] = stats[k][kk].hwm !== 0 ? stats[k][kk].hwm : latestValue[k][kk];
+              latestValue[k][`${kk}hwm`] =
+                stats[k][kk].hwm !== 0 ? stats[k][kk].hwm : latestValue[k][kk];
             }
           });
         }
@@ -507,7 +509,9 @@ export default class RadialWidget extends React.Component<Props, State> {
           latest[key][`${itemKey}hwm`] === 0
             ? 0
             : parseInt(latest[key][`${itemKey}`] / latest[key][`${itemKey}hwm`] * 100, 10),
-        valuePerSec: latest[key][`${itemKey}PerSec`] ? bytesToSize(latest[key][`${itemKey}PerSec`]) : 0
+        valuePerSec: latest[key][`${itemKey}PerSec`]
+          ? bytesToSize(latest[key][`${itemKey}PerSec`])
+          : 0
       };
       if (itemKeyValues[itemKey].valuePerSec !== undefined) {
         this.text += ` ${itemKeyValues[itemKey].valuePerSec}/s`;
@@ -556,9 +560,7 @@ export default class RadialWidget extends React.Component<Props, State> {
         });
         return retValue;
       } else if (showRunQueue && key === 'cpu') {
-        let fixedValue = _.isInteger(v.usage)
-          ? v.usage
-          : parseInt(v.usage, 10);
+        let fixedValue = _.isInteger(v.usage) ? v.usage : parseInt(v.usage, 10);
         fixedValue = Math.min(fixedValue, 100);
         const runQueueValue = _.isInteger(v.runQueue) ? v.runQueue : parseInt(v.runQueue, 10);
         this.text = fixedValue + '%\n' + runQueueValue;

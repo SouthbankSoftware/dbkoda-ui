@@ -52,7 +52,7 @@ import 'codemirror/theme/material.css';
 import '../style.scss';
 
 @inject(allStores => ({
-  store: allStores.store,
+  store: allStores.store
 }))
 @observer
 export default class BYOBlock extends React.Component {
@@ -60,16 +60,12 @@ export default class BYOBlock extends React.Component {
   constructor(props) {
     super(props);
 
-    this.editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    );
+    this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     this.block = this.editor.blockList[this.editor.selectedBlock];
     this.currentCollection = this.props.currentCollection;
     if (!this.block.code) {
       // eslint-disable-next-line
-      const formTemplate = require('./BlockTemplates/' +
-        this.block.type +
-        '.hbs');
+      const formTemplate = require('./BlockTemplates/' + this.block.type + '.hbs');
       this.block.code = formTemplate(this.block.fields);
     }
     this.cmOptions = {
@@ -85,19 +81,19 @@ export default class BYOBlock extends React.Component {
       matchBrackets: true,
       autoCloseBrackets: true,
       foldOptions: {
-        widget: '...',
+        widget: '...'
       },
       foldGutter: true,
       gutters: [
         'CodeMirror-linenumbers',
-        'CodeMirror-foldgutter', // , 'CodeMirror-lint-markers'
+        'CodeMirror-foldgutter' // , 'CodeMirror-lint-markers'
       ],
       keyMap: 'sublime',
-      mode: 'MongoScript',
+      mode: 'MongoScript'
     };
 
     this.state = {
-      code: this.block.code,
+      code: this.block.code
     };
   }
 
@@ -105,23 +101,17 @@ export default class BYOBlock extends React.Component {
   updateCode(newCode) {
     this.block.code = newCode;
     // Update Editor Contents.
-    this.props.store.treeActionPanel.formValues = this.props.onChangeCallback(
-      this.editor,
-    );
+    this.props.store.treeActionPanel.formValues = this.props.onChangeCallback(this.editor);
     this.props.store.treeActionPanel.isNewFormValues = true;
     this.setState({
-      code: newCode,
+      code: newCode
     });
   }
 
   render() {
     return (
       <div className="editorView">
-        <CodeMirror
-          value={this.state.code}
-          options={this.cmOptions}
-          onChange={this.updateCode}
-        />
+        <CodeMirror value={this.state.code} options={this.cmOptions} onChange={this.updateCode} />
       </div>
     );
   }

@@ -37,50 +37,49 @@ export default {
         EVENT: 'EVENT',
         APP: {
           OPEN: 'EVENT_APP_OPEN',
-          CLOSE: 'EVENT_APP_CLOSE',
+          CLOSE: 'EVENT_APP_CLOSE'
         },
         USER_PREFERENCES: {
           TELEMETRY: {
             ENABLED: 'EVENT_USER_PREFERENCES_TELEMTRY_ENABLED',
-            DISABLED: 'EVENT_USER_PREFERENCES_TELEMTRY_DISABLED',
-          },
+            DISABLED: 'EVENT_USER_PREFERENCES_TELEMTRY_DISABLED'
+          }
         },
         CONNECTION_PANEL: {
           NEW_PROFILE: {
             OPEN_DIALOG: 'EVENT_CONNECTION_NEW_PROFILE_OPEN_DIALOG',
             START: 'EVENT_CONNECTIONS_NEW_PROFILE_START',
             FINISH: 'EVENT_CONNECTIONS_NEW_PROFILE_FINISH',
-            FAILED: 'EVENT_CONNECTIONS_NEW_PROFILE_FAILED',
+            FAILED: 'EVENT_CONNECTIONS_NEW_PROFILE_FAILED'
           },
           EDIT_PROFILE: {
             OPEN_DIALOG: 'EVENT_CONNECTION_EDIT_PROFILE_OPEN_DIALOG',
             START: 'EVENT_CONNECTIONS_EDIT_PROFILE_START',
             FINISH: 'EVENT_CONNECTIONS_EDIT_PROFILE_FINISH',
-            FAILED: 'EVENT_CONNECTIONS_NEW_PROFILE_FAILED',
+            FAILED: 'EVENT_CONNECTIONS_NEW_PROFILE_FAILED'
           },
           REMOVE_PROFILE: 'EVENT_CONNECTIONS_REMOVE_PROFILE',
           CLOSE_PROFILE: 'EVENT_CONNECTIONS_CLOSE_PROFILE',
-          CHANGE_PROFILE_SELECTION:
-            'EVENT_CONNECTIONS_CHANGE_PROFILE_SELECTION',
-          OPEN_CONTEXT_MENU: 'EVENT_CONNECTIONS_OPEN_CONTEXT_MENU',
+          CHANGE_PROFILE_SELECTION: 'EVENT_CONNECTIONS_CHANGE_PROFILE_SELECTION',
+          OPEN_CONTEXT_MENU: 'EVENT_CONNECTIONS_OPEN_CONTEXT_MENU'
         },
         OUTPUT_PANEL: {
           SHOW_MORE: {
             START: 'EVENT_OUTPUT_SHOW_MORE_START',
-            FINISH: 'EVENT_OUTPUT_SHOW_MORE_FINISH',
+            FINISH: 'EVENT_OUTPUT_SHOW_MORE_FINISH'
           },
           EXECUTE_TERMINAL: {
             START: 'EVENT_OUTPUT_EXECUTE_TERMINAL_START',
-            FINISH: 'EVENT_OUTPUT_EXECUTE_TERMINAL_FINISH',
+            FINISH: 'EVENT_OUTPUT_EXECUTE_TERMINAL_FINISH'
           },
           CLEAR_OUTPUT: 'EVENT_OUTPUT_CLEAR_OUTPUT',
-          SAVE_OUTPUT: 'EVENT_OUTPUT_SAVE_OUTPUT',
+          SAVE_OUTPUT: 'EVENT_OUTPUT_SAVE_OUTPUT'
         },
         EDITOR_PANEL: {
           NEW_EDITOR: {
             START: 'EVENT_EDITOR_NEW_EDITOR_START',
             FINISH: 'EVENT_EDITOR_NEW_EDITOR_FINISH',
-            FAILED_DEFAULT: 'EVENT_EDITOR_NEW_EDITOR_FAILED_DEFAULT',
+            FAILED_DEFAULT: 'EVENT_EDITOR_NEW_EDITOR_FAILED_DEFAULT'
           },
           CLOSE_EDITOR: 'EVENT_EDITOR_CLOSE_EDITOR',
           CHANGE_DROPDOWN: 'EVENT_EDITOR_CHANGE_DROPDOWN',
@@ -90,20 +89,20 @@ export default {
           TOOLBAR: {
             EXECUTE_ALL: {
               START: 'EVENT_EDITOR_TOOLBAR_EXECUTE_ALL_START',
-              FINISH: 'EVENT_EDITOR_TOOLBAR_EXECUTE_ALL_FINISH',
+              FINISH: 'EVENT_EDITOR_TOOLBAR_EXECUTE_ALL_FINISH'
             },
             EXECUTE_LINE: {
               START: 'EVENT_EDITOR_TOOLBAR_EXECUTE_LINE_START',
-              FINISH: 'EVENT_EDITOR_TOOLBAR_EXECUTE_LINE_FINISH',
+              FINISH: 'EVENT_EDITOR_TOOLBAR_EXECUTE_LINE_FINISH'
             },
-            CHANGE_FILTER: 'EVENT_EDITOR_TOOLBAR_CHANGE_FILTER',
-          },
-        },
+            CHANGE_FILTER: 'EVENT_EDITOR_TOOLBAR_CHANGE_FILTER'
+          }
+        }
       },
       INFO: 'INFO',
       WARNING: 'WARNING',
       ERROR: 'ERROR',
-      CRASH: 'CRASH',
+      CRASH: 'CRASH'
     };
   },
 
@@ -118,7 +117,7 @@ export default {
       EDITOR_PANEL: 'EDITOR_PANEL',
       OUTPUT: 'OUTPUTS',
       TREE: 'TREE',
-      PREFERENCES: 'PREFERENCES',
+      PREFERENCES: 'PREFERENCES'
     };
   },
 
@@ -157,7 +156,7 @@ export default {
       fragment: eventFragment,
       message: eventMessage,
       change: null,
-      timestamp: dateTime,
+      timestamp: dateTime
     };
   },
 
@@ -197,7 +196,7 @@ export default {
       fragment: eventFragment,
       message: eventMessage,
       change: eventChange,
-      timestamp: dateTime,
+      timestamp: dateTime
     };
   },
 
@@ -231,7 +230,7 @@ export default {
       message: eventMessage,
       change: eventChange,
       startTimestamp: dateTime,
-      endTimestamp: null,
+      endTimestamp: null
     };
     // Placeholder until file API is complete.
     return data;
@@ -262,5 +261,5 @@ export default {
       ' ' +
       offset;
     event.endTimestamp = dateTime;
-  },
+  }
 };

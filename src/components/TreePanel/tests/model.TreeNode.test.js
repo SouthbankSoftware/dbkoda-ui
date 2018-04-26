@@ -41,13 +41,13 @@ describe('TreeNode', () => {
             children: [
               {
                 text: 'CustId_1',
-                type: 'index',
-              },
-            ],
+                type: 'index'
+              }
+            ]
           },
           {
             text: 'products',
-            type: 'collection',
+            type: 'collection'
           },
           {
             text: 'bstatestat',
@@ -55,16 +55,16 @@ describe('TreeNode', () => {
             children: [
               {
                 text: 'statid_1',
-                type: 'index',
-              },
-            ],
-          },
-        ],
+                type: 'index'
+              }
+            ]
+          }
+        ]
       },
       {
-        text: 'TestDB',
-      },
-    ],
+        text: 'TestDB'
+      }
+    ]
   };
 
   const treeNode = new TreeNode(treeJson);

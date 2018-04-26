@@ -41,18 +41,12 @@ export const Header = ({ viewType, switchExplainView, suggestIndex }) => {
   return (
     <div className="explain-header">
       <span className="explain-label">{globalString('explain/heading')}</span>
-      <Button
-        className="pt-label explain-view-switch-button"
-        onClick={switchExplainView}
-      >
+      <Button className="pt-label explain-view-switch-button" onClick={switchExplainView}>
         {viewType === 0
           ? globalString('explain/panel/rawView')
           : globalString('explain/panel/explainView')}
       </Button>
-      <Button
-        className="pt-label explain-view-suggest-index-button"
-        onClick={suggestIndex}
-      >
+      <Button className="pt-label explain-view-suggest-index-button" onClick={suggestIndex}>
         {globalString('explain/panel/suggestIndex')}
       </Button>
     </div>
@@ -65,8 +59,7 @@ export default class Panel extends React.Component {
       return (
         <div className="explain-error-panel">
           <div className="header">
-            Failed to parse explain output,{' '}
-            <b>make sure to highlight entire statement.</b>
+            Failed to parse explain output, <b>make sure to highlight entire statement.</b>
           </div>
           <QueryCommandView command={this.props.editor.explains.command} />
           <div className="output">{this.props.editor.explains.output}</div>

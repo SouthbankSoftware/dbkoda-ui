@@ -88,7 +88,9 @@ export default class Widget extends React.Component<Props, State> {
   }
 
   _generateDefaultProjection = (props: Props) => {
-    const { widget: { items } } = props;
+    const {
+      widget: { items }
+    } = props;
 
     return _.reduce(
       items,
@@ -106,8 +108,7 @@ export default class Widget extends React.Component<Props, State> {
 
   _renderDefaultView() {
     const { items, values } = this.props.widget;
-    const latestValue =
-      values.length > 0 ? values[values.length - 1].value : {};
+    const latestValue = values.length > 0 ? values[values.length - 1].value : {};
 
     return (
       <div className="DefaultWidgetView">
@@ -170,10 +171,7 @@ export default class Widget extends React.Component<Props, State> {
     }
     return (
       // $FlowFixMe
-      <div
-        className={(title || '') + ' ' + type + ' Widget' || 'Widget'}
-        style={widgetStyle}
-      >
+      <div className={(title || '') + ' ' + type + ' Widget' || 'Widget'} style={widgetStyle}>
         {state === 'error' ? (
           <ErrorView title={null} error={error} errorLevel={errorLevel} />
         ) : (
@@ -189,18 +187,11 @@ export default class Widget extends React.Component<Props, State> {
                       popoverClassName="StackedRadialWidgetTooltip"
                       className="toolTip"
                       content={<div>{description}</div>}
-                      target={
-                        <InfoIcon
-                          className="infoButton"
-                          width={20}
-                          height={20}
-                        />
-                      }
+                      target={<InfoIcon className="infoButton" width={20} height={20} />}
                     />
                   </span>
                 )}
-                {showAlarms &&
-                  alarms && <AlarmView category={showAlarms} alarms={alarms} />}
+                {showAlarms && alarms && <AlarmView category={showAlarms} alarms={alarms} />}
               </div>
             )}
             <Popover2
@@ -217,11 +208,7 @@ export default class Widget extends React.Component<Props, State> {
                   description={description}
                 />
               }
-              target={
-                <span className="children">
-                  {children || this._renderDefaultView()}
-                </span>
-              }
+              target={<span className="children">{children || this._renderDefaultView()}</span>}
             />
             {showVerticalRuleLeft && <hr className="verticalLeft" />}
             {showHorizontalRule && <hr />}
@@ -234,11 +221,7 @@ export default class Widget extends React.Component<Props, State> {
             )}
           </div>
         )}
-        <ReactResizeDetector
-          handleWidth
-          handleHeight
-          onResize={this._onResize}
-        />
+        <ReactResizeDetector handleWidth handleHeight onResize={this._onResize} />
       </div>
     );
   }

@@ -1,758 +1,759 @@
-@import "../../styles/_defaultTheme.scss";
+@import '../../styles/_defaultTheme.scss';
 
 div.importAlert {
-    color: $defaultFontColor;
+  color: $defaultFontColor;
 
-    div.pt-alert-footer {
-        button.pt-button {
-            color: $defaultFontColor !important;
-        }
-
-        button.pt-button:hover {
-            background-clip: unset;
-        }
+  div.pt-alert-footer {
+    button.pt-button {
+      color: $defaultFontColor !important;
     }
+
+    button.pt-button:hover {
+      background-clip: unset;
+    }
+  }
 }
 
 div.loaderWrapper {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 
-    div.loader {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-top: -50px;
-        margin-left: -50px;
-        border: 16px solid $treeLoaderColorBG;
-        border-top: 16px solid $treeLoaderColor;
-        border-radius: 50%;
-        width: 100px;
-        height: 100px;
-        order: 1;
-        position: relative;
-        animation: spin 2s linear infinite;
-    }
+  div.loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    border: 16px solid $treeLoaderColorBG;
+    border-top: 16px solid $treeLoaderColor;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    order: 1;
+    position: relative;
+    animation: spin 2s linear infinite;
+  }
 }
 
 @keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
 
-    100% {
-        transform: rotate(360deg);
-    }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 div.aggregateGraphicalBuilderWrapper {
+  display: flex;
+  flex-direction: column;
+  order: 1;
+  flex-grow: 1;
+  background-color: $aggregateViewBackgroundColor;
+  text-align: center;
+  height: 100%;
+
+  div.topButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 85%;
+
+    a {
+      top: 10px;
+      margin-right: 5px;
+      margin-left: 5px;
+      z-index: 10;
+      font-weight: lighter;
+      color: $defaultFontColor;
+      border: 1px solid $welcomeViewButtonHoverColor !important;
+      border-radius: 1em;
+      background-image: unset;
+      background-color: $aggregateBlockBackgroundInvalid !important;
+      border: unset;
+      box-shadow: unset;
+
+      svg {
+        fill: $defaultFontColor !important;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    a.showLeftPanelButton {
+      order: 1;
+    }
+
+    a.importButton {
+      order: 2;
+    }
+
+    a.exportButton {
+      order: 3;
+    }
+
+    a:hover {
+      background-color: $aggregateBlockBackgroundHighlight !important;
+    }
+  }
+
+  h2 {
+    padding-top: 40%;
+  }
+
+  ul.graphicalBuilderBlockList {
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    order: 1;
+    order: 2;
     flex-grow: 1;
-    background-color: $aggregateViewBackgroundColor;
-    text-align: center;
+    list-style-type: none;
+    height: 100%;
+    padding-left: 0px;
+
+    li.firstBlockTarget {
+      order: -1;
+      height: 150px;
+    }
+
+    li.lastBlockTarget {
+      order: 3;
+      height: 100%;
+    }
+
+    div.aggregateBlock {
+      order: 2;
+      height: 50px;
+      margin-left: 50px;
+      width: 190px;
+
+      div.blockBuilderWrapper {
+        height: 100%;
+        position: relative;
+
+        svg.dbKodaSVG {
+          position: absolute;
+          width: 180px;
+          left: 0px;
+          z-index: 3;
+        }
+
+        svg.dbKodaSVG:hover {
+          opacity: 0.75;
+        }
+
+        svg.MIDDLE {
+          path.st0 {
+            fill: none;
+          }
+        }
+
+        svg.END {
+          path.st0 {
+            fill: none;
+          }
+        }
+
+        p.aggregateBlockTitle {
+          pointer-events: none;
+          position: absolute;
+          left: 60px;
+          top: 10px;
+          z-index: 5;
+        }
+
+        svg.closeBlockIcon {
+          position: absolute;
+          width: 20px;
+          left: 155px;
+          top: 10px;
+          z-index: 5;
+        }
+
+        svg.closeBlockIcon:hover {
+          fill: $white;
+        }
+      }
+    }
+
+    div.selected_true {
+      svg.dbKodaSVG {
+        circle {
+          fill: white;
+        }
+      }
+    }
+  }
+
+  div.divider {
+    order: 2;
+    width: 15px;
+    background-color: $tabBackground;
+  }
+}
+
+div.Pane.vertical.Pane1 {
+  div.leftPaneInnerWrapper {
     height: 100%;
 
-    div.topButtons {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-        width: 85%;
+    div.aggregateLeftPanel {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
 
-        a {
-            top: 10px;
-            margin-right: 5px;
-            margin-left: 5px;
-            z-index: 10;
-            font-weight: lighter;
-            color: $defaultFontColor;
-            border: 1px solid $welcomeViewButtonHoverColor !important;
-            border-radius: 1em;
-            background-image: unset;
-            background-color: $aggregateBlockBackgroundInvalid !important;
-            border: unset;
-            box-shadow: unset;
-
-            svg {
-                fill: $defaultFontColor !important;
-                transform: translate(-50%, -50%);
-            }
+      div.aggregatePaletteWrapper {
+        .pt-tree-node-content:hover {
+          background-color: unset;
         }
 
-        a.showLeftPanelButton {
-            order: 1;
+        .pt-tree-node-content-1:hover {
+          background-color: $aggregateBlockBackgroundHoverSecondary !important;
         }
 
-        a.importButton {
-            order: 2;
-        }
-
-        a.exportButton {
-            order: 3;
-        }
-
-        a:hover {
-            background-color: $aggregateBlockBackgroundHighlight !important;
-        }
-    }
-
-    h2 {
-        padding-top: 40%;
-    }
-
-    ul.graphicalBuilderBlockList {
         overflow-y: auto;
+        order: 1;
+        flex-grow: 1;
+        color: $navbarLeftHeading;
+
+        nav.aggregatePaletteToolbar {
+          background-color: $navbarLeftBackground;
+
+          h2.paletteHeader {
+            color: $navbarLeftHeading;
+            font-size: 16px !important;
+            margin-top: 0px;
+            margin-bottom: 10px;
+            padding-top: 16px;
+            text-align: left;
+          }
+        }
+
+        .palletteTree {
+          .pt-tree-root {
+            .pt-tree-node {
+              .pt-tree-node-content-0 {
+                height: 60px;
+                border-top: 1px solid $aggregateBlockBorder;
+
+                span.pt-tree-node-caret {
+                  color: $navbarLeftHeading;
+                  border: 1px solid $defaultFontColor;
+                  border-radius: 1em;
+                  margin-left: 20px;
+                  margin-right: 10px;
+                }
+
+                span.pt-tree-node-caret:hover {
+                }
+
+                span.pt-tree-node-caret-open {
+                  background-color: $defaultFontColor;
+                  color: $aggregateBlockBackgroundHover;
+                }
+
+                span.pt-tree-node-label {
+                  font-size: 16px;
+                }
+              }
+
+              .pt-tree-node-content-0:hover {
+                background-color: $aggregateBlockBackgroundHover !important;
+              }
+
+              .pt-collapse {
+                .pt-collapse-body {
+                  .pt-tree-node-list {
+                    .pt-tree-node {
+                      height: 40px;
+
+                      .pt-tree-node-content {
+                        .pt-tree-node-label {
+                          height: 40px;
+
+                          div.aggregateBlock {
+                            display: flex;
+                            flex-direction: row;
+                            width: 100%;
+                            height: 30px;
+                            font-size: 18px;
+                            cursor: all-scroll;
+                            flex-grow: 1;
+
+                            div.blockPalletteWrapper {
+                              display: flex;
+                              flex-direction: row;
+                              height: 100%;
+                              width: 100%;
+                              cursor: all-scroll;
+                              flex-grow: 1;
+
+                              svg.dbKodaSVG {
+                                width: 15px;
+                                fill: $navbarLeftHeading;
+                                margin-left: 20px;
+                                padding-bottom: 10px;
+                                cursor: copy;
+                              }
+
+                              svg.dbKodaSVG:hover {
+                                fill: $aggregateBlockFontColorHover;
+                              }
+
+                              p.aggregateBlockTitle {
+                                pointer-events: none;
+                                cursor: inherit;
+                                user-select: none;
+                                font-size: smaller;
+                                color: $navbarLeftHeading;
+                                padding-top: 10px;
+                                padding-left: 10px;
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            .pt-tree-node-expanded {
+              .pt-tree-node-content-0 {
+                background-color: $aggregateBlockBackgroundHover !important;
+              }
+            }
+          }
+        }
+
+        div.aggregatePaletteContent {
+          height: 100%;
+          overflow: auto;
+
+          ul.aggregateBlockList {
+            list-style-type: none;
+            margin-top: 0px;
+            padding-left: 0px;
+
+            li.aggregateBlockWrapper {
+              border-bottom: 1px solid $aggregateBlockBorder;
+              width: 100%;
+              height: 50px;
+              font-size: 20px;
+              text-align: left;
+            }
+
+            li.aggregateBlockWrapper:hover {
+              background-color: $aggregateBlockBackgroundHover;
+              color: $aggregateBlockFontColorHover;
+            }
+          }
+        }
+      }
+
+      div.aggregateDetailsWrapper {
         display: flex;
         flex-direction: column;
         order: 2;
         flex-grow: 1;
-        list-style-type: none;
-        height: 100%;
-        padding-left: 0px;
+        color: $navbarLeftHeading;
 
-        li.firstBlockTarget {
-            order: -1;
-            height: 150px;
-        }
+        nav.aggregateDetailsToolbar {
+          order: 1;
+          background-color: $navbarLeftBackground;
+          height: 50px;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          flex-shrink: 0;
 
-        li.lastBlockTarget {
-            order: 3;
-            height: 100%;
-        }
+          h2.currentBlockChoice {
+            color: $navbarLeftHeading;
+            font-size: 16px;
+            padding-top: 14px;
+            text-align: left;
+          }
 
-        div.aggregateBlock {
-            order: 2;
-            height: 50px;
-            margin-left: 50px;
-            width: 190px;
+          div.pt-align-right {
+            padding-top: 10px;
 
-            div.blockBuilderWrapper {
-                height: 100%;
-                position: relative;
+            a.pt-button {
+              background: unset;
+              background-color: $fieldGroupHeaderIcon !important;
 
-                svg.dbKodaSVG {
-                    position: absolute;
-                    width: 180px;
-                    left: 0px;
-                    z-index: 3;
-                }
-
-                svg.dbKodaSVG:hover {
-                    opacity: 0.75;
-                }
-
-                svg.MIDDLE {
-                    path.st0 {
-                        fill: none;
-                    }
-                }
-
-                svg.END {
-                    path.st0 {
-                        fill: none;
-                    }
-                }
-
-                p.aggregateBlockTitle {
-                    pointer-events: none;
-                    position: absolute;
-                    left: 60px;
-                    top: 10px;
-                    z-index: 5;
-                }
-
-                svg.closeBlockIcon {
-                    position: absolute;
-                    width: 20px;
-                    left: 155px;
-                    top: 10px;
-                    z-index: 5;
-                }
-
-                svg.closeBlockIcon:hover {
-                    fill: $white;
-                }
+              svg {
+                fill: $defaultFontColor;
+                width: 20px;
+              }
             }
+
+            a.pt-button:hover {
+              background-color: $fieldGroupHeaderIconHover !important;
+            }
+          }
         }
 
-        div.selected_true {
-            svg.dbKodaSVG {
-                circle {
-                    fill: white;
-                }
-            }
+        h2.aggregateBlockType {
+          margin-top: 20px;
+          order: 2;
+          text-align: -webkit-center;
+          color: $defaultFontColor;
         }
+
+        p.aggregateBlockDescription {
+          margin-top: 10px;
+          margin-bottom: 0px;
+          order: 3;
+          text-align: -webkit-center;
+        }
+
+        div.aggregateDetailsContent {
+          order: 4;
+          overflow-y: auto;
+
+          div {
+            div {
+              form {
+                height: unset !important;
+              }
+            }
+          }
+
+          p {
+            padding-top: 10px;
+            padding-left: 10px;
+          }
+        }
+
+        div.bottomToolbar {
+          background-color: $navbarLeftBackground;
+          order: 5;
+          z-index: 5;
+          position: absolute;
+          bottom: 0;
+          height: 40px;
+          width: 100%;
+
+          a.hideLeftPanelButton {
+            bottom: 0;
+            right: 10px;
+            float: right;
+            margin-right: 20px;
+            margin-top: 5px;
+            font-weight: lighter;
+            color: $connectionButtonFontColour;
+            border: 1px solid $welcomeViewButtonHoverColor !important;
+            border-radius: 0;
+            background-image: unset;
+            background-color: $navbarLeftBackground;
+            border: unset;
+            box-shadow: unset;
+          }
+
+          a.byoCodeButton {
+            bottom: 0;
+            left: 10px;
+            float: left;
+            margin-right: 20px;
+            margin-top: 5px;
+            font-weight: lighter;
+            color: $connectionButtonFontColour;
+            border: 1px solid $welcomeViewButtonHoverColor !important;
+            border-radius: 0;
+            background-image: unset;
+            background-color: $navbarLeftBackground;
+            border: unset;
+            box-shadow: unset;
+          }
+
+          a:hover {
+            background-color: $welcomeViewButtonHoverColor;
+            border: 1px solid $welcomeViewButtonHoverColor;
+          }
+        }
+      }
+
+      fieldset[label='Group By'] {
+        .form-group-inline {
+          width: 31%;
+        }
+      }
     }
-
-    div.divider {
-        order: 2;
-        width: 15px;
-        background-color: $tabBackground;
-    }
-}
-
-div.Pane.vertical.Pane1 {
-    div.leftPaneInnerWrapper {
-        height: 100%;
-
-        div.aggregateLeftPanel {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            font-family: Arial, Helvetica, sans-serif;
-
-            div.aggregatePaletteWrapper {
-                .pt-tree-node-content:hover {
-                    background-color: unset;
-                }
-
-                .pt-tree-node-content-1:hover {
-                    background-color: $aggregateBlockBackgroundHoverSecondary !important;
-                }
-
-                overflow-y: auto;
-                order: 1;
-                flex-grow: 1;
-                color: $navbarLeftHeading;
-
-                nav.aggregatePaletteToolbar {
-                    background-color: $navbarLeftBackground;
-
-                    h2.paletteHeader {
-                        color: $navbarLeftHeading;
-                        font-size: 16px !important;
-                        margin-top: 0px;
-                        margin-bottom: 10px;
-                        padding-top: 16px;
-                        text-align: left;
-                    }
-                }
-
-                .palletteTree {
-                    .pt-tree-root {
-                        .pt-tree-node {
-                            .pt-tree-node-content-0 {
-                                height: 60px;
-                                border-top: 1px solid $aggregateBlockBorder;
-
-                                span.pt-tree-node-caret {
-                                    color: $navbarLeftHeading;
-                                    border: 1px solid $defaultFontColor;
-                                    border-radius: 1em;
-                                    margin-left: 20px;
-                                    margin-right: 10px;
-                                }
-
-                                span.pt-tree-node-caret:hover {}
-
-                                span.pt-tree-node-caret-open {
-                                    background-color: $defaultFontColor;
-                                    color: $aggregateBlockBackgroundHover;
-                                }
-
-                                span.pt-tree-node-label {
-                                    font-size: 16px;
-                                }
-                            }
-
-                            .pt-tree-node-content-0:hover {
-                                background-color: $aggregateBlockBackgroundHover !important;
-                            }
-
-                            .pt-collapse {
-                                .pt-collapse-body {
-                                    .pt-tree-node-list {
-                                        .pt-tree-node {
-                                            height: 40px;
-
-                                            .pt-tree-node-content {
-                                                .pt-tree-node-label {
-                                                    height: 40px;
-
-                                                    div.aggregateBlock {
-                                                        display: flex;
-                                                        flex-direction: row;
-                                                        width: 100%;
-                                                        height: 30px;
-                                                        font-size: 18px;
-                                                        cursor: all-scroll;
-                                                        flex-grow: 1;
-
-                                                        div.blockPalletteWrapper {
-                                                            display: flex;
-                                                            flex-direction: row;
-                                                            height: 100%;
-                                                            width: 100%;
-                                                            cursor: all-scroll;
-                                                            flex-grow: 1;
-
-                                                            svg.dbKodaSVG {
-                                                                width: 15px;
-                                                                fill: $navbarLeftHeading;
-                                                                margin-left: 20px;
-                                                                padding-bottom: 10px;
-                                                                cursor: copy;
-                                                            }
-
-                                                            svg.dbKodaSVG:hover {
-                                                                fill: $aggregateBlockFontColorHover;
-                                                            }
-
-                                                            p.aggregateBlockTitle {
-                                                                pointer-events: none;
-                                                                cursor: inherit;
-                                                                user-select: none;
-                                                                font-size: smaller;
-                                                                color: $navbarLeftHeading;
-                                                                padding-top: 10px;
-                                                                padding-left: 10px;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        .pt-tree-node-expanded {
-                            .pt-tree-node-content-0 {
-                                background-color: $aggregateBlockBackgroundHover !important;
-                            }
-                        }
-                    }
-                }
-
-                div.aggregatePaletteContent {
-                    height: 100%;
-                    overflow: auto;
-
-                    ul.aggregateBlockList {
-                        list-style-type: none;
-                        margin-top: 0px;
-                        padding-left: 0px;
-
-                        li.aggregateBlockWrapper {
-                            border-bottom: 1px solid $aggregateBlockBorder;
-                            width: 100%;
-                            height: 50px;
-                            font-size: 20px;
-                            text-align: left;
-                        }
-
-                        li.aggregateBlockWrapper:hover {
-                            background-color: $aggregateBlockBackgroundHover;
-                            color: $aggregateBlockFontColorHover;
-                        }
-                    }
-                }
-            }
-
-            div.aggregateDetailsWrapper {
-                display: flex;
-                flex-direction: column;
-                order: 2;
-                flex-grow: 1;
-                color: $navbarLeftHeading;
-
-                nav.aggregateDetailsToolbar {
-                    order: 1;
-                    background-color: $navbarLeftBackground;
-                    height: 50px;
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    flex-shrink: 0;
-
-                    h2.currentBlockChoice {
-                        color: $navbarLeftHeading;
-                        font-size: 16px;
-                        padding-top: 14px;
-                        text-align: left;
-                    }
-
-                    div.pt-align-right {
-                        padding-top: 10px;
-
-                        a.pt-button {
-                            background: unset;
-                            background-color: $fieldGroupHeaderIcon !important;
-
-                            svg {
-                                fill: $defaultFontColor;
-                                width: 20px;
-                            }
-                        }
-
-                        a.pt-button:hover {
-                            background-color: $fieldGroupHeaderIconHover !important;
-                        }
-                    }
-                }
-
-                h2.aggregateBlockType {
-                    margin-top: 20px;
-                    order: 2;
-                    text-align: -webkit-center;
-                    color: $defaultFontColor;
-                }
-
-                p.aggregateBlockDescription {
-                    margin-top: 10px;
-                    margin-bottom: 0px;
-                    order: 3;
-                    text-align: -webkit-center;
-                }
-
-                div.aggregateDetailsContent {
-                    order: 4;
-                    overflow-y: auto;
-
-                    div {
-                        div {
-                            form {
-                                height: unset !important;
-                            }
-                        }
-                    }
-
-                    p {
-                        padding-top: 10px;
-                        padding-left: 10px;
-                    }
-                }
-
-                div.bottomToolbar {
-                    background-color: $navbarLeftBackground;
-                    order: 5;
-                    z-index: 5;
-                    position: absolute;
-                    bottom: 0;
-                    height: 40px;
-                    width: 100%;
-
-                    a.hideLeftPanelButton {
-                        bottom: 0;
-                        right: 10px;
-                        float: right;
-                        margin-right: 20px;
-                        margin-top: 5px;
-                        font-weight: lighter;
-                        color: $connectionButtonFontColour;
-                        border: 1px solid $welcomeViewButtonHoverColor !important;
-                        border-radius: 0;
-                        background-image: unset;
-                        background-color: $navbarLeftBackground;
-                        border: unset;
-                        box-shadow: unset;
-                    }
-
-                    a.byoCodeButton {
-                        bottom: 0;
-                        left: 10px;
-                        float: left;
-                        margin-right: 20px;
-                        margin-top: 5px;
-                        font-weight: lighter;
-                        color: $connectionButtonFontColour;
-                        border: 1px solid $welcomeViewButtonHoverColor !important;
-                        border-radius: 0;
-                        background-image: unset;
-                        background-color: $navbarLeftBackground;
-                        border: unset;
-                        box-shadow: unset;
-                    }
-
-                    a:hover {
-                        background-color: $welcomeViewButtonHoverColor;
-                        border: 1px solid $welcomeViewButtonHoverColor;
-                    }
-                }
-            }
-
-            fieldset[label='Group By'] {
-                .form-group-inline {
-                    width: 31%;
-                }
-            }
-        }
-    }
+  }
 }
 
 label[for='last'] {
-    display: none;
-    padding: none;
+  display: none;
+  padding: none;
 }
 
 svg.invalid {
-    fill: $aggregateBlockBackgroundInvalid;
+  fill: $aggregateBlockBackgroundInvalid;
 
-    circle {
-        fill: $aggregateBlockBackgroundHighlight;
-    }
+  circle {
+    fill: $aggregateBlockBackgroundHighlight;
+  }
 }
 
 svg.color_0 {
-    fill: $colourOne;
+  fill: $colourOne;
 
-    circle {
-        fill: $highlightOne;
-    }
+  circle {
+    fill: $highlightOne;
+  }
 }
 
 svg.color_1 {
-    fill: $colourTwo;
+  fill: $colourTwo;
 
-    circle {
-        fill: $highlightTwo;
-    }
+  circle {
+    fill: $highlightTwo;
+  }
 }
 
 svg.color_2 {
-    fill: $colourThree;
+  fill: $colourThree;
 
-    circle {
-        fill: $highlightThree;
-    }
+  circle {
+    fill: $highlightThree;
+  }
 }
 
 svg.color_3 {
-    fill: $colourFour;
+  fill: $colourFour;
 
-    circle {
-        fill: $highlightFour;
-    }
+  circle {
+    fill: $highlightFour;
+  }
 }
 
 svg.color_4 {
-    fill: $colourFive;
+  fill: $colourFive;
 
-    circle {
-        fill: $highlightFive;
-    }
+  circle {
+    fill: $highlightFive;
+  }
 }
 
 svg.color_5 {
-    fill: $colourSix;
+  fill: $colourSix;
 
-    circle {
-        fill: $highlightSix;
-    }
+  circle {
+    fill: $highlightSix;
+  }
 }
 
 svg.color_6 {
-    fill: $colourSeven;
+  fill: $colourSeven;
 
-    circle {
-        fill: $highlightSeven;
-    }
+  circle {
+    fill: $highlightSeven;
+  }
 }
 
 svg.color_7 {
-    fill: $colourEight;
+  fill: $colourEight;
 
-    circle {
-        fill: $highlightEight;
-    }
+  circle {
+    fill: $highlightEight;
+  }
 }
 
 svg.color_8 {
-    fill: $colourNine;
+  fill: $colourNine;
 
-    circle {
-        fill: $highlightNine;
-    }
+  circle {
+    fill: $highlightNine;
+  }
 }
 
 svg.color_9 {
-    fill: $colourTen;
+  fill: $colourTen;
 
-    circle {
-        fill: $highlightTen;
-    }
+  circle {
+    fill: $highlightTen;
+  }
 }
 
 svg.color_10 {
-    fill: $colourEleven;
+  fill: $colourEleven;
 
-    circle {
-        fill: $highlightEleven;
-    }
+  circle {
+    fill: $highlightEleven;
+  }
 }
 
 svg.color_11 {
-    fill: $colourTwelve;
+  fill: $colourTwelve;
 
-    circle {
-        fill: $highlightTwelve;
-    }
+  circle {
+    fill: $highlightTwelve;
+  }
 }
 
 svg.color_12 {
-    fill: $colourThirteen;
+  fill: $colourThirteen;
 
-    circle {
-        fill: $highlightThirteen;
-    }
+  circle {
+    fill: $highlightThirteen;
+  }
 }
 
 svg.color_13 {
-    fill: $colourFourteen;
+  fill: $colourFourteen;
 
-    circle {
-        fill: $highlightFourteen;
-    }
+  circle {
+    fill: $highlightFourteen;
+  }
 }
 
 svg.color_14 {
-    fill: $colourFifteen;
+  fill: $colourFifteen;
 
-    circle {
-        fill: $highlightFifteen;
-    }
+  circle {
+    fill: $highlightFifteen;
+  }
 }
 
 svg.color_15 {
-    fill: $colourSixteen;
+  fill: $colourSixteen;
 
-    circle {
-        fill: $highlightSixteen;
-    }
+  circle {
+    fill: $highlightSixteen;
+  }
 }
 
 svg.color_16 {
-    fill: $colourSeventeen;
+  fill: $colourSeventeen;
 
-    circle {
-        fill: $highlightSeventeen;
-    }
+  circle {
+    fill: $highlightSeventeen;
+  }
 }
 
 svg.closeBlockIcon.invalid {
-    fill: $aggregateBlockBackgroundHighlight;
+  fill: $aggregateBlockBackgroundHighlight;
 }
 
 svg.closeBlockIcon.color_0 {
-    fill: $highlightOne;
+  fill: $highlightOne;
 }
 
 svg.closeBlockIcon.color_1 {
-    fill: $highlightTwo;
+  fill: $highlightTwo;
 }
 
 svg.closeBlockIcon.color_2 {
-    fill: $highlightThree;
+  fill: $highlightThree;
 }
 
 svg.closeBlockIcon.color_3 {
-    fill: $highlightFour;
+  fill: $highlightFour;
 }
 
 svg.closeBlockIcon.color_4 {
-    fill: $highlightFive;
+  fill: $highlightFive;
 }
 
 svg.closeBlockIcon.color_5 {
-    fill: $highlightSix;
+  fill: $highlightSix;
 }
 
 svg.closeBlockIcon.color_6 {
-    fill: $highlightSeven;
+  fill: $highlightSeven;
 }
 
 svg.closeBlockIcon.color_7 {
-    fill: $highlightEight;
+  fill: $highlightEight;
 }
 
 svg.closeBlockIcon.color_8 {
-    fill: $highlightNine;
+  fill: $highlightNine;
 }
 
 svg.closeBlockIcon.color_9 {
-    fill: $colourTen;
+  fill: $colourTen;
 
-    circle {
-        fill: $highlightTen;
-    }
+  circle {
+    fill: $highlightTen;
+  }
 }
 
 svg.closeBlockIcon.color_10 {
-    fill: $colourEleven;
+  fill: $colourEleven;
 
-    circle {
-        fill: $highlightEleven;
-    }
+  circle {
+    fill: $highlightEleven;
+  }
 }
 
 svg.closeBlockIcon.color_11 {
-    fill: $colourTwelve;
+  fill: $colourTwelve;
 
-    circle {
-        fill: $highlightTwelve;
-    }
+  circle {
+    fill: $highlightTwelve;
+  }
 }
 
 svg.closeBlockIcon.color_12 {
-    fill: $colourThirteen;
+  fill: $colourThirteen;
 
-    circle {
-        fill: $highlightThirteen;
-    }
+  circle {
+    fill: $highlightThirteen;
+  }
 }
 
 svg.closeBlockIcon.color_13 {
-    fill: $colourFourteen;
+  fill: $colourFourteen;
 
-    circle {
-        fill: $highlightFourteen;
-    }
+  circle {
+    fill: $highlightFourteen;
+  }
 }
 
 svg.closeBlockIcon.color_14 {
-    fill: $colourFifteen;
+  fill: $colourFifteen;
 
-    circle {
-        fill: $highlightFifteen;
-    }
+  circle {
+    fill: $highlightFifteen;
+  }
 }
 
 svg.closeBlockIcon.color_15 {
-    fill: $colourSixteen;
+  fill: $colourSixteen;
 
-    circle {
-        fill: $highlightSixteen;
-    }
+  circle {
+    fill: $highlightSixteen;
+  }
 }
 
 svg.closeBlockIconcolor_16 {
-    fill: $colourSeventeen;
+  fill: $colourSeventeen;
 
-    circle {
-        fill: $highlightSeventeen;
-    }
+  circle {
+    fill: $highlightSeventeen;
+  }
 }
 
 .aggregateTabInnerWrapper {
-    .Pane2 {
-        div.editorView {
-            height: 100%;
-        }
+  .Pane2 {
+    div.editorView {
+      height: 100%;
     }
+  }
 
-    .SplitPane.LeftSplitPane.vertical {
-        // fix resizer hidden problem
-        right: auto !important;
-        overflow: unset !important;
-    }
+  .SplitPane.LeftSplitPane.vertical {
+    // fix resizer hidden problem
+    right: auto !important;
+    overflow: unset !important;
+  }
 
-    .Resizer {
-        background-color: $navbarSecondaryBackground;
-    }
+  .Resizer {
+    background-color: $navbarSecondaryBackground;
+  }
 }
 
 .generateChartTooltip {
-    margin-left: 40px;
+  margin-left: 40px;
 }

@@ -30,17 +30,13 @@ import { action, computed, reaction } from 'mobx';
 // import {Intent} from '@blueprintjs/core';
 // import { NewToaster } from '../common/Toaster';
 import DatabaseExport from './DatabaseExport';
-import {
-  BackupRestoreActions,
-  DrawerPanes,
-  EditorTypes,
-} from '../common/Constants';
+import { BackupRestoreActions, DrawerPanes, EditorTypes } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
 import { isCollectionAction, isDatabaseAction } from './Utils';
 
 @inject(allStores => ({
   store: allStores.store,
-  api: allStores.api,
+  api: allStores.api
 }))
 @observer
 export class BackupRestore extends React.Component {
@@ -55,7 +51,7 @@ export class BackupRestore extends React.Component {
         const editor = this.getEditorById(editorId);
         this.fetchCollectionlist(editor);
         this.setState({ editorId });
-      },
+      }
     );
   }
 
@@ -80,28 +76,23 @@ export class BackupRestore extends React.Component {
           !this.state.collections)
       ) {
         this.setState({
-          editorId: nextProps.store.treeActionPanel.treeActionEditorId,
+          editorId: nextProps.store.treeActionPanel.treeActionEditorId
         });
-        const editor = this.getEditorById(
-          nextProps.store.treeActionPanel.treeActionEditorId,
-        );
+        const editor = this.getEditorById(nextProps.store.treeActionPanel.treeActionEditorId);
         this.fetchCollectionlist(editor);
       }
     }
   }
 
   componentDidMount() {
-    if (
-      this.props.store.treeActionPanel.treeActionEditorId &&
-      !this.state.editorId
-    ) {
+    if (this.props.store.treeActionPanel.treeActionEditorId && !this.state.editorId) {
       const editorId = this.props.store.treeActionPanel.treeActionEditorId;
       this.setState({ editorId });
       const editor = this.getEditorById(editorId);
       this.fetchCollectionlist(editor);
       featherClient()
         .service('/os-execution')
-        .on('os-command-finish', (output) => {
+        .on('os-command-finish', output => {
           this.setState({ commandExecuting: false });
         });
     }
@@ -143,9 +134,9 @@ export class BackupRestore extends React.Component {
           .service('/mongo-sync-execution')
           .update(selectedProfile.id, {
             shellId: editor.shellId,
-            commands: `db.getSiblingDB("${db}").getCollectionNames()`,
+            commands: `db.getSiblingDB("${db}").getCollectionNames()`
           })
-          .then((res) => {
+          .then(res => {
             this.setState({ collections: JSON.parse(res) });
           });
       }
@@ -154,11 +145,11 @@ export class BackupRestore extends React.Component {
           .service('/mongo-sync-execution')
           .update(selectedProfile.id, {
             shellId: editor.shellId,
-            commands: 'db.adminCommand({listDatabases: 1})',
+            commands: 'db.adminCommand({listDatabases: 1})'
           })
-          .then((res) => {
+          .then(res => {
             const dbs = JSON.parse(res).databases;
-            const dbNames = dbs.map((db) => {
+            const dbNames = dbs.map(db => {
               return db.name;
             });
             this.setState({ collections: dbNames });
@@ -171,10 +162,7 @@ export class BackupRestore extends React.Component {
     const treeEditors = this.props.store.treeActionPanel.editors.entries();
     let treeEditor;
     for (const editor of treeEditors) {
-      if (
-        editor[1].id == editorId &&
-        editor[1].type === EditorTypes.SHELL_COMMAND
-      ) {
+      if (editor[1].id == editorId && editor[1].type === EditorTypes.SHELL_COMMAND) {
         treeEditor = editor[1];
         break;
       }

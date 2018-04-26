@@ -19,7 +19,7 @@
  */
 
 import React from 'react';
-import {Responsive, WidthProvider} from 'react-grid-layout';
+import { Responsive, WidthProvider } from 'react-grid-layout';
 
 import './styles.scss';
 import Button from './Button';
@@ -34,7 +34,7 @@ export default class ProfileConfiguration extends React.Component {
     super(props);
     this.state = {
       layouts,
-      selectedDb: null,
+      selectedDb: null
     };
   }
 
@@ -55,27 +55,27 @@ export default class ProfileConfiguration extends React.Component {
         selectedDb = db;
       }
     });
-    this.setState({selectedDb});
+    this.setState({ selectedDb });
   }
 
   getSelectedDatabases = () => {
-    const {databases} = this.props;
+    const { databases } = this.props;
     if (databases) {
       return databases.filter(db => db.selected);
     }
     return [];
   };
 
-  commitProfileConfiguration = ({level, slowms, profileSize}) => {
+  commitProfileConfiguration = ({ level, slowms, profileSize }) => {
     const dbs = this.getSelectedDatabases();
     const configs = dbs.map(db => {
-      return {level, slowms, profileSize, dbName: db.name};
+      return { level, slowms, profileSize, dbName: db.name };
     });
     this.props.commitProfileConfiguration(configs);
   };
 
   createButtonPanels(layout) {
-    const {showPerformancePanel} = this.props;
+    const { showPerformancePanel } = this.props;
     return (
       <div key={layout.i} className={layout.className} data-grid={layout}>
         <Button
@@ -136,20 +136,18 @@ export default class ProfileConfiguration extends React.Component {
           </div>
         );
       }
-      return (
-        <div key={layout.i} className={layout.className} data-grid={layout} />
-      );
+      return <div key={layout.i} className={layout.className} data-grid={layout} />;
     });
   }
 
   render() {
     console.log(this.props);
-    const {layouts} = this.state;
+    const { layouts } = this.state;
     return (
       <ResponsiveGridLayout
         className="profile-config-panel"
-        layouts={{verticalGridSize: 12}}
-        cols={{lg: 12, md: 12, sm: 12, xs: 12, xxs: 12}}
+        layouts={{ verticalGridSize: 12 }}
+        cols={{ lg: 12, md: 12, sm: 12, xs: 12, xxs: 12 }}
       >
         {this.createDomElement(layouts)}
       </ResponsiveGridLayout>

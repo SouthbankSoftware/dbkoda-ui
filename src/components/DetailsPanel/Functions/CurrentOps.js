@@ -32,8 +32,8 @@ export const CurrentOps = {
   dbkoda_CurrentOps: () => {
     return 'dbeOps.printCurrentOps(true,true)';
   },
-  dbkoda_CurrentOps_parse: (data) => {
+  dbkoda_CurrentOps_parse: data => {
     // data.time = Globalize.formatNumber(data.time);
     return data;
-  },
+  }
 };

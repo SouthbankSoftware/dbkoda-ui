@@ -31,17 +31,17 @@ class CodeMirror extends React.Component {
     path: PropTypes.string,
     value: PropTypes.string,
     preserveScrollPosition: PropTypes.bool,
-    alwaysScrollToBottom: PropTypes.bool,
+    alwaysScrollToBottom: PropTypes.bool
   };
 
   static defaultProps = {
     preserveScrollPosition: false,
-    alwaysScrollToBottom: false,
+    alwaysScrollToBottom: false
   };
 
   state = {
     isFocused: false,
-    isPropsInitialized: false,
+    isPropsInitialized: false
   };
 
   getCodeMirrorInstance() {
@@ -110,7 +110,7 @@ class CodeMirror extends React.Component {
 
   focusChanged(focused) {
     this.setState({
-      isFocused: focused,
+      isFocused: focused
     });
     this.props.onFocusChange && this.props.onFocusChange(focused);
   }
@@ -125,7 +125,7 @@ class CodeMirror extends React.Component {
     }
     if (!this.state.isPropsInitialized && this.props.alwaysScrollToBottom) {
       this.setState({
-        isPropsInitialized: true,
+        isPropsInitialized: true
       });
       const nextScrollPosition = this.codeMirror.getScrollInfo();
       const scrollTop = nextScrollPosition.height - nextScrollPosition.clientHeight;
@@ -137,7 +137,7 @@ class CodeMirror extends React.Component {
     const editorClassName = className(
       'ReactCodeMirror',
       this.state.isFocused ? 'ReactCodeMirror--focused' : null,
-      this.props.className,
+      this.props.className
     );
     /* eslint-disable react/no-string-refs */
     return (

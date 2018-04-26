@@ -23,10 +23,10 @@
 import React from 'react';
 import './style.scss';
 
-const getAllShardStatistics = (explains) => {
+const getAllShardStatistics = explains => {
   const shards = explains.executionStats.executionStages.shards;
   const allShards = [];
-  shards.map((shard) => {
+  shards.map(shard => {
     const oneShard = [];
     let cursor = shard.executionStages;
     let executionTime = 0;
@@ -44,7 +44,7 @@ const getAllShardStatistics = (explains) => {
       if (!cursor.inputStage && cursor.inputStages && cursor.inputStages.constructor === Array) {
         let examined = 0;
         let nReturned = 0;
-        cursor.inputStages.map((input) => {
+        cursor.inputStages.map(input => {
           examined += input.keysExamined;
           nReturned += input.nReturned;
         });
@@ -63,10 +63,10 @@ const getAllShardStatistics = (explains) => {
   return allShards;
 };
 
-export const getWorstShardStatistics = (explains) => {
+export const getWorstShardStatistics = explains => {
   const allShards = getAllShardStatistics(explains);
   const worstShards = [];
-  allShards.map((shards) => {
+  allShards.map(shards => {
     worstShards.push(shards[0]);
   });
   return worstShards;
@@ -85,7 +85,7 @@ export default ({ explains }) => {
         <div className="column">{globalString('explain/statistics/returned')}</div>
         <div className="column">{globalString('explain/statistics/ms')}</div>
       </div>
-      {shardStatistics.map((shard) => {
+      {shardStatistics.map(shard => {
         return (
           <div className="row" key={shard.shardName}>
             <div className="cell">{shard.shardName}</div>

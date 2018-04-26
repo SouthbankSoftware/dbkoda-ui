@@ -23,8 +23,6 @@
  * @Email:  guy@southbanksoftware.com
  */
 
-
-
-module.exports = function (string) {
-    return string.replace(/\./g, '_');
+module.exports = function(string) {
+  return string.replace(/\./g, '_');
 };
