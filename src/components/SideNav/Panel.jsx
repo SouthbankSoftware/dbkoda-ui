@@ -5,7 +5,7 @@
  * @Date:   2018-04-16T14:56:12+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-26T13:51:15+10:00
+ * @Last modified time: 2018-04-26T16:12:32+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -48,13 +48,17 @@ type Props = {
   menuItems: *
 };
 
+type State = {
+  menuItems: *
+};
+
 @inject(allStores => ({
   store: allStores.store,
   drawer: allStores.store.drawer
 }))
 @observer
-export default class SideNav extends React.Component<Props> {
-  constructor(props) {
+export default class SideNav extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {

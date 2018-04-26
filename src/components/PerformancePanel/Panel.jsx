@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-26T15:24:25+10:00
+ * @Last modified time: 2018-04-26T16:15:16+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -49,9 +49,6 @@ type Props = {
   onClose: () => void,
   resetHighWaterMark: (profileId: UUID) => void,
   resetPerformancePanel: (profileId: UUID) => void,
-  showTopConnections: () => void,
-  showProfiling: () => void,
-  showProfileConfiguration: () => void,
   api: *,
   mongoStatus: String,
   sshStatus: String
@@ -111,9 +108,6 @@ export default class PerformancePanel extends React.Component<Props> {
       onClose,
       resetHighWaterMark,
       resetPerformancePanel,
-      showTopConnections,
-      showProfileConfiguration,
-      showProfiling,
       mongoStatus,
       sshStatus
     } = this.props;
@@ -128,38 +122,6 @@ export default class PerformancePanel extends React.Component<Props> {
               {profileAlias}
               {isUnresponsive && ' (Not Responding)'}
             </div>
-            {showProfiling && (
-              <Tooltip
-                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-                content={globalString('performance/profiling/profilingButtonText')}
-                hoverOpenDelay={1000}
-                inline
-                intent={Intent.PRIMARY}
-                position={Position.BOTTOM}
-              >
-                <Button
-                  className="top-con-button reset-button pt-button pt-intent-primary"
-                  text={globalString('performance/profiling/profilingButtonText')}
-                  onClick={showProfiling}
-                />
-              </Tooltip>
-            )}
-            {showProfileConfiguration && (
-              <Tooltip
-                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-                content={globalString('performance/profiling/profile-configuration-button-text')}
-                hoverOpenDelay={1000}
-                inline
-                intent={Intent.PRIMARY}
-                position={Position.BOTTOM}
-              >
-                <Button
-                  className="top-con-button reset-button pt-button pt-intent-primary"
-                  text={globalString('performance/profiling/profile-configuration-button-text')}
-                  onClick={showProfileConfiguration}
-                />
-              </Tooltip>
-            )}
             {resetHighWaterMark &&
               !isUnresponsive && (
                 <Tooltip
