@@ -222,7 +222,7 @@ export default class TreeNode {
 
     const Actions = TreeActions[this.type];
     const Menus = [];
-    Menus.push(
+    /*  Menus.push(
       <MenuItem
         onClick={this.handleMakeRoot}
         text="Make Root Node"
@@ -231,9 +231,8 @@ export default class TreeNode {
         icon="git-new-branch"
         intent={Intent.NONE}
       />
-    );
+    ); */
     if (Actions && Actions.length > 0) {
-      Menus.push(<MenuDivider key="divider" />);
       for (const objAction of Actions) {
         /*         if (
           objAction.name === 'ShowPerformancePanel' &&
