@@ -1,6 +1,6 @@
 /**
- * @Last modified by:   guiguan
- * @Last modified time: 2017-10-09T17:21:04+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-27T11:02:22+10:00
  *
  * Theme 1 Colours: These should be externalized eventually
  *
@@ -22,7 +22,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 //Theme Colors:
 $panelLeftBackground: #363951;
 $navbarLeftBackground: #272a3a;
@@ -40,25 +39,22 @@ $profileListTabHover: rgba(191, 190, 192, 0.048);
 $profileListSelected: rgba(191, 190, 192, 0.1);
 $defaultFontColor: #bfbec0;
 $brightFontColor: #dfdee0;
-
 // Side Nav:
 $sideNavBackground: #262835;
 $sideNavButtonSelected: #191b23;
-
+$sideNavBackgroundPerformance: #2d2d2d;
+$sideNavPerformanceButtonSelected: rgba(32, 32, 32, 0.5);
 // Scroll Bars:
 $scrollBarBackground: #474a5a;
 $scrollBarTopAndBottom: rgba(0, 0, 0, 0.2);
 $scrollBarThumb: #575a6a;
-
 $connectionCheckboxBackgroundColour: #363951;
 $connectionCheckboxBackgroundColourHover: #565971;
 $connectionButtonBackgroundColour: #363951;
-$connectionButtonBackgroundColourHover: #565971;
-// Auto-Complete Menu:
+$connectionButtonBackgroundColourHover: #565971; // Auto-Complete Menu:
 $hintsBackgroundColor: #272a3a;
 $hintsColor: #bfbec0;
-$hintsBackgroundActiveColor: #363951;
-// Aggregate Menu:
+$hintsBackgroundActiveColor: #363951; // Aggregate Menu:
 $aggregateBlockBorder: rgba(191, 190, 192, 0.2);
 $aggregateBlockFontColor: #8f8e90;
 $aggregateBlockFontColorHover: #dfdee0;
@@ -67,7 +63,6 @@ $aggregateBlockBackgroundHover: #464961;
 $aggregateBlockBackgroundHoverSecondary: rgba(38, 41, 65, 0.41);
 $aggregateBlockBackgroundInvalid: #494849;
 $aggregateBlockBackgroundHighlight: #343334;
-
 //Toast Notifications:
 $toastBackgroundColourSuccess: #dbeed3;
 $toastFontColourSuccess: #356b36;
@@ -80,10 +75,8 @@ $toastFontColourDanger: #9f3c3a;
 $toastCloseIconColourDanger: rgba(159, 60, 58, 0.5);
 $toastBackgroundColourInfo: #d4eaf6;
 $toastFontColourInfo: #2b6584;
-$toastCloseIconColourInfo: rgba(43, 101, 132, 0.5);
-// Dialogs
-$dialogButtonBorder: rgba(154, 154, 155, 0.6);
-// ToolTips
+$toastCloseIconColourInfo: rgba(43, 101, 132, 0.5); // Dialogs
+$dialogButtonBorder: rgba(154, 154, 155, 0.6); // ToolTips
 $toolTipBackgroundColour: #c0c0c0;
 $toolTipFontColour: #4f4f4f;
 $tabFontColor: #8b8b8b;
@@ -91,8 +84,7 @@ $tabBackground: #323232;
 $tabBackgroundHover: #292929;
 $tabButtonHover: #bfbec0;
 $tabBackgroundSelected: #202020;
-$panelRightBackground: #202020;
-//Editor:
+$panelRightBackground: #202020; //Editor:
 $editorBackground: #202020;
 $editorActiveLine: rgba(100, 100, 100, 0.15);
 $editorSelectText: rgba(200, 200, 200, 0.15);
@@ -106,8 +98,7 @@ $propFontColor: #aac6e3;
 $stringFontColor: rgba(58, 178, 98, 0.85);
 $propertyStringFontColor: #3fc16b;
 $white: #ffffff;
-$black: #000000;
-//Welcome View:
+$black: #000000; //Welcome View:
 $welcomeViewBrightBackgroundColor: #314249;
 $welcomeViewDividerColor: #9a9a9b;
 $welcomeViewDividerTransparent: rgba(154, 154, 155, 0.4);
@@ -119,24 +110,20 @@ $welcomeViewSocialMediaText: #9a9a9b;
 $welcomeViewFontColor: #bfbec0;
 $welcomeViewFontColorBright: #9a9a9b;
 $welcomeViewFontColorDark: #afaeb0;
-$welcomeViewLinkColor: #4b98c6;
-//Profile List
+$welcomeViewLinkColor: #4b98c6; //Profile List
 $profileListIconColor: rgba(191, 190, 192, 0.3);
 $profileListFontColor: #bfbec0;
-$profileListDividerColor: #272a3a;
-//Output:
+$profileListDividerColor: #272a3a; //Output:
 $terminalBackground: #494849;
 $terminalInput: #202020;
 $terminalButtonBackground: #bfbec0;
-$terminalButtonIcon: #58595b;
-//NavBars:
+$terminalButtonIcon: #58595b; //NavBars:
 $navbarRightBackground: #494849;
 $navbarRighHeading: #bfbec0;
 $navbarSecondaryBackground: #323232;
 $navbarLeftHeading: #bfbec0;
 $navbarTertiaryBackground: #202020;
-$navbarOutputBackground: #232323;
-//Buttons:
+$navbarOutputBackground: #232323; //Buttons:
 $buttonTextColour: #bfbec0;
 $buttonSuccessBackground: #24a26e;
 $buttonSuccessBackgroundHover: #1f7f53;
@@ -152,8 +139,7 @@ $buttonTertiaryIcon: #8b8b8b;
 $buttonDark: #494849;
 $buttonDangerBackground: #8a4148;
 $buttonDangerBackgroundHover: #663139;
-$buttonDangerIcon: #bfbec0;
-// New Connection Panel:
+$buttonDangerIcon: #bfbec0; // New Connection Panel:
 $connectionHeaderFontColour: #bfbec0;
 $connectionCloseIconColor: rgba(191, 190, 192, 0.5);
 $connectionCloseIconHover: #bfbec0;
@@ -172,29 +158,25 @@ $connectionButtonBackgroundColourConnectHover: #1f7f53;
 $connectionButtonBackgroundColourReset: #8a4148;
 $connectionButtonBackgroundColourResetHover: #663139;
 $connectionCheckboxColour: rgba(191, 190, 192, 0.75);
-$connectionWarningFontColour: #9a5158;
-// Tree
+$connectionWarningFontColour: #9a5158; // Tree
 $treeMessageColor: rgba(154, 154, 155, 0.8);
 $treeBorderColor: rgba(154, 154, 155, 0.4);
 $treeIconColor: rgba(154, 154, 155, 0.8);
 $treeIconBGColor: rgba(154, 154, 155, 0.2);
 $treeLoaderColor: rgba(154, 154, 155, 0.8);
-$treeLoaderColorBG: rgba(154, 154, 155, 0.4);
-//Searchbox:
+$treeLoaderColorBG: rgba(154, 154, 155, 0.4); //Searchbox:
 $searchPrimaryBackground: #bfbec0;
 $searchPrimaryFontColor: #494849;
 $searchSecondaryBackground: #202020;
 $searchSecondaryFontColor: #bfbec0;
 $downArrow: '\25BE';
-$rightArrow: '\25B8';
-// Fields:
+$rightArrow: '\25B8'; // Fields:
 // =======
 //
 // Toolbar Fields:
 // ---------------
 $selectDarkPrimaryBackground: #313131;
-$selectDarkBorderColor: #515151;
-// Form Fields:
+$selectDarkBorderColor: #515151; // Form Fields:
 // ------------
 $fieldGroupPrimaryBackground: rgba(191, 190, 192, 0.1);
 $fieldGroupTitleUnderline: rgba(191, 190, 192, 0.3);
@@ -203,8 +185,7 @@ $fieldGroupTertiaryBackground: rgba(33, 46, 51, 0.15);
 $fieldGroupHeaderIcon: #363951;
 $fieldGroupHeaderIconHover: #161921;
 $fieldGroupHeaderDangerIcon: #8a4148;
-$fieldGroupListIcon: #bfbec0;
-// fields are input, numericinput, select, etc
+$fieldGroupListIcon: #bfbec0; // fields are input, numericinput, select, etc
 $fieldHeadingFontColor: #bfbec0; // for Form header, and field Labels
 $fieldLabelFontColor: #58585b; // for Fields with labels like Radio boxes, Check boxes
 $fieldBrightBackgroundColor: #ffffff;
@@ -222,8 +203,7 @@ $fieldSecondaryButtonActive: #7c3a40;
 $fieldSecondaryButtonFontColor: #bfbec0;
 $fieldTertiaryButtonBackground: #2d3d46;
 $fieldTertiaryButtonBorder: #bfbec0;
-$fieldTertiaryButtonFontColor: #bfbec0;
-// explain panel
+$fieldTertiaryButtonFontColor: #bfbec0; // explain panel
 $explainLabelColor: #bfbec0;
 $explainSwitchBtnColor: #313131;
 $explainSwitchBtnBorderColor: rgb(74, 74, 74);
@@ -243,14 +223,11 @@ $explainStatisticTableHeaderBkColor: #607747;
 $explainShardStatisticTableHeaderBkColor: #4f5a6e;
 $explainStepElapseTimeBestColor: #8a4148;
 $explainStepElapseTimeWorstColor: #24a26e;
-
 $detailsBackground: #1c1d1d;
 $detailsFontColor: #bfbec0;
 $chartTooltipBackground: rgba(255, 255, 255, 0.7);
 $chartItemHover: rgba(86, 86, 86, 0.15);
-
 $menuItemHover: rgba(170, 182, 264, 0.3);
-
 // Table JSON View
 $tableHeaderBackground: #5d3750;
 $tableBackgroundOdd: #282828;
@@ -261,7 +238,6 @@ $tableHeaderText: #bfbec0;
 $tableBodyText: #bfbec0;
 $tableCellBorder: rgba(191, 190, 192, 0.25);
 $tableButtonHover: #696869;
-
 // Visual Tools Color Palette
 $colourOne: #00b4e9;
 $colourTwo: #27608a;
@@ -280,7 +256,6 @@ $colourFourteen: #00b458;
 $colourFifteen: #00bd9b;
 $colourSixteen: #617747;
 $colourSeventeen: #9ed68e;
-
 $highlightOne: #00a9cf;
 $highlightTwo: #1f5373;
 $highlightThree: #55558c;
@@ -298,30 +273,22 @@ $highlightFourteen: #009d4a;
 $highlightFifteen: #18a687;
 $highlightSixteen: #51603a;
 $highlightSeventeen: #93bf83;
-
 // Chart Panel
 $overlayYAxis: #aab8c1;
 $overlayXAxis: #eedac1;
 $overlayCenter: #c7d8c8;
-
 $treeNodeYAxis: #707a7f;
 $treeNodeXAxis: #ce8e49;
 $treeNodeCenter: #5e7f5f;
-
 $defaultChartPanelText: #666;
-
 $chartPanelTooltipBackground: rgba(35, 35, 35, 0.9);
 $chartPanelTooltipTitle: #888;
-
 // Error View
 $errorViewText: #555;
-
 //==== PERFORMANCE PANEL ====//
 $performanceSectionDivider: #494849;
-
 // Profile Configuration
 $profileConfigurationLabelFontColor: #bfbec0;
 $profileConfigurationBkColor: #202020;
-
 // tips cards
 $tipsCardFontColor: #bfbec0;

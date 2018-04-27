@@ -3,7 +3,7 @@
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-27T09:44:13+10:00
+ * @Last modified time: 2018-04-27T10:41:06+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,6 +34,7 @@ import { NewToaster } from '#/common/Toaster';
 import { SideNav } from '#/SideNav';
 import { NavPanes } from '#/common/Constants';
 import { attachToMobx, detachFromMobx } from '~/api/PerformancePanel';
+import LoadingView from '#/common/LoadingView';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/icons/lib/css/blueprint-icons.css';
@@ -159,12 +160,15 @@ class PerformanceWindow extends React.Component {
     const { store } = this.props;
 
     return (
-      <div className="mainContainer">
-        <SideNav menuItems={[NavPanes.PERFORMANCE, NavPanes.TOP_COMMANDS, NavPanes.PROFILING]} />
+      <div className="performanceContainer">
+        <SideNav
+          className="sideNavPerformance"
+          menuItems={[NavPanes.PERFORMANCE, NavPanes.TOP_COllECTIONS, NavPanes.PROFILING]}
+        />
         <div className="fullPanel">
           {store.drawer &&
             store.drawer.activeNavPane == NavPanes.PERFORMANCE && (
-              <div>
+              <div style={{ height: '100%' }}>
                 {store.performancePanel ? (
                   <PerformancePanel
                     performancePanel={store.performancePanel}
@@ -181,14 +185,12 @@ class PerformanceWindow extends React.Component {
                     mongoStatus={this.state.mongoStatus}
                   />
                 ) : (
-                  <div>
-                    <span>Loading Performance Panel...</span>
-                  </div>
+                  <LoadingView />
                 )}
               </div>
             )}
           {store.drawer &&
-            store.drawer.activeNavPane == NavPanes.TOP_COMMANDS && <TopConnectionsPanel />}
+            store.drawer.activeNavPane == NavPanes.TOP_COllECTIONS && <TopConnectionsPanel />}
           {store.drawer &&
             store.drawer.activeNavPane == NavPanes.PROFILING &&
             this.state.bProfiling && (

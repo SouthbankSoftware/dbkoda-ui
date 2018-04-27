@@ -5,7 +5,7 @@
  * @Date:   2018-04-16T14:56:12+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-26T16:12:32+10:00
+ * @Last modified time: 2018-04-27T10:31:05+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -112,9 +112,9 @@ export default class SideNav extends React.Component<Props, State> {
             <PerformanceIcon className="dbKodaSVG" />
           </MenuItem>
         )}
-        {checkMenuItem(NavPanes.TOP_COMMANDS) && (
+        {checkMenuItem(NavPanes.TOP_COllECTIONS) && (
           <MenuItem
-            name={NavPanes.TOP_COMMANDS}
+            name={NavPanes.TOP_COllECTIONS}
             isSelected={this.isItemSelected}
             changeMenu={this.changeMenuSelected}
           >

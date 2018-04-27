@@ -3,7 +3,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-26T15:06:24+10:00
+ * @Last modified time: 2018-04-27T10:30:03+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -42,7 +42,7 @@ export default class MenuItem extends React.Component {
           hoverOpenDelay={500}
           content={this.props.name}
           tooltipClassName="pt-dark"
-          position={Position.BOTTOM}
+          position={Position.RIGHT}
         >
           <AnchorButton
             className={`menuItem${this.props.name}`}

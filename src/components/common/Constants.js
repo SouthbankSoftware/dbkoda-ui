@@ -4,7 +4,7 @@
  * @Date:   2017-03-15T12:03:27+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-26T13:51:32+10:00
+ * @Last modified time: 2018-04-27T10:33:49+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -48,7 +48,7 @@ export const NavPanes = {
   EDITOR: 'Editor',
   PROFILE: 'Profile',
   PERFORMANCE: 'Performance',
-  TOP_COMMANDS: 'TopCommands',
+  TOP_COllECTIONS: 'Top Collections',
   PROFILING: 'Profiling'
 };
 
