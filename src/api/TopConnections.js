@@ -5,7 +5,7 @@
  * @Date:   2018-03-27T10:39:44+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-17T16:26:57+10:00
+ * @Last modified time: 2018-04-27T15:19:20+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -92,14 +92,19 @@ export default class TopConnections {
       });
   };
 
-  killOperation = (profileId: UUID, opId: number) => {
+  killOperation = (profileId: UUID, opId: *) => {
+    const nOP = parseInt(opId, 10);
+    let op = opId;
+    if (!isNaN(nOP)) {
+      op = nOP;
+    }
     featherClient()
       .service('drivercommands')
       .patch(profileId, {
         database: 'admin',
         command: {
           killOp: 1,
-          op: opId
+          op
         }
       })
       .catch(err => {
