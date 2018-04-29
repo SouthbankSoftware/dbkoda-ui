@@ -34,7 +34,7 @@ import PathsSectionIcon from '~/styles/icons/color/folder-icon.svg';
 import ApplicationSectionIcon from '~/styles/icons/color/settings-icon.svg';
 import ShortcutsSectionIcon from '~/styles/icons/color/keys-icon.svg';
 import PerformanceSectionIcon from '~/styles/icons/color/performance-icon.svg';
-import FeaturesSectionIcon from '~/styles/icons/color/new-icon.svg';
+// import FeaturesSectionIcon from '~/styles/icons/color/new-icon.svg';
 
 @inject(allStores => ({
   store: allStores.store
