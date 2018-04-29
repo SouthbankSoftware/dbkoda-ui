@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T15:31:22+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-24T15:48:26+10:00
+ * @Last modified time: 2018-04-27T15:41:50+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -92,7 +92,8 @@ export default class OperationsView extends React.Component<Props> {
     });
   }
 
-  getCellData = (rowIndex: number, columnIndex: number, bUseIndex: boolen = true) => {
+  getCellData = (ogRowIndex: number, columnIndex: number, bUseIndex: boolen = true) => {
+    let rowIndex = ogRowIndex;
     if (bUseIndex) {
       const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
       if (sortedRowIndex != null) {
@@ -126,7 +127,7 @@ export default class OperationsView extends React.Component<Props> {
           bDelete:
             this.state.lastSelectRegion &&
             this.state.lastSelectRegion[0].rows &&
-            this.state.lastSelectRegion[0].rows[0] === rowIndex
+            this.state.lastSelectRegion[0].rows[0] === ogRowIndex
         };
         break;
       default:
@@ -181,6 +182,7 @@ export default class OperationsView extends React.Component<Props> {
   @autobind
   removeOperation() {
     this.props.api.killSelectedOperation();
+    this.setState({ sortedIndexMap: [] }); // TODO: Remove this line and do sort on the column again to update sortedIndexMap
     this.hideRemoveOperationAlert();
   }
 
