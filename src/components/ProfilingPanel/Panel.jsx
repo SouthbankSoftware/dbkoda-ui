@@ -52,7 +52,7 @@ export default class ProfilingPanel extends React.Component<Props> {
       databaseList: [],
       selectedOperation: null,
       bottomSplitPos: 1000,
-      topSplitPos: window.innerWidth
+      topSplitPos: window.innerWidth - 61
     };
     this.props.store.api.getProfilingDataBases();
   }
@@ -111,6 +111,7 @@ export default class ProfilingPanel extends React.Component<Props> {
     };
 
     const onOperationSelection = selectedOperation => {
+      this.setState({ selectedOperation: null });
       this.setState({ selectedOperation });
     };
 

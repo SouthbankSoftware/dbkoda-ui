@@ -34,6 +34,10 @@
   display: flex;
   flex-direction: column;
 
+  .pt-button-text {
+    flex: none !important;
+  }
+
   .pt-align-right {
     .pt-popover-wrapper {
       margin-right: 0px;
@@ -41,18 +45,20 @@
   }
 
   .profilingResultsWrapper {
-    margin-left: 2.5%;
-    width: 95%;
-
     .panelHeader {
       padding-left: 0px;
 
       .pt-navbar-heading {
         font-size: 20px;
+        margin-left: 12px;
       }
     }
 
     .tableWrapper {
+      .dbSelectWrapper {
+        margin-left: 12px;
+      }
+
       .dbSelectLabel {
         color: #bfbec0;
         margin-right: 6px;
@@ -63,7 +69,7 @@
           div {
             button {
               height: 25px;
-              width: 10em !important;
+              width: 12em !important;
               background-image: none;
               outline: none;
               background: unset;

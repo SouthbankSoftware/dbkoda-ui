@@ -92,13 +92,14 @@ export default class Menu extends React.Component {
         >
           <ShortcutsSectionIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
+        {/* @TODO -> Re add this section once we have appropriate content.
         <MenuItem
           name="UserGuide"
           isSelected={this.isItemSelected}
           changeMenu={this.changeMenuSelected}
         >
           <FeaturesSectionIcon className="dbKodaSVG" width={20} height={20} />
-        </MenuItem>
+        </MenuItem> */}
       </div>
     );
   }

@@ -58,12 +58,12 @@
       },
       "profiling": {
         "profilingButtonText": "Profiling",
-        "profile-configuration-button-text": "Profile Configure",
+        "profile-configuration-button-text": "Configure Profiling",
         "configuration": {
           "setup": "Setup Profiling",
           "analyse": "Analyse Profiling",
           "performance": "Performance",
-          "close": "Close",
+          "close": "Back",
           "database-list-title": "Database to Profile",
           "profile-mode": "Profile Mode",
           "operation-exceeds": "Operation exceeding time limit",

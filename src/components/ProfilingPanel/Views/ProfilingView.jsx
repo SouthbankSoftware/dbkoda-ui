@@ -33,7 +33,7 @@ import { SelectionModes, Table, Utils, TableLoadingOption } from '@blueprintjs/t
 import TextSortableColumn from '../Components/TextSortableColumn';
 import ProgressBarColumn from '../Components/ProgressBarColumn';
 
-const columnsWidthsPercent = [15, 12, 12, 30, 6, 9, 10];
+const columnsWidthsPercent = [15, 13, 12, 35, 5, 5, 15];
 
 @observer
 export default class ProfilingView extends React.Component<Props> {
@@ -106,7 +106,6 @@ export default class ProfilingView extends React.Component<Props> {
         break;
       case 6:
         cellValue = _.pick(this.state.data[rowIndex], 'millis');
-        console.log('!!! A - ', this.state.highWaterMark);
         if (this.state.highWaterMark) {
           cellValue.highWaterMark = this.state.highWaterMark.millis;
         }
