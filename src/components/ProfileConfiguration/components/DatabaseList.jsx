@@ -18,6 +18,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
+import { Icon } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import Checkbox from '../../common/Checkbox';
 
 import './DatabaseList.scss';
@@ -32,14 +34,18 @@ export default class DatabaseList extends React.Component {
         </div>
         <div className="profile-db-list">
           {this.props.databases.map(db => {
+            const dotClsName = db.value && db.value.was > 0 ? 'full-circle' : 'full-circle hide';
             return (
-              <Checkbox
-                key={db.name}
-                className="db-item"
-                label={db.name}
-                value={db.selected}
-                onClick={() => selectDatabase(db)}
-              />
+              <div className="profile-database">
+                <Icon className={dotClsName} icon={IconNames.FULL_CIRCLE} />
+                <Checkbox
+                  key={db.name}
+                  className="db-item"
+                  label={db.name}
+                  value={db.selected}
+                  onClick={() => selectDatabase(db)}
+                />
+              </div>
             );
           })}
         </div>

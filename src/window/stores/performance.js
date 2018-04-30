@@ -152,7 +152,8 @@ export default class Store {
     {
       enabledDatabases: [],
       selectedDatabase: null,
-      payload: null
+      payload: null,
+      databases: []
     },
     null,
     { deep: false }

@@ -23,4 +23,16 @@
       font-size: $fontSize;
     }
   }
+  .profile-database {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .hide {
+      opacity: 0;
+    }
+    .full-circle {
+      color: #87a986;
+      margin: 5px;
+    }
+  }
 }
