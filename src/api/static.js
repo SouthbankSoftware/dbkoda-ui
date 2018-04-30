@@ -90,6 +90,15 @@ export default class StaticApi {
       const documents = [];
       let currentLine = resultSet.start;
       const lines = _.clone(resultSet);
+      // Skip past the command to the result set if it's a multi-line command
+      let lineCheck = currentLine + 1;
+      let doc = this.getDocumentAtLine(outputId, lineCheck, 1, lines, cm);
+      while (doc.startsWith('...')) {
+        lineCheck += 1;
+        currentLine = lineCheck;
+        doc = this.getDocumentAtLine(outputId, lineCheck, 1, lines, cm);
+      }
+
       while (currentLine < resultSet.end && lines.status !== 'Invalid') {
         try {
           const doc = this.getDocumentAtLine(outputId, currentLine, 1, lines, cm);

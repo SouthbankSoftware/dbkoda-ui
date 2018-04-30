@@ -52,7 +52,7 @@ describe('App', () => {
     );
   });
 
-  test('has 1 split panel', () => {
-    expect(app.find('SplitPane').length).toEqual(1);
+  test('has no split panels', () => {
+    expect(app.find('SplitPane').length).toEqual(0);
   });
 });
