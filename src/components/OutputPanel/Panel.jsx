@@ -130,7 +130,10 @@ export default class Panel extends React.Component<Props> {
       console.log(activeEditor);
     }
 
-    if (id === activeEditor.id) {
+    if (
+      shellId === activeEditor.shellId &&
+      id === activeEditor.profileId
+    ) {
       if (activeEditor.explains) {
         activeEditor.explains.active = false;
       }
