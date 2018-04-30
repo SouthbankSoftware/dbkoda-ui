@@ -684,10 +684,9 @@ class View extends React.Component {
    */
   componentDidMount() {
     this.refresh();
-
     if (this.props.config.settings.automaticAutoComplete) {
       const cm = this.editor.getCodeMirror();
-      cm.on('change', _.debounce(CodeMirror.commands.autocomplete, 200));
+      cm.on('change', _.debounce(CodeMirror.commands.autocomplete, 400));
     }
 
     const _updateUnsavedFileIndicator = _.debounce(() => {
@@ -744,8 +743,22 @@ class View extends React.Component {
     }
   }
 
+  clearAutoCompletion(cm) {
+    const options = {
+      hint() {
+        return {
+          from: 0,
+          to: 0,
+          list: []
+        };
+      }
+    };
+    cm.showHint(options);
+  }
+
   setupAutoCompletion() {
     CodeMirror.commands.autocomplete = cm => {
+      this.clearAutoCompletion(cm);
       const currentLine = cm.getLine(cm.getCursor().line);
       let start = cm.getCursor().ch;
       let end = start;
