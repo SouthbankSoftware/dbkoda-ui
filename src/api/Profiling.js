@@ -83,8 +83,9 @@ export default class Profiling {
   };
 
   getProfilingDataBases = (profileId: UUID) => {
-    featherClient()
-      .service('profile')
+    const service = featherClient().service('profile');
+    service.timeout = 30000;
+    service
       .get(profileId, {
         query: {
           op: 'configuration'
@@ -102,8 +103,9 @@ export default class Profiling {
   };
 
   getProfilingData = (profileId: UUID, database: string) => {
-    featherClient()
-      .service('profile')
+    const service = featherClient().service('profile');
+    service.timeout = 30000;
+    service
       .get(profileId, {
         query: {
           op: 'profile',

@@ -33,7 +33,7 @@ import { SelectionModes, Table, Utils, TableLoadingOption } from '@blueprintjs/t
 import TextSortableColumn from '../Components/TextSortableColumn';
 import ProgressBarColumn from '../Components/ProgressBarColumn';
 
-const columnsWidthsPercent = [15, 13, 12, 35, 5, 5, 15];
+const columnsWidthsPercent = [17, 16, 12, 35, 5, 5, 10];
 
 @observer
 export default class ProfilingView extends React.Component<Props> {
@@ -58,7 +58,6 @@ export default class ProfilingView extends React.Component<Props> {
     };
   }
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if (nextProps && nextProps.ops) {
       this.setState({ data: nextProps.ops });
     } else {
@@ -158,7 +157,7 @@ export default class ProfilingView extends React.Component<Props> {
     const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
 
     const loadingOptions = [];
-    let numRows = 10;
+    let numRows = 20;
     if (ops && ops.length) {
       numRows = ops.length;
     } else {
