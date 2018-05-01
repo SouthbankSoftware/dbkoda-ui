@@ -22,7 +22,7 @@
  * @Date:   2017-09-20 10:35:04
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-27T14:59:02+11:00
+ * @Last modified time: 2018-05-01T09:31:58+10:00
  */
 
 /* eslint no-prototype-builtins:warn */
@@ -406,20 +406,21 @@ export default class Panel extends React.Component {
               <span>{this.state.updateStatusMsg}</span>
             </div>
           )}
-          {this.props.store.treePanel.downloadingDrill && (
+          {this.props.store.treePanel.showDrillStatus && (
             <div className="drillDownload">
-              {this.props.store.treePanel.showDrillStatus && (
+              {this.props.store.treePanel.downloadingDrill && (
                 <div className="dialogContent">
                   <p>{this.props.store.treePanel.drillStatusMsg}</p>
-                  {this.props.store.treePanel.drillDownloadProgress && (
-                    <p style={{ textAlign: 'center' }}>
-                      {Math.round(this.props.store.treePanel.drillDownloadProgress * 100) +
-                        '% complete'}
-                    </p>
-                  )}
+                  {this.props.store.treePanel.drillDownloadProgress &&
+                    !isNaN(this.props.store.treePanel.drillDownloadProgress) && (
+                      <p style={{ textAlign: 'center' }}>
+                        {Math.round(this.props.store.treePanel.drillDownloadProgress * 100) +
+                          '% complete'}
+                      </p>
+                    )}
                 </div>
               )}
-              {!this.props.store.treePanel.showDrillStatus && (
+              {!this.props.store.treePanel.downloadingDrill && (
                 <div className="dialogContent">
                   <LoadingView />
                   <p>Starting Apache Drill...</p>
