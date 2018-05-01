@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T11:39:01+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-24T13:07:53+10:00
+ * @Last modified time: 2018-05-01T09:30:30+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -90,9 +90,7 @@ export default class TreeView extends React.Component {
     this.state = {
       nodes: this.props.treeState.nodes,
       isPasswordDialogVisible: false,
-      isLoadingDialogVisible: false,
       remotePass: null,
-      showDrillDownloaderStatus: false,
       showDrillNotFoundDialog: false,
       drillDownloadFunction: null,
       drillDontDownloadFunction: null
@@ -451,55 +449,35 @@ export default class TreeView extends React.Component {
     console.log('command: ', command, ', message:', message);
     if (command === 'START') {
       if (message === 'drill') {
-        // this.setState({
-        //   drillStatusMsg: globalString('drill/downloading_drill')
-        // });
         this.props.store.treePanel.drillStatusMsg = globalString(
           'drill/status_bar/downloading_drill'
         );
       } else {
-        // this.setState({
-        //   drillStatusMsg: globalString('drill/downloading_drill_controller')
-        // });
         this.props.store.treePanel.drillStatusMsg = globalString(
           'drill/status_bar/downloading_drill_controller'
         );
       }
     } else if (command === 'DOWNLOADING') {
-      // this.setState({
-      //   drillDownloadProgress: message
-      // });
-      this.props.store.treePanel.downloadingDrill = true;
+      this.props.store.treePanel.showDrillStatus = true;
       this.props.store.treePanel.drillDownloadProgress = message;
     } else if (command === 'COMPLETE') {
       const drillCmd = message.split('|');
       console.log('drillCmd:', drillCmd);
       if (drillCmd[0] == 'drillCmd') {
-        // this.setState({
-        //   drillStatusMsg: globalString('drill/drill_download_success'),
-        //   drillDownloadProgress: null
-        // });
         this.props.store.treePanel.drillDownloadProgress = message;
         this.props.store.treePanel.drillStatusMsg = globalString(
           'drill/status_bar/drill_download_success'
         );
       } else {
-        // this.setState({
-        //   drillStatusMsg: globalString('drill/drill_controller_download_success'),
-        //   drillDownloadProgress: null
-        // });
         this.props.store.treePanel.drillDownloadProgress = null;
         this.props.store.treePanel.drillStatusMsg = globalString(
           'drill/status_bar/drill_download_success'
         );
       }
-      this.props.store.treePanel.downloadingDrill = false;
+      this.props.store.treePanel.showDrillStatus = false;
       this.saveDrillCmd(drillCmd[0], drillCmd[1]);
     } else if (command === 'ERROR') {
-      // this.setState({
-      //   drillStatusMsg: globalString('drill/drill_download_failed')
-      // });
-      this.props.store.treePanel.downloadingDrill = false;
+      this.props.store.treePanel.showDrillStatus = false;
       this.props.store.treePanel.drillStatusMsg = globalString(
         'drill/status_bar/drill_download_failed'
       );
@@ -528,13 +506,11 @@ export default class TreeView extends React.Component {
       ) {
         const downloadDrill = () => {
           this.setState({
-            showDrillNotFoundDialog: false,
-            showDrillDownloaderStatus: true,
-            isLoadingDialogVisible: true
+            showDrillNotFoundDialog: false
           });
           runInAction(() => {
-            this.props.store.treePanel.downloadingDrill = true;
             this.props.store.treePanel.showDrillStatus = true;
+            this.props.store.treePanel.downloadingDrill = true;
           });
           ipcRenderer.send('drill', 'downloadDrill');
           ipcRenderer.once('drillResult', (event, arg) => {
@@ -578,13 +554,9 @@ export default class TreeView extends React.Component {
         ipcRenderer.send('drill', 'downloadController');
         ipcRenderer.once('drillResult', (event, arg) => {
           if (arg == 'downloadDrillControllerComplete') {
-            this.setState({
-              showDrillDownloaderStatus: false,
-              isLoadingDialogVisible: false
-            });
             runInAction(() => {
-              this.props.store.treePanel.downloadingDrill = false;
               this.props.store.treePanel.showDrillStatus = false;
+              this.props.store.treePanel.downloadingDrill = false;
             });
             resolve(true);
           }
@@ -618,9 +590,8 @@ export default class TreeView extends React.Component {
         if (this.props.store.profileList.selectedProfile.sha) {
           this.setState({ isPasswordDialogVisible: true });
         } else {
-          this.setState({ isLoadingDialogVisible: true });
           runInAction(() => {
-            this.props.store.treePanel.downloadingDrill = true;
+            this.props.store.treePanel.showDrillStatus = true;
           });
           this.props.api.addNewEditorForDrill({
             db: this.nodeRightClicked.text,
@@ -646,9 +617,8 @@ export default class TreeView extends React.Component {
       });
   };
   onDrillEditorAdded = (response, errorCode) => {
-    this.setState({ isLoadingDialogVisible: false });
     runInAction(() => {
-      this.props.store.treePanel.downloadingDrill = false;
+      this.props.store.treePanel.showDrillStatus = false;
     });
     if (response === 'error') {
       let message = globalString('drill/open_drill_editor_failed');
@@ -675,9 +645,8 @@ export default class TreeView extends React.Component {
   };
 
   openDrillEditorWithPass = () => {
-    this.setState({ isLoadingDialogVisible: true });
     runInAction(() => {
-      this.props.store.treePanel.downloadingDrill = true;
+      this.props.store.treePanel.showDrillStatus = true;
     });
     this.props.api.addNewEditorForDrill({
       db: this.nodeRightClicked.text,

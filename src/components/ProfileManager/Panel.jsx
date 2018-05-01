@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-20T13:02:12+10:00
+ * @Last modified time: 2018-05-01T14:10:46+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -106,9 +106,9 @@ export default class ProfileManager extends React.Component<Props, State> {
     this.setState({ isConnecting: true });
     this.form
       .onConnect()
-      .then(() => {
-        this.setState({ isConnecting: false });
-      })
+      // .then(() => {  // no need to call setState as if the connection is successful, the component has already been unmounted.
+      //   this.setState({ isConnecting: false });
+      // })
       .catch(() => this.setState({ isConnecting: false }));
   }
 
