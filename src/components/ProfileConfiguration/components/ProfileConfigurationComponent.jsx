@@ -83,10 +83,6 @@ export default class ProfileConfiguration extends React.Component {
     const { showProfiling } = this.props;
     return (
       <div key={layout.i} className={layout.className} data-grid={layout}>
-        <Button
-          className={`${layout.className}-button`}
-          text={globalString('performance/profiling/configuration/analyse')}
-        />
         {showProfiling && (
           <Button
             className={`${layout.className}-button`}
