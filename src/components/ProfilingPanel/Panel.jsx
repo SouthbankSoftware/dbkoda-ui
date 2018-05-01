@@ -175,7 +175,7 @@ export default class ProfilingPanel extends React.Component<Props> {
         {renderTable && (
           <div className="detailsWrapper">
             <div className="exampleWrapper">
-              <OperationDetails operation={selectedOperation} />}
+              <OperationDetails operation={selectedOperation} />
             </div>
             <ExplainView operation={selectedOperation} />
           </div>
