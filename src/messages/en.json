@@ -75,6 +75,7 @@
           "apply": "Apply",
           "cancel": "Cancel",
           "configure-success": "Profile configuration applied.",
+          "profile-enabled-indicator": "indicates system profile is enabled",
           "tooltip": {
             "level0":
               "The profiler is off and does not collect any data. This is the default profiler level.",

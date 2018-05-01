@@ -48,6 +48,12 @@ export default class DatabaseList extends React.Component {
               </div>
             );
           })}
+          <div className="db-profile-indicator">
+            <Icon className="full-circle" icon={IconNames.FULL_CIRCLE} />{' '}
+            <span>
+              {globalString('performance/profiling/configuration/profile-enabled-indicator')}
+            </span>
+          </div>
         </div>
       </div>
     );
