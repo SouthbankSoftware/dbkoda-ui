@@ -22,7 +22,7 @@
  * @Date:   2017-03-08T11:56:51+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-10T12:07:13+11:00
+ * @Last modified time: 2018-05-02T09:25:38+10:00
  */
 
 import React from 'react';
@@ -73,6 +73,7 @@ export default class TreeNode {
   @observable label;
   text;
   type;
+  className;
   icon;
   secondaryLabel;
   allChildNodes;
@@ -198,6 +199,7 @@ export default class TreeNode {
         this.secondaryLabel = null;
         break;
     }
+    this.className = this.type + 'Node';
     // this.icon = `pt-icon-${this.type}`;
     this.icon = null;
     if (parent && parent.id != 'root') {

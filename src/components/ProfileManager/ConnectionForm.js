@@ -126,6 +126,10 @@ export class ConnectionForm extends JsonForm {
       this.updateClusterUrl(field);
     }
 
+    if (field.subForm.value === SubformCategory.SSH && field.name === 'ssh') {
+      this.updateRemoteHost(field);
+    }
+
     this.validateForm();
   }
   @action
@@ -258,6 +262,13 @@ export class ConnectionForm extends JsonForm {
       } else {
         aliasField.value = field.$('url').value;
       }
+    }
+  }
+
+  updateRemoteHost(field) {
+    if (field.value) {
+      const remoteHostField = field.$('remoteHost');
+      remoteHostField.value = field.$('host', SubformCategory.BASIC).value;
     }
   }
   /**
