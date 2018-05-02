@@ -84,7 +84,7 @@ export default class OperationDetails extends React.Component {
     };
 
     this.state = {
-      code: ''
+      code: 'Select a database and operation to see an example query.'
     };
   }
 
@@ -93,10 +93,14 @@ export default class OperationDetails extends React.Component {
       this.setState({
         code: JSON.stringify(nextProps.operation.example, null, 2)
       });
+      setTimeout(() => {
+        this.forceUpdate();
+      }, 100);
     }
   }
 
   render() {
+    const { code } = this.state;
     return (
       <div style={{ height: '100%' }}>
         <nav className="pt-navbar exampleToolbar">
@@ -111,7 +115,7 @@ export default class OperationDetails extends React.Component {
         </nav>
         <div style={{ height: '100%' }}>
           <div className="editorView">
-            <CodeMirror value={this.state.code} options={this.cmOptions} />
+            <CodeMirror value={code} options={this.cmOptions} />
           </div>
         </div>
       </div>

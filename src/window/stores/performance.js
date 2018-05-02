@@ -203,18 +203,14 @@ export default class Store {
           const payload = args.dataObject;
           handleNewData(payload, this.performancePanel);
         } else if (args.command === 'mw_toaster') {
-          console.log(args.toasterObj);
           if (this.toasterCallback) {
             this.toasterCallback(args.toasterObj);
           }
         } else if (args.command === 'mw_error') {
-          console.log(args);
           if (this.errorHandler) {
             this.errorHandler(args.err);
           }
         } else if (args.command === 'mw_topConnectionsData') {
-          console.log(args.profileId);
-          console.table(args.payload);
           this.topConnectionsPanel.payload = args.payload;
           this.topConnectionsPanel.highWaterMarkConnection = _.maxBy(
             this.topConnectionsPanel.payload,
