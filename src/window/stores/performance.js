@@ -248,10 +248,10 @@ export default class Store {
             if (args.payload instanceof Array) {
               // Transform data for ID field.
               args.payload.forEach(opEntry => {
-                const keys = Object.keys(opEntry);
-                const op = opEntry[keys[0]];
-                op.id = keys[0];
-                opsArray.push(op);
+                // const keys = Object.keys(opEntry);
+                // const op = opEntry[keys[0]];
+                // op.id = keys[0];
+                opsArray.push(opEntry);
               });
             } else {
               // Transform data for ID field.
