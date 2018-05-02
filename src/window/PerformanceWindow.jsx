@@ -163,7 +163,7 @@ class PerformanceWindow extends React.Component {
       <div className="performanceContainer">
         <SideNav
           className="sideNavPerformance"
-          menuItems={[NavPanes.PERFORMANCE, NavPanes.TOP_COllECTIONS, NavPanes.PROFILING]}
+          menuItems={[NavPanes.PERFORMANCE, NavPanes.TOP_CONNECTIONS, NavPanes.PROFILING]}
         />
         <div className="fullPanel">
           {store.drawer &&
@@ -190,7 +190,7 @@ class PerformanceWindow extends React.Component {
               </div>
             )}
           {store.drawer &&
-            store.drawer.activeNavPane == NavPanes.TOP_COllECTIONS && <TopConnectionsPanel />}
+            store.drawer.activeNavPane == NavPanes.TOP_CONNECTIONS && <TopConnectionsPanel />}
           {store.drawer &&
             store.drawer.activeNavPane == NavPanes.PROFILING &&
             this.state.bProfiling && (

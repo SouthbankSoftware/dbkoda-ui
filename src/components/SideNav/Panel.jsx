@@ -112,9 +112,9 @@ export default class SideNav extends React.Component<Props, State> {
             <PerformanceIcon className="dbKodaSVG" />
           </MenuItem>
         )}
-        {checkMenuItem(NavPanes.TOP_COllECTIONS) && (
+        {checkMenuItem(NavPanes.TOP_CONNECTIONS) && (
           <MenuItem
-            name={NavPanes.TOP_COllECTIONS}
+            name={NavPanes.TOP_CONNECTIONS}
             isSelected={this.isItemSelected}
             changeMenu={this.changeMenuSelected}
           >
