@@ -55,6 +55,7 @@
     }
 
     .tableWrapper {
+      max-height: 400px;
       .dbSelectWrapper {
         margin-left: 12px;
       }
@@ -99,6 +100,7 @@
 
       .opsTableWrapper {
         margin-top: 5px;
+        height: 400px !important;
       }
     }
   }

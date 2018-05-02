@@ -48,7 +48,7 @@ export const NavPanes = {
   EDITOR: 'Editor',
   PROFILE: 'Profile',
   PERFORMANCE: 'Performance',
-  TOP_COllECTIONS: 'Top Collections',
+  TOP_CONNECTIONS: 'Top Connections',
   PROFILING: 'Profiling'
 };
 

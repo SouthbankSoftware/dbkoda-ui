@@ -93,10 +93,10 @@ export default class StaticApi {
       // Skip past the command to the result set if it's a multi-line command
       let lineCheck = currentLine;
       let doc = cm.getLine(lineCheck).trim();
-      while (doc.startsWith('...')) {
+      while (doc.startsWith('...') || !doc.startsWith('{')) {
         lineCheck += 1;
         currentLine = lineCheck;
-        doc = cm.getLine(lineCheck).trim();// this.getDocumentAtLine(outputId, lineCheck, 1, lines, cm);
+        doc = cm.getLine(lineCheck).trim(); // this.getDocumentAtLine(outputId, lineCheck, 1, lines, cm);
       }
 
       while (currentLine < resultSet.end && lines.status !== 'Invalid') {

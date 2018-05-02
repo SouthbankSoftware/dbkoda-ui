@@ -131,7 +131,7 @@ if (IS_ELECTRON) {
     Broker.emit(EventType.WINDOW_CLOSING);
 
     // TODO: verify this logic
-    // store.closeConnection();
+    store.closeConnection();
   });
 }
 

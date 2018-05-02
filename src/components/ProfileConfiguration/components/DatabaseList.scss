@@ -30,9 +30,20 @@
     .hide {
       opacity: 0;
     }
-    .full-circle {
-      color: #87a986;
-      margin: 5px;
+  }
+  .full-circle {
+    color: #87a986;
+    margin: 5px;
+    width: 16px;
+    height: 16px;
+  }
+  .db-profile-indicator {
+    color: $fontColor;
+    line-height: 16px;
+    margin-top: 20px;
+    span {
+      height: 25px;
+      line-height: 25px;
     }
   }
 }

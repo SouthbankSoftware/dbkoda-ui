@@ -28,7 +28,6 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import { runInAction } from 'mobx';
 import autobind from 'autobind-decorator';
-import { ProfilingConstants } from '#/common/Constants';
 import ErrorView from '#/common/ErrorView';
 import { debounce } from 'lodash';
 import { Classes, Button, MenuItem, Intent, Position, Tooltip } from '@blueprintjs/core';
@@ -85,7 +84,7 @@ export default class ProfilingPanel extends React.Component<Props> {
     const { store, showProfileConfiguration } = this.props;
     const { profilingPanel } = store;
     const { selectedDatabase, selectedOperation } = this.state;
-    const ops = this.props.store.profilingPanel.payload;
+    let ops = this.props.store.profilingPanel.payload;
     const { highWaterMarkProfile } = profilingPanel;
     let renderTable = true;
     let errorTitle = globalString('performance/profiling/results/noResultsFoundTitle');
@@ -94,8 +93,10 @@ export default class ProfilingPanel extends React.Component<Props> {
       errorTitle = globalString('performance/profiling/results/noDatabaseSelectedTitle');
       errorBody = globalString('performance/profiling/results/noDatabaseSelectedBody');
     }
-    if (ops === ProfilingConstants.NO_RESULTS || !ops || !selectedDatabase) {
+    if (!selectedDatabase) {
       renderTable = false;
+    } else if (ops && ops.length && ops.length > 20) {
+      ops = ops.slice(0, 30);
     }
 
     const renderItem = (item, { handleClick, modifiers }) => {
@@ -159,24 +160,26 @@ export default class ProfilingPanel extends React.Component<Props> {
               </Select>
             </div>
 
-            {renderTable ? (
+            {renderTable && (
               <ProfilingView
                 ops={ops}
                 highWaterMark={highWaterMarkProfile}
                 onSelect={onOperationSelection}
                 tableWidth={this.state.topSplitPos}
               />
-            ) : (
-              <ErrorView title={errorTitle} error={errorBody} />
             )}
+            {!selectedDatabase &&
+              !renderTable && <ErrorView title={errorTitle} error={errorBody} />}
           </div>
         </div>
-        <div className="detailsWrapper">
-          <div className="exampleWrapper">
-            <OperationDetails operation={selectedOperation} />
+        {renderTable && (
+          <div className="detailsWrapper">
+            <div className="exampleWrapper">
+              <OperationDetails operation={selectedOperation} />
+            </div>
+            <ExplainView operation={selectedOperation} />
           </div>
-          <ExplainView operation={selectedOperation} />
-        </div>
+        )}
       </div>
     );
   }

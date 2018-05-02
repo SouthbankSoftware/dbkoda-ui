@@ -54,6 +54,7 @@ import '#/common/MongoScript.js';
 import StageProgress from '#/ExplainPanel/StageProgress';
 import { StageStepsTable } from '#/ExplainPanel/StageStepsTable';
 import { getExecutionStages } from '#/ExplainPanel/ExplainStep';
+import ErrorView from '#/common/ErrorView';
 // import ShardsStageProgress from '#/ExplainPanel/ShardsStageProgress';
 import 'codemirror/theme/material.css';
 
@@ -76,11 +77,15 @@ export default class OperationDetails extends React.Component {
       if (stages) {
         this.setState({ stages });
       }
+      if (!stages || stages.length == 0) {
+        this.setState({ stages: null });
+      }
     }
   }
 
   render() {
     const executionStages = this.state.stages;
+    console.log(this.state.stages);
     return (
       <div className="explainView" style={{ height: '100%' }}>
         <nav className="pt-navbar explainToolbar">
@@ -100,6 +105,12 @@ export default class OperationDetails extends React.Component {
               stages={this.state.stages}
               shardMergeStage={this.state.stages}
               shard={executionStages.shards !== undefined}
+            />
+          )}
+          {!this.state.stages && (
+            <ErrorView
+              title={globalString('performance/profiling/results/noExplainTitle')}
+              error={globalString('performance/profiling/results/noExplainBody')}
             />
           )}
         </div>
