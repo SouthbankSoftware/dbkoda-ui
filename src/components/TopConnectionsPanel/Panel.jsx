@@ -30,6 +30,7 @@ import { inject, observer } from 'mobx-react';
 import SplitPane from 'react-split-pane';
 import autobind from 'autobind-decorator';
 import { debounce } from 'lodash';
+import ExplainView from '#/ProfilingPanel/Views/ExplainView';
 import ConnectionsView from './Views/Connections';
 import OperationsView from './Views/Operations';
 import OperationDetails from './Views/OperationDetails';
@@ -78,6 +79,11 @@ export default class TopConnectionsPanel extends React.Component<Props> {
       display: 'flex',
       flexDirection: 'column'
     };
+    const { topConnectionsPanel } = this.props.store;
+    let defaultOperationPaneSize = '100%';
+    if (topConnectionsPanel.bShowExplain) {
+      defaultOperationPaneSize = '50%';
+    }
 
     return (
       <div>
@@ -96,21 +102,35 @@ export default class TopConnectionsPanel extends React.Component<Props> {
             />
           </div>
           <SplitPane
-            className="BottomSplitPane"
-            split="vertical"
-            defaultSize={this.state.bottomSplitPos}
-            onDragFinished={this.updateBottomSplitPos}
-            minSize={600}
-            maxSize={1200}
+            className="DetailsSplitPane"
+            split="horizontal"
+            defaultSize={defaultOperationPaneSize}
+            minSize={200}
+            maxSize={1000}
+            pane2Style={splitPane2Style}
           >
-            <div className="operationList">
-              <OperationsView
-                onSelect={this.onOperationSelection}
-                tableWidth={this.state.bottomSplitPos}
-              />
-            </div>
-            <div className="operationDetails">
-              <OperationDetails />
+            <SplitPane
+              className="BottomSplitPane"
+              split="vertical"
+              defaultSize={this.state.bottomSplitPos}
+              onDragFinished={this.updateBottomSplitPos}
+              minSize={600}
+              maxSize={1200}
+            >
+              <div className="operationList">
+                <OperationsView
+                  onSelect={this.onOperationSelection}
+                  tableWidth={this.state.bottomSplitPos}
+                />
+              </div>
+              <div className="operationDetails">
+                <OperationDetails />
+              </div>
+            </SplitPane>
+            <div>
+              {topConnectionsPanel.bShowExplain && (
+                <ExplainView operation={topConnectionsPanel.selectedOperation} />
+              )}
             </div>
           </SplitPane>
         </SplitPane>

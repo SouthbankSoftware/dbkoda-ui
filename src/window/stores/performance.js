@@ -141,7 +141,8 @@ export default class Store {
       selectedConnection: null,
       operations: null,
       selectedOperation: null,
-      highWaterMarkConnection: null
+      highWaterMarkConnection: null,
+      bShowExplain: false
     },
     null,
     { deep: false }

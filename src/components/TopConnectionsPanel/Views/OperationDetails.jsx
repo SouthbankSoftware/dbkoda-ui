@@ -26,6 +26,8 @@
 
 /* eslint import/no-dynamic-require: warn */
 
+import { Tooltip, Intent, Position, Button } from '@blueprintjs/core';
+import { action } from 'mobx';
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
@@ -53,10 +55,10 @@ import '#/common/MongoScript.js';
 import 'codemirror/theme/material.css';
 
 @inject(({ store }) => {
-  const {
-    topConnectionsPanel: { selectedOperation }
-  } = store;
+  const { topConnectionsPanel } = store;
+  const { selectedOperation } = topConnectionsPanel;
   return {
+    topConnectionsPanel,
     operation: selectedOperation
   };
 })
@@ -100,19 +102,39 @@ export default class OperationDetails extends React.Component {
       this.setState({ code: JSON.stringify(nextProps.operation, null, 2) });
     }
   }
+  @action.bound
+  toggleExplain() {
+    this.props.topConnectionsPanel.bShowExplain = !this.props.topConnectionsPanel.bShowExplain;
+  }
 
   render() {
+    const { topConnectionsPanel } = this.props;
     return (
       <div style={{ height: '100%' }}>
-        <nav className="pt-navbar connectionsToolbar">
+        <nav className="pt-navbar actionsToolbar">
           <div className="pt-navbar-group pt-align-left">
             <div className="pt-navbar-heading" />
           </div>
-        </nav>
-        <div style={{ height: '100%' }}>
-          <div className="editorView">
-            <CodeMirror value={this.state.code} options={this.cmOptions} />
+          <div className="pt-navbar-group pt-align-right">
+            <Tooltip
+              className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+              content="Toggle Explain Plan"
+              hoverOpenDelay={1000}
+              inline
+              intent={Intent.PRIMARY}
+              position={Position.BOTTOM}
+            >
+              <Button
+                active={topConnectionsPanel.bShowExplain}
+                className="reset-button pt-button pt-intent-primary"
+                text="Explain"
+                onClick={this.toggleExplain}
+              />
+            </Tooltip>
           </div>
+        </nav>
+        <div className="editorView">
+          <CodeMirror value={this.state.code} options={this.cmOptions} />
         </div>
       </div>
     );
