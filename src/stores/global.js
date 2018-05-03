@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-27T17:03:29+11:00
+ * @Last modified time: 2018-05-04T12:26:27+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,6 +34,7 @@ import { NewToaster } from '#/common/Toaster';
 import moment from 'moment';
 import Globalize from 'globalize';
 import DataCenter from '~/api/DataCenter';
+import { setUser } from '~/helpers/loggingApi';
 import { Broker, EventType } from '../helpers/broker';
 import { ProfileStatus } from '../components/common/Constants';
 import Config from './config';
@@ -51,10 +52,6 @@ if (IS_ELECTRON) {
 
   global.PATHS = remote.getGlobal('PATHS');
   stateStorePath = global.PATHS.stateStore;
-
-  global.UAT = remote.getGlobal('UAT');
-} else {
-  global.UAT = false;
 }
 
 global.EOL = global.IS_ELECTRON
@@ -67,7 +64,11 @@ export default class Store {
   @nodump api = null;
   @nodump profileStore = null;
   @observable locale = 'en';
-  @observable version = '0.11.0-beta';
+  // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
+  // DefinePlugin. The version is retrieved automatically from package.json at the building time of
+  // ui bundle
+  // eslint-disable-next-line no-undef
+  @observable version = VERSION;
   @observable previousVersion = null;
   @observable updateAvailable = false;
   @observable.shallow editors = observable.map(null, { deep: false });
@@ -574,6 +575,8 @@ export default class Store {
     return this.config
       .load()
       .then(() => {
+        setUser(this.config.settings.user);
+
         const foregroundSamplingRateChangedReaction = reaction(
           () => this.config.settings.performancePanel.foregroundSamplingRate,
           rate => this.api.reactToSamplingRateChange(rate, true)

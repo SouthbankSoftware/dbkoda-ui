@@ -110,3 +110,6 @@ globals:
   GetRandomPort: false
   UAT: false
   logToMain: false
+  sendToMain: false
+  l: false
+  logger: false

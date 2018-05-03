@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-10-02T13:50:52+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-26T15:32:46+11:00
+ * @Last modified time: 2018-05-04T11:05:58+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,10 +31,13 @@ declare var IS_DEVELOPMENT: any;
 declare var IS_ELECTRON: any;
 declare var Globalize: any;
 declare var locale: string;
+declare var l: any;
+declare var logger: any;
 
 /** Utility functions */
 declare function globalString(path: string, ...params: *[]): string;
 declare function globalNumber(value: number, config?: {}): string;
+declare function sendToMain(channel: string, ...args: *[]): void;
 declare function logToMain(level: string, message: string): void;
 
 /** Global types */
