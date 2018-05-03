@@ -5,7 +5,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T21:53:30+11:00
+ * @Last modified time: 2018-05-03T21:17:59+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -47,11 +47,13 @@ export default class Config {
     featherClient().configService.on(
       'changed',
       action(changed => {
-        logToMain('debug', 'config changed');
-
         _.forEach(changed, (v, k) => {
           _.set(this.settings, k, v.new);
         });
+
+        sendToMain('configChanged', changed);
+
+        logToMain('debug', 'config changed');
       })
     );
   };
@@ -76,6 +78,9 @@ export default class Config {
         action(({ payload }) => {
           // this will convert payload into new observable
           this.settings = payload;
+
+          sendToMain('configLoaded', payload);
+
           logToMain('debug', 'config loaded');
         })
       )
