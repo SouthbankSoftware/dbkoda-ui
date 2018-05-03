@@ -758,6 +758,9 @@ class View extends React.Component {
 
   setupAutoCompletion() {
     CodeMirror.commands.autocomplete = cm => {
+      if (this.props.store.editorToolbar.isActiveExecuting) {
+        return;
+      }
       this.clearAutoCompletion(cm);
       const currentLine = cm.getLine(cm.getCursor().line);
       let start = cm.getCursor().ch;

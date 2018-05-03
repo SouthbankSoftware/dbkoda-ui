@@ -2,6 +2,7 @@
 
 exports[`DragLabel matches snapshot 1`] = `
 <span
+  className="nodeLbl"
   style={
     Object {
       "cursor": "move",
