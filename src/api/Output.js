@@ -441,11 +441,6 @@ export default class OutputApi {
         () => {
           runInAction(() => {
             // Revert to raw view if table view JSON can't be parsed
-            NewToaster.show({
-              message: globalString('output/editor/tableDefaultNotJson'),
-              className: 'warning',
-              icon: ''
-            });
             this.openView(OutputToolbarContexts.RAW);
           });
         }
