@@ -684,7 +684,10 @@ class View extends React.Component {
    */
   componentDidMount() {
     this.refresh();
-    if (this.props.config.settings.automaticAutoComplete) {
+    if (
+      this.props.config.settings.automaticAutoComplete &&
+      this.editorObject.type == EditorTypes.DEFAULT
+    ) {
       const cm = this.editor.getCodeMirror();
       cm.on('change', _.debounce(CodeMirror.commands.autocomplete, 400));
     }
