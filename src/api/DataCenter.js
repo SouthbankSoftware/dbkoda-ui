@@ -72,7 +72,14 @@ export default class DataCenter {
     this.drillOutputAvailable = this.outputApi.drillOutputAvailable.bind(this);
 
     // TopConnections public APIs
-    _.assign(this, _.pick(this.topConnectionsApi, ['getTopConnections', 'killOperation']));
+    _.assign(
+      this,
+      _.pick(this.topConnectionsApi, [
+        'getTopConnections',
+        'killOperation',
+        'getExplainForOperation'
+      ])
+    );
 
     // Profling public APIs
     _.assign(this, _.pick(this.profilingApi, ['getProfilingDataBases', 'getProfilingData']));

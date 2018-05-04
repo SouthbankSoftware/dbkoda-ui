@@ -73,6 +73,11 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   @action.bound
   onOperationSelection(selectedOperation) {
     this.props.store.topConnectionsPanel.selectedOperation = selectedOperation;
+    if (!selectedOperation.execStats) {
+      this.props.store.topConnectionsPanel.bShowExplain = false;
+    } else {
+      this.props.store.topConnectionsPanel.bShowExplain = true;
+    }
   }
   render() {
     const splitPane2Style = {
@@ -80,6 +85,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
       flexDirection: 'column'
     };
     const { topConnectionsPanel } = this.props.store;
+    const { selectedOperation } = topConnectionsPanel;
     let defaultOperationPaneSize = '100%';
     if (topConnectionsPanel.bShowExplain) {
       defaultOperationPaneSize = '50%';
@@ -90,7 +96,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
         <SplitPane
           className="MainSplitPane"
           split="horizontal"
-          defaultSize="60%"
+          defaultSize="45%"
           minSize={200}
           maxSize={1000}
           pane2Style={splitPane2Style}
@@ -105,6 +111,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
             className="DetailsSplitPane"
             split="horizontal"
             defaultSize={defaultOperationPaneSize}
+            size={defaultOperationPaneSize}
             minSize={200}
             maxSize={1000}
             pane2Style={splitPane2Style}
@@ -129,7 +136,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
             </SplitPane>
             <div>
               {topConnectionsPanel.bShowExplain && (
-                <ExplainView operation={topConnectionsPanel.selectedOperation} />
+                <ExplainView execStats={selectedOperation.execStats} />
               )}
             </div>
           </SplitPane>
