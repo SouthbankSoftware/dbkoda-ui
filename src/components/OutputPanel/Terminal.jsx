@@ -29,9 +29,10 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { DropTarget } from 'react-dnd';
+import _ from 'lodash';
+import { action, reaction } from 'mobx';
 import { DragItemTypes } from '#/common/Constants.js';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
-import { action, reaction } from 'mobx';
 import { featherClient } from '~/helpers/feathers';
 import {
   AnchorButton,
@@ -82,7 +83,10 @@ function collect(connect, monitor) {
   };
 }
 
-@inject('store')
+@inject(allStores => ({
+  store: allStores.store,
+  config: allStores.config
+}))
 @observer
 @ContextMenuTarget
 class Terminal extends React.Component {
@@ -174,6 +178,15 @@ class Terminal extends React.Component {
    */
   componentDidMount() {
     const cm = this.terminal.getCodeMirror();
+    console.log(CodeMirror.commands);
+    if (this.props.config.settings.automaticAutoComplete) {
+      cm.on(
+        'change',
+        _.debounce(() => {
+          cm.execCommand('autocomplete');
+        }, 400)
+      );
+    }
     cm.on('keydown', (cm, keyEvent) => {
       if (cm.state.completionActive == null) {
         if (keyEvent.keyCode == 38) {
