@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-04T12:26:27+10:00
+ * @Last modified time: 2018-05-04T23:29:55+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -59,6 +59,10 @@ global.EOL = global.IS_ELECTRON
   : process.platform === 'win32'
     ? '\r\n'
     : '\n';
+
+if (IS_TEST) {
+  global.VERSION = '';
+}
 
 export default class Store {
   @nodump api = null;

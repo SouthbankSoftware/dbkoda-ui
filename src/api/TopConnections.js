@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2018-03-27T10:39:44+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-04-27T15:19:20+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-04T23:10:05+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,7 +26,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import _ from 'lodash';
 import { Broker, EventType } from '~/helpers/broker';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';

@@ -5,7 +5,7 @@
  * @Date:   2018-05-04T10:41:36+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-04T12:03:21+10:00
+ * @Last modified time: 2018-05-04T23:20:22+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -51,24 +51,26 @@ export const sendError = (error: Error, options: { customData?: *, tags?: * }) =
 export const infoSymbol = Symbol.for('info');
 
 export const initLoggingApi = (defaultTags: string[]) => {
-  // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
-  // DefinePlugin. The API_KEY is retrieved automatically from package.json at the building time of
-  // ui bundle
-  // $FlowFixMe
-  rg4js('apiKey', API_KEY); // eslint-disable-line no-undef
-  rg4js('enablePulse', true);
-  // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
-  // DefinePlugin. The VERSION is retrieved automatically from package.json at the building time of
-  // ui bundle
-  // $FlowFixMe
-  rg4js('setVersion', VERSION); // eslint-disable-line no-undef
-  rg4js('saveIfOffline', true);
-  setUser({ id: 'beforeConfigLoaded' });
+  if (!IS_TEST) {
+    // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
+    // DefinePlugin. The API_KEY is retrieved automatically from package.json at the building time of
+    // ui bundle
+    // $FlowFixMe
+    rg4js('apiKey', API_KEY); // eslint-disable-line no-undef
+    rg4js('enablePulse', true);
+    // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
+    // DefinePlugin. The VERSION is retrieved automatically from package.json at the building time of
+    // ui bundle
+    // $FlowFixMe
+    rg4js('setVersion', VERSION); // eslint-disable-line no-undef
+    rg4js('saveIfOffline', true);
+    setUser({ id: 'beforeConfigLoaded' });
 
-  defaultTags.push(global.IS_PRODUCTION ? 'prod' : 'dev');
-  global.UAT && defaultTags.push('uat');
+    defaultTags.push(global.IS_PRODUCTION ? 'prod' : 'dev');
+    global.UAT && defaultTags.push('uat');
 
-  rg4js('withTags', defaultTags);
+    rg4js('withTags', defaultTags);
+  }
 
   // $FlowFixMe
   console._error = console.error;
@@ -142,7 +144,7 @@ export const initLoggingApi = (defaultTags: string[]) => {
         // $FlowFixMe
         console._error(info.message);
         logToMain('error', info.message);
-        if (info.raygun !== false) {
+        if (info.raygun !== false && !IS_TEST) {
           sendError(info.error, info);
         }
       } else if (k === 'notice') {

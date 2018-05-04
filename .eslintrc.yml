@@ -107,6 +107,7 @@ globals:
   IS_ELECTRON: false
   IS_PRODUCTION: false
   IS_DEVELOPMENT: false
+  IS_TEST: false
   GetRandomPort: false
   UAT: false
   logToMain: false

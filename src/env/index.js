@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-04T12:29:34+10:00
+ * @Last modified time: 2018-05-04T23:20:43+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,6 +27,7 @@ import { initLoggingApi } from '~/helpers/loggingApi';
 
 global.IS_PRODUCTION = process.env.NODE_ENV === 'production';
 global.IS_DEVELOPMENT = !IS_PRODUCTION;
+global.IS_TEST = process.env.NODE_ENV === 'test';
 global.IS_ELECTRON = _.has(window, 'process.versions.electron');
 
 if (IS_ELECTRON) {
@@ -52,7 +53,7 @@ initLoggingApi([
   window.location.pathname === '/ui/' ? 'main window' : 'performance window'
 ]);
 
-if (process.env.NODE_ENV !== 'test') {
+if (!IS_TEST) {
   const Globalize = require('globalize'); // doesn't work well with import
 
   global.Globalize = Globalize;
