@@ -601,7 +601,7 @@ class View extends React.Component {
               type && type === 'os'
                 ? featherClient().service('/os-execution')
                 : featherClient().service('/mongo-stop-execution');
-            service.timeout = 1000;
+            service.timeout = 10000;
             service
               .remove(id, {
                 query: {
