@@ -709,6 +709,8 @@ export default class PerformancePanelApi {
             dbConfigs
           })
         );
+      } else if (args.command === 'pw_getOperationExplainPlan') {
+        this.api.getExplainForOperation(args.profileId, args);
       }
     }
   }

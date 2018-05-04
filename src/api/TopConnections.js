@@ -26,6 +26,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
 import { Broker, EventType } from '~/helpers/broker';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
@@ -107,8 +108,39 @@ export default class TopConnections {
           op
         }
       })
+      .then(res => {
+        console.log(res);
+      })
       .catch(err => {
         this._handleError(profileId, err);
       });
+  };
+
+  getExplainForOperation = (profileId: UUID, params: *) => {
+    console.log(params);
+    if (params.database && params.explainCmd) {
+      console.log(params.explainCmd);
+      featherClient()
+        .service('drivercommands')
+        .patch(profileId, {
+          database: params.database,
+          command: {
+            explain: JSON.parse(params.explainCmd),
+            verbosity: 'executionStats'
+          }
+        })
+        .then(res => {
+          console.log(res);
+          this.api.sendMsgToPerformanceWindow({
+            profileId,
+            command: 'mw_explainForOperation',
+            explainId: params.explainId,
+            payload: res
+          });
+        })
+        .catch(err => {
+          this._handleError(profileId, err);
+        });
+    }
   };
 }
