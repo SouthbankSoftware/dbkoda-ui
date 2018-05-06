@@ -313,12 +313,14 @@ export default class Store {
     }
     this.startCreatingNewEditor();
     // Create a new shell through feathers.
-    return featherClient()
-      .service('/mongo-shells')
+    const service = featherClient().service('/mongo-shells');
+    service.timeout = 15000;
+    service
       .create({
         id: this.profileStore.profiles.get(this.editorPanel.activeDropdownId).id
       })
       .then(res => {
+        console.debug('Created new editor for Aggregate Builder: ', res);
         // Create new editor as normal, but with "aggregate" type.
         return this.api.setNewEditorState(res, {
           type: 'aggregate',

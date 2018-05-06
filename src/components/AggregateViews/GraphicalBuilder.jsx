@@ -90,7 +90,7 @@ export default class GraphicalBuilder extends React.Component {
 
     // Add aggregate object to shell.
     const service = featherClient().service('/mongo-sync-execution');
-    service.timeout = 30000;
+    service.timeout = 10000;
     service
       .update(this.profileId, {
         shellId: this.shell, // eslint-disable-line
@@ -283,7 +283,7 @@ export default class GraphicalBuilder extends React.Component {
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       // Fetch response from shell object for all steps up to position - 1
       const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 30000;
+      service.timeout = 10000;
       service
         .update(editor.profileId, {
           shellId: editor.shellId, // eslint-disable-line
@@ -652,7 +652,7 @@ export default class GraphicalBuilder extends React.Component {
     return new Promise((resolve, reject) => {
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 30000;
+      service.timeout = 10000;
       service
         .update(editor.profileId, {
           shellId: editor.shellId, // eslint-disable-line
@@ -746,7 +746,7 @@ export default class GraphicalBuilder extends React.Component {
         if (res.areAllValid === true) {
           // Update steps in Shell:
           const service = featherClient().service('/mongo-sync-execution');
-          service.timeout = 30000;
+          service.timeout = 10000;
           service
             .update(editor.profileId, {
               shellId: editor.shellId, // eslint-disable-line
@@ -774,7 +774,7 @@ export default class GraphicalBuilder extends React.Component {
           const validArray = stepArray.slice(0, res.firstInvalid);
           // Update steps in Shell:
           const service = featherClient().service('/mongo-sync-execution');
-          service.timeout = 30000;
+          service.timeout = 10000;
           service
             .update(editor.profileId, {
               shellId: editor.shellId, // eslint-disable-line
@@ -809,7 +809,7 @@ export default class GraphicalBuilder extends React.Component {
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       // Update steps in Shell:
       const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 30000;
+      service.timeout = 10000;
       service
         .update(editor.profileId, {
           shellId: editor.shellId, // eslint-disable-line
@@ -846,7 +846,7 @@ export default class GraphicalBuilder extends React.Component {
     output.output = globalString('aggregate_builder/valid_output');
 
     const service = featherClient().service('/mongo-sync-execution');
-    service.timeout = 30000;
+    service.timeout = 10000;
     service
       .update(editor.profileId, {
         shellId: editor.shellId, // eslint-disable-line
@@ -865,6 +865,31 @@ export default class GraphicalBuilder extends React.Component {
       })
       .catch(e => {
         console.error(e);
+        if (e.match('Timeout of 10000ms exceeded')) {
+          console.error('Retry aggregation once more with higher timeout...');
+          const service = featherClient().service('/mongo-sync-execution');
+          service.timeout = 30000;
+          service
+            .update(editor.profileId, {
+              shellId: editor.shellId, // eslint-disable-line
+              commands: AggregateCommands.GET_RESULTS(editor.aggregateID, stepId, false)
+            })
+            .then(res => {
+              runInAction('Update Graphical Builder', () => {
+                res = JSON.parse(res);
+                if (res.length === 0) {
+                  output.output = globalString('aggregate_builder/no_output');
+                }
+                res.map(indexValue => {
+                  output.output += JSON.stringify(indexValue) + '\n';
+                });
+              });
+            })
+            .catch(e => {
+              console.error(e);
+              // Fail aggregation.
+            });
+        }
       });
   }
 
@@ -967,7 +992,7 @@ export default class GraphicalBuilder extends React.Component {
       // Save file function.
       const _saveFile = (path, fileContent) => {
         const service = featherClient().service('files');
-        service.timeout = 30000;
+        service.timeout = 10000;
         return service
           .create({ _id: path, content: fileContent, watching: false })
           .then(() => currentEditor.doc.markClean())
@@ -1244,7 +1269,7 @@ export default class GraphicalBuilder extends React.Component {
           editor.aggConfig = startCommands;
           startCommands = startCommands.replace(/\n/g, '').replace(/\r/g, '');
           const service = featherClient().service('/mongo-sync-execution');
-          service.timeout = 30000;
+          service.timeout = 10000;
           service
             .update(editor.profileId, {
               shellId: editor.shellId, // eslint-disable-line

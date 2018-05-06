@@ -32,6 +32,7 @@ import { ContextMenuTarget, Menu, MenuItem, Intent } from '@blueprintjs/core';
 import StaticApi from '~/api/static';
 import { terminalTypes } from '~/api/Terminal';
 import { NewToaster } from '#/common/Toaster';
+import LoadingView from '#/common/LoadingView';
 import 'codemirror/theme/material.css';
 import OutputTerminal from './Terminal';
 
@@ -232,8 +233,20 @@ export default class Editor extends React.Component {
     if (!this.props.store.outputs.get(this.props.id)) {
       return <div className="outputEditor" />;
     }
+    let isLoader = false;
+    if (
+      this.props.store.outputs.get(this.props.id) &&
+      this.props.store.outputs.get(this.props.id).output &&
+      (this.props.store.outputs.get(this.props.id).output ==
+        '  Loading results...\n  ----------------------------------  ' ||
+        this.props.store.outputs.get(this.props.id).output ==
+          '  Example of Result at current Stage: \n  ----------------------------------  \n')
+    ) {
+      isLoader = true;
+    }
     return (
       <div className="outputEditor">
+        {isLoader && <LoadingView />}
         <CodeMirror
           autosave
           ref={c => {
