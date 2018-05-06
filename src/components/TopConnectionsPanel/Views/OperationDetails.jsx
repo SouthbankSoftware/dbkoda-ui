@@ -58,6 +58,7 @@ import 'codemirror/theme/material.css';
   const { topConnectionsPanel } = store;
   const { selectedOperation } = topConnectionsPanel;
   return {
+    api: store.api,
     topConnectionsPanel,
     operation: selectedOperation
   };
@@ -103,12 +104,13 @@ export default class OperationDetails extends React.Component {
     }
   }
   @action.bound
-  toggleExplain() {
-    this.props.topConnectionsPanel.bShowExplain = !this.props.topConnectionsPanel.bShowExplain;
+  getExplainForSelectedOp() {
+    this.props.api.getExplainForSelectedOp();
   }
 
   render() {
-    const { topConnectionsPanel } = this.props;
+    // const { topConnectionsPanel } = this.props;
+    // //                 loading={topConnectionsPanel.bLoadingExplain}
     return (
       <div style={{ height: '100%' }}>
         <nav className="pt-navbar actionsToolbar">
@@ -125,10 +127,9 @@ export default class OperationDetails extends React.Component {
               position={Position.BOTTOM}
             >
               <Button
-                active={topConnectionsPanel.bShowExplain}
                 className="reset-button pt-button pt-intent-primary"
                 text="Explain"
-                onClick={this.toggleExplain}
+                onClick={this.getExplainForSelectedOp}
               />
             </Tooltip>
           </div>

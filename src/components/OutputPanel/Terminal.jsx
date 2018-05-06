@@ -31,7 +31,7 @@ import { inject, observer } from 'mobx-react';
 import { DropTarget } from 'react-dnd';
 import _ from 'lodash';
 import { action, reaction } from 'mobx';
-import { DragItemTypes } from '#/common/Constants.js';
+import { DragItemTypes, EditorTypes } from '#/common/Constants.js';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import { featherClient } from '~/helpers/feathers';
 import {
@@ -179,7 +179,8 @@ class Terminal extends React.Component {
   componentDidMount() {
     const cm = this.terminal.getCodeMirror();
     console.log(CodeMirror.commands);
-    if (this.props.config.settings.automaticAutoComplete) {
+    const editorType = this.props.store.editors.get(this.props.id).type;
+    if (this.props.config.settings.automaticAutoComplete && editorType !== EditorTypes.DRILL) {
       cm.on(
         'change',
         _.debounce(() => {

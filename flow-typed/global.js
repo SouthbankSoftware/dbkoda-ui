@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-10-02T13:50:52+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-03T21:14:20+10:00
+ * @Last modified time: 2018-05-04T23:19:50+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,11 +26,14 @@
 /* eslint-disable */
 
 declare var UAT: any;
-declare var IS_PRODUCTION: any;
-declare var IS_DEVELOPMENT: any;
-declare var IS_ELECTRON: any;
+declare var IS_PRODUCTION: boolean;
+declare var IS_DEVELOPMENT: boolean;
+declare var IS_ELECTRON: boolean;
+declare var IS_TEST: boolean;
 declare var Globalize: any;
 declare var locale: string;
+declare var l: any;
+declare var logger: any;
 
 /** Utility functions */
 declare function globalString(path: string, ...params: *[]): string;

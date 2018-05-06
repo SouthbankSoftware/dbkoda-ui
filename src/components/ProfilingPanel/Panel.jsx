@@ -177,7 +177,10 @@ export default class ProfilingPanel extends React.Component<Props> {
             <div className="exampleWrapper">
               <OperationDetails operation={selectedOperation} />
             </div>
-            <ExplainView operation={selectedOperation} />
+            {selectedOperation &&
+              selectedOperation.execStats && (
+                <ExplainView execStats={selectedOperation.execStats} />
+              )}
           </div>
         )}
       </div>

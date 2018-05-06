@@ -601,7 +601,7 @@ class View extends React.Component {
               type && type === 'os'
                 ? featherClient().service('/os-execution')
                 : featherClient().service('/mongo-stop-execution');
-            service.timeout = 1000;
+            service.timeout = 10000;
             service
               .remove(id, {
                 query: {
@@ -684,7 +684,10 @@ class View extends React.Component {
    */
   componentDidMount() {
     this.refresh();
-    if (this.props.config.settings.automaticAutoComplete) {
+    if (
+      this.props.config.settings.automaticAutoComplete &&
+      this.editorObject.type == EditorTypes.DEFAULT
+    ) {
       const cm = this.editor.getCodeMirror();
       cm.on('change', _.debounce(CodeMirror.commands.autocomplete, 400));
     }

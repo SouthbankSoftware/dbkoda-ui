@@ -2,8 +2,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-11-20T14:07:16+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-16T10:55:07+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-03T22:32:01+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,6 +31,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const GlobalizePlugin = require('globalize-webpack-plugin');
 const commonGlobalizePluginOptions = require('./commonGlobalizePluginOptions');
+const commonDefinePluginOptions = require('./commonDefinePluginOptions');
 const common = require('./common');
 
 const ENABLE_SOURCE_MAP = true;
@@ -54,32 +55,33 @@ module.exports = merge(
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
             use: [
-            {
+              {
                 loader: 'css-loader',
                 options: {
-                    url: false,
-                    minimize: true,
-                    sourceMap: false
+                  url: false,
+                  minimize: true,
+                  sourceMap: false
                 }
-            },
-            {
+              },
+              {
                 loader: 'sass-loader',
                 options: {
-                    sourceMap: false
+                  sourceMap: false
                 }
-            }
-          ]
+              }
+            ]
           })
         }
       ]
     },
     devtool: ENABLE_SOURCE_MAP ? 'source-map' : false,
     plugins: [
-      new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify('production')
-        }
-      }),
+      new webpack.DefinePlugin(
+        merge(commonDefinePluginOptions, {
+          // https://webpack.js.org/plugins/define-plugin/#feature-flags
+          'process.env.NODE_ENV': JSON.stringify('production')
+        })
+      ),
       new webpack.optimize.ModuleConcatenationPlugin(),
       new webpack.optimize.CommonsChunkPlugin({
         name: 'commons',

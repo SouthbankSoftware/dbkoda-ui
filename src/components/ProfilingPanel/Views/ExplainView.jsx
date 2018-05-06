@@ -61,31 +61,10 @@ import 'codemirror/theme/material.css';
 @observer
 export default class OperationDetails extends React.Component {
   static propTypes = {};
-  constructor(props) {
-    super(props);
-    this.state = {
-      operation: null,
-      stages: null
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.operation) {
-      this.state.operation = nextProps.operation;
-
-      const stages = getExecutionStages(this.state.operation.execStats);
-      if (stages) {
-        this.setState({ stages });
-      }
-      if (!stages || stages.length == 0) {
-        this.setState({ stages: null });
-      }
-    }
-  }
 
   render() {
-    const executionStages = this.state.stages;
-    console.log(this.state.stages);
+    const executionStages = getExecutionStages(this.props.execStats);
+    console.log('execStats::', this.props.execStats);
     return (
       <div className="explainView" style={{ height: '100%' }}>
         <nav className="pt-navbar explainToolbar">
@@ -99,15 +78,15 @@ export default class OperationDetails extends React.Component {
           </div>
         </nav>
         <div className="explainBody explain-statistic-container-view" style={{ height: '100%' }}>
-          {this.state.stages && <StageProgress stages={this.state.stages} />}
-          {this.state.stages && (
+          {executionStages && <StageProgress stages={executionStages} />}
+          {executionStages && (
             <StageStepsTable
-              stages={this.state.stages}
-              shardMergeStage={this.state.stages}
+              stages={executionStages}
+              shardMergeStage={executionStages}
               shard={executionStages.shards !== undefined}
             />
           )}
-          {!this.state.stages && (
+          {!executionStages && (
             <ErrorView
               title={globalString('performance/profiling/results/noExplainTitle')}
               error={globalString('performance/profiling/results/noExplainBody')}

@@ -8157,6 +8157,10 @@ pkg-dir@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
+pkginfo@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/pkginfo/-/pkginfo-0.4.1.tgz#b5418ef0439de5425fc4995042dced14fb2a84ff"
+
 pluralize@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"
@@ -8890,6 +8894,10 @@ raw-body@2.3.2:
     http-errors "1.6.2"
     iconv-lite "0.4.19"
     unpipe "1.0.0"
+
+raygun4js@^2.9.4:
+  version "2.9.4"
+  resolved "https://registry.yarnpkg.com/raygun4js/-/raygun4js-2.9.4.tgz#cf729fc1650ad37841950bfbf433726e4c2b9f5f"
 
 rc@^1.1.2, rc@^1.1.7:
   version "1.2.2"

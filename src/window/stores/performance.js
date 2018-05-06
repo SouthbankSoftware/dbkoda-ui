@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-04-27T10:33:29+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-04T14:22:55+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,22 +25,23 @@
  */
 
 import _ from 'lodash';
-import { observable, action, runInAction } from 'mobx';
+import { observable, action, runInAction, extendObservable } from 'mobx';
 import { restore } from 'dumpenvy';
 import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
 import { ProfilingConstants, NavPanes } from '#/common/Constants';
 import { handleNewData, attachToMobx } from '~/api/PerformancePanel';
+import { setUser } from '~/helpers/loggingApi';
 
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
 
-const Globalize = require('globalize'); // doesn't work well with import
-// Globalize Configuration for Performance Window
-global.Globalize = Globalize;
-const { language, region } = Globalize.locale().attributes;
-global.locale = `${language}-${region}`;
-global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...params);
-global.globalNumber = (value, config) => Globalize.numberFormatter(config)(value);
+// const Globalize = require('globalize'); // doesn't work well with import
+// // Globalize Configuration for Performance Window
+// global.Globalize = Globalize;
+// const { language, region } = Globalize.locale().attributes;
+// global.locale = `${language}-${region}`;
+// global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...params);
+// global.globalNumber = (value, config) => Globalize.numberFormatter(config)(value);
 
 global.config = null;
 
@@ -114,6 +115,50 @@ class PerformanceWindowApi {
   };
 
   @action.bound
+  getExplainForSelectedOp = () => {
+    console.log('getExplainForOperation');
+    const { topConnectionsPanel } = this.store;
+    const { selectedConnection, selectedOperation } = topConnectionsPanel;
+    if (selectedConnection && selectedOperation) {
+      const explainId = selectedConnection.connectionId + '_' + selectedOperation.opId;
+      topConnectionsPanel.lastExplainId = explainId;
+      topConnectionsPanel.bLoadingExplain = true;
+
+      const filterCommand = (value, key) => {
+        const loKey = key.toLowerCase();
+        if (
+          loKey === 'findandmodify' ||
+          loKey === 'find' ||
+          loKey === 'distinct' ||
+          loKey === 'count'
+        ) {
+          return true;
+        }
+        return false;
+      };
+      const cmdForExplain = selectedOperation.command;
+      if (selectedOperation.command && selectedOperation.command.$db) {
+        const database = _.pick(cmdForExplain, '$db');
+        let commandParams = _.omit(cmdForExplain, '$db');
+        const command = _.pickBy(commandParams, filterCommand);
+        const commandStr = JSON.stringify(command);
+        commandParams = _.omitBy(commandParams, filterCommand);
+        const commandParamsStr = JSON.stringify(commandParams);
+        const explainCommandStr =
+          commandParamsStr.substr(0, 1) +
+          commandStr.substr(1, commandStr.length - 2) +
+          ',' +
+          commandParamsStr.substr(1);
+        this.sendCommandToMainProcess('pw_getOperationExplainPlan', {
+          explainId,
+          explainCmd: explainCommandStr,
+          database: database.$db
+        });
+      }
+    }
+  };
+
+  @action.bound
   setProfilingDatabaseConfiguration = configs => {
     console.log('send profiling database configuration ', configs);
     this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', {
@@ -142,7 +187,10 @@ export default class Store {
       operations: null,
       selectedOperation: null,
       highWaterMarkConnection: null,
-      bShowExplain: false
+      bLoadingExplain: false,
+      bShowExplain: false,
+      lastExplainId: null,
+      explain: null
     },
     null,
     { deep: false }
@@ -195,10 +243,22 @@ export default class Store {
             deserializer,
             postDeserializer
           });
+
           this.performancePanel = restore(args.dataObject, {
             deserializer,
             postDeserializer
           });
+
+          // TODO refine this
+          setUser(global.config.settings.user);
+          if (IS_ELECTRON) {
+            const { remote } = window.require('electron');
+
+            remote
+              .getCurrentWindow()
+              .setTitle(`Perforamnce Panel - ${this.performancePanel.profileAlias}`);
+          }
+
           attachToMobx(this.performancePanel);
         } else if (args.command === 'mw_updateData' && this.performancePanel !== null) {
           const payload = args.dataObject;
@@ -227,7 +287,7 @@ export default class Store {
             // Get name of database (key)
             const db = {};
             const keys = Object.keys(item);
-            db.name = keys[0];
+            [db.name] = keys;
             db.value = item[keys[0]];
             if (item[keys[0]].was) {
               dbList.push(db);
@@ -288,6 +348,17 @@ export default class Store {
               iconName: 'pt-icon-thumbs-down'
             });
             this.profilingPanel.databases = newDbs;
+          }
+        } else if (args.command === 'mw_explainForOperation') {
+          console.log(args.payload);
+          if (args.explainId && args.explainId === this.topConnectionsPanel.lastExplainId) {
+            if (args.payload.executionStats) {
+              extendObservable(this.topConnectionsPanel.selectedOperation, {
+                execStats: args.payload.executionStats.executionStages
+              });
+
+              this.topConnectionsPanel.bShowExplain = true;
+            }
           }
         }
       }
