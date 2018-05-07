@@ -1,0 +1,38 @@
+$height: 30px;
+.docker-config-container {
+  input {
+    height: $height;
+  }
+  .text-label {
+    line-height: $height;
+    margin-right: 10px;
+  }
+  .config-label-width {
+    width: 150px;
+    display: inline-block;
+  }
+}
+
+.inline-file-input {
+  display: inline !important;
+}
+
+.docker-mount-volume {
+  display: flex;
+  flex-direction: row;
+  margin-top: $height;
+  margin-left: 20px;
+  .mount-separator {
+    line-height: $height;
+    width: 10px;
+    text-align: center;
+  }
+}
+
+.final-command-container {
+  margin-left: 20px;
+  .final-command {
+    margin: 20px 0px;
+    width: 50%;
+  }
+}

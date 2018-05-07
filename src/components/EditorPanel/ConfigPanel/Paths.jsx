@@ -26,8 +26,12 @@
 
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Button } from '@blueprintjs/core';
+import { Button, RadioGroup, Radio } from '@blueprintjs/core';
 import path from 'path';
+
+import Docker from './docker';
+
+import './Paths.scss';
 
 const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
@@ -36,6 +40,7 @@ export default class Paths extends React.Component {
   constructor(props) {
     super(props);
     this.onPathEntered = this.onPathEntered.bind(this);
+    this.state = { radioSelection: 'path' };
   }
 
   onPathEntered(e) {
@@ -66,44 +71,65 @@ export default class Paths extends React.Component {
     }
   }
 
+  changeRadio = e => {
+    this.setState({ radioSelection: e.target.value });
+  };
+
   render() {
     return (
       <div className="formContentWrapper">
-        <div className="sectionHeader">{globalString('editor/config/sections/paths')}</div>
-        <div className="form-row">{this.props.renderFieldLabel('mongoCmd')}</div>
-        <div className="fileInput">
-          <input
-            type="text"
-            id="mongoCmd"
-            value={this.props.settings.mongoCmd || ''}
-            onChange={this.onPathEntered}
+        <RadioGroup onChange={this.changeRadio} selectedValue={this.state.radioSelection}>
+          <Radio
+            className="sectionHeader"
+            value="path"
+            label={globalString('editor/config/sections/paths')}
           />
-          <Button
-            className="formButton"
-            onClick={() => {
-              this.openPath('mongoCmd');
-            }}
-          >
-            {globalString('general/browse')}
-          </Button>
-        </div>
-        <div className="form-row">{this.props.renderFieldLabel('drillCmd')}</div>
-        <div className="fileInput">
-          <input
-            type="text"
-            id="drillCmd"
-            value={this.props.settings.drillCmd || ''}
-            onChange={this.onPathEntered}
+
+          <div className="form-row">{this.props.renderFieldLabel('mongoCmd')}</div>
+          <div className="fileInput">
+            <input
+              type="text"
+              id="mongoCmd"
+              disabled={this.state.radioSelection === 'docker'}
+              value={this.props.settings.mongoCmd || ''}
+              onChange={this.onPathEntered}
+            />
+            <Button
+              className="formButton"
+              disabled={this.state.radioSelection === 'docker'}
+              onClick={() => {
+                this.openPath('mongoCmd');
+              }}
+            >
+              {globalString('general/browse')}
+            </Button>
+          </div>
+          <div className="form-row">{this.props.renderFieldLabel('drillCmd')}</div>
+          <div className="fileInput">
+            <input
+              type="text"
+              id="drillCmd"
+              disabled={this.state.radioSelection === 'docker'}
+              value={this.props.settings.drillCmd || ''}
+              onChange={this.onPathEntered}
+            />
+            <Button
+              className="formButton"
+              disabled={this.state.radioSelection === 'docker'}
+              onClick={() => {
+                this.openPath('drillCmd');
+              }}
+            >
+              {globalString('general/browse')}
+            </Button>
+          </div>
+          <Radio className="sectionHeader docker-section-header" label="Docker" value="docker" />
+          <Docker
+            dockerEnabled={this.state.radioSelection === 'docker'}
+            updateValue={this.onPathEntered}
+            docker={this.props.settings.docker}
           />
-          <Button
-            className="formButton"
-            onClick={() => {
-              this.openPath('drillCmd');
-            }}
-          >
-            {globalString('general/browse')}
-          </Button>
-        </div>
+        </RadioGroup>
       </div>
     );
   }
