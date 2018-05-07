@@ -262,6 +262,7 @@ export default class Editor extends React.Component {
           shellId={this.props.shellId}
           title={this.props.title}
           onDrop={item => this.handleDrop(item)}
+          getDocumentAtLine={this.props.getDocumentAtLine}
         />
       </div>
     );

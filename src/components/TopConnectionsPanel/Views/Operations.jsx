@@ -77,6 +77,8 @@ export default class OperationsView extends React.Component<Props> {
         }
       }
       this.setState({ data: operations });
+    } else {
+      this.setState({ data: null });
     }
     if (nextProps && nextProps.tableWidth) {
       const columnsWidths = columnsWidthsPercent.map(width => width * nextProps.tableWidth / 100);

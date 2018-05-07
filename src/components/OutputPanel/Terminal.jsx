@@ -85,6 +85,7 @@ function collect(connect, monitor) {
 
 @inject(allStores => ({
   store: allStores.store,
+  api: allStores.api,
   config: allStores.config
 }))
 @observer
@@ -280,7 +281,18 @@ class Terminal extends React.Component {
     Broker.emit(EventType.FEATURE_USE, 'Terminal');
     if (this.state.command) {
       this.props.store.outputPanel.executingTerminalCmd = true;
+      this.setExecStartLine();
     }
+  }
+
+  @action.bound
+  setExecStartLine() {
+    const { activeEditorId } = this.props.store.editorPanel;
+    const outputCm = this.props.store.outputPanel.editorRefs[activeEditorId].getCodeMirror();
+    this.props.store.outputs.get(activeEditorId).currentExecStartLine = outputCm.lineCount();
+    console.log(
+      `Output Exec Start Line: ${this.props.store.outputs.get(activeEditorId).currentExecStartLine}`
+    );
   }
 
   /**
@@ -314,10 +326,39 @@ class Terminal extends React.Component {
 
   @action.bound
   finishedExecution() {
+    const { activeEditorId } = this.props.store.editorPanel;
     this.props.store.editors.get(this.props.id).executing = false;
-    if (this.props.store.editorPanel.activeEditorId == this.props.id) {
+    if (activeEditorId == this.props.id) {
       this.props.store.editorToolbar.isActiveExecuting = false;
       this.props.store.editorPanel.stoppingExecution = false;
+      // Open Table view if default table setting is on
+      if (this.props.config.settings.tableOutputDefault) {
+        console.log('Open table view!');
+        const lineNumber = this.props.store.outputs.get(activeEditorId).currentExecStartLine;
+        const editor = this.props.store.outputPanel.editorRefs[activeEditorId];
+        const cm = editor.getCodeMirror();
+        const lines = { start: 0, end: 0, status: '' };
+        // const currentJson = this.props.api.outputApi.getCurrentResultSet();
+        const currentJson = this.props.getDocumentAtLine(
+          this.props.store.editorPanel.activeEditorId,
+          lineNumber,
+          1,
+          lines
+        );
+        console.log('Current JSON: ' + currentJson);
+        console.log(
+          `initJsonView(${currentJson}, ${activeEditorId}, 'tableJson', ${lines}, ${editor}, false, true)`
+        );
+        this.props.api.initJsonView(
+          currentJson,
+          activeEditorId,
+          'tableJson',
+          lines,
+          editor,
+          false,
+          true
+        );
+      }
     }
   }
 
