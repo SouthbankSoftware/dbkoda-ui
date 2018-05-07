@@ -119,8 +119,9 @@ export default class TopConnections {
     console.log(params);
     if (params.database && params.explainCmd) {
       console.log(params.explainCmd);
-      featherClient()
-        .service('drivercommands')
+      const driverService = featherClient().service('drivercommands');
+      driverService.timeout = 30000;
+      return driverService
         .patch(profileId, {
           database: params.database,
           command: {

@@ -75,6 +75,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
     this.props.store.topConnectionsPanel.selectedOperation = selectedOperation;
     if (!selectedOperation.execStats) {
       this.props.store.topConnectionsPanel.bShowExplain = false;
+      this.props.store.topConnectionsPanel.bLoadingExplain = false;
     } else {
       this.props.store.topConnectionsPanel.bShowExplain = true;
     }
@@ -96,7 +97,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
         <SplitPane
           className="MainSplitPane"
           split="horizontal"
-          defaultSize="45%"
+          defaultSize="40%"
           minSize={200}
           maxSize={1000}
           pane2Style={splitPane2Style}

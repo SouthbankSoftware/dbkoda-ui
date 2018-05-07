@@ -716,6 +716,18 @@ export default class ListView extends React.Component {
             </span>
           </Cell>
         );
+      } else if (profiles[rowIndex][1].status == ProfileStatus.CONNECTING) {
+        return (
+          <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
+            <ConnectionIcon className="pt-icon dbKodaSVG" width={40} height={40} />
+            <p className="profileListing">{profiles[rowIndex][1].alias}</p>
+            <AnchorButton
+              style={{ marginLeft: 'auto' }}
+              className="pt-button pt-intent-primary pt-icon-chevron-right"
+              loading
+            />
+          </Cell>
+        );
       }
       return (
         <Cell className={className}>

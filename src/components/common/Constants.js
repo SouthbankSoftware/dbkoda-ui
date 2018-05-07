@@ -33,7 +33,8 @@ export const DragItemTypes = {
 
 export const ProfileStatus = {
   OPEN: 'OPEN',
-  CLOSED: 'CLOSED'
+  CLOSED: 'CLOSED',
+  CONNECTING: 'CONNECTING'
 };
 
 export const EditorTypes = {
