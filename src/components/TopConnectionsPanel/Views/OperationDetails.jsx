@@ -109,8 +109,8 @@ export default class OperationDetails extends React.Component {
   }
 
   render() {
-    // const { topConnectionsPanel } = this.props;
-    // //                 loading={topConnectionsPanel.bLoadingExplain}
+    const { topConnectionsPanel } = this.props;
+
     return (
       <div style={{ height: '100%' }}>
         <nav className="pt-navbar actionsToolbar">
@@ -120,7 +120,7 @@ export default class OperationDetails extends React.Component {
           <div className="pt-navbar-group pt-align-right">
             <Tooltip
               className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-              content="Toggle Explain Plan"
+              content="Fetch Explain Plan"
               hoverOpenDelay={1000}
               inline
               intent={Intent.PRIMARY}
@@ -129,6 +129,7 @@ export default class OperationDetails extends React.Component {
               <Button
                 className="reset-button pt-button pt-intent-primary"
                 text="Explain"
+                loading={topConnectionsPanel.bLoadingExplain}
                 onClick={this.getExplainForSelectedOp}
               />
             </Tooltip>
