@@ -134,7 +134,6 @@ class PerformanceWindowApi {
 
   @action.bound
   getExplainForSelectedOp = () => {
-    console.log('getExplainForOperation');
     const { topConnectionsPanel } = this.store;
     const { selectedConnection, selectedOperation } = topConnectionsPanel;
     if (selectedConnection && selectedOperation) {
@@ -154,23 +153,62 @@ class PerformanceWindowApi {
         }
         return false;
       };
-      const cmdForExplain = selectedOperation.command;
-      if (selectedOperation.command && selectedOperation.command.$db) {
+      const cmdNotSupported = () => {
+        topConnectionsPanel.lastExplainId = null;
+        topConnectionsPanel.bLoadingExplain = false;
+        this.showToaster({
+          message: 'Command not supported for Explain.',
+          className: 'danger',
+          iconName: 'pt-icon-thumbs-down'
+        });
+      };
+
+      let explainCommandStr = '';
+      let databaseStr = '';
+
+      if (
+        (selectedOperation.op === 'command' || selectedOperation.op === 'query') &&
+        selectedOperation.command &&
+        selectedOperation.command.$db
+      ) {
+        const cmdForExplain = selectedOperation.command;
         const database = _.pick(cmdForExplain, '$db');
+        databaseStr = database.$db;
         let commandParams = _.omit(cmdForExplain, '$db');
         const command = _.pickBy(commandParams, filterCommand);
-        const commandStr = JSON.stringify(command);
-        commandParams = _.omitBy(commandParams, filterCommand);
-        const commandParamsStr = JSON.stringify(commandParams);
-        const explainCommandStr =
-          commandParamsStr.substr(0, 1) +
-          commandStr.substr(1, commandStr.length - 2) +
-          ',' +
-          commandParamsStr.substr(1);
+        if (Object.keys(command).length > 0) {
+          const commandStr = JSON.stringify(command);
+          commandParams = _.omitBy(commandParams, filterCommand);
+          const commandParamsStr = JSON.stringify(commandParams);
+          explainCommandStr =
+            commandParamsStr.substr(0, 1) +
+            commandStr.substr(1, commandStr.length - 2) +
+            ',' +
+            commandParamsStr.substr(1);
+        } else {
+          cmdNotSupported();
+        }
+      } else if (selectedOperation.op === 'update') {
+        const nsParams = selectedOperation.ns.split('.');
+        [databaseStr] = nsParams;
+        const [, collection] = nsParams;
+        const commandStr = JSON.stringify(selectedOperation.command);
+        explainCommandStr = `{"update": "${collection}", "updates":[${commandStr}]}`;
+      } else if (selectedOperation.op === 'remove') {
+        const nsParams = selectedOperation.ns.split('.');
+        [databaseStr] = nsParams;
+        const [, collection] = nsParams;
+        const commandStr = JSON.stringify(selectedOperation.command);
+        explainCommandStr = `{"delete": "${collection}", "deletes":[${commandStr}]}`;
+      } else {
+        cmdNotSupported();
+      }
+
+      if (explainCommandStr.length > 0 && databaseStr.length > 0) {
         this.sendCommandToMainProcess('pw_getOperationExplainPlan', {
           explainId,
           explainCmd: explainCommandStr,
-          database: database.$db
+          database: databaseStr
         });
       }
     }
@@ -207,8 +245,7 @@ export default class Store {
       highWaterMarkConnection: null,
       bLoadingExplain: false,
       bShowExplain: false,
-      lastExplainId: null,
-      explain: null
+      lastExplainId: null
     },
     null,
     { deep: false }
@@ -367,8 +404,9 @@ export default class Store {
           }
         } else if (args.command === 'mw_explainForOperation') {
           console.log(args.payload);
+          this.topConnectionsPanel.bLoadingExplain = false;
           if (args.explainId && args.explainId === this.topConnectionsPanel.lastExplainId) {
-            if (args.payload.executionStats) {
+            if (args.payload && args.payload.executionStats) {
               extendObservable(this.topConnectionsPanel.selectedOperation, {
                 execStats: args.payload.executionStats.executionStages
               });
