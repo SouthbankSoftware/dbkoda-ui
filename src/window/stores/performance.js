@@ -116,7 +116,6 @@ class PerformanceWindowApi {
 
   @action.bound
   getExplainForSelectedOp = () => {
-    console.log('getExplainForOperation');
     const { topConnectionsPanel } = this.store;
     const { selectedConnection, selectedOperation } = topConnectionsPanel;
     if (selectedConnection && selectedOperation) {
@@ -145,14 +144,16 @@ class PerformanceWindowApi {
           iconName: 'pt-icon-thumbs-down'
         });
       };
-      const cmdForExplain = selectedOperation.command;
+
       let explainCommandStr = '';
       let databaseStr = '';
+
       if (
         (selectedOperation.op === 'command' || selectedOperation.op === 'query') &&
         selectedOperation.command &&
         selectedOperation.command.$db
       ) {
+        const cmdForExplain = selectedOperation.command;
         const database = _.pick(cmdForExplain, '$db');
         databaseStr = database.$db;
         let commandParams = _.omit(cmdForExplain, '$db');
@@ -185,7 +186,7 @@ class PerformanceWindowApi {
         cmdNotSupported();
       }
 
-      if (explainCommandStr.length > 0) {
+      if (explainCommandStr.length > 0 && databaseStr.length > 0) {
         this.sendCommandToMainProcess('pw_getOperationExplainPlan', {
           explainId,
           explainCmd: explainCommandStr,
@@ -226,8 +227,7 @@ export default class Store {
       highWaterMarkConnection: null,
       bLoadingExplain: false,
       bShowExplain: false,
-      lastExplainId: null,
-      explain: null
+      lastExplainId: null
     },
     null,
     { deep: false }
