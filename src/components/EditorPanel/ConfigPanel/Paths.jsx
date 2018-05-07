@@ -126,7 +126,8 @@ export default class Paths extends React.Component {
           <Radio className="sectionHeader docker-section-header" label="Docker" value="docker" />
           <Docker
             dockerEnabled={this.state.radioSelection === 'docker'}
-            updateValue={this.onPathEntered}
+            onPathEntered={this.onPathEntered}
+            settings={this.props.settings}
             docker={this.props.settings.docker}
           />
         </RadioGroup>

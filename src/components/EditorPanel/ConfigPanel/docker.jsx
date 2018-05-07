@@ -24,9 +24,10 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
+import { observer } from 'mobx-react';
 import { RadioGroup, Radio } from '@blueprintjs/core';
 import './docker.scss';
-
+@observer
 export default class Docker extends React.Component {
   constructor(props) {
     super(props);
@@ -42,7 +43,7 @@ export default class Docker extends React.Component {
   };
 
   render() {
-    const { dockerEnabled, onPathEntered } = this.props;
+    const { dockerEnabled, onPathEntered, settings } = this.props;
     return (
       <div className="docker-config-container">
         <RadioGroup inline onChange={this.changeRadio} selectedValue={this.state.selection}>
@@ -57,7 +58,7 @@ export default class Docker extends React.Component {
               type="text"
               id="docker.imageName"
               disabled={!dockerEnabled || this.state.selection === 'id'}
-              value=""
+              value={settings.docker.imageName}
               onChange={onPathEntered}
             />
           </div>
@@ -71,9 +72,9 @@ export default class Docker extends React.Component {
           <div className="inline-file-input">
             <input
               type="text"
-              id="docker.containerId"
+              id="docker.containerID"
               disabled={!dockerEnabled || this.state.selection === 'image'}
-              value=""
+              value={settings.docker.containerID}
               onChange={onPathEntered}
             />
           </div>
@@ -84,17 +85,17 @@ export default class Docker extends React.Component {
           </span>
           <input
             type="text"
-            id="docker.volumeHostPath"
+            id="docker.hostPath"
             disabled={!dockerEnabled || this.state.selection === 'id'}
-            value=""
+            value={settings.docker.hostPath}
             onChange={onPathEntered}
           />
           <span className="text-label mount-separator">:</span>
           <input
             type="text"
-            id="docker.volumeContainerPath"
+            id="docker.containerPath"
             disabled={!dockerEnabled || this.state.selection === 'id'}
-            value=""
+            value={settings.docker.containerPath}
             onChange={onPathEntered}
           />
         </div>
@@ -104,6 +105,7 @@ export default class Docker extends React.Component {
           </div>
           <input
             type="text"
+            id="docker.dockerCmd"
             className="final-command"
             disabled={!dockerEnabled || this.state.selection === 'id'}
             value={this.state.finalCmd}

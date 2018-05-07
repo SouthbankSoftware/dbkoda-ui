@@ -387,6 +387,12 @@
         "drillControllerCmd": "Drill Controller Path",
         "passwordStoreEnabled": "Password Store Enabled",
         "applyButton": "Apply",
+        "docker-placeholder": {
+          "image": "Docker Image Name",
+          "container-id": "Docker Container ID",
+          "host-path": "Path in the host",
+          "container-path": "Path in the container"
+        },
         "remove_store_dialog": {
           "question": "Are you sure you would like to disable the password store?",
           "qualifier":
