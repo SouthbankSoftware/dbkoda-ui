@@ -34,6 +34,10 @@
   display: flex;
   flex-direction: column;
 
+  .ResetButton {
+    margin-left: 10px;
+  }
+
   .pt-button-text {
     flex: none !important;
   }
@@ -56,6 +60,7 @@
 
     .tableWrapper {
       max-height: 400px;
+
       .dbSelectWrapper {
         margin-left: 12px;
       }

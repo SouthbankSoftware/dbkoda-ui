@@ -205,7 +205,8 @@ export default class Store {
     downloadingDrill: false,
     showDrillStatus: false,
     drillDownloadProgress: null,
-    drillStatusMsg: ''
+    drillStatusMsg: '',
+    action: null
   };
 
   @observable

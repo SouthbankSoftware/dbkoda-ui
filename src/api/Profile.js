@@ -201,7 +201,9 @@ export default class ProfileApi {
     service.timeout = 30000;
     // Mark profile status to connecting
     if (selectedProfile) {
-      selectedProfile.status = ProfileStatus.CONNECTING;
+      runInAction(() => {
+        selectedProfile.status = ProfileStatus.CONNECTING;
+      });
     }
     return service
       .create({}, { query })

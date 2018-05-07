@@ -53,7 +53,8 @@ export default class ProfilingPanel extends React.Component<Props> {
       bottomSplitPos: 1000,
       topSplitPos: window.innerWidth - 61
     };
-    this.props.store.api.getProfilingDataBases();
+    this.refreshDB = this.props.store.api.getProfilingDataBases;
+    this.refreshDB();
   }
   componentDidMount() {
     window.addEventListener('resize', debounce(this.handleResize, 400));
@@ -76,9 +77,20 @@ export default class ProfilingPanel extends React.Component<Props> {
     runInAction('Reset profiling payload to null before re-fetching.', () => {
       this.props.store.profilingPanel.payload = null;
     });
-
     this.props.store.api.getProfilingData(item);
   };
+
+  @autobind
+  _onRefreshDBs() {
+    this.setState({ selectedDatabase: null });
+    this.refreshDB();
+  }
+
+  @autobind
+  _onRefreshOps() {
+    this.setState({ selectedOperation: null });
+    this.props.store.api.getProfilingData({ name: this.state.selectedDatabase });
+  }
 
   render() {
     const { store, showProfileConfiguration } = this.props;
@@ -124,6 +136,21 @@ export default class ProfilingPanel extends React.Component<Props> {
               <div className="pt-navbar-heading viewHeading">Profiling Results</div>
             </div>
             <div className="pt-navbar-group pt-align-right">
+              <Tooltip
+                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                content={globalString('performance/profiling/refreshOps')}
+                hoverOpenDelay={1000}
+                inline
+                intent={Intent.PRIMARY}
+                position={Position.BOTTOM}
+              >
+                <Button
+                  className="top-con-button reset-button pt-button pt-intent-primary"
+                  text={globalString('performance/profiling/refreshOps')}
+                  disabled={this.selectedDatabase}
+                  onClick={this._onRefreshOps}
+                />
+              </Tooltip>
               {showProfileConfiguration && (
                 <Tooltip
                   className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
@@ -166,6 +193,7 @@ export default class ProfilingPanel extends React.Component<Props> {
                 highWaterMark={highWaterMarkProfile}
                 onSelect={onOperationSelection}
                 tableWidth={this.state.topSplitPos}
+                refreshOps={this._onRefreshOps}
               />
             )}
             {!selectedDatabase &&
