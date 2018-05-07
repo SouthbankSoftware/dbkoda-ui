@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-04T23:29:55+10:00
+ * @Last modified time: 2018-05-07T16:52:58+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,7 +34,7 @@ import { NewToaster } from '#/common/Toaster';
 import moment from 'moment';
 import Globalize from 'globalize';
 import DataCenter from '~/api/DataCenter';
-import { setUser } from '~/helpers/loggingApi';
+import { setUser, toggleRaygun } from '~/helpers/loggingApi';
 import { Broker, EventType } from '../helpers/broker';
 import { ProfileStatus } from '../components/common/Constants';
 import Config from './config';
@@ -579,7 +579,21 @@ export default class Store {
     return this.config
       .load()
       .then(() => {
-        setUser(this.config.settings.user);
+        const settingsUserChangedReaction = reaction(
+          () => this.config.settings.user.id,
+          () => {
+            setUser(this.config.settings.user);
+          },
+          { fireImmediately: true }
+        );
+
+        const settingsTelemetryEnabledReaction = reaction(
+          () => this.config.settings.telemetryEnabled,
+          enabled => {
+            toggleRaygun(enabled);
+          },
+          { fireImmediately: true }
+        );
 
         const foregroundSamplingRateChangedReaction = reaction(
           () => this.config.settings.performancePanel.foregroundSamplingRate,
@@ -593,6 +607,8 @@ export default class Store {
 
         // stop all PP when refreshing
         Broker.once(EventType.WINDOW_REFRESHING, () => {
+          settingsTelemetryEnabledReaction();
+          settingsUserChangedReaction();
           foregroundSamplingRateChangedReaction();
           backgroundSamplingRateChangedReaction();
         });
