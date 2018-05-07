@@ -119,7 +119,7 @@ export default class OperationsView extends React.Component<Props> {
         cellValue = this.state.data[rowIndex].us;
         break;
       case 4:
-        cellValue = this.state.data[rowIndex].palnSummary;
+        cellValue = this.state.data[rowIndex].planSummary;
         break;
       case 5:
         cellValue = {
