@@ -30,7 +30,18 @@ import { runInAction } from 'mobx';
 import autobind from 'autobind-decorator';
 import ErrorView from '#/common/ErrorView';
 import { debounce } from 'lodash';
-import { Classes, Button, MenuItem, Intent, Position, Tooltip } from '@blueprintjs/core';
+import {
+  Classes,
+  Button,
+  MenuItem,
+  Intent,
+  Position,
+  Tooltip,
+  Switch,
+  RadioGroup,
+  Radio,
+  NumericInput
+} from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import ProfilingView from './Views/ProfilingView';
 import ExplainView from './Views/ExplainView';
@@ -51,8 +62,17 @@ export default class ProfilingPanel extends React.Component<Props> {
       databaseList: [],
       selectedOperation: null,
       bottomSplitPos: 1000,
-      topSplitPos: window.innerWidth - 61
+      topSplitPos: window.innerWidth - 61,
+      currentConfig: {},
+      dirtyConfig: false
     };
+    this.defaultOptions = {
+      selectedDb: { value: { was: 0 } },
+      selectedValue: 0,
+      exceedLimit: 100,
+      profileCollectionSize: 1000000
+    };
+    this.state.currentConfig = this.defaultOptions;
     this.refreshDB = this.props.store.api.getProfilingDataBases;
     this.refreshDB();
   }
@@ -77,6 +97,14 @@ export default class ProfilingPanel extends React.Component<Props> {
     runInAction('Reset profiling payload to null before re-fetching.', () => {
       this.props.store.profilingPanel.payload = null;
     });
+
+    // Get configuration information for state:
+    const dbConfig = {};
+    dbConfig.selectedValue = item.value.was; // Profiling type: 0 = off.
+    dbConfig.exceedLimit = item.value.slowms; // Profiling type: 0 = off.
+    dbConfig.profileCollectionSize = item.value.size || 0; // Profiling type: 0 = off.
+    this.state.dirtyConfig = false;
+    this.setState({ currentConfig: dbConfig });
     this.props.store.api.getProfilingData(item);
   };
 
@@ -90,6 +118,59 @@ export default class ProfilingPanel extends React.Component<Props> {
   _onRefreshOps() {
     this.setState({ selectedOperation: null });
     this.props.store.api.getProfilingData({ name: this.state.selectedDatabase });
+  }
+
+  @autobind
+  _onChangeProfilingStatus() {
+    console.debug('Changed profiling status to: ', !this.state.currentConfig.selectedValue);
+    // If turning on profiling, send through currentConfig to start profiling:
+    if (this.state.currentConfig.selectedValue > 0) {
+      // Turn profiling on:
+    }
+  }
+
+  @autobind
+  _onClickApply() {
+    console.debug('Apply new configuration: ', this.state.currentConfig);
+    // Set profiling config for existing database:
+
+    this.setState({ dirtyConfig: false });
+  }
+
+  @autobind
+  _onModeChange(event) {
+    console.debug('Mode changed to: ', event.currentTarget.value);
+    // Making modification to a profiling db means config is dirty.
+    if (this.state.currentConfig.selectedValue > 0) {
+      this.state.dirtyConfig = true;
+    }
+    const newConfig = this.state.currentConfig;
+    newConfig.selectedValue = event.currentTarget.value;
+    this.setState({ currentConfig: newConfig });
+  }
+
+  @autobind
+  _onUpdateSizeLimit(value) {
+    console.debug('Size limit changed to ', value);
+    // Making modification to a profiling db means config is dirty.
+    if (this.state.currentConfig.selectedValue > 0) {
+      this.state.dirtyConfig = true;
+    }
+    const newConfig = this.state.currentConfig;
+    newConfig.profileCollectionSize = value;
+    this.setState({ currentConfig: newConfig });
+  }
+
+  @autobind
+  _onUpdateExceedLimit(value) {
+    console.debug('Exceeding value changed to ', value);
+    // Making modification to a profiling db means config is dirty.
+    if (this.state.currentConfig.selectedValue > 0) {
+      this.state.dirtyConfig = true;
+    }
+    const newConfig = this.state.currentConfig;
+    newConfig.exceedLimit = value;
+    this.setState({ currentConfig: newConfig });
   }
 
   render() {
@@ -171,10 +252,12 @@ export default class ProfilingPanel extends React.Component<Props> {
           </nav>
           <div className="tableWrapper">
             <div className="dbSelectWrapper">
-              <span className="dbSelectLabel">Database</span>
+              <span className="dbSelectLabel">
+                {globalString('performance/profiling/results/database')}
+              </span>
               <Select
                 filterable={false}
-                items={profilingPanel.enabledDatabases}
+                items={profilingPanel.databases}
                 itemRenderer={renderItem}
                 noResults={<MenuItem disabled text="No Results" />}
                 onItemSelect={this._onDBSelect}
@@ -185,6 +268,62 @@ export default class ProfilingPanel extends React.Component<Props> {
                   rightIcon="double-caret-vertical"
                 />
               </Select>
+              <span className="profilingSwitchLabel">
+                {globalString('performance/profiling/results/profiling')}
+              </span>
+              <Switch
+                className="profilingStatus"
+                checked={this.state.currentConfig.selectedValue}
+                onChange={this._onChangeProfilingStatus}
+              />
+
+              <RadioGroup
+                label={globalString('performance/profiling/results/mode')}
+                className="radioGroup"
+                onChange={this._onModeChange}
+                selectedValue={this.state.currentConfig.selectedValue}
+              >
+                <span> {globalString('performance/profiling/results/all')}</span>
+                <Radio value={1} />
+                <span> {globalString('performance/profiling/results/exceeding')}</span>
+                <Radio value={2} />
+              </RadioGroup>
+              <NumericInput
+                value={this.state.currentConfig.exceedLimit + 'ms'}
+                stepSize={10}
+                majorStepSize={100}
+                selectAllOnFocus
+                min={1}
+                disabled={this.state.currentConfig.selectedValue != 2}
+                onValueChange={this._onUpdateExceedLimit}
+              />
+              <span>{globalString('performance/profiling/results/collectionSize')}</span>
+              <NumericInput
+                className="size-limit"
+                stepSize={1000}
+                majorStepSize={1000000}
+                min={1000}
+                onValueChange={this._onUpdateSizeLimit}
+                value={this.state.currentConfig.profileCollectionSize + 'mb'}
+              />
+              <Tooltip
+                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                content={globalString('performance/profiling/profile-configuration-button-text')}
+                hoverOpenDelay={1000}
+                inline
+                intent={Intent.PRIMARY}
+                position={Position.BOTTOM}
+              >
+                <Button
+                  disabled={!this.state.currentConfig.selectedValue}
+                  className="applybutton pt-button top-con-button reset-button pt-button pt-intent-primary"
+                  text="Apply"
+                  onClick={this._onClickApply}
+                />
+              </Tooltip>
+              {this.state.dirtyConfig && (
+                <span>{globalString('performance/profiling/results/unsavedChanges')}</span>
+              )}
             </div>
 
             {renderTable && (

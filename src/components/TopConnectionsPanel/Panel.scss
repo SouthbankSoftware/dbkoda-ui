@@ -46,12 +46,15 @@
   width: 100%;
   height: 100%;
 }
+
 .operationDetails {
   height: 100%;
+
   .editorView {
     height: calc(100% - 50px);
   }
 }
+
 .explainView {
   flex-grow: 1;
 
@@ -301,6 +304,7 @@
     font-weight: lighter;
     font-size: small;
     color: $connectionButtonFontColour;
+
     // width: 8em !important;
     border-radius: 5px;
     background-image: unset;
@@ -314,7 +318,7 @@
   }
 
   button.reset-button:hover {
-    background-color: $connectionButtonBackgroundColourHover;
+    background-color: $performanceButtonHover;
     color: $connectionButtonFontColourHover;
   }
 
@@ -443,7 +447,7 @@
   }
 
   .pt-button:hover {
-    background: $buttonSecondaryBackgroundHover !important;
+    background: $performanceButtonHover !important;
   }
 
   .pt-button.deleteButton {
