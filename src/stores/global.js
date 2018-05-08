@@ -180,7 +180,7 @@ export default class Store {
 
   @observable
   aggregateBuilder = {
-    includeCreateView: true,
+    includeCreateView: false,
     viewName: '',
     showViewNameDialog: false
   };
