@@ -40,7 +40,6 @@ export default class Paths extends React.Component {
   constructor(props) {
     super(props);
     this.onPathEntered = this.onPathEntered.bind(this);
-    this.state = { radioSelection: 'path' };
   }
 
   onPathEntered(e) {
@@ -72,16 +71,17 @@ export default class Paths extends React.Component {
   }
 
   changeRadio = e => {
-    this.setState({ radioSelection: e.target.value });
+    this.props.updateValue('dockerEnabled', e.target.value === 'true');
   };
 
   render() {
+    const { settings } = this.props;
     return (
       <div className="formContentWrapper">
-        <RadioGroup onChange={this.changeRadio} selectedValue={this.state.radioSelection}>
+        <RadioGroup onChange={this.changeRadio} selectedValue={settings.dockerEnabled}>
           <Radio
             className="sectionHeader"
-            value="path"
+            value={false}
             label={globalString('editor/config/sections/paths')}
           />
 
@@ -90,13 +90,13 @@ export default class Paths extends React.Component {
             <input
               type="text"
               id="mongoCmd"
-              disabled={this.state.radioSelection === 'docker'}
+              disabled={settings.dockerEnabled}
               value={this.props.settings.mongoCmd || ''}
               onChange={this.onPathEntered}
             />
             <Button
               className="formButton"
-              disabled={this.state.radioSelection === 'docker'}
+              disabled={settings.dockerEnabled}
               onClick={() => {
                 this.openPath('mongoCmd');
               }}
@@ -109,13 +109,13 @@ export default class Paths extends React.Component {
             <input
               type="text"
               id="drillCmd"
-              disabled={this.state.radioSelection === 'docker'}
+              disabled={settings.dockerEnabled}
               value={this.props.settings.drillCmd || ''}
               onChange={this.onPathEntered}
             />
             <Button
               className="formButton"
-              disabled={this.state.radioSelection === 'docker'}
+              disabled={settings.dockerEnabled}
               onClick={() => {
                 this.openPath('drillCmd');
               }}
@@ -123,11 +123,12 @@ export default class Paths extends React.Component {
               {globalString('general/browse')}
             </Button>
           </div>
-          <Radio className="sectionHeader docker-section-header" label="Docker" value="docker" />
+          <Radio className="sectionHeader docker-section-header" label="Docker" value />
           <Docker
-            dockerEnabled={this.state.radioSelection === 'docker'}
+            dockerEnabled={settings.dockerEnabled}
             onPathEntered={this.onPathEntered}
             settings={this.props.settings}
+            updateValue={this.props.updateValue}
             docker={this.props.settings.docker}
           />
         </RadioGroup>

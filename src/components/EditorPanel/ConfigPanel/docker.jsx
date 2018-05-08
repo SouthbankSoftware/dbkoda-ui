@@ -31,50 +31,81 @@ import './docker.scss';
 export default class Docker extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { selection: 'image', finalCmd: '' };
+    this.state = {
+      finalCmd: ''
+    };
   }
 
   changeRadio = e => {
-    this.setState({ selection: e.target.value });
+    const { updateValue } = this.props;
+    updateValue('docker.createNew', e.target.value === 'true');
   };
+
+  componentDidMount() {
+    this.calculateFinalCommand(this.props.settings.docker);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.calculateFinalCommand(nextProps.settings.docker);
+  }
+
+  calculateFinalCommand(docker) {
+    const dockerSubCmd = docker.createNew ? 'run' : 'exec';
+    const mongoCmd = `docker ${dockerSubCmd} -it --rm ${docker.imageName} mongo`;
+    const mongoVersionCmd = `docker ${dockerSubCmd} --rm ${docker.imageName} mongo --version`;
+    const mongoSiblingCmd = `docker ${dockerSubCmd} --rm ${docker.imageName}`;
+    const { updateValue } = this.props;
+    updateValue('docker.mongoCmd', mongoCmd);
+    updateValue('docker.mongoVersionCmd', mongoVersionCmd);
+    ['mongorestore', 'mongodump', 'mongoimport', 'mongoexport'].forEach(cmd => {
+      updateValue(`docker.${cmd}Cmd`, `${mongoSiblingCmd} ${cmd}`);
+    });
+    this.setState({ finalCmd: mongoCmd });
+  }
 
   changeFinalCommand = e => {
     this.setState({ finalCmd: e.target.value });
+    this.props.updateValue('docker.mongoCmd', e.target.value);
   };
 
   render() {
     const { dockerEnabled, onPathEntered, settings } = this.props;
+    const { docker } = settings;
     return (
       <div className="docker-config-container">
-        <RadioGroup inline onChange={this.changeRadio} selectedValue={this.state.selection}>
+        <RadioGroup inline onChange={this.changeRadio} selectedValue={docker.createNew}>
           <Radio
             className="config-label-width inline-file-input form-row"
             disabled={!dockerEnabled}
-            value="image"
+            value
             label={globalString('editor/config/docker-image-name')}
           />
           <div className="inline-file-input">
             <input
               type="text"
               id="docker.imageName"
-              disabled={!dockerEnabled || this.state.selection === 'id'}
-              value={settings.docker.imageName}
+              disabled={!dockerEnabled || !docker.createNew}
+              value={docker.imageName}
               onChange={onPathEntered}
             />
           </div>
-          <div style={{ height: '30px' }} />
+          <div
+            style={{
+              height: '30px'
+            }}
+          />
           <Radio
             className="config-label-width inline-file-input form-row"
             disabled={!dockerEnabled}
-            value="id"
+            value={false}
             label={globalString('editor/config/docker-container-id')}
           />
           <div className="inline-file-input">
             <input
               type="text"
               id="docker.containerID"
-              disabled={!dockerEnabled || this.state.selection === 'image'}
-              value={settings.docker.containerID}
+              disabled={!dockerEnabled || docker.createNew}
+              value={docker.containerID}
               onChange={onPathEntered}
             />
           </div>
@@ -86,16 +117,16 @@ export default class Docker extends React.Component {
           <input
             type="text"
             id="docker.hostPath"
-            disabled={!dockerEnabled || this.state.selection === 'id'}
-            value={settings.docker.hostPath}
+            disabled={!dockerEnabled || !docker.createNew}
+            value={docker.hostPath}
             onChange={onPathEntered}
           />
           <span className="text-label mount-separator">:</span>
           <input
             type="text"
             id="docker.containerPath"
-            disabled={!dockerEnabled || this.state.selection === 'id'}
-            value={settings.docker.containerPath}
+            disabled={!dockerEnabled || !docker.createNew}
+            value={docker.containerPath}
             onChange={onPathEntered}
           />
         </div>
@@ -107,9 +138,9 @@ export default class Docker extends React.Component {
             type="text"
             id="docker.dockerCmd"
             className="final-command"
-            disabled={!dockerEnabled || this.state.selection === 'id'}
+            disabled={!dockerEnabled || !docker.createNew}
             value={this.state.finalCmd}
-            onChange={onPathEntered}
+            onChange={this.changeFinalCommand}
           />
         </div>
       </div>
