@@ -127,7 +127,6 @@ export default class Paths extends React.Component {
           <Docker
             dockerEnabled={settings.dockerEnabled}
             onPathEntered={this.onPathEntered}
-            settings={this.props.settings}
             updateValue={this.props.updateValue}
             docker={this.props.settings.docker}
           />

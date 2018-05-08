@@ -100,7 +100,7 @@ export default class Store {
     },
     null,
     {
-      deep: false
+      deep: true
     }
   );
 
