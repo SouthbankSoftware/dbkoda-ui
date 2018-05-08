@@ -413,6 +413,12 @@ export default class Store {
 
               this.topConnectionsPanel.bShowExplain = true;
             }
+          } else if (args.error) {
+            this.api.showToaster({
+              message: 'Timeout exceeded while trying to execute explain for selected command.',
+              className: 'danger',
+              iconName: 'pt-icon-thumbs-down'
+            });
           }
         }
       }

@@ -47,7 +47,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
     super(props);
     this.state = {
       bottomSplitPos: window.innerWidth * 0.6 < 600 ? 600 : window.innerWidth * 0.6,
-      topSplitPos: window.innerWidth
+      topSplitPos: window.innerWidth - 61
     };
     this.props.api.getTopConnections();
   }
@@ -59,7 +59,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   }
   @autobind
   handleResize() {
-    this.setState({ topSplitPos: window.innerWidth });
+    this.setState({ topSplitPos: window.innerWidth - 61 });
   }
   @autobind
   updateBottomSplitPos(pos) {
@@ -69,6 +69,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   onConnectionSelection(selectedConnection) {
     this.props.store.topConnectionsPanel.selectedConnection = selectedConnection;
     this.props.store.topConnectionsPanel.operations = selectedConnection.ops;
+    this.props.store.topConnectionsPanel.bShowExplain = false;
   }
   @action.bound
   onOperationSelection(selectedOperation) {
@@ -84,6 +85,9 @@ export default class TopConnectionsPanel extends React.Component<Props> {
     const splitPane2Style = {
       display: 'flex',
       flexDirection: 'column'
+    };
+    const bottomPane2Style = {
+      width: this.state.topSplitPos - this.state.bottomSplitPos + 'px'
     };
     const { topConnectionsPanel } = this.props.store;
     const { selectedOperation } = topConnectionsPanel;
@@ -105,7 +109,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
           <div className="connectionList">
             <ConnectionsView
               onSelect={this.onConnectionSelection}
-              tableWidth={this.state.topSplitPos - 61}
+              tableWidth={this.state.topSplitPos}
             />
           </div>
           <SplitPane
@@ -124,6 +128,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
               onDragFinished={this.updateBottomSplitPos}
               minSize={600}
               maxSize={1200}
+              pane2Style={bottomPane2Style}
             >
               <div className="operationList">
                 <OperationsView
@@ -136,9 +141,10 @@ export default class TopConnectionsPanel extends React.Component<Props> {
               </div>
             </SplitPane>
             <div>
-              {topConnectionsPanel.bShowExplain && (
-                <ExplainView execStats={selectedOperation.execStats} />
-              )}
+              {topConnectionsPanel.bShowExplain &&
+                selectedOperation.execStats && (
+                  <ExplainView execStats={selectedOperation.execStats} />
+                )}
             </div>
           </SplitPane>
         </SplitPane>

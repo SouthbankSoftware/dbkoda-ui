@@ -140,6 +140,11 @@ export default class TopConnections {
         })
         .catch(err => {
           this._handleError(profileId, err);
+          this.api.sendMsgToPerformanceWindow({
+            profileId,
+            command: 'mw_explainForOperation',
+            error: err
+          });
         });
     }
   };
