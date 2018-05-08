@@ -3,7 +3,7 @@
  * @Date:   2017-08-02T10:00:30+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-25T15:00:08+10:00
+ * @Last modified time: 2018-05-08T16:44:26+10:00
  */
 
 /*
@@ -28,7 +28,6 @@
 
 import React from 'react';
 import StorageSunburstView from '#/common/SunburstView';
-import { SyncService } from '#/common/SyncService';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Broker, EventType } from '~/helpers/broker';
@@ -39,7 +38,12 @@ import './Panel.scss';
 // Raw tree data
 // const data = require('./data-guy.json');
 
-@inject('store')
+@inject(({ store, api }) => {
+  return {
+    store,
+    api
+  };
+})
 @observer
 export default class StoragePanel extends React.Component {
   constructor(props) {
@@ -49,34 +53,25 @@ export default class StoragePanel extends React.Component {
       data: {},
       selectedNode: null
     };
-    this.loadData = this.loadData.bind(this);
+
     Broker.emit(EventType.FEATURE_USE, 'StorageView');
     this.loadData();
   }
-  @action
+  @action.bound
   loadData() {
-    const selectedProfile = this.props.store.profileList.selectedProfile;
-    if (!selectedProfile || (selectedProfile && selectedProfile.status != 'OPEN')) {
-      this.props.store.profileList.selectedProfile.storageView.visible = false;
-      return;
-    }
-    const editorId = this.props.store.editorPanel.activeEditorId;
-    if (editorId) {
-      this.showLoading(true);
-      const editor = this.props.store.editors.get(editorId);
-      SyncService.executeQuery('dbe.storageAnalysis()', editor.shellId, editor.profileId)
-        .then(res => {
-          try {
-            this.setStorageData(res);
-            this.storageData = res;
-          } catch (err) {
-            this.updateMsg('Unable to parse response from the query. ' + err.message);
-          }
-        })
-        .catch(reason => {
-          this.updateMsg('Error in SyncService: ' + reason);
-        });
-    }
+    this.showLoading(true);
+    this.props.api
+      .getStorageData(this.props.profileId, this.props.shellId)
+      .then(res => {
+        try {
+          this.setStorageData(res);
+        } catch (err) {
+          this.updateMsg('Unable to parse response from the query. ' + err.message);
+        }
+      })
+      .catch(reason => {
+        this.updateMsg('Error in SyncService: ' + reason);
+      });
   }
   setStorageData(data) {
     const newData = data;
@@ -87,39 +82,33 @@ export default class StoragePanel extends React.Component {
     this.showLoading(false);
     this.showView(true);
   }
+  @action.bound
   loadChildData(db, col, nodeData) {
-    return new Promise((resolve, reject) => {
-      const editorId = this.props.store.editorPanel.activeEditorId;
-      if (editorId) {
-        this.showLoading(true);
-        const editor = this.props.store.editors.get(editorId);
-        SyncService.executeQuery(
-          'dbe.collectionStorageAnalysis("' + db + '", "' + col + '" , 1000)',
-          editor.shellId,
-          editor.profileId
-        )
-          .then(res => {
-            try {
-              this.showLoading(false);
-              if (!nodeData.children) {
-                nodeData.children = res;
-                if (this.getChildrenSize(nodeData) > 0) {
-                  nodeData.size = 0;
-                }
-                this.addParent(nodeData);
+    return new Promise(resolve => {
+      this.showLoading(true);
+      this.props.api
+        .getChildStorageData(this.props.profileId, this.props.shellId, db, col)
+        .then(res => {
+          try {
+            this.showLoading(false);
+            if (!nodeData.children) {
+              nodeData.children = res;
+              if (this.getChildrenSize(nodeData) > 0) {
+                nodeData.size = 0;
               }
-              resolve(true);
-            } catch (err) {
-              reject('Unable to parse response from the query. ' + err.message);
+              this.addParent(nodeData);
             }
-          })
-          .catch(reason => {
-            reject('Error in SyncService: ' + reason);
-          });
-      }
+            resolve(true);
+          } catch (err) {
+            this.updateMsg('Unable to parse response from the query. ' + err.message);
+          }
+        })
+        .catch(reason => {
+          this.updateMsg('Error in SyncService: ' + reason);
+        });
     });
   }
-  storageData; // Keeps original storage Data to revert to from child node.
+
   childData;
   @observable msg = 'Loading Storage View...';
   @observable bLoading = false;
@@ -199,18 +188,14 @@ export default class StoragePanel extends React.Component {
       nodeData.parent.parent.parent.name == 'total' &&
       !nodeData.children
     ) {
-      this.loadChildData(nodeData.parent.parent.name, nodeData.parent.name, nodeData)
-        .then(res => {
-          if (res) {
-            this.forceUpdate();
-          }
-          // this.setState({
-          //   data: resNodeData,
-          // });
-        })
-        .catch(reason => {
-          this.updateMsg(reason);
-        });
+      this.loadChildData(nodeData.parent.parent.name, nodeData.parent.name, nodeData).then(res => {
+        if (res) {
+          this.forceUpdate();
+        }
+        // this.setState({
+        //   data: resNodeData,
+        // });
+      });
     }
   };
 

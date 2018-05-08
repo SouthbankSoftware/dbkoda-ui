@@ -3,7 +3,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-17T16:34:36+10:00
+ * @Last modified time: 2018-05-08T16:40:01+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -36,6 +36,7 @@ import DrillApi from './Drill';
 import PasswordApi from './Password';
 import TopConnectionsApi from './TopConnections';
 import ProfilingApi from './Profiling';
+import StorageDrilldownApi from './StorageDrilldown';
 
 export default class DataCenter {
   store;
@@ -58,6 +59,7 @@ export default class DataCenter {
     this.passwordApi = new PasswordApi(store, this, config);
     this.topConnectionsApi = new TopConnectionsApi(store, this);
     this.profilingApi = new ProfilingApi(store, this);
+    this.storageDrilldownApi = new StorageDrilldownApi(store, this);
 
     this.init = this.init.bind(this);
 
@@ -70,6 +72,9 @@ export default class DataCenter {
     this.swapOutputShellConnection = this.outputApi.swapOutputShellConnection.bind(this);
     this.addDrillOutput = this.outputApi.addDrillOutput.bind(this);
     this.drillOutputAvailable = this.outputApi.drillOutputAvailable.bind(this);
+
+    // StorageDrilldown public APIs
+    _.assign(this, _.pick(this.storageDrilldownApi, ['getStorageData', 'getChildStorageData']));
 
     // TopConnections public APIs
     _.assign(
