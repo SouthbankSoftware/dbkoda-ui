@@ -383,9 +383,9 @@
           "metricSmoothingWindow": "Metric moving average (number of samples)",
           "foregroundSamplingRate": "Foreground sampling rate (ms)",
           "backgroundSamplingRate": "Background sampling rate (ms)",
-          "historySize": "History size (number of samples). (Panel restart required)",
-          "historyBrushSize": "History default brush size. (Panel restart required)",
-          "alarmDisplayingWindow": "Alarm keepalive (ms). (Panel restart required)"
+          "historySize": "History size (number of samples)",
+          "historyBrushSize": "History default brush size",
+          "alarmDisplayingWindow": "Alarm keepalive (ms)"
         },
         "mongoCmd": "Mongo Binary Path",
         "drillCmd": "Apache Drill Path",
