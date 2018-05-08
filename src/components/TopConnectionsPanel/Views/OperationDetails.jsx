@@ -101,6 +101,8 @@ export default class OperationDetails extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.operation) {
       this.setState({ code: JSON.stringify(nextProps.operation, null, 2) });
+    } else {
+      this.setState({ code: '' });
     }
   }
   @action.bound

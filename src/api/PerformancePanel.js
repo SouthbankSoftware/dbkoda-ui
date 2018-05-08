@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-04-20T17:10:58+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-07T17:09:11+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -653,11 +653,9 @@ export default class PerformancePanelApi {
     if (args.profileId) {
       if (args.command === 'pw_windowReady') {
         const performancePanel = performancePanels.get(args.profileId);
-        const configObj = this.store.config;
         this.sendMsgToPerformanceWindow({
           command: 'mw_initData',
           profileId: args.profileId,
-          configObject: dump(configObj, { serializer }),
           dataObject: dump(performancePanel, { serializer })
         });
         this.externalPerformanceWindows.set(args.profileId, {
