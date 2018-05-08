@@ -77,6 +77,7 @@ class PerformanceWindow extends React.Component {
     console.log(event);
     document.removeEventListener('visibilitychange', this._handleVisibilityChange);
     this.props.api.sendCommandToMainProcess('pw_windowReload');
+    this.props.api.closeShell();
   }
 
   @action.bound

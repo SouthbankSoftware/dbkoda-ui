@@ -31,6 +31,8 @@ import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
 import { ProfilingConstants, NavPanes } from '#/common/Constants';
 import { handleNewData, attachToMobx } from '~/api/PerformancePanel';
 import { setUser, toggleRaygun } from '~/helpers/loggingApi';
+import { featherClient } from '../../helpers/feathers';
+import { Broker, EventType } from '../../helpers/broker';
 
 global.config = {
   settings: null
@@ -63,11 +65,46 @@ class PerformanceWindowApi {
   store = null;
   constructor(store) {
     this.store = store;
+    Broker.on(EventType.FEATHER_CLIENT_LOADED, () => {
+      this.featherClientLoaded = true;
+      this.createNewShell(this.profileId);
+    });
   }
   profileId = null;
   setProfileId(id) {
     this.profileId = id;
   }
+
+  @action.bound
+  createNewShell(profileId) {
+    const { shellService } = featherClient();
+    if (!shellService || !profileId) {
+      return;
+    }
+    shellService.timeout = 30000;
+    shellService
+      .create({ id: profileId })
+      .then(res => {
+        console.log('create new shell ', res);
+        this.shellId = res.shellId;
+      })
+      .catch(err => {
+        l.error(err);
+      });
+  }
+
+  @action.bound
+  closeShell() {
+    const { shellService } = featherClient();
+    if (!shellService || !this.profileId) {
+      return;
+    }
+    shellService
+      .remove({ id: this.profileId, query: { shellId: this.shellId } })
+      .then(e => l.info('close shell ', e))
+      .catch(err => l.error(err));
+  }
+
   @action.bound
   sendCommandToMainProcess = (command, params) => {
     if (IS_ELECTRON) {
@@ -217,9 +254,7 @@ class PerformanceWindowApi {
   @action.bound
   setProfilingDatabaseConfiguration = configs => {
     console.log('send profiling database configuration ', configs);
-    this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', {
-      configs
-    });
+    this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', { configs });
   };
 
   @action.bound
@@ -263,10 +298,7 @@ export default class Store {
     { deep: false }
   );
 
-  @observable
-  drawer = observable({
-    activeNavPane: NavPanes.PERFORMANCE
-  });
+  @observable drawer = observable({ activeNavPane: NavPanes.PERFORMANCE });
 
   toasterCallback = null;
   errorHandler = null;
@@ -292,6 +324,7 @@ export default class Store {
   handleDataSync = (event, args) => {
     if (args.command === 'mw_setProfileId') {
       this.setProfileId(args.profileId);
+      this.api.createNewShell(args.profileId);
       this.api.sendCommandToMainProcess('pw_windowReady');
     } else {
       if (!this.profileId && args.profileId) {
@@ -299,10 +332,7 @@ export default class Store {
       }
       if (this.profileId === args.profileId) {
         if (args.command === 'mw_initData') {
-          this.performancePanel = restore(args.dataObject, {
-            deserializer,
-            postDeserializer
-          });
+          this.performancePanel = restore(args.dataObject, { deserializer, postDeserializer });
 
           if (IS_ELECTRON) {
             const { remote } = window.require('electron');
@@ -362,9 +392,8 @@ export default class Store {
             if (args.payload instanceof Array) {
               // Transform data for ID field.
               args.payload.forEach(opEntry => {
-                // const keys = Object.keys(opEntry);
-                // const op = opEntry[keys[0]];
-                // op.id = keys[0];
+                // const keys = Object.keys(opEntry); const op = opEntry[keys[0]]; op.id =
+                // keys[0];
                 opsArray.push(opEntry);
               });
             } else {

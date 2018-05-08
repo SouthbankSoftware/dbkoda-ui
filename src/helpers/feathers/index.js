@@ -149,6 +149,7 @@ export const featherClient = () => {
 let times = 0;
 const loadPrimus = () => {
   load(url + '/dist/primus.js', err => {
+    l.info('load primus ', err, url);
     if (!err) {
       const primus = new window.Primus(url, {
         strategy: ['online', 'timeout', 'disconnect']
