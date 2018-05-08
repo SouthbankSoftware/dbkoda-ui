@@ -43,10 +43,10 @@ export const SimpleQuery = {
     data.UseOr = false;
     data.IncludeProjection = true;
     data.Projections = [];
-    data.Projections.push({});
-    data.Projections.push({ AttributeName: '_id', AttributeProjectionValue: 0 });
+    // data.Projections.push({});
+    // data.Projections.push({ AttributeName: '_id', AttributeProjectionValue: 0 });
     data.FilterKeys = [];
-    data.FilterKeys.push({ AttributeName: '_id', Operator: '$eq', Value: '""' });
+    // data.FilterKeys.push({ AttributeName: '_id', Operator: '$eq', Value: '""' });
     data.Sort = false;
     data.Count = false;
     return data;

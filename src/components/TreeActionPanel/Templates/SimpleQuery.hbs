@@ -1,7 +1,11 @@
 db.getSiblingDB("{{{Database}}}").getCollection("{{{CollectionName}}}").find(
-  { {{#if FilterKeys}} {{#if UseOr}}"$or"{{else}}"$and"{{/if}}:[
-        {{#each FilterKeys}} { "{{{AttributeName}}}":{ {{{Operator}}}:{{{Value}}} } } {{#unless last}},{{/unless}}
-        {{/each}}] {{/if}} },
+     { {{#if FilterKeys}} {{#if UseOr}} "$or":[ {{/if~}}
+        {{#each FilterKeys}} {{#if UseOr}} { {{/if}} "{{{AttributeName}}}":{ {{{Operator}}}:{{{Value}}} }
+        {{#if UseOr}} } {{/if}}
+        {{#unless last}},{{/unless}}
+        {{/each}}
+        {{#if UseOr}} ] {{/if~}}
+  {{/if}} },
      { {{#each Projections}}{{#if AttributeName}} "{{{AttributeName}}}":{{{AttributeProjectionValue}}} {{/if}}{{#unless last}},{{/unless}} {{/each}} })
     {{~#if SortKeys}}.sort({
     {{~#each SortKeys}} "{{{AttributeName}}}":{{{Direction}}}{{#unless last}},{{/unless}}{{/each}} }){{/if}}

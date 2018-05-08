@@ -154,8 +154,10 @@
     },
     {
       "name": "Limit",
+      "label": "Limit (0=No limit)",
       "tooltip": "Limit on number of rows returned",
       "type": "Numeric",
+      "default": 10,
       "rules": "integer"
     },
     {
