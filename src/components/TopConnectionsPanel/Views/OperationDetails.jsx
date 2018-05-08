@@ -75,7 +75,7 @@ export default class OperationDetails extends React.Component {
       // lineNumbers: 'false',
       indentUnit: 2,
       styleActiveLine: 'true',
-      scrollbarStyle: null,
+      // scrollbarStyle: null,
       smartIndent: true,
       styleSelectedText: false,
       tabSize: 2,

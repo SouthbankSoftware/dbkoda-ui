@@ -5,7 +5,7 @@
  * @Date:   2018-05-04T10:41:36+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-07T17:48:17+10:00
+ * @Last modified time: 2018-05-08T14:58:32+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -103,6 +103,32 @@ const initRaygun = (manualBoot = true) => {
   manualBoot && global.rg4js('boot');
 };
 
+export const infoSymbol = Symbol.for('info');
+
+const attachGlobalErrorEvents = () => {
+  window.onerror = (message, _source, _lineno, _colno, error) => {
+    l.error(error || message, {
+      // $FlowFixMe
+      [infoSymbol]: {
+        tags: ['unhandled-exception']
+      }
+    });
+
+    return true;
+  };
+
+  window.onunhandledrejection = event => {
+    event.preventDefault();
+
+    l.error(event.reason, {
+      // $FlowFixMe
+      [infoSymbol]: {
+        tags: ['unhandled-rejection']
+      }
+    });
+  };
+};
+
 export const toggleRaygun = (enabled: boolean, manualBoot: boolean = true) => {
   if (enabled) {
     isRaygunEnabled = true;
@@ -115,8 +141,6 @@ export const toggleRaygun = (enabled: boolean, manualBoot: boolean = true) => {
     isRaygunEnabled = false;
   }
 };
-
-export const infoSymbol = Symbol.for('info');
 
 export const initLoggingApi = (tags: string[]) => {
   defaultPiggybackTags = tags.slice();
@@ -202,25 +226,40 @@ export const initLoggingApi = (tags: string[]) => {
         // $FlowFixMe
         console._error(info.error);
 
+        const usePiggyback = !isRaygunEnabled && info.raygun !== false;
+
+        if (usePiggyback) {
+          if (info.tags) {
+            info.tags = [...defaultPiggybackTags, ...info.tags];
+          } else {
+            info.tags = defaultPiggybackTags;
+          }
+        }
+
         // piggyback error via main (dbkoda)
         logToMain('error', info.error.message, {
-          tags: !isRaygunEnabled && info.raygun !== false ? defaultPiggybackTags : undefined,
-          stack: info.error.stack
+          usePiggyback,
+          stack: info.error.stack,
+          info: usePiggyback ? _.omit(info, ['message', 'error']) : undefined
         });
 
         if (isRaygunEnabled && info.raygun !== false) {
           sendError(info.error, info);
         }
+      } else if (k === 'warn') {
+        console.warn(...args);
+
+        logToMain('warn', util.format(...args));
       } else if (k === 'notice') {
         console.log('%cNotice: ', 'color: green', ...args);
+
+        logToMain('notice', util.format(...args));
+      } else if (k === 'info') {
+        console.log(...args);
       } else if (k === 'debug') {
         if (!IS_PRODUCTION) {
           console.log('%cDebug: ', 'color: blue', ...args);
         }
-      } else if (k === 'info') {
-        console.log(...args);
-      } else {
-        console[k](...args);
       }
     };
   });
@@ -232,4 +271,6 @@ export const initLoggingApi = (tags: string[]) => {
 
   // $FlowFixMe
   console.error = l.error;
+
+  attachGlobalErrorEvents();
 };

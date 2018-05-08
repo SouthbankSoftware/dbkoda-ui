@@ -35,6 +35,11 @@ import DocumentsIcon from '../../styles/icons/documents-icon.svg';
 }))
 @observer
 export default class CreateViewButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props.store.aggregateBuilder.includeCreateView = false;
+  }
+
   @action.bound
   openViewNameDialog() {
     this.props.store.aggregateBuilder.showViewNameDialog = true;

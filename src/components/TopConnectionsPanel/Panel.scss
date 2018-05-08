@@ -31,6 +31,7 @@
 
 .BottomSplitPane {
   height: 100%;
+  width: 100%;
 }
 
 .BottomSplitPane > .Pane2 {
@@ -296,6 +297,7 @@
 
 .ResetButton {
   align-self: center;
+  margin-left: 40px;
   margin-right: 40px;
   height: 22px;
   border-bottom: unset !important;
@@ -324,6 +326,36 @@
 
   button.top-con-button {
     width: 10em !important;
+  }
+}
+.Switch {
+  display: flex;
+  flex-direction: row;
+
+  .switchLabel {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+
+  .pt-switch {
+    font-size: 10pt;
+    font-weight: lighter;
+    color: $connectionHeadingsFontColour !important;
+    text-align: left;
+    margin: 0;
+    margin-left: 12px;
+  }
+}
+.NumericInput {
+  width: 80px;
+  margin-left: 8px;
+  margin-right: 8px;
+  .pt-input-group {
+    width: calc(100% - 30px);
+    .pt-input {
+      background-color: $selectDarkPrimaryBackground !important;
+      color: $buttonPrimaryBackground !important;
+    }
   }
 }
 

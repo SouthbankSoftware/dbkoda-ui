@@ -389,9 +389,19 @@
         },
         "mongoCmd": "Mongo Binary Path",
         "drillCmd": "Apache Drill Path",
+        "docker-image-name": "Docker Image Name",
+        "docker-container-id": "Docker Container ID",
+        "docker-volume": "Mount Volume",
+        "docker-cmd": "Mongo Command",
         "drillControllerCmd": "Drill Controller Path",
         "passwordStoreEnabled": "Password Store Enabled",
         "applyButton": "Apply",
+        "docker-placeholder": {
+          "image": "Docker Image Name",
+          "container-id": "Docker Container ID",
+          "host-path": "Path in the host",
+          "container-path": "Path in the container"
+        },
         "remove_store_dialog": {
           "question": "Are you sure you would like to disable the password store?",
           "qualifier":

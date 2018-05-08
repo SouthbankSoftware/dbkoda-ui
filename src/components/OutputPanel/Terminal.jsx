@@ -333,21 +333,15 @@ class Terminal extends React.Component {
       this.props.store.editorPanel.stoppingExecution = false;
       // Open Table view if default table setting is on
       if (this.props.config.settings.tableOutputDefault) {
-        console.log('Open table view!');
         const lineNumber = this.props.store.outputs.get(activeEditorId).currentExecStartLine;
         const editor = this.props.store.outputPanel.editorRefs[activeEditorId];
         const cm = editor.getCodeMirror();
         const lines = { start: 0, end: 0, status: '' };
-        // const currentJson = this.props.api.outputApi.getCurrentResultSet();
         const currentJson = this.props.getDocumentAtLine(
           this.props.store.editorPanel.activeEditorId,
           lineNumber,
           1,
           lines
-        );
-        console.log('Current JSON: ' + currentJson);
-        console.log(
-          `initJsonView(${currentJson}, ${activeEditorId}, 'tableJson', ${lines}, ${editor}, false, true)`
         );
         this.props.api.initJsonView(
           currentJson,

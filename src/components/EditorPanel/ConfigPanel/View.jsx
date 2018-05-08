@@ -69,7 +69,6 @@ export default class View extends React.Component {
   updateValue(configPath, nextValue) {
     const { settings } = this.props.config;
     const { changedFields, newSettings } = this.props.store.configPage;
-
     _.set(newSettings, configPath, nextValue);
     // update changedFields
     const oldValue = _.get(settings, configPath);
@@ -81,6 +80,7 @@ export default class View extends React.Component {
       // changed, add to changedFields
       changedFields.push(configPath);
     }
+    // this.setState({newSettings});
   }
 
   applyChanges = () => {
@@ -172,6 +172,7 @@ export default class View extends React.Component {
   };
 
   render() {
+    console.log('new seetings ', this.props.store.configPage.newSettings);
     return (
       <div className="configPanelTabWrapper">
         <div className="configPanelWrapper">

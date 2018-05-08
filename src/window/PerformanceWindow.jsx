@@ -48,7 +48,8 @@ import ProfileConfiguration from '../components/ProfileConfiguration';
 import Status from '../components/PerformancePanel/Status';
 
 @inject(allStores => ({
-  store: allStores.store
+  store: allStores.store,
+  api: allStores.store.api
 }))
 @observer
 class PerformanceWindow extends React.Component {
@@ -61,8 +62,6 @@ class PerformanceWindow extends React.Component {
       bProfiling: true
     };
 
-    document.addEventListener('visibilitychange', this._handleVisibilityChange, false);
-
     window.onbeforeunload = this._handleNavigatingAway;
   }
 
@@ -70,12 +69,14 @@ class PerformanceWindow extends React.Component {
     const { store } = this.props;
     store.toasterCallback = this._showToasterFromMainWindow;
     store.errorHandler = this._errorHandler;
+    document.addEventListener('visibilitychange', this._handleVisibilityChange, false);
   }
 
   @action.bound
   _handleNavigatingAway(event) {
     console.log(event);
-    this.props.store.sendCommandToMainProcess('pw_windowReload');
+    document.removeEventListener('visibilitychange', this._handleVisibilityChange);
+    this.props.api.sendCommandToMainProcess('pw_windowReload');
   }
 
   @action.bound

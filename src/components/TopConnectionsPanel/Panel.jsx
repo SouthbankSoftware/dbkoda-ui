@@ -43,13 +43,16 @@ import './Panel.scss';
 }))
 @observer
 export default class TopConnectionsPanel extends React.Component<Props> {
+  timeoutUpdateId = null;
   constructor(props) {
     super(props);
     this.state = {
+      autoRefreshTopCon: true,
+      autoRefreshTimeout: 30,
       bottomSplitPos: window.innerWidth * 0.6 < 600 ? 600 : window.innerWidth * 0.6,
-      topSplitPos: window.innerWidth
+      topSplitPos: window.innerWidth - 61
     };
-    this.props.api.getTopConnections();
+    this.updateTopConnections();
   }
   componentDidMount() {
     window.addEventListener('resize', debounce(this.handleResize, 400));
@@ -57,19 +60,32 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
   }
+
+  @autobind
+  updateTopConnections() {
+    this.props.api.getTopConnections();
+    if (this.state.autoRefreshTopCon && this.state.autoRefreshTimeout > 0) {
+      this.setTimerForUpdate();
+    }
+  }
+
   @autobind
   handleResize() {
-    this.setState({ topSplitPos: window.innerWidth });
+    this.setState({ topSplitPos: window.innerWidth - 61 });
   }
+
   @autobind
   updateBottomSplitPos(pos) {
     this.setState({ bottomSplitPos: pos });
   }
+
   @action.bound
   onConnectionSelection(selectedConnection) {
     this.props.store.topConnectionsPanel.selectedConnection = selectedConnection;
     this.props.store.topConnectionsPanel.operations = selectedConnection.ops;
+    this.props.store.topConnectionsPanel.bShowExplain = false;
   }
+
   @action.bound
   onOperationSelection(selectedOperation) {
     this.props.store.topConnectionsPanel.selectedOperation = selectedOperation;
@@ -80,10 +96,51 @@ export default class TopConnectionsPanel extends React.Component<Props> {
       this.props.store.topConnectionsPanel.bShowExplain = true;
     }
   }
+
+  @autobind
+  setTimerForUpdate() {
+    if (this.timeoutUpdateId) {
+      clearTimeout(this.timeoutUpdateId);
+      this.timeoutUpdateId = null;
+    }
+    this.timeoutUpdateId = setTimeout(
+      this.updateTopConnections,
+      this.state.autoRefreshTimeout * 1000
+    );
+  }
+
+  @autobind
+  onAutoRefreshCheckboxToggle(e) {
+    const fieldValue = e.target.checked;
+    const fieldName = e.target.id;
+    console.log(fieldName, ':', fieldValue);
+    this.setState({ autoRefreshTopCon: fieldValue });
+    if (fieldValue && this.state.autoRefreshTimeout > 0) {
+      this.setTimerForUpdate();
+    }
+    if (!fieldValue && this.timeoutUpdateId) {
+      clearTimeout(this.timeoutUpdateId);
+      this.timeoutUpdateId = null;
+    }
+    // this.props.updateValue(fieldName, fieldValue);
+  }
+
+  @autobind
+  onAutoRefreshTimeoutChange(value) {
+    console.log('onAutoRefreshTimeoutChange:', value);
+    this.setState({ autoRefreshTimeout: value });
+    if (value > 0 && this.state.autoRefreshTopCon) {
+      this.setTimerForUpdate();
+    }
+  }
+
   render() {
     const splitPane2Style = {
       display: 'flex',
       flexDirection: 'column'
+    };
+    const bottomPane2Style = {
+      width: this.state.topSplitPos - this.state.bottomSplitPos + 'px'
     };
     const { topConnectionsPanel } = this.props.store;
     const { selectedOperation } = topConnectionsPanel;
@@ -105,7 +162,11 @@ export default class TopConnectionsPanel extends React.Component<Props> {
           <div className="connectionList">
             <ConnectionsView
               onSelect={this.onConnectionSelection}
-              tableWidth={this.state.topSplitPos - 61}
+              tableWidth={this.state.topSplitPos}
+              autoRefreshTopCon={this.state.autoRefreshTopCon}
+              onAutoRefreshCheckboxToggle={this.onAutoRefreshCheckboxToggle}
+              autoRefreshTimeout={this.state.autoRefreshTimeout}
+              onAutoRefreshTimeoutChange={this.onAutoRefreshTimeoutChange}
             />
           </div>
           <SplitPane
@@ -124,6 +185,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
               onDragFinished={this.updateBottomSplitPos}
               minSize={600}
               maxSize={1200}
+              pane2Style={bottomPane2Style}
             >
               <div className="operationList">
                 <OperationsView
@@ -136,9 +198,10 @@ export default class TopConnectionsPanel extends React.Component<Props> {
               </div>
             </SplitPane>
             <div>
-              {topConnectionsPanel.bShowExplain && (
-                <ExplainView execStats={selectedOperation.execStats} />
-              )}
+              {topConnectionsPanel.bShowExplain &&
+                selectedOperation.execStats && (
+                  <ExplainView execStats={selectedOperation.execStats} />
+                )}
             </div>
           </SplitPane>
         </SplitPane>
