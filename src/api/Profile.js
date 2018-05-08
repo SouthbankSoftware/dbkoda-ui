@@ -224,6 +224,7 @@ export default class ProfileApi {
       .catch(err => {
         runInAction('Turn off loading spinner in dialog.', () => {
           this.store.layout.alertIsLoading = false;
+          selectedProfile.status = ProfileStatus.CLOSED;
         });
         console.error(err);
         logToMain('error', 'Failed to add SSH Terminal: ' + err);
