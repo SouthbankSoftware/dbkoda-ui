@@ -3,7 +3,7 @@
  * @Date:   2017-07-13T10:36:10+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-04T14:06:51+10:00
+ * @Last modified time: 2018-05-08T11:31:23+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,6 +32,7 @@ import * as mobx from 'mobx';
 import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
 import { AppContainer } from 'react-hot-loader';
+import ErrorBoundary from '#/common/ErrorBoundary';
 import { Broker, EventType } from './helpers/broker';
 import App from './components/App';
 
@@ -58,7 +59,9 @@ const renderApp = () => {
           config={store.config}
           profileStore={store.profileStore}
         >
-          <Component />
+          <ErrorBoundary emitCrashEvent>
+            <Component />
+          </ErrorBoundary>
         </Provider>
       </AppContainer>,
       rootEl

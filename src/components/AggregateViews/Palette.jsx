@@ -229,7 +229,11 @@ export default class Palette extends React.Component {
         dataObj[5].childNodes.push({
           id: index,
           label: (
-            <Tooltip content={BlockTypes[keyName].description}>
+            <Tooltip
+              content={BlockTypes[keyName].description}
+              hoverOpenDelay={2000}
+              position={Position.right}
+            >
               <Block
                 key={'key-' + index} //eslint-disable-line
                 listPosition={index}
@@ -245,7 +249,11 @@ export default class Palette extends React.Component {
           groupsArray[group].push({
             id: index,
             label: (
-              <Tooltip content={BlockTypes[keyName].description} position={Position.right}>
+              <Tooltip
+                content={BlockTypes[keyName].description}
+                position={Position.right}
+                hoverOpenDelay={2000}
+              >
                 <Block
                   key={'key-' + index} //eslint-disable-line
                   listPosition={index}

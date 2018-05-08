@@ -107,6 +107,7 @@
       border-radius: 0;
       border-style: none;
       box-shadow: none;
+
       // background-color: $fieldBrightBackgroundColor !important;
       // color: $fieldBrightFontColor !important;
     }
@@ -393,11 +394,13 @@
   .pt-tooltip-indicator-form {
     border-bottom: none !important;
     vertical-align: middle !important;
+    width: 100%;
   }
 
   .pt-form-content-reverse {
     display: flex;
     width: 100%;
+
     /*flex-direction: row-reverse;*/
   }
 
