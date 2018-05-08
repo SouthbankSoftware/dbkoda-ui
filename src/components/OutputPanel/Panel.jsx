@@ -4,8 +4,8 @@
  * @Author: Chris Trott <christrott>
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-04-24T16:41:32+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-08T16:30:46+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -519,27 +519,31 @@ export default class Panel extends React.Component<Props> {
 
     const { selectedProfile } = this.props.store.profileList;
 
-    if (selectedProfile) {
+    if (selectedProfile && selectedProfile.status === 'OPEN') {
       if (selectedProfile.storageView && selectedProfile.storageView.visible) {
-        tabs.push(
-          <Tab
-            className="visible"
-            key={'Storage-' + selectedProfile.id}
-            id={'Storage-' + selectedProfile.id}
-            title={'Storage-' + selectedProfile.alias}
-            panel={<StoragePanel />}
-          >
-            <Button className="pt-minimal" onClick={() => this.closeStorageView()}>
-              <span className="pt-icon-cross" />
-            </Button>
-          </Tab>
-        );
+        const editorId = this.props.store.editorPanel.activeEditorId;
+        if (editorId) {
+          const editor = this.props.store.editors.get(editorId);
+          tabs.push(
+            <Tab
+              className="visible"
+              key={'Storage-' + selectedProfile.id}
+              id={'Storage-' + selectedProfile.id}
+              title={'Storage-' + selectedProfile.alias}
+              panel={<StoragePanel profileId={editor.profileId} shellId={editor.shellId} />}
+            >
+              <Button className="pt-minimal" onClick={() => this.closeStorageView()}>
+                <span className="pt-icon-cross" />
+              </Button>
+            </Tab>
+          );
 
-        if (selectedProfile.storageView.shouldFocus) {
-          runInAction(() => {
-            this.props.store.outputPanel.currentTab = 'Storage-' + selectedProfile.id;
-            this.props.store.profileList.selectedProfile.storageView.shouldFocus = false;
-          });
+          if (selectedProfile.storageView.shouldFocus) {
+            runInAction(() => {
+              this.props.store.outputPanel.currentTab = 'Storage-' + selectedProfile.id;
+              this.props.store.profileList.selectedProfile.storageView.shouldFocus = false;
+            });
+          }
         }
       }
     }
