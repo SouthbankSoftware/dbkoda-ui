@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-04T23:20:43+10:00
+ * @Last modified time: 2018-05-07T14:18:38+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,6 +29,7 @@ global.IS_PRODUCTION = process.env.NODE_ENV === 'production';
 global.IS_DEVELOPMENT = !IS_PRODUCTION;
 global.IS_TEST = process.env.NODE_ENV === 'test';
 global.IS_ELECTRON = _.has(window, 'process.versions.electron');
+global.WINDOW_NAME = window.location.pathname === '/ui/' ? 'main' : 'performance';
 
 if (IS_ELECTRON) {
   const { remote } = window.require('electron');
@@ -46,12 +47,9 @@ global.sendToMain = (channel, ...args) => {
   }
 };
 
-global.logToMain = (level, message) => global.sendToMain('log', level, message);
+global.logToMain = (level, message, options) => global.sendToMain('log', level, message, options);
 
-initLoggingApi([
-  'dbkoda-ui',
-  window.location.pathname === '/ui/' ? 'main window' : 'performance window'
-]);
+initLoggingApi(['dbkoda-ui', `window-${global.WINDOW_NAME}`]);
 
 if (!IS_TEST) {
   const Globalize = require('globalize'); // doesn't work well with import

@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-04T14:22:55+10:00
+ * @Last modified time: 2018-05-07T17:48:33+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,20 +30,34 @@ import { restore } from 'dumpenvy';
 import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
 import { ProfilingConstants, NavPanes } from '#/common/Constants';
 import { handleNewData, attachToMobx } from '~/api/PerformancePanel';
-import { setUser } from '~/helpers/loggingApi';
+import { setUser, toggleRaygun } from '~/helpers/loggingApi';
 
-const electron = window.require('electron');
-const { ipcRenderer } = electron;
+global.config = {
+  settings: null
+};
 
-// const Globalize = require('globalize'); // doesn't work well with import
-// // Globalize Configuration for Performance Window
-// global.Globalize = Globalize;
-// const { language, region } = Globalize.locale().attributes;
-// global.locale = `${language}-${region}`;
-// global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...params);
-// global.globalNumber = (value, config) => Globalize.numberFormatter(config)(value);
+if (IS_ELECTRON) {
+  const { ipcRenderer } = window.require('electron');
 
-global.config = null;
+  global.config.settings = ipcRenderer.sendSync('configQueried');
+  const { user, telemetryEnabled } = global.config.settings;
+  setUser(user);
+  toggleRaygun(telemetryEnabled, false);
+
+  ipcRenderer.on('configChanged', (_event, changed) => {
+    _.forEach(changed, (v, k) => {
+      _.set(global.config.settings, k, v.new);
+    });
+
+    if (_.has(changed, 'user.id')) {
+      setUser(_.get(global.config.settings, 'user'));
+    }
+
+    if (_.has(changed, 'telemetryEnabled')) {
+      toggleRaygun(_.get(global.config.settings, 'telemetryEnabled'));
+    }
+  });
+}
 
 class PerformanceWindowApi {
   store = null;
@@ -56,11 +70,15 @@ class PerformanceWindowApi {
   }
   @action.bound
   sendCommandToMainProcess = (command, params) => {
-    ipcRenderer.send('performance', {
-      command,
-      profileId: this.profileId,
-      ...params
-    });
+    if (IS_ELECTRON) {
+      const { ipcRenderer } = window.require('electron');
+
+      ipcRenderer.send('performance', {
+        command,
+        profileId: this.profileId,
+        ...params
+      });
+    }
   };
 
   @action.bound
@@ -255,7 +273,12 @@ export default class Store {
 
   constructor() {
     this.api = new PerformanceWindowApi(this);
-    ipcRenderer.on('performance', this.handleDataSync);
+
+    if (IS_ELECTRON) {
+      const { ipcRenderer } = window.require('electron');
+
+      ipcRenderer.on('performance', this.handleDataSync);
+    }
   }
   setProfileId(id) {
     this.profileId = id;
@@ -276,18 +299,11 @@ export default class Store {
       }
       if (this.profileId === args.profileId) {
         if (args.command === 'mw_initData') {
-          global.config = this.config = restore(args.configObject, {
-            deserializer,
-            postDeserializer
-          });
-
           this.performancePanel = restore(args.dataObject, {
             deserializer,
             postDeserializer
           });
 
-          // TODO refine this
-          setUser(global.config.settings.user);
           if (IS_ELECTRON) {
             const { remote } = window.require('electron');
 

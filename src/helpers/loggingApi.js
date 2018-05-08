@@ -5,7 +5,7 @@
  * @Date:   2018-05-04T10:41:36+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-04T23:20:22+10:00
+ * @Last modified time: 2018-05-07T17:48:17+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,51 +26,105 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import rg4js from 'raygun4js';
 import _ from 'lodash';
 import util from 'util';
 
-global.rg4js;
+global.rg4js = null;
+export let isRaygunEnabled = false; // eslint-disable-line
+let cachedUserObj;
 
 export const setUser = (user: { id: string }) => {
-  rg4js('setUser', {
+  const userObj = {
     identifier: user.id
-  });
+  };
+
+  if (global.rg4js) {
+    global.rg4js('setUser', userObj);
+  } else {
+    cachedUserObj = userObj;
+  }
 };
 
 export const sendError = (error: Error, options: { customData?: *, tags?: * }) => {
   const { customData, tags } = options || {};
 
-  rg4js('send', {
-    error,
-    customData,
-    tags
+  global.rg4js &&
+    global.rg4js('send', {
+      error,
+      customData,
+      tags
+    });
+};
+
+let defaultTags;
+let defaultPiggybackTags;
+
+const initRaygun = (manualBoot = true) => {
+  global.rg4js = require('raygun4js');
+
+  // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
+  // DefinePlugin. The API_KEY is retrieved automatically from package.json at the building time of
+  // ui bundle
+  // $FlowFixMe
+  global.rg4js('apiKey', API_KEY); // eslint-disable-line no-undef
+  global.rg4js('enablePulse', true);
+  // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
+  // DefinePlugin. The VERSION is retrieved automatically from package.json at the building time of
+  // ui bundle
+  // $FlowFixMe
+  global.rg4js('setVersion', VERSION); // eslint-disable-line no-undef
+  global.rg4js('saveIfOffline', true);
+
+  if (cachedUserObj) {
+    global.rg4js('setUser', cachedUserObj);
+    cachedUserObj = null;
+  } else {
+    setUser({ id: 'beforeConfigLoaded' });
+  }
+
+  global.rg4js('withTags', defaultTags);
+
+  global.rg4js('onBeforeSend', payload => {
+    if (isRaygunEnabled) {
+      return payload;
+    }
+
+    return false;
   });
+
+  global.rg4js('onBeforeSendRUM', payload => {
+    if (isRaygunEnabled) {
+      return payload;
+    }
+
+    return false;
+  });
+
+  manualBoot && global.rg4js('boot');
+};
+
+export const toggleRaygun = (enabled: boolean, manualBoot: boolean = true) => {
+  if (enabled) {
+    isRaygunEnabled = true;
+
+    // lazy init raygun
+    if (!global.rg4js) {
+      initRaygun(manualBoot);
+    }
+  } else {
+    isRaygunEnabled = false;
+  }
 };
 
 export const infoSymbol = Symbol.for('info');
 
-export const initLoggingApi = (defaultTags: string[]) => {
-  if (!IS_TEST) {
-    // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
-    // DefinePlugin. The API_KEY is retrieved automatically from package.json at the building time of
-    // ui bundle
-    // $FlowFixMe
-    rg4js('apiKey', API_KEY); // eslint-disable-line no-undef
-    rg4js('enablePulse', true);
-    // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
-    // DefinePlugin. The VERSION is retrieved automatically from package.json at the building time of
-    // ui bundle
-    // $FlowFixMe
-    rg4js('setVersion', VERSION); // eslint-disable-line no-undef
-    rg4js('saveIfOffline', true);
-    setUser({ id: 'beforeConfigLoaded' });
+export const initLoggingApi = (tags: string[]) => {
+  defaultPiggybackTags = tags.slice();
+  defaultPiggybackTags.push('piggyback');
 
-    defaultTags.push(global.IS_PRODUCTION ? 'prod' : 'dev');
-    global.UAT && defaultTags.push('uat');
-
-    rg4js('withTags', defaultTags);
-  }
+  tags.push(global.IS_PRODUCTION ? 'prod' : 'dev');
+  global.UAT && tags.push('uat');
+  defaultTags = tags;
 
   // $FlowFixMe
   console._error = console.error;
@@ -137,14 +191,24 @@ export const initLoggingApi = (defaultTags: string[]) => {
         if (info.error) {
           // $FlowFixMe
           info.error.message = util.format(...resultsWithErrors);
+          info.error.stack = info.error.stack.replace(
+            /^.*/,
+            `${info.error.constructor.name}: ${info.error.message}`
+          );
         } else if (info.raygun !== false) {
           info.error = new Error(info.message);
         }
 
         // $FlowFixMe
-        console._error(info.message);
-        logToMain('error', info.message);
-        if (info.raygun !== false && !IS_TEST) {
+        console._error(info.error);
+
+        // piggyback error via main (dbkoda)
+        logToMain('error', info.error.message, {
+          tags: !isRaygunEnabled && info.raygun !== false ? defaultPiggybackTags : undefined,
+          stack: info.error.stack
+        });
+
+        if (isRaygunEnabled && info.raygun !== false) {
           sendError(info.error, info);
         }
       } else if (k === 'notice') {
