@@ -19,12 +19,22 @@
     {
       "AttributeName": "d",
       "AttributeProjectionValue": 1
+    },
+    {
+      "AttributeName": "e",
+      "AttributeProjectionValue": 1,
+      "last": 1
     }
   ],
   "SortKeys": [
     {
       "AttributeName": "a",
       "Direction": -1
+    },
+    {
+      "AttributeName": "b",
+      "Direction": -1,
+      "last": 1
     }
   ],
   "Limit": 10,
