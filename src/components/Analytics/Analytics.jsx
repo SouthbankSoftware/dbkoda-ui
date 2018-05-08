@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: chris
+ * @Date:   2017-06-20T15:09:51+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-08T16:55:11+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -17,15 +23,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- * @Author: chris
- * @Date:   2017-06-20T15:09:51+10:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T13:38:08+11:00
- */
 
-import React from 'react';
+import * as React from 'react';
+import _ from 'lodash';
 import { reaction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
@@ -40,6 +40,8 @@ import { Broker, EventType } from '../../helpers/broker';
 }))
 @observer
 export default class Analytics extends React.Component {
+  reactions = [];
+
   constructor(props) {
     super(props);
     this.hasPinged = false;
@@ -49,15 +51,32 @@ export default class Analytics extends React.Component {
       siteUrl = protocol + 'dev.dbkoda.com';
       ReactGA.initialize(gaCode.development, {
         debug: true,
-        titleCase: false
+        titleCase: false,
+        gaOptions: {
+          userId: this.props.config.settings.user.id
+        }
       });
     } else if (process.env.NODE_ENV === 'production') {
       siteUrl = protocol + 'electron.dbkoda.com';
       ReactGA.initialize(gaCode.prod, {
-        titleCase: false
+        titleCase: false,
+        gaOptions: {
+          userId: this.props.config.settings.user.id
+        }
       });
     }
     ReactGA.set({ page: siteUrl });
+
+    // provide our own user id
+    this.reactions.push(
+      reaction(
+        () => this.props.config.settings.user.id,
+        userId => {
+          ReactGA.set({ userId });
+        }
+      )
+    );
+
     if (this.props.config.settings.telemetryEnabled) {
       // TODO Get App Version
       const appVersion = this.props.store.version;
@@ -68,32 +87,36 @@ export default class Analytics extends React.Component {
      * @param {function()} - The state that will trigger the reaction.
      * @param {function()} - The reaction to any change on the state.
      //  */
-    reaction(
-      () => this.props.config.settings.telemetryEnabled,
-      telemetryEnabled => {
-        if (!this.props.store.layout.optInVisible) {
-          if (telemetryEnabled) {
-            this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
-          } else {
-            this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
+    this.reactions.push(
+      reaction(
+        () => this.props.config.settings.telemetryEnabled,
+        telemetryEnabled => {
+          if (!this.props.store.layout.optInVisible) {
+            if (telemetryEnabled) {
+              this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
+            } else {
+              this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
+            }
           }
-        }
-      },
-      { name: 'analyticsReactionToTelemetryChange' }
+        },
+        { name: 'analyticsReactionToTelemetryChange' }
+      )
     );
     /**
      * send opt events when clicking ok button.
      */
-    reaction(
-      () => this.props.store.layout.optInVisible,
-      _ => {
-        if (this.props.config.settings.telemetryEnabled) {
-          this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
-        } else {
-          this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
-        }
-      },
-      { name: 'analyticsReactionToTelemetryChange' }
+    this.reactions.push(
+      reaction(
+        () => this.props.store.layout.optInVisible,
+        _ => {
+          if (this.props.config.settings.telemetryEnabled) {
+            this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
+          } else {
+            this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
+          }
+        },
+        { name: 'analyticsReactionToTelemetryChange' }
+      )
     );
     this._sendEvent = this._sendEvent.bind(this);
     this.newProfileCreated = this.newProfileCreated.bind(this);
@@ -118,7 +141,9 @@ export default class Analytics extends React.Component {
     Broker.off(EventType.FEEDBACK, this.feedbackEvent);
     Broker.off(EventType.FEATURE_USE, this.keyFeatureEvent);
     Broker.off(EventType.CONTROLLER_ACTIVITY, this.controllerActivity);
-    Broker.on(EventType.PING_HOME, this.pingHome);
+    Broker.off(EventType.PING_HOME, this.pingHome);
+
+    _.forEach(this.reactions, r => r());
   }
 
   hasOneDayPassed(previousDate, currentDate) {
