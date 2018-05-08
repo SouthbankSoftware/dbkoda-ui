@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2018-04-27T09:46:47+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-08T11:36:52+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -109,11 +109,6 @@ class App extends React.Component {
       telemetryEnabled: bool
     });
     this.props.store.layout.optInVisible = false;
-  }
-
-  // eslint-disable-next-line camelcase
-  unstable_handleError() {
-    Broker.emit(EventType.APP_CRASHED);
   }
 
   render() {

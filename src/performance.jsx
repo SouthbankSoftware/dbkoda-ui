@@ -3,7 +3,7 @@
  * @Date:   2018-02-26T13:19:02+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-04T14:07:53+10:00
+ * @Last modified time: 2018-05-08T11:37:29+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,6 +31,7 @@ import * as mobx from 'mobx';
 import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
 import { AppContainer } from 'react-hot-loader';
+import ErrorBoundary from '#/common/ErrorBoundary';
 import Store from '~/window/stores/performance';
 import PerformanceWindow from '~/window/PerformanceWindow';
 
@@ -43,7 +44,9 @@ const store = new Store();
 ReactDOM.render(
   <AppContainer>
     <Provider store={store} api={store.api} config={store.config} profileStore={store.profileStore}>
-      <PerformanceWindow />
+      <ErrorBoundary>
+        <PerformanceWindow />
+      </ErrorBoundary>
     </Provider>
   </AppContainer>,
   rootEl

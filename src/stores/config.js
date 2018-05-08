@@ -5,7 +5,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-03T21:17:59+10:00
+ * @Last modified time: 2018-05-08T10:31:05+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -38,7 +38,7 @@ export default class Config {
   constructor() {
     this.path = global.PATHS.configPath;
 
-    logToMain('info', `config path: ${this.path}`);
+    l.info(`config path: ${this.path}`);
 
     this._watchConfigChanges();
   }
@@ -53,14 +53,14 @@ export default class Config {
 
         sendToMain('configChanged', changed);
 
-        logToMain('debug', 'config changed');
+        l.debug('config changed');
       })
     );
   };
 
   _handleError = (message: string) => {
-    console.error(message);
-    logToMain('error', message);
+    l.error(message);
+
     NewToaster.show({
       message,
       className: 'danger',

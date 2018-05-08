@@ -59,6 +59,8 @@
       "profiling": {
         "profilingButtonText": "Profiling",
         "profile-configuration-button-text": "Configure Profiling",
+        "refreshDBs": "Refresh DBs",
+        "refreshOps": "Refresh Ops",
         "configuration": {
           "setup": "Setup Profiling",
           "analyse": "Analyse Profiling",
@@ -104,6 +106,13 @@
           "apply": "Apply",
           "cancel": "Cancel",
           "configure-success": "Profile configuration applied.",
+          "database": "Database",
+          "mode": "Mode:",
+          "profiling": "Profiling",
+          "all": "All",
+          "exceeding": "Exceeding",
+          "collectionSize": "Collection Size",
+          "unsavedChanges": "Unsaved Changes",
           "tooltip": {
             "level0":
               "The profiler is off and does not collect any data. This is the default profiler level.",

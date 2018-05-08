@@ -34,6 +34,10 @@
   display: flex;
   flex-direction: column;
 
+  .ResetButton {
+    margin-left: 10px;
+  }
+
   .pt-button-text {
     flex: none !important;
   }
@@ -56,13 +60,102 @@
 
     .tableWrapper {
       max-height: 400px;
+
       .dbSelectWrapper {
         margin-left: 12px;
+        display: flex;
+
+        label.profilingStatus {
+          margin-left: 10px;
+        }
+
+        span.profilingSwitchLabel {
+          margin-left: 10px;
+          color: $connectionButtonFontColour;
+        }
+
+        button.applyButton {
+          font-weight: lighter;
+          font-size: small;
+          color: $connectionButtonFontColour;
+
+          // width: 8em !important;
+          border-radius: 5px;
+          background-image: unset;
+          background-color: #313131;
+          border: 1px solid $connectionButtonBorderColour;
+          box-shadow: unset;
+          height: 22px;
+          line-height: 10px;
+          min-height: 22px;
+          text-align: center;
+        }
+
+        button.reset-button:hover {
+          background-color: $performanceButtonHover;
+          color: $connectionButtonFontColourHover;
+        }
+      }
+
+      span {
+        color: $connectionButtonFontColour;
+        margin-right: 5px;
       }
 
       .dbSelectLabel {
         color: #bfbec0;
         margin-right: 6px;
+      }
+
+      .radioGroup {
+        display: flex;
+        flex-direction: row;
+
+        .pt-label {
+          color: $connectionButtonFontColour;
+          margin-right: 5px;
+        }
+
+        span {
+          color: $connectionButtonFontColour;
+          margin-right: 5px;
+        }
+      }
+
+      .pt-numeric-input {
+        width: 120px;
+        margin-right: 40px;
+
+        .pt-disabled {
+          input {
+            background-color: darken(#bfbec0, 20) !important;
+          }
+        }
+
+        div {
+          width: 100%;
+        }
+      }
+
+      .pt-button-group {
+        height: 95%;
+        width: 30px;
+
+        .pt-button {
+          width: 30px !important;
+          height: 10px !important;
+          border: none;
+          color: white;
+          cursor: pointer;
+        }
+
+        .profile-button-cancel {
+          background-color: rgb(185, 95, 92);
+        }
+
+        .profile-button-apply {
+          background-color: rgb(135, 169, 134);
+        }
       }
 
       .pt-popover-wrapper {
@@ -100,6 +193,8 @@
 
       .opsTableWrapper {
         margin-top: 5px;
+        padding-left: 2.5%;
+        padding-right: 2.5%;
         height: 400px !important;
       }
     }
