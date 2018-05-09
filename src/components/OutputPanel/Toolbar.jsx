@@ -50,7 +50,7 @@ import { OutputFileTypes } from '~/api/Output';
 import { OutputToolbarContexts } from '../common/Constants';
 import ClearOutputIcon from '../../styles/icons/clear-output-icon.svg';
 import ShowMoreIcon from '../../styles/icons/show-more-icon.svg';
-import SaveOutputIcon from '../../styles/icons/save-output-icon.svg';
+import SaveOutputIcon from '../../styles/icons/save-icon.svg';
 import ExpandIcon from '../../styles/icons/code-folder-icon.svg';
 import CollapseIcon from '../../styles/icons/code-folder-right-icon.svg';
 import RefreshIcon from '../../styles/icons/refresh-icon.svg';
@@ -714,9 +714,7 @@ export default class Toolbar extends React.Component {
         'TableView-' + this.props.store.editorPanel.activeEditorId;
       return;
     }
-    editor = this.props.store.outputPanel.editorRefs[
-      this.props.store.editorPanel.activeEditorId
-    ];
+    editor = this.props.store.outputPanel.editorRefs[this.props.store.editorPanel.activeEditorId];
     const cm = editor.getCodeMirror();
 
     // Get the last line that we think is valid:

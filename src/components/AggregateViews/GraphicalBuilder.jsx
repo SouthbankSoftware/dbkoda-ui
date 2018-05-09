@@ -47,7 +47,7 @@ import GenerateChartButton from './GenerateChartButton';
 import CreateViewButton from './CreateViewButton';
 import ShowIcon from '../../styles/icons/show-icon.svg';
 import ImportIcon from '../../styles/icons/export-icon.svg';
-import ExportIcon from '../../styles/icons/import-icon.svg';
+import ExportIcon from '../../styles/icons/save-icon.svg';
 
 const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
@@ -1335,7 +1335,7 @@ export default class GraphicalBuilder extends React.Component {
               intent={Intent.SUCCESS}
               onClick={this.onExportButtonClicked}
             >
-              <ExportIcon className="dbKodaSVG" width={20} height={20} />
+              <ExportIcon className="dbKodaSVG export" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           <CreateViewButton />
