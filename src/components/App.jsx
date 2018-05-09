@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2018-05-08T11:36:52+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-09T12:49:05+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,7 +28,7 @@ import { Broker, EventType } from '~/helpers/broker';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import SplitPane from 'react-split-pane';
-import { action, untracked } from 'mobx';
+import { action, untracked, runInAction } from 'mobx';
 import { inject, observer, PropTypes } from 'mobx-react';
 import DevTools from 'mobx-react-devtools';
 import { EditorPanel } from '#/EditorPanel';
@@ -69,11 +69,13 @@ class App extends React.Component {
   };
 
   componentWillMount() {
-    if (!this.props.config.settings.showNewFeaturesDialogOnStart) {
-      this.props.store.editorPanel.showNewFeaturesDialog = false;
-    } else {
-      this.props.store.editorPanel.showNewFeaturesDialog = true;
-    }
+    runInAction(() => {
+      if (!this.props.config.settings.showNewFeaturesDialogOnStart) {
+        this.props.store.editorPanel.showNewFeaturesDialog = false;
+      } else {
+        this.props.store.editorPanel.showNewFeaturesDialog = true;
+      }
+    });
   }
 
   componentDidMount() {
@@ -81,17 +83,19 @@ class App extends React.Component {
     Broker.emit(EventType.APP_RENDERED);
 
     // Check if user has upgraded to new version for showing new features dialog.
-    if (store.previousVersion) {
-      if (store.previousVersion !== store.version) {
-        // New version - Show new features.
+    runInAction(() => {
+      if (store.previousVersion) {
+        if (store.previousVersion !== store.version) {
+          // New version - Show new features.
+          store.editorPanel.showNewFeaturesDialog = true;
+          store.previousVersion = store.version;
+        }
+      } else {
+        // If no version specified, this is first install - Show new Features.
         store.editorPanel.showNewFeaturesDialog = true;
         store.previousVersion = store.version;
       }
-    } else {
-      // If no version specified, this is first install - Show new Features.
-      store.editorPanel.showNewFeaturesDialog = true;
-      store.previousVersion = store.version;
-    }
+    });
   }
   @action.bound
   updateRightSplitPos(pos) {
