@@ -588,10 +588,7 @@ export default class View extends React.Component {
     const { width, height } = this.state;
     const trailWidth = width + 400;
     return (
-      <div
-        ref={viewEl => (this.viewEl = viewEl)}
-        className={`StorageSunburstView ${this.props.store.layout.storageClassName}`}
-      >
+      <div ref={viewEl => (this.viewEl = viewEl)} className="StorageSunburstView">
         <div className="main">
           <div className="sequence">
             <svg className="trail" width={trailWidth} height={50}>

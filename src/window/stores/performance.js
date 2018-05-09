@@ -318,8 +318,7 @@ export default class Store {
     optInVisible: !global.UAT,
     overallSplitPos: 100,
     leftSplitPos: 200,
-    rightSplitPos: 100,
-    storageClassName: 'storage-view-full-screen'
+    rightSplitPos: 100
   };
 
   @observable drawer = observable({ activeNavPane: NavPanes.PERFORMANCE });

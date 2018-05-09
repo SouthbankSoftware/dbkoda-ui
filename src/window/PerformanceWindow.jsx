@@ -47,6 +47,7 @@ import '#/App.scss';
 import { StoragePanel } from '../components/StoragePanel';
 import ProfileConfiguration from '../components/ProfileConfiguration';
 import Status from '../components/PerformancePanel/Status';
+import './PerformanceWindow.scss';
 
 @inject(allStores => ({ store: allStores.store, api: allStores.store.api }))
 @observer
@@ -212,7 +213,10 @@ class PerformanceWindow extends React.Component {
           {store.drawer &&
             store.drawer.activeNavPane == NavPanes.STORAGE_PANEL &&
             store.api.shellId && (
-              <StoragePanel profileId={store.api.profileId} shellId={store.api.shellId} />
+              <div className="performance-storage">
+                <div className="title">Storage Panel</div>
+                <StoragePanel profileId={store.api.profileId} shellId={store.api.shellId} />
+              </div>
             )}
         </div>
       </div>
