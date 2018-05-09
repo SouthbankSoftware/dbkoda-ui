@@ -50,7 +50,8 @@ export const NavPanes = {
   PROFILE: 'Profile',
   PERFORMANCE: 'Performance',
   TOP_CONNECTIONS: 'Top Connections',
-  PROFILING: 'Profiling'
+  PROFILING: 'Profiling',
+  STORAGE_PANEL: 'Storage Drill'
 };
 
 export const DrawerPanes = {

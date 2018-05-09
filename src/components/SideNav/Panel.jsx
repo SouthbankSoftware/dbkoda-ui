@@ -36,6 +36,7 @@ import ProfileIcon from '~/styles/icons/connection-icon.svg';
 import PerformanceIcon from '~/styles/icons/performance-icon-2.svg';
 import ProfilingIcon from '~/styles/icons/profiling-icon-2.svg';
 import TopCommandsIcon from '~/styles/icons/top-commands-icon.svg';
+import StorageIcon from '~/styles/icons/databases-icon.svg';
 
 import './Panel.scss';
 
@@ -128,6 +129,15 @@ export default class SideNav extends React.Component<Props, State> {
             changeMenu={this.changeMenuSelected}
           >
             <ProfilingIcon className="dbKodaSVG" />
+          </MenuItem>
+        )}
+        {checkMenuItem(NavPanes.STORAGE_PANEL) && (
+          <MenuItem
+            name={NavPanes.STORAGE_PANEL}
+            isSelected={this.isItemSelected}
+            changeMenu={this.changeMenuSelected}
+          >
+            <StorageIcon className="dbKodaSVG" />
           </MenuItem>
         )}
       </div>
