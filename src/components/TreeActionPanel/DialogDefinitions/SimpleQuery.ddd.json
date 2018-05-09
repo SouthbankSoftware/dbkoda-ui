@@ -39,7 +39,7 @@
       "name": "FilterKeys",
       "label": "Filter conditions",
       "type": "Table",
-      "maxColumns": 3,
+      "maxColumns": 2,
       "columns": [
         {
           "name": "AttributeName",
