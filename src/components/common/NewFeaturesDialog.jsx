@@ -85,10 +85,10 @@ export default class NewFeaturesDialog extends React.Component<Props, State> {
       >
         <div className="dialogContent">
           <div className="header">
-            <p className="title">
+            <span className="title">
               {globalString('general/newFeaturesDialog/title')}
               <p className="versionNumber">{this.props.store.version}</p>
-            </p>
+            </span>
             <p className="subtitle">{globalString('general/newFeaturesDialog/subTitle')}</p>
           </div>
           <div className="body">

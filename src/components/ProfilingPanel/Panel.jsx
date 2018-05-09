@@ -132,6 +132,7 @@ export default class ProfilingPanel extends React.Component<Props> {
       };
       if (config) {
         this.props.api.setProfilingDatabaseConfiguration(config);
+        this.state.currentConfig.selectedValue = 0;
       }
       console.log('change profile configuration ', config);
     } else {
@@ -144,6 +145,7 @@ export default class ProfilingPanel extends React.Component<Props> {
       if (config) {
         this.props.api.setProfilingDatabaseConfiguration(config);
       }
+      this.state.currentConfig.selectedValue = 1;
       console.log('change profile configuration ', config);
     }
     this.forceUpdate();
@@ -245,21 +247,6 @@ export default class ProfilingPanel extends React.Component<Props> {
               <div className="pt-navbar-heading viewHeading">Profiling Results</div>
             </div>
             <div className="pt-navbar-group pt-align-right">
-              <Tooltip
-                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-                content={globalString('performance/profiling/refreshDBs')}
-                hoverOpenDelay={1000}
-                inline
-                intent={Intent.PRIMARY}
-                position={Position.BOTTOM}
-              >
-                <Button
-                  className="top-con-button reset-button pt-button pt-intent-primary"
-                  text={globalString('performance/profiling/refreshOps')}
-                  disabled={this.selectedDatabase}
-                  onClick={this._onRefreshDBs}
-                />
-              </Tooltip>
               <Tooltip
                 className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
                 content={globalString('performance/profiling/refreshOps')}
