@@ -122,18 +122,46 @@ export default class ProfilingPanel extends React.Component<Props> {
 
   @autobind
   _onChangeProfilingStatus() {
-    console.debug('Changed profiling status to: ', !this.state.currentConfig.selectedValue);
     // If turning on profiling, send through currentConfig to start profiling:
     if (this.state.currentConfig.selectedValue > 0) {
-      // Turn profiling on:
+      const config = {
+        level: 0,
+        slowms: this.state.currentConfig.exceedLimit,
+        profileSize: this.state.currentConfig.profileCollectionSize,
+        dbName: this.state.selectedDatabase
+      };
+      if (config) {
+        this.props.api.setProfilingDatabaseConfiguration(config);
+      }
+      console.log('change profile configuration ', config);
+    } else {
+      const config = {
+        level: 1,
+        slowms: this.state.currentConfig.exceedLimit,
+        profileSize: this.state.currentConfig.profileCollectionSize,
+        dbName: this.state.selectedDatabase
+      };
+      if (config) {
+        this.props.api.setProfilingDatabaseConfiguration(config);
+      }
+      console.log('change profile configuration ', config);
     }
+    this.forceUpdate();
   }
 
   @autobind
   _onClickApply() {
-    console.debug('Apply new configuration: ', this.state.currentConfig);
     // Set profiling config for existing database:
-
+    const config = {
+      level: this.state.currentConfig.selectedValue,
+      slowms: this.state.currentConfig.exceedLimit,
+      profileSize: this.state.currentConfig.profileCollectionSize,
+      dbName: this.state.selectedDatabase
+    };
+    console.log('change profile configuration ', config);
+    if (config) {
+      this.props.api.setProfilingDatabaseConfiguration(config);
+    }
     this.setState({ dirtyConfig: false });
   }
 
@@ -145,7 +173,7 @@ export default class ProfilingPanel extends React.Component<Props> {
       this.state.dirtyConfig = true;
     }
     const newConfig = this.state.currentConfig;
-    newConfig.selectedValue = event.currentTarget.value;
+    newConfig.selectedValue = parseInt(event.currentTarget.value, 10);
     this.setState({ currentConfig: newConfig });
   }
 
@@ -219,6 +247,21 @@ export default class ProfilingPanel extends React.Component<Props> {
             <div className="pt-navbar-group pt-align-right">
               <Tooltip
                 className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                content={globalString('performance/profiling/refreshDBs')}
+                hoverOpenDelay={1000}
+                inline
+                intent={Intent.PRIMARY}
+                position={Position.BOTTOM}
+              >
+                <Button
+                  className="top-con-button reset-button pt-button pt-intent-primary"
+                  text={globalString('performance/profiling/refreshOps')}
+                  disabled={this.selectedDatabase}
+                  onClick={this._onRefreshDBs}
+                />
+              </Tooltip>
+              <Tooltip
+                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
                 content={globalString('performance/profiling/refreshOps')}
                 hoverOpenDelay={1000}
                 inline
@@ -275,6 +318,7 @@ export default class ProfilingPanel extends React.Component<Props> {
                 className="profilingStatus"
                 checked={this.state.currentConfig.selectedValue}
                 onChange={this._onChangeProfilingStatus}
+                disabled={!this.state.selectedDatabase}
               />
 
               <RadioGroup
@@ -282,19 +326,22 @@ export default class ProfilingPanel extends React.Component<Props> {
                 className="radioGroup"
                 onChange={this._onModeChange}
                 selectedValue={this.state.currentConfig.selectedValue}
+                disabled={!this.state.selectedDatabase}
               >
                 <span> {globalString('performance/profiling/results/all')}</span>
-                <Radio value={1} />
+                <Radio disabled={!this.state.selectedDatabase} value={1} />
                 <span> {globalString('performance/profiling/results/exceeding')}</span>
-                <Radio value={2} />
+                <Radio disabled={!this.state.selectedDatabase} value={2} />
               </RadioGroup>
               <NumericInput
-                value={this.state.currentConfig.exceedLimit + 'ms'}
+                value={this.state.currentConfig.exceedLimit}
                 stepSize={10}
                 majorStepSize={100}
                 selectAllOnFocus
                 min={1}
-                disabled={this.state.currentConfig.selectedValue != 2}
+                disabled={
+                  !this.state.selectedDatabase || this.state.currentConfig.selectedValue != 2
+                }
                 onValueChange={this._onUpdateExceedLimit}
               />
               <span>{globalString('performance/profiling/results/collectionSize')}</span>
@@ -304,7 +351,8 @@ export default class ProfilingPanel extends React.Component<Props> {
                 majorStepSize={1000000}
                 min={1000}
                 onValueChange={this._onUpdateSizeLimit}
-                value={this.state.currentConfig.profileCollectionSize + 'mb'}
+                value={this.state.currentConfig.profileCollectionSize}
+                disabled={!this.state.selectedDatabase}
               />
               <Tooltip
                 className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
@@ -315,7 +363,7 @@ export default class ProfilingPanel extends React.Component<Props> {
                 position={Position.BOTTOM}
               >
                 <Button
-                  disabled={!this.state.currentConfig.selectedValue}
+                  disabled={!this.state.selectedDatabase || !this.state.currentConfig.selectedValue}
                   className="applybutton pt-button top-con-button reset-button pt-button pt-intent-primary"
                   text="Apply"
                   onClick={this._onClickApply}
