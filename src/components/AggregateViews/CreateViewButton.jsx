@@ -37,7 +37,9 @@ import DocumentsIcon from '../../styles/icons/documents-icon.svg';
 export default class CreateViewButton extends React.Component {
   constructor(props) {
     super(props);
-    this.props.store.aggregateBuilder.includeCreateView = false;
+    runInAction('Construct new CreateView button', () => {
+      this.props.store.aggregateBuilder.includeCreateView = false;
+    });
   }
 
   @action.bound
