@@ -34,7 +34,8 @@ import {
   Intent,
   Menu,
   MenuItem,
-  MenuDivider
+  MenuDivider,
+  Position
 } from '@blueprintjs/core';
 
 import DragLabel from './DragLabel.jsx';
@@ -297,6 +298,7 @@ export default class TreeNode {
           <Popover
             minimal
             interactionKind={PopoverInteractionKind.CLICK}
+            position={Position.TOP}
             popoverClassName="toolTip"
             content={<Menu>{Menus}</Menu>}
             target={

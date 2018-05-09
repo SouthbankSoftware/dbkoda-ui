@@ -78,6 +78,9 @@ div.aggregateGraphicalBuilderWrapper {
         fill: $defaultFontColor !important;
         transform: translate(-50%, -50%);
       }
+      .export {
+        width: 15px;
+      }
     }
 
     a.showLeftPanelButton {
