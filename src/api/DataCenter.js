@@ -97,7 +97,8 @@ export default class DataCenter {
       _.pick(this.aggregationApi, [
         'generateCode',
         'onHideLeftPanelClicked',
-        'onShowLeftPanelClicked'
+        'onShowLeftPanelClicked',
+        'updateAggregateConfig'
       ])
     );
 

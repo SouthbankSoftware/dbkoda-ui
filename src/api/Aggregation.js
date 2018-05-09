@@ -29,7 +29,8 @@
 /* eslint import/no-dynamic-require: warn */
 
 // import { Broker, EventType } from '~/helpers/broker';
-// import { featherClient } from '~/helpers/feathers';
+// $FlowFixMe
+import { featherClient } from '~/helpers/feathers';
 // import { NewToaster } from '#/common/Toaster';
 
 import { action } from 'mobx';
@@ -136,5 +137,45 @@ export default class AggregationApi {
   @action.bound
   onShowLeftPanelClicked() {
     this.store.setDrawerChild(DrawerPanes.AGGREGATE);
+  }
+
+  /**
+   * Sends a request to controller to update config for agg builder.
+   *
+   * @return {Promise} promise - The promise resolving the config update.
+   */
+  // $FlowFixMe
+  @action.bound
+  updateAggregateConfig(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const editor: any = this.store.editors.get(this.store.editorPanel.activeEditorId);
+      if (editor.blockList[0]) {
+        // $FlowFixMe
+        const formTemplate = require('#/AggregateViews/AggregateBlocks/BlockTemplates/Start.hbs');
+        let startCommands = formTemplate(editor.blockList[0].fields) + ';\n';
+        if (!editor.aggConfig || !(editor.aggConfig === startCommands)) {
+          // Config has changed, send request and update config.
+          editor.aggConfig = startCommands;
+          startCommands = startCommands.replace(/\n/g, '').replace(/\r/g, '');
+          const service = featherClient().service('/mongo-sync-execution');
+          service.timeout = 10000;
+          service
+            .update(editor.profileId, {
+              shellId: editor.shellId, // eslint-disable-line
+              commands: startCommands,
+              responseType: 'text'
+            })
+            .then(res => {
+              resolve(res);
+            })
+            .catch(e => {
+              console.error(e);
+              reject();
+            });
+        }
+        // Else, do nothing.
+        resolve();
+      }
+    });
   }
 }

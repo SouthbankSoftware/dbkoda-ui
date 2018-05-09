@@ -30,7 +30,8 @@ import _ from 'lodash';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, observable, reaction, runInAction } from 'mobx';
-import { AnchorButton, Intent, Tooltip, Position } from '@blueprintjs/core';
+import { Button, AnchorButton, Intent, Tooltip, Position } from '@blueprintjs/core';
+import { Broker, EventType } from '~/helpers/broker';
 import FormBuilder from '#/TreeActionPanel/FormBuilder';
 import View from '#/TreeActionPanel/View';
 import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
@@ -187,6 +188,12 @@ export default class Details extends React.Component {
     const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     editor.blockList[editor.selectedBlock].byoCode = false;
     this.forceUpdate();
+  }
+
+  @action.bound
+  _onApplyBlock() {
+    console.debug('Update aggregate builder...');
+    Broker.emit(EventType.AGGREGATE_UPDATE, this.props.store.editorPanel.activeEditorId);
   }
 
   render() {
@@ -353,6 +360,21 @@ export default class Details extends React.Component {
                   </div>
                 </div>
               )}
+              <Tooltip
+                className="applyButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                content={globalString('aggregate_builder/applyTooltip')}
+                hoverOpenDelay={1000}
+                inline
+                intent={Intent.PRIMARY}
+                position={Position.BOTTOM}
+              >
+                <Button
+                  className="top-con-button reset-button pt-button pt-intent-primary"
+                  text={globalString('aggregate_builder/apply')}
+                  disabled={!activeBlock}
+                  onClick={this._onApplyBlock}
+                />
+              </Tooltip>
             </div>
           )}
         </div>
