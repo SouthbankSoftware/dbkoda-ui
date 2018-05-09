@@ -2,11 +2,23 @@ var delResult={}
 
 delResult=db.getSiblingDB("{{{Database}}}").getCollection("{{{CollectionName}}}").
   {{#if DeleteMany }}deleteMany{{else}}deleteOne{{/if}}(
-     { {{#if FilterKeys~}} {{#if UseOr~}}"$or"{{else}}"$and"{{/if~}}:[
-        {{#each FilterKeys }}
-        { "{{{AttributeName}}}":{ {{{Operator}}}:{{{Value}}} } } {{#unless last}},{{/unless}}
-            {{/each }}
-      ] {{/if ~}}
-     });
+  { {{#if UseOr}} "$or":[
+         {{#if FilterKeys}}
+              {{#each FilterKeys}}
+     { "{{{AttributeName}}}":{ {{{Operator}}}:{{{Value}}} } }
+             {{~#unless last}},{{/unless}}
+              {{/each}}
+   ]
+            {{/if~}}
+      {{else}}
+         {{#if FilterKeys}}
+
+           {{#each FilterKeys}}
+     "{{{AttributeName}}}":{ {{{Operator}}}:{{{Value}}} }
+             {{~#unless last}},{{/unless}}
+           {{/each~}}
+         {{/if~}}
+      {{/if}}
+  });
 
 printjson(delResult);

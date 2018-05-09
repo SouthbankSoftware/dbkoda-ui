@@ -163,6 +163,7 @@ export default class ProfilingView extends React.Component<Props> {
     } else {
       loadingOptions.push(TableLoadingOption.CELLS);
     }
+    console.debug(ops);
     return (
       <div className="opsTableWrapper" style={{ height: '100%' }}>
         <div style={{ height: 'calc(100% - 50px)' }}>

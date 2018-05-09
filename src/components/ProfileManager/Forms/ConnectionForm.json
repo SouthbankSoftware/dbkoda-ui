@@ -38,7 +38,7 @@
       {
         "name": "database",
         "label": "Database",
-        "value": "admin",
+        "value": "test",
         "options": {
           "tooltip": "The database in which this connection will initially be established"
         },
