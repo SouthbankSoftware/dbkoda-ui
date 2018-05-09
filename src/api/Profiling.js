@@ -1,7 +1,7 @@
 /**
  * @flow
  *
- * @Author: Michael <guiguan>
+ * @Author: Michael <Mike>
  * @Date:   2018-03-27T10:39:44+11:00
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   Mike

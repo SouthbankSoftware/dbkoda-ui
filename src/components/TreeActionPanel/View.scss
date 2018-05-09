@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2018-05-08T16:45:21+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-09T12:39:36+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -17,16 +23,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-// @Author: Wahaj Shamim <wahaj>
-// @Date:   2017-03-14T16:09:51+11:00
-// @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   wahaj
-// @Last modified time: 2017-06-07T14:28:56+10:00
+
 @import '../../styles/_defaultTheme.scss';
 
 .dynamic-form {
   div > form {
-    margin: 30px;
+    padding: 30px;
   }
 
   .cm-s-material .CodeMirror-gutters {
@@ -70,12 +72,12 @@
     overflow-x: hidden;
   }
 
-  .form-scrollable:after {
-    display: block;
-    content: '';
-    width: 100%;
-    height: 50px;
-  }
+  // .form-scrollable:after {
+  //   display: block;
+  //   content: '';
+  //   width: 100%;
+  //   height: 50px;
+  // }
 
   .form-title {
     text-align: center;
@@ -417,7 +419,7 @@
   }
 
   .is-open > .Select-control {
-    background-color: $connectionActiveTextFieldBackgroundColour !important;
+    // background-color: $connectionActiveTextFieldBackgroundColour !important;
     box-shadow: none !important;
   }
 

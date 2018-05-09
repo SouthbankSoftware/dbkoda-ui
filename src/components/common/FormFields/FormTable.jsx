@@ -22,8 +22,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-18T13:31:39+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-31T15:36:40+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-09T11:36:47+10:00
  */
 
 import React from 'react';
@@ -81,8 +81,7 @@ export default observer(({ members }) => {
           <FieldControl
             field={members}
             controls={{
-              onAdd: true,
-              onClear: true
+              onAdd: true
             }}
           />
         </div>

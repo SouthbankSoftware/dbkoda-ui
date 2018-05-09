@@ -165,7 +165,9 @@
           "Apologies, Aggregation has lost connection with the Mongo shell, please restart Aggregation builder from the tree context menu.",
         "create_view_message": "Please enter a View name:"
       },
-      "invalid_aggregation_code": "Invalid aggregation code. Please check syntax."
+      "invalid_aggregation_code": "Invalid aggregation code. Please check syntax.",
+      "apply": "Apply",
+      "applyTooltip": "Apply your current config to the aggregation."
     },
     "telemetry_dialog": {
       "header": "Hi There!",

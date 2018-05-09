@@ -130,10 +130,7 @@ export default class ProfilingPanel extends React.Component<Props> {
         profileSize: this.state.currentConfig.profileCollectionSize,
         dbName: this.state.selectedDatabase
       };
-      if (config) {
-        this.props.api.setProfilingDatabaseConfiguration(config);
-        this.state.currentConfig.selectedValue = 0;
-      }
+      this.state.currentConfig.selectedValue = 0;
       console.log('change profile configuration ', config);
     } else {
       const config = {
@@ -142,13 +139,10 @@ export default class ProfilingPanel extends React.Component<Props> {
         profileSize: this.state.currentConfig.profileCollectionSize,
         dbName: this.state.selectedDatabase
       };
-      if (config) {
-        this.props.api.setProfilingDatabaseConfiguration(config);
-      }
       this.state.currentConfig.selectedValue = 1;
       console.log('change profile configuration ', config);
     }
-    this.forceUpdate();
+    this.setState({ dirtyConfig: false });
   }
 
   @autobind
@@ -162,7 +156,7 @@ export default class ProfilingPanel extends React.Component<Props> {
     };
     console.log('change profile configuration ', config);
     if (config) {
-      this.props.api.setProfilingDatabaseConfiguration(config);
+      this.props.api.setProfilingDatabaseConfiguration([config]);
     }
     this.setState({ dirtyConfig: false });
   }
@@ -218,7 +212,7 @@ export default class ProfilingPanel extends React.Component<Props> {
     }
     if (!selectedDatabase) {
       renderTable = false;
-    } else if (ops && ops.length && ops.length > 20) {
+    } else if (ops && ops.length && ops.length > 30) {
       ops = ops.slice(0, 30);
     }
 
@@ -350,7 +344,7 @@ export default class ProfilingPanel extends React.Component<Props> {
                 position={Position.BOTTOM}
               >
                 <Button
-                  disabled={!this.state.selectedDatabase || !this.state.currentConfig.selectedValue}
+                  disabled={!this.state.selectedDatabase}
                   className="applybutton pt-button top-con-button reset-button pt-button pt-intent-primary"
                   text="Apply"
                   onClick={this._onClickApply}

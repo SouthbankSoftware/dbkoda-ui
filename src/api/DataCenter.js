@@ -36,6 +36,7 @@ import DrillApi from './Drill';
 import PasswordApi from './Password';
 import TopConnectionsApi from './TopConnections';
 import ProfilingApi from './Profiling';
+import AggregationApi from './Aggregation';
 import StorageDrilldownApi from './StorageDrilldown';
 
 export default class DataCenter {
@@ -59,6 +60,7 @@ export default class DataCenter {
     this.passwordApi = new PasswordApi(store, this, config);
     this.topConnectionsApi = new TopConnectionsApi(store, this);
     this.profilingApi = new ProfilingApi(store, this);
+    this.aggregationApi = new AggregationApi(store, this);
     this.storageDrilldownApi = new StorageDrilldownApi(store, this);
 
     this.init = this.init.bind(this);
@@ -88,6 +90,17 @@ export default class DataCenter {
 
     // Profling public APIs
     _.assign(this, _.pick(this.profilingApi, ['getProfilingDataBases', 'getProfilingData']));
+
+    // Aggregation Public APIs
+    _.assign(
+      this,
+      _.pick(this.aggregationApi, [
+        'generateCode',
+        'onHideLeftPanelClicked',
+        'onShowLeftPanelClicked',
+        'updateAggregateConfig'
+      ])
+    );
 
     // Terminal public APIs
     _.assign(

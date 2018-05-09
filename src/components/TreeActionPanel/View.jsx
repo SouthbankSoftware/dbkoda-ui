@@ -23,7 +23,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-31T12:33:24+11:00
+ * @Last modified time: 2018-05-09T12:50:07+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -54,7 +54,7 @@ export default class TreeActionView extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { formStyle: { height: window.innerHeight - 210 } };
+    this.state = { formStyle: { height: window.innerHeight - 165 } };
   }
   handleKeyPress(event) {
     // [Enter] should not submit the form.
@@ -120,9 +120,10 @@ export default class TreeActionView extends React.Component {
       }
     }
     return (
-      <div className="pt-dark form-scrollable">
+      <div className="pt-dark">
         <h3 className="form-title">{title}</h3>
         <form
+          className="form-scrollable"
           ref={f => {
             this.treeActionForm = f;
           }}
