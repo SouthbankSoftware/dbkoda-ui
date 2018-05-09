@@ -14,7 +14,7 @@
       "label": "Disk Usage",
       "tooltip": "Overflow to disk if neccessary?",
       "type": "Boolean",
-      "default": true
+      "default": false
     }
   ]
 }

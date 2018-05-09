@@ -3,7 +3,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-15T09:57:04+11:00
+ * @Last modified time: 2018-05-09T12:03:17+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -172,7 +172,6 @@ export default class View extends React.Component {
   };
 
   render() {
-    console.log('new seetings ', this.props.store.configPage.newSettings);
     return (
       <div className="configPanelTabWrapper">
         <div className="configPanelWrapper">
