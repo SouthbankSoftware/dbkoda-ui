@@ -141,7 +141,7 @@ export class ConnectionForm extends JsonForm {
         StaticApi.mongoProtocol + field.$('host').value + ':' + field.$('port').value;
       const conDB = field.$('authenticationDatabase', SubformCategory.AUTH).value;
       connectionUrl += '/';
-      connectionUrl += conDB === '' ? 'admin' : conDB;
+      connectionUrl += conDB === '' ? 'test' : conDB;
       urlField.value = connectionUrl;
     }
   }
@@ -163,7 +163,7 @@ export class ConnectionForm extends JsonForm {
       connectionUrl += '/';
 
       const conDB = field.$('authenticationDatabase', SubformCategory.AUTH).value;
-      connectionUrl += conDB === '' ? 'admin' : conDB;
+      connectionUrl += conDB === '' ? 'test' : conDB;
 
       const addQueryParam = (key, value) => {
         let addQM = false;

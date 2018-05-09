@@ -424,6 +424,19 @@ div.Pane.vertical.Pane1 {
             padding-top: 10px;
             padding-left: 10px;
           }
+
+          .applyButton {
+            float: right;
+            width: unset;
+            margin-right: 20px;
+            button {
+              background-color: $connectionButtonBackgroundColourConnect;
+              color: $connectionButtonFontColour;
+            }
+            button:hover {
+              background-color: $connectionButtonBackgroundColourConnectHover;
+            }
+          }
         }
 
         div.bottomToolbar {
