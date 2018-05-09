@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-07T14:18:38+10:00
+ * @Last modified time: 2018-05-09T15:22:39+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,6 +32,9 @@ global.IS_ELECTRON = _.has(window, 'process.versions.electron');
 global.WINDOW_NAME = window.location.pathname === '/ui/' ? 'main' : 'performance';
 
 if (IS_ELECTRON) {
+  // fix the problem that process.platform is not available at start
+  process.platform = window.require('os').platform();
+
   const { remote } = window.require('electron');
 
   global.UAT = remote.getGlobal('UAT');

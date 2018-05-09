@@ -1,4 +1,8 @@
-/*
+/**
+ * Created by joey on 14/11/17.
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-09T15:05:36+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -17,11 +21,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- * Created by joey on 14/11/17.
- */
-import os from 'os';
 
 export const getSeparator = () => {
-  return os.platform() === 'win32' ? '\r\n' : '\n';
+  return process.platform === 'win32' ? '\r\n' : '\n';
 };
