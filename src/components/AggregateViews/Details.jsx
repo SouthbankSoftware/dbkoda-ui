@@ -31,7 +31,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, observable, reaction, runInAction } from 'mobx';
 import { AnchorButton, Intent, Tooltip, Position } from '@blueprintjs/core';
-import { DrawerPanes } from '#/common/Constants';
 import FormBuilder from '#/TreeActionPanel/FormBuilder';
 import View from '#/TreeActionPanel/View';
 import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
@@ -41,13 +40,13 @@ import HideIcon from '../../styles/icons/close-profile-icon.svg';
 import './style.scss';
 
 @inject(allStores => ({
+  api: allStores.store.api,
   store: allStores.store
 }))
 @observer
 export default class Details extends React.Component {
   constructor(props) {
     super(props);
-    this.generateCode = this.generateCode.bind(this);
     this.state = {
       form: null,
       previousActiveBlock: null,
@@ -150,89 +149,8 @@ export default class Details extends React.Component {
       }
     }
     // Update Editor Contents.
-    this.props.store.treeActionPanel.formValues = this.generateCode(editorObject);
+    this.props.store.treeActionPanel.formValues = this.props.store.api.generateCode(editorObject);
     this.props.store.treeActionPanel.isNewFormValues = true;
-  }
-
-  /**
-   * Generates valid Mongo Code using Handlebars and the Details MobX-Form.
-   *
-   * @param {Object} editorObject - Editor Object to generate handlebars code for.
-   */
-  generateCode(editorObject) {
-    const os = require('os').release();
-    let newLine = '\n';
-    if (os.match(/Win/gi)) {
-      newLine = '\r\n';
-    }
-
-    let codeString = 'use ' + editorObject.collection.refParent.text + ';' + newLine;
-
-    // First add Start block.
-    if (
-      editorObject.blockList &&
-      editorObject.blockList[0] &&
-      editorObject.blockList[0].type.toUpperCase() === 'START'
-    ) {
-      const formTemplate = require('./AggregateBlocks/BlockTemplates/Start.hbs');
-      codeString += formTemplate(editorObject.blockList[0].fields) + ';' + newLine;
-    }
-    codeString += 'db.getCollection("' + editorObject.collection.text + '").aggregate([' + newLine;
-    let pipelineString = '[';
-
-    const selectedBlockIndex = editorObject.selectedBlock;
-    // Then add all other blocks.
-    editorObject.blockList.map((block, index) => {
-      if (!(block.type.toUpperCase() === 'START')) {
-        if (block.byoCode) {
-          if (block.code) {
-            block.code.replace(/\r\n/g, newLine);
-            block.code.replace(/\n/g, newLine);
-            if (index > selectedBlockIndex) {
-              const blockString = '/*' + block.code.replace(/\r\n/g, newLine) + ', */' + newLine;
-              codeString += blockString;
-              pipelineString += blockString;
-            } else {
-              const blockString = block.code.replace(/\r\n/g, newLine) + ',' + newLine;
-              codeString += blockString;
-              pipelineString += blockString;
-            }
-          }
-        } else {
-          // eslint-disable-next-line
-          const formTemplate = require('./AggregateBlocks/BlockTemplates/' + block.type + '.hbs');
-          if (index > selectedBlockIndex) {
-            codeString += '/*' + formTemplate(block.fields) + ', */' + newLine;
-            pipelineString += '/*' + formTemplate(block.fields) + ', */' + newLine;
-          } else {
-            codeString += formTemplate(block.fields) + ',' + newLine;
-            pipelineString += formTemplate(block.fields) + ',' + newLine;
-          }
-        }
-      }
-    });
-
-    codeString += '],';
-    codeString += '{';
-    pipelineString += ']';
-
-    if (
-      editorObject.blockList &&
-      editorObject.blockList[0] &&
-      editorObject.blockList[0].type.toUpperCase() === 'START'
-    ) {
-      codeString += 'allowDiskUse: ' + editorObject.blockList[0].fields.DiskUsage;
-    }
-    codeString += '}';
-    codeString += ');';
-
-    if (this.props.store.aggregateBuilder.includeCreateView) {
-      codeString += `${newLine}${newLine}db.createView('${
-        this.props.store.aggregateBuilder.viewName
-      }','${editorObject.collection.text}', ${pipelineString});${newLine}`;
-    }
-
-    return codeString;
   }
 
   formPromise;
@@ -246,11 +164,6 @@ export default class Details extends React.Component {
   @action
   updateMsg(value) {
     this.msg = value;
-  }
-
-  @action.bound
-  onHideLeftPanelClicked() {
-    this.props.store.setDrawerChild(DrawerPanes.DEFAULT);
   }
 
   @action.bound
@@ -290,7 +203,9 @@ export default class Details extends React.Component {
       // Update Handlebars first:
       // Update Editor Contents.
       runInAction(() => {
-        this.props.store.treeActionPanel.formValues = this.generateCode(activeEditor);
+        this.props.store.treeActionPanel.formValues = this.props.store.api.generateCode(
+          activeEditor
+        );
         this.props.store.treeActionPanel.isNewFormValues = true;
       });
       return (
@@ -312,7 +227,7 @@ export default class Details extends React.Component {
                 <AnchorButton
                   className="hideLeftPanelButton circleButton"
                   intent={Intent.SUCCESS}
-                  onClick={this.onHideLeftPanelClicked}
+                  onClick={this.props.store.api.onHideLeftPanelClicked}
                 >
                   <HideIcon className="dbKodaSVG" width={50} height={50} />
                 </AnchorButton>
@@ -339,7 +254,7 @@ export default class Details extends React.Component {
             </div>
           </nav>
           <div className="aggregateDetailsContent">
-            <BYOBlock onChangeCallback={this.generateCode} />
+            <BYOBlock onChangeCallback={this.props.store.api.generateCode} />
           </div>
         </div>
       );
@@ -395,7 +310,7 @@ export default class Details extends React.Component {
               <AnchorButton
                 className="hideLeftPanelButton circleButton"
                 intent={Intent.SUCCESS}
-                onClick={this.onHideLeftPanelClicked}
+                onClick={this.props.store.api.onHideLeftPanelClicked}
               >
                 <HideIcon className="dbKodaSVG" width={50} height={50} />
               </AnchorButton>

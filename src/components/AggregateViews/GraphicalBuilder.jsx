@@ -59,6 +59,7 @@ const FILE_FILTERS = [
 ];
 
 @inject(allStores => ({
+  api: allStores.store.api,
   store: allStores.store
 }))
 @observer
@@ -635,11 +636,6 @@ export default class GraphicalBuilder extends React.Component {
       }
     }
     array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
-  }
-
-  @action.bound
-  onShowLeftPanelClicked() {
-    this.props.store.drawer.drawerChild = DrawerPanes.AGGREGATE;
   }
 
   /**
@@ -1326,7 +1322,7 @@ export default class GraphicalBuilder extends React.Component {
               <AnchorButton
                 className="showLeftPanelButton circleButton"
                 intent={Intent.SUCCESS}
-                onClick={this.onShowLeftPanelClicked}
+                onClick={this.props.store.api.onShowLeftPanelClicked}
               >
                 <ShowIcon className="dbKodaSVG" width={20} height={20} />
               </AnchorButton>
