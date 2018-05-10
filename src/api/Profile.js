@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-23T09:39:21+10:00
+ * @Last modified time: 2018-05-10T10:33:04+10:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -224,7 +224,9 @@ export default class ProfileApi {
       .catch(err => {
         runInAction('Turn off loading spinner in dialog.', () => {
           this.store.layout.alertIsLoading = false;
-          selectedProfile.status = ProfileStatus.CLOSED;
+          if (selectedProfile) {
+            selectedProfile.status = ProfileStatus.CLOSED;
+          }
         });
         console.error(err);
         logToMain('error', 'Failed to add SSH Terminal: ' + err);
