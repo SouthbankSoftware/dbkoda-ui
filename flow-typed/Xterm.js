@@ -3,7 +3,7 @@
  * @Date:   2017-11-08T15:20:34+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T13:53:47+11:00
+ * @Last modified time: 2018-05-09T13:59:03+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -63,23 +63,24 @@ declare module 'xterm' {
     focus(): void;
     write(data: string): void;
     static applyAddon(addon: *): void;
+    attachCustomKeyEventHandler(handler: *): boolean;
 
     charMeasure: CharMeasure;
   }
 }
 
 declare module 'xterm/lib/addons/attach/attach' {
-  declare export default any
+  declare export default any;
 }
 
 declare module 'xterm/lib/addons/fit/fit' {
-  declare export default any
+  declare export default any;
 }
 
 declare module 'xterm/lib/addons/search/search' {
-  declare export default any
+  declare export default any;
 }
 
 declare module 'xterm/lib/addons/winptyCompat/winptyCompat' {
-  declare export default any
+  declare export default any;
 }

@@ -363,6 +363,7 @@ div.Pane.vertical.Pane1 {
         color: $navbarLeftHeading;
 
         nav.aggregateDetailsToolbar {
+          border-top: 1px solid #323232;
           order: 1;
           background-color: $navbarLeftBackground;
           height: 50px;
@@ -395,6 +396,9 @@ div.Pane.vertical.Pane1 {
               background-color: $fieldGroupHeaderIconHover !important;
             }
           }
+        }
+        .aggregateDetailsToolbar:hover {
+          border-top: 1px solid #525252;
         }
 
         h2.aggregateBlockType {

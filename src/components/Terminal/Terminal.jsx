@@ -5,7 +5,7 @@
  * @Date:   2017-11-08T15:08:22+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-23T10:43:38+11:00
+ * @Last modified time: 2018-05-09T16:03:06+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -164,6 +164,16 @@ export default class Terminal extends React.PureComponent<Props> {
         onResize(this.xterm, size);
       }
     });
+
+    if (process.platform === 'win32' || process.platform === 'linux') {
+      this.xterm.attachCustomKeyEventHandler(e => {
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+          // ctrl+c
+          document.execCommand('copy');
+          return false;
+        }
+      });
+    }
   }
 
   componentWillUnmount() {

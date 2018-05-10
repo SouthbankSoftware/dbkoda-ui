@@ -54,7 +54,7 @@ export default class LeftPanel extends React.Component {
         <SplitPane
           className="LeftSplitPane"
           split="horizontal"
-          defaultSize={500}
+          defaultSize={300}
           minSize={250}
           maxSize={1000}
           pane2Style={splitPane2Style}

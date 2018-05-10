@@ -5,7 +5,7 @@
  * @Date:   2018-05-08T10:39:54+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-08T11:31:07+10:00
+ * @Last modified time: 2018-05-10T15:22:30+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,7 @@
  */
 
 import * as React from 'react';
-import { Broker, EventType } from '~/helpers/broker';
+// import { Broker, EventType } from '~/helpers/broker';
 import './Boundary.scss';
 
 type Props = {
@@ -51,13 +51,13 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     this.state = { error: null, errorInfo: null };
   }
 
-  componentDidCatch(error: *, errorInfo: *) {
-    this.setState({ error, errorInfo });
-
-    // react will use `console.error` to print out this error so we don't have to double log it
-
-    this.props.emitCrashEvent && Broker.emit(EventType.APP_CRASHED);
-  }
+  // componentDidCatch(error: *, errorInfo: *) {
+  //   this.setState({ error, errorInfo });
+  //
+  //   // react will use `console.error` to print out this error so we don't have to double log it
+  //
+  //   this.props.emitCrashEvent && Broker.emit(EventType.APP_CRASHED);
+  // }
 
   render() {
     if (this.state.error) {
