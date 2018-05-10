@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-27T14:15:03+11:00
+ * @Last modified time: 2018-05-10T12:15:51+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -83,7 +83,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
   }
 
   .editorToolbar {
-    overflow-x: hidden;
+    // overflow-x: hidden;
     background-color: $navbarRightBackground !important;
     min-height: 50px;
 
