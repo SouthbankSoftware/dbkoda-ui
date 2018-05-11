@@ -31,7 +31,7 @@ import * as React from 'react';
 import { Responsive } from 'react-grid-layout';
 // $FlowFixMe
 import { Button, Intent, Position, Tooltip } from '@blueprintjs/core';
-import { Menu, MenuItem } from '@blueprintjs/core';
+// import { Menu, MenuItem } from '@blueprintjs/core';
 import { inject, observer } from 'mobx-react';
 import autobind from 'autobind-decorator';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
