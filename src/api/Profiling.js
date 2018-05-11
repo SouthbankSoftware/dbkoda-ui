@@ -5,7 +5,7 @@
  * @Date:   2018-03-27T10:39:44+11:00
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-11T14:45:24+10:00
+ * @Last modified time: 2018-05-11T16:06:25+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,7 +29,6 @@
 import { Broker, EventType } from '~/helpers/broker';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
-import { NewToaster } from '#/common/Toaster';
 
 export default class Profiling {
   store: *;
