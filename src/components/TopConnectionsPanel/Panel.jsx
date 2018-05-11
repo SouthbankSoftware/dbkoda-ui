@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-27T11:42:58+10:00
+ * @Last modified time: 2018-05-11T14:18:14+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -89,11 +89,11 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   @action.bound
   onOperationSelection(selectedOperation) {
     this.props.store.topConnectionsPanel.selectedOperation = selectedOperation;
-    if (!selectedOperation.execStats) {
+    if (selectedOperation && selectedOperation.execStats) {
+      this.props.store.topConnectionsPanel.bShowExplain = true;
+    } else {
       this.props.store.topConnectionsPanel.bShowExplain = false;
       this.props.store.topConnectionsPanel.bLoadingExplain = false;
-    } else {
-      this.props.store.topConnectionsPanel.bShowExplain = true;
     }
   }
 
@@ -199,6 +199,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
             </SplitPane>
             <div>
               {topConnectionsPanel.bShowExplain &&
+                selectedOperation &&
                 selectedOperation.execStats && (
                   <ExplainView execStats={selectedOperation.execStats} />
                 )}

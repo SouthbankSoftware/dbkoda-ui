@@ -2,8 +2,8 @@
  * @Author: Michael Harrison
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  Mike@southbanksoftware.com
- * @Last modified by:   Mike
- * @Last modified time: 2018-04-17T16:19:47+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-11T16:04:12+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,26 +33,27 @@ import { SelectionModes, Table, Utils, TableLoadingOption } from '@blueprintjs/t
 import TextSortableColumn from '../Components/TextSortableColumn';
 import ProgressBarColumn from '../Components/ProgressBarColumn';
 
-const columnsWidthsPercent = [17, 16, 12, 35, 5, 5, 10];
+const columnsWidthsPercent = [20, 15, 45, 5, 5, 10];
 
 @observer
 export default class ProfilingView extends React.Component<Props> {
   constructor(props) {
     super(props);
-    const columnsWidths = columnsWidthsPercent.map(width => width * this.props.tableWidth / 100);
+    const columnsWidths = columnsWidthsPercent.map(width =>
+      Math.floor(width * this.props.tableWidth / 100)
+    );
     this.state = {
       lastSelectRegion: null,
       sortedIndexMap: [],
       data: this.props.ops || null,
       highWaterMark: null,
       columns: [
-        new TextSortableColumn('Id', 0),
-        new TextSortableColumn('ns', 1),
-        new TextSortableColumn('Plan Summary', 2),
-        new TextSortableColumn('Plan Stack', 3),
-        new TextSortableColumn('#', 4),
-        new TextSortableColumn('ms', 5),
-        new ProgressBarColumn('', 'millis', 6)
+        new TextSortableColumn('ns', 0),
+        new TextSortableColumn('Plan Summary', 1),
+        new TextSortableColumn('Plan Stack', 2),
+        new TextSortableColumn('#', 3),
+        new TextSortableColumn('ms', 4),
+        new ProgressBarColumn('', 'millis', 5)
       ],
       columnsWidths
     };
@@ -67,7 +68,9 @@ export default class ProfilingView extends React.Component<Props> {
       this.setState({ highWaterMark: nextProps.highWaterMark });
     }
     if (nextProps && nextProps.tableWidth) {
-      const columnsWidths = columnsWidthsPercent.map(width => width * nextProps.tableWidth / 100);
+      const columnsWidths = columnsWidthsPercent.map(width =>
+        Math.floor(width * nextProps.tableWidth / 100)
+      );
       this.setState({ columnsWidths });
     }
   }
@@ -86,31 +89,28 @@ export default class ProfilingView extends React.Component<Props> {
     let cellValue = '';
     switch (columnIndex) {
       case 0:
-        cellValue = this.state.data[rowIndex].id;
-        break;
-      case 1:
         cellValue = this.state.data[rowIndex].ns;
         break;
-      case 2:
+      case 1:
         cellValue = this.state.data[rowIndex].plansSummary;
         break;
-      case 3:
+      case 2:
         cellValue = this.state.data[rowIndex].planQuery.join(', ');
         break;
-      case 4:
+      case 3:
         cellValue = this.state.data[rowIndex].count;
         break;
-      case 5:
+      case 4:
         cellValue = this.state.data[rowIndex].millis;
         break;
-      case 6:
+      case 5:
         cellValue = _.pick(this.state.data[rowIndex], 'millis');
         if (this.state.highWaterMark) {
           cellValue.highWaterMark = this.state.highWaterMark.millis;
         }
         break;
       default:
-        cellValue = this.state.data[rowIndex].id;
+        cellValue = '';
         break;
     }
     if (typeof cellValue === 'object') {

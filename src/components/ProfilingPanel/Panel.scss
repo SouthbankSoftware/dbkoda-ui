@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T10:33:36+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-16T17:05:35+10:00
+ * @Last modified time: 2018-05-11T15:53:21+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -64,9 +64,11 @@
       .dbSelectWrapper {
         margin-left: 12px;
         display: flex;
+        align-items: center;
 
         label.profilingStatus {
           margin-left: 10px;
+          margin-bottom: 0px;
         }
 
         span.profilingSwitchLabel {
@@ -110,6 +112,12 @@
       .radioGroup {
         display: flex;
         flex-direction: row;
+        align-items: center;
+
+        .pt-label,
+        .pt-radio {
+          margin-bottom: 0px;
+        }
 
         .pt-label {
           color: $connectionButtonFontColour;
@@ -172,6 +180,7 @@
 
               span {
                 width: 90%;
+                color: #202020;
               }
 
               svg {
@@ -192,10 +201,22 @@
       }
 
       .opsTableWrapper {
-        margin-top: 5px;
+        margin-top: 10px;
         padding-left: 2.5%;
         padding-right: 2.5%;
         height: 400px !important;
+        .pt-table-quadrant-scroll-container {
+          overflow-x: hidden;
+          .pt-table-body-cells {
+            .pt-table-cell-col-4,
+            .pt-table-cell-col-5 {
+              font-family: Courier;
+            }
+          }
+        }
+        .pt-table-quadrant-scroll-container:focus {
+          outline: unset;
+        }
       }
     }
   }

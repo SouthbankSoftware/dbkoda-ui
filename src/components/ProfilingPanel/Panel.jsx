@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-26T15:46:42+10:00
+ * @Last modified time: 2018-05-11T15:09:41+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -62,7 +62,7 @@ export default class ProfilingPanel extends React.Component<Props> {
       databaseList: [],
       selectedOperation: null,
       bottomSplitPos: 1000,
-      topSplitPos: window.innerWidth - 61,
+      topSplitPos: window.innerWidth - 61 - Math.round(window.innerWidth * 0.05),
       currentConfig: {},
       dirtyConfig: false
     };
@@ -84,7 +84,7 @@ export default class ProfilingPanel extends React.Component<Props> {
   }
   @autobind
   handleResize() {
-    this.setState({ topSplitPos: window.innerWidth });
+    this.setState({ topSplitPos: window.innerWidth - 61 - Math.round(window.innerWidth * 0.05) });
   }
   @autobind
   updateBottomSplitPos(pos) {

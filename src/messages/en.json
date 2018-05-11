@@ -60,7 +60,7 @@
         "profilingButtonText": "Profiling",
         "profile-configuration-button-text": "Configure Profiling",
         "refreshDBs": "Refresh DBs",
-        "refreshOps": "Refresh Ops",
+        "refreshOps": "Refresh",
         "configuration": {
           "setup": "Setup Profiling",
           "analyse": "Analyse Profiling",

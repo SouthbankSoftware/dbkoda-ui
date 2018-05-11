@@ -4,8 +4,8 @@
  * @Author: Michael <Mike>
  * @Date:   2018-03-27T10:39:44+11:00
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   Mike
- * @Last modified time: 2018-04-17T10:56:32+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-11T14:45:24+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -74,8 +74,7 @@ export default class Profiling {
     console.error(err);
     // $FlowFixMe
     const errorMessage = `Profile ${alias} (${profileId}) ${level}: ${err.message || err}`;
-
-    NewToaster.show({
+    this.api.showToasterInPerformanceWindow(profileId, {
       message: errorMessage,
       className: level === 'error' ? 'danger' : 'warning',
       iconName: 'pt-icon-thumbs-down'
@@ -120,7 +119,9 @@ export default class Profiling {
         });
       })
       .catch(err => {
-        this._handleError(profileId, err);
+        if (err.message !== 'PROFILING_DISABLED') {
+          this._handleError(profileId, err);
+        }
       });
   };
 }
