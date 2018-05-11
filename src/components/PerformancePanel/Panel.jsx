@@ -87,19 +87,19 @@ export default class PerformancePanel extends React.Component<Props> {
 
   @autobind
   _getContextMenu(widgetName: String) {
-    const that = this;
     if (widgetName === 'Database Storage') {
-      return (
-        <Menu>
-          <MenuItem
-            onClick={() => {
-              that.props.api.openStorageDDView();
-            }}
-            text="View Storage Drill down"
-          />
-        </Menu>
-      );
+      // return (
+      //   <Menu>
+      //     <MenuItem
+      //       onClick={() => {
+      //         that.props.api.openStorageDDView();
+      //       }}
+      //       text="View Storage Drill down"
+      //     />
+      //   </Menu>
+      // );
     }
+    return null;
   }
 
   render() {
