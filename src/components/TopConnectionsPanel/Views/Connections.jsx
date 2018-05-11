@@ -3,7 +3,7 @@
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-26T16:20:53+10:00
+ * @Last modified time: 2018-05-11T10:36:38+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -38,7 +38,6 @@ import ProgressBarColumn from '../Components/ProgressBarColumn';
 const columnsWidthsPercent = [10, 15, 15, 10, 10, 15, 10, 15];
 
 @inject(({ store }) => {
-  console.log(store);
   const { topConnectionsPanel } = store;
 
   return {
@@ -90,42 +89,43 @@ export default class ConnectionsView extends React.Component<Props> {
         rowIndex = sortedRowIndex;
       }
     }
-
-    if (this.state.data === null || this.state.data.length === 0) {
-      return '';
-    }
     let cellValue = '';
-    switch (columnIndex) {
-      case 0:
-        cellValue = this.state.data[rowIndex].connectionId;
-        break;
-      case 1:
-        cellValue = this.state.data[rowIndex].appName;
-        break;
-      case 2:
-        cellValue = this.state.data[rowIndex].client;
-        break;
-      case 3:
-        cellValue = this.state.data[rowIndex].lastNs;
-        break;
-      case 4:
-        cellValue = this.state.data[rowIndex].lastOp;
-        break;
-      case 5:
-        cellValue = this.state.data[rowIndex].lastCommand;
-        break;
-      case 6:
-        cellValue = this.state.data[rowIndex].us;
-        break;
-      case 7:
-        cellValue = _.pick(this.state.data[rowIndex], 'us');
-        if (this.state.highWaterMark) {
-          cellValue.highWaterMark = this.state.highWaterMark.us;
+    if (this.state.data && this.state.data.length > 0) {
+      const rowData = this.state.data[rowIndex];
+      if (rowData) {
+        switch (columnIndex) {
+          case 0:
+            cellValue = rowData.hasOwnProperty('connectionId') ? rowData.connectionId : '';
+            break;
+          case 1:
+            cellValue = rowData.hasOwnProperty('appName') ? rowData.appName : '';
+            break;
+          case 2:
+            cellValue = rowData.hasOwnProperty('client') ? rowData.client : '';
+            break;
+          case 3:
+            cellValue = rowData.hasOwnProperty('lastNs') ? rowData.lastNs : '';
+            break;
+          case 4:
+            cellValue = rowData.hasOwnProperty('lastOp') ? rowData.lastOp : '';
+            break;
+          case 5:
+            cellValue = rowData.hasOwnProperty('lastCommand') ? rowData.lastCommand : '';
+            break;
+          case 6:
+            cellValue = rowData.hasOwnProperty('us') ? rowData.us : '';
+            break;
+          case 7:
+            cellValue = rowData.hasOwnProperty('us') ? _.pick(rowData, 'us') : { us: 0 };
+            if (this.state.highWaterMark) {
+              cellValue.highWaterMark = this.state.highWaterMark.us;
+            }
+            break;
+          default:
+            cellValue = '';
+            break;
         }
-        break;
-      default:
-        cellValue = this.state.data[rowIndex].connectionId;
-        break;
+      }
     }
     if (typeof cellValue === 'object') {
       cellValue = JSON.stringify(cellValue);
@@ -168,13 +168,12 @@ export default class ConnectionsView extends React.Component<Props> {
 
   render() {
     const { connections } = this.props;
-    console.log('connections::', connections);
 
     const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
 
     const loadingOptions = [];
     let numRows = 10;
-    if (connections && connections.length) {
+    if (connections && connections.length > 0) {
       numRows = connections.length;
     } else {
       loadingOptions.push(TableLoadingOption.CELLS);
