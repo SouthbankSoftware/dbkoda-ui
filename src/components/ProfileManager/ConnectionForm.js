@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-23T13:45:14+10:00
+ * @Last modified time: 2018-05-11T11:23:01+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -114,13 +114,13 @@ export class ConnectionForm extends JsonForm {
       this.updateUrl(field);
     }
 
-    if (field.name === 'urlRadioCluster' && field.value) {
+    if (field.name === 'urlClusterRadio' && field.value) {
       // disable the cluster config to use the cluster url
       this.updateFieldValue(field.$('useClusterConfig'), false);
     }
     if (
       field.subForm.value === SubformCategory.CLUSTER &&
-      field.name !== 'urlRadioCluster' &&
+      field.name !== 'urlClusterRadio' &&
       field.name !== 'urlCluster'
     ) {
       this.updateClusterUrl(field);
@@ -149,7 +149,7 @@ export class ConnectionForm extends JsonForm {
   @action
   updateClusterUrl(field) {
     const urlField = field.$('urlCluster');
-    const isUrlMode = field.$('urlRadioCluster').value;
+    const isUrlMode = field.$('urlClusterRadio').value;
     if (!isUrlMode) {
       let connectionUrl = StaticApi.mongoProtocol;
       if (field.$('hostsList').value === '') {

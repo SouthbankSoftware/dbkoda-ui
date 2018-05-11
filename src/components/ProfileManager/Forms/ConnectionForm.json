@@ -222,8 +222,8 @@
         "checkbox": "enabled"
       },
       {
-        "name": "urlRadioCluster",
-        "label": "Use URI instead",
+        "name": "urlClusterRadio",
+        "label": "Use Cluster URI instead",
         "value": false,
         "type": "checkbox",
         "column": 2,

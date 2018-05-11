@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-11T11:06:12+10:00
+ * @Last modified time: 2018-05-11T11:39:12+10:00
  */
 
 import _ from 'lodash';
@@ -129,7 +129,7 @@ export default class ProfileApi {
     if (data.passRadio === null || data.passRadio === undefined) {
       data.passRadio = !data.keyRadio;
     }
-    if (data.useClusterConfig) {
+    if (data.useClusterConfig || data.urlClusterRadio) {
       connectionUrl = data.urlCluster;
     } else {
       connectionUrl = data.url;
@@ -281,14 +281,14 @@ export default class ProfileApi {
       const profileData = _.omit(data, ['password', 'passPhrase', 'remotePass']);
       console.debug(profileData);
       const profile: Profile = {
+        ...profileData,
         id: res.id,
         shellId: res.shellId,
         status: ProfileStatus.OPEN,
         initialMsg: res.output ? res.output.join('\r') : '',
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
-        mongoType: res.mongoType,
-        ...profileData
+        mongoType: res.mongoType
       };
       console.debug('profile:', profile);
       if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {

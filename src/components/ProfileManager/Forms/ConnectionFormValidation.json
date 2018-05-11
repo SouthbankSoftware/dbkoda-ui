@@ -261,7 +261,7 @@
               }
             },
             {
-              "$id": "urlRadioCluster",
+              "$id": "urlClusterRadio",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
