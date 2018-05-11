@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T11:39:01+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-01T09:30:30+10:00
+ * @Last modified time: 2018-05-11T16:47:48+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -417,7 +417,7 @@ export default class TreeView extends React.Component {
       this.props.store.treeActionPanel.treeNode = treeNode;
       this.props.store.treeActionPanel.treeAction = action;
       const editorId = this.props.store.editorPanel.activeEditorId;
-      if (editorId) {
+      if (editorId && editorId !== 'Default') {
         const editor = this.props.store.editors.get(editorId);
         this.props.store.editors.set(
           editorId,
@@ -431,6 +431,19 @@ export default class TreeView extends React.Component {
             }
           })
         );
+      } else {
+        const profileId = this.props.store.profileList.selectedProfile.id;
+        if (profileId) {
+          this.props.api.addEditor({
+            profileId,
+            detailsView: {
+              visible: true,
+              treeNode,
+              treeAction: action,
+              currentProfile: this.props.store.profileList.selectedProfile.id
+            }
+          });
+        }
       }
     });
   };
