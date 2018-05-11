@@ -362,7 +362,7 @@ export default class Store {
 
             remote
               .getCurrentWindow()
-              .setTitle(`Perforamnce Panel - ${this.performancePanel.profileAlias}`);
+              .setTitle(`Performance Panel - ${this.performancePanel.profileAlias}`);
           }
 
           attachToMobx(this.performancePanel);
