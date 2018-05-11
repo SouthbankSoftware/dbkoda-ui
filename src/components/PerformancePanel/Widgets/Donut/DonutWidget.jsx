@@ -27,7 +27,7 @@
 import React from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { autorun } from 'mobx';
 import type { WidgetState } from '~/api/Widget';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
@@ -40,13 +40,17 @@ type Props = {
   performancePanel: PerformancePanelState,
   widget: WidgetState,
   widgetStyle: *,
-  getContextMenu: Function
+  getContextMenu: Function,
+  api: Object
 };
 
 type State = {
   items: *
 };
 
+@inject(allStores => ({
+  api: allStores.store.api
+}))
 @observer
 export default class DonutWidget extends React.Component<Props, State> {
   colors: Array<string> = [];
@@ -291,12 +295,17 @@ export default class DonutWidget extends React.Component<Props, State> {
     return { items: [top], totalSize: sumValue };
   }
 
+  showDetail = () => {
+    this.props.api.openStorageDDView();
+  };
+
   render() {
     const { performancePanel, widget, widgetStyle, getContextMenu } = this.props;
+    const myWidget = { ...widget, detailAction: { text: 'Storage', action: this.showDetail } };
     return (
       <Widget
         performancePanel={performancePanel}
-        widget={widget}
+        widget={myWidget}
         widgetStyle={widgetStyle}
         onResize={this._onResize}
         projection={this.projection()}

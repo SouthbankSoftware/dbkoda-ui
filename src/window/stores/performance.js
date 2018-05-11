@@ -33,6 +33,7 @@ import { handleNewData, attachToMobx } from '~/api/PerformancePanel';
 import { setUser, toggleRaygun } from '~/helpers/loggingApi';
 import { featherClient } from '../../helpers/feathers';
 import { Broker, EventType } from '../../helpers/broker';
+import StorageDrilldownApi from '../../api/StorageDrilldown';
 
 global.config = {
   settings: null
@@ -130,7 +131,8 @@ class PerformanceWindowApi {
 
   @action.bound
   openStorageDDView = () => {
-    this.sendCommandToMainProcess('pw_openStorageDDView');
+    // this.sendCommandToMainProcess('pw_openStorageDDView');
+    this.store.setActiveNavPane(NavPanes.STORAGE_PANEL);
   };
 
   @action.bound
@@ -263,6 +265,18 @@ class PerformanceWindowApi {
       this.store.toasterCallback(toasterObj);
     }
   }
+
+  storageDrillApi = new StorageDrilldownApi();
+
+  @action.bound
+  getStorageData(profileId, shellId) {
+    return this.storageDrillApi.getStorageData(profileId, shellId);
+  }
+
+  @action.bound
+  getChildStorageData(profileId, shellId, db, col) {
+    return this.storageDrillApi.getChildStorageData(profileId, shellId, db, col);
+  }
 }
 
 export default class Store {
@@ -297,6 +311,15 @@ export default class Store {
     null,
     { deep: false }
   );
+
+  @observable
+  layout = {
+    alertIsLoading: false,
+    optInVisible: !global.UAT,
+    overallSplitPos: 100,
+    leftSplitPos: 200,
+    rightSplitPos: 100
+  };
 
   @observable drawer = observable({ activeNavPane: NavPanes.PERFORMANCE });
 

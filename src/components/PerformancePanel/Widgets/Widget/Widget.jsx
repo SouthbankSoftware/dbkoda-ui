@@ -38,7 +38,7 @@ import ReactResizeDetector from 'react-resize-detector';
 // $FlowFixMe
 import { Popover2 } from '@blueprintjs/labs';
 // $FlowFixMe
-import { PopoverInteractionKind } from '@blueprintjs/core';
+import { PopoverInteractionKind, Button } from '@blueprintjs/core';
 import type { WidgetValue } from '~/api/Widget';
 import InfoIcon from '~/styles/icons/explain-query-icon.svg';
 import HistoryView from './HistoryView';
@@ -160,7 +160,8 @@ export default class Widget extends React.Component<Props, State> {
         rowText,
         type,
         panelTitle,
-        unit
+        unit,
+        detailAction
       },
       widgetStyle
     } = this.props;
@@ -190,6 +191,13 @@ export default class Widget extends React.Component<Props, State> {
                       target={<InfoIcon className="infoButton" width={20} height={20} />}
                     />
                   </span>
+                )}
+                {detailAction && (
+                  <Button
+                    className="detail-action"
+                    onClick={detailAction.action}
+                    text={detailAction.text}
+                  />
                 )}
                 {showAlarms && alarms && <AlarmView category={showAlarms} alarms={alarms} />}
               </div>
