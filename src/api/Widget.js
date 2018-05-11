@@ -78,7 +78,8 @@ export type WidgetState = {
   showAlarms?: *,
   alarms?: IObservableArray<Alarm>,
   infoWidget?: boolean,
-  colorList?: *
+  colorList?: *,
+  detailAction?: Object
 };
 
 export default class WidgetApi {

@@ -75,7 +75,7 @@
   .chartSeperator {
     display: inline-block;
     position: relative;
-    height: calc(80%);
+    height: 80vh;
     background-color: gray;
     width: 1px;
     margin: 0 70px 0 0px;
@@ -118,4 +118,8 @@
   .list::-webkit-scrollbar {
     width: 5px;
   }
+}
+
+.storage-view-full-screen {
+  height: 100vh;
 }

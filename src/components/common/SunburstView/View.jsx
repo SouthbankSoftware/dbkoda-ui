@@ -621,7 +621,7 @@ export default class View extends React.Component {
           </div>
         </div>
         <div className="chartSeperator" />
-        <div className="list">
+        <div className={`list ${this.props.store.layout.listClassName}`}>
           <table ref={listEl => (this.listEl = listEl)}>
             <thead />
             <tbody />

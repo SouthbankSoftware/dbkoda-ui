@@ -44,13 +44,12 @@ import '~/styles/global.scss';
 import '~/styles/fonts/index.css';
 import '#/App.scss';
 
+import { StoragePanel } from '../components/StoragePanel';
 import ProfileConfiguration from '../components/ProfileConfiguration';
 import Status from '../components/PerformancePanel/Status';
+import './PerformanceWindow.scss';
 
-@inject(allStores => ({
-  store: allStores.store,
-  api: allStores.store.api
-}))
+@inject(allStores => ({ store: allStores.store, api: allStores.store.api }))
 @observer
 class PerformanceWindow extends React.Component {
   constructor() {
@@ -140,10 +139,7 @@ class PerformanceWindow extends React.Component {
   showProfileConfiguration = show => {
     if (show) {
       const { store } = this.props;
-      this.setState({
-        bProfileConfiguration: true,
-        bProfiling: false
-      });
+      this.setState({ bProfileConfiguration: true, bProfiling: false });
       store.api.getProfilingDataBases();
     }
   };
@@ -151,10 +147,7 @@ class PerformanceWindow extends React.Component {
   @action.bound
   showProfiling = show => {
     if (show) {
-      this.setState({
-        bProfileConfiguration: false,
-        bProfiling: true
-      });
+      this.setState({ bProfileConfiguration: false, bProfiling: true });
     }
   };
 
@@ -165,22 +158,28 @@ class PerformanceWindow extends React.Component {
       <div className="performanceContainer">
         <SideNav
           className="sideNavPerformance"
-          menuItems={[NavPanes.PERFORMANCE, NavPanes.TOP_CONNECTIONS, NavPanes.PROFILING]}
+          menuItems={[
+            NavPanes.PERFORMANCE,
+            NavPanes.TOP_CONNECTIONS,
+            NavPanes.PROFILING,
+            NavPanes.STORAGE_PANEL
+          ]}
         />
         <div className="fullPanel">
           {store.drawer &&
             store.drawer.activeNavPane == NavPanes.PERFORMANCE && (
-              <div style={{ height: '100%' }}>
+              <div
+                style={{
+                  height: '100%'
+                }}
+              >
                 {store.performancePanel ? (
                   <PerformancePanel
                     performancePanel={store.performancePanel}
                     onClose={null}
                     resetHighWaterMark={store.api.resetHighWaterMark}
                     resetPerformancePanel={() => {
-                      this.setState({
-                        sshStatus: Status.NORMAL,
-                        mongoStatus: Status.NORMAL
-                      });
+                      this.setState({ sshStatus: Status.NORMAL, mongoStatus: Status.NORMAL });
                       store.api.resetPerformancePanel();
                     }}
                     sshStatus={this.state.sshStatus}
@@ -210,6 +209,14 @@ class PerformanceWindow extends React.Component {
                   this.showProfiling(true);
                 }}
               />
+            )}
+          {store.drawer &&
+            store.drawer.activeNavPane == NavPanes.STORAGE_PANEL &&
+            store.api.shellId && (
+              <div className="performance-storage">
+                <div className="title">Storage Panel</div>
+                <StoragePanel profileId={store.api.profileId} shellId={store.api.shellId} />
+              </div>
             )}
         </div>
       </div>
