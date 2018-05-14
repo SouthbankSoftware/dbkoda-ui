@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-05-07T17:48:33+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-15T09:28:58+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -254,6 +254,11 @@ class PerformanceWindowApi {
   };
 
   @action.bound
+  getIndexAdvisorForSelectedOp = () => {
+    console.log('getIndexAdvisorForSelectedOp');
+  };
+
+  @action.bound
   setProfilingDatabaseConfiguration = configs => {
     console.log('send profiling database configuration ', configs);
     this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', { configs });
@@ -455,12 +460,17 @@ export default class Store {
             this.profilingPanel.databases = newDbs;
           }
         } else if (args.command === 'mw_explainForOperation') {
-          console.log(args.payload);
+          console.log('args.payload: ', JSON.stringify(args.payload));
           this.topConnectionsPanel.bLoadingExplain = false;
           if (args.explainId && args.explainId === this.topConnectionsPanel.lastExplainId) {
-            if (args.payload && args.payload.executionStats) {
+            if (
+              args.payload &&
+              args.payload.queryPlanner &&
+              args.payload.queryPlanner.winningPlan
+            ) {
               extendObservable(this.topConnectionsPanel.selectedOperation, {
-                execStats: args.payload.executionStats.executionStages
+                explainPlan: args.payload,
+                execStats: args.payload.queryPlanner.winningPlan
               });
 
               this.topConnectionsPanel.bShowExplain = true;

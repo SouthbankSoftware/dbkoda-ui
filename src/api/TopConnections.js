@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2018-03-27T10:39:44+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-05-04T23:10:05+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-14T15:47:45+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -126,7 +126,7 @@ export default class TopConnections {
           database: params.database,
           command: {
             explain: JSON.parse(params.explainCmd),
-            verbosity: 'executionStats'
+            verbosity: 'queryPlanner'
           }
         })
         .then(res => {
