@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-24T14:46:20+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-15T14:43:30+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,13 +22,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-07-24T14:46:20+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T18:02:48+11:00
  */
 
 import 'codemirror/addon/hint/show-hint.css';
@@ -123,6 +122,8 @@ function collect(connect, monitor) {
 }))
 @ContextMenuTarget
 class View extends React.Component {
+  _debouncedAutocomplete: *;
+
   static propTypes = {
     store: PropTypes.observableObject.isRequired
   };
@@ -667,10 +668,11 @@ class View extends React.Component {
     this.refresh();
     if (
       this.props.config.settings.automaticAutoComplete &&
-      this.editorObject.type == EditorTypes.DEFAULT
+      this.editorObject.type === EditorTypes.DEFAULT &&
+      !this._debouncedAutocomplete
     ) {
-      const cm = this.editor.getCodeMirror();
-      cm.on('change', _.debounce(CodeMirror.commands.autocomplete, 400));
+      this._debouncedAutocomplete = _.debounce(CodeMirror.commands.autocomplete, 400);
+      this.editor.getCodeMirror().on('change', this._debouncedAutocomplete);
     }
 
     const _updateUnsavedFileIndicator = _.debounce(() => {
@@ -714,7 +716,11 @@ class View extends React.Component {
     _.forEach(this.reactions, r => r());
 
     this._updateUnsavedFileIndicator.cancel();
-    this.editor.getCodeMirror().off('change', this._updateUnsavedFileIndicator);
+
+    const cm = this.editor.getCodeMirror();
+
+    cm.off('change', this._updateUnsavedFileIndicator);
+    !this._debouncedAutocomplete && cm.off('change', this._debouncedAutocomplete);
     this._updateUnsavedFileIndicator = null;
 
     Broker.removeListener(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain);
