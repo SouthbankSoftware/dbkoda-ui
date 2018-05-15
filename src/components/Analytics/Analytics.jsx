@@ -5,7 +5,7 @@
  * @Date:   2017-06-20T15:09:51+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-15T11:34:47+10:00
+ * @Last modified time: 2018-05-15T11:55:49+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -72,7 +72,7 @@ export default class Analytics extends React.Component<Props> {
      * Reaction function for when a change occurs on the telemetryEnabled state
      * @param {function()} - The state that will trigger the reaction.
      * @param {function()} - The reaction to any change on the state.
-     //  */
+     */
     this.reactions.push(
       reaction(
         () => this.props.config.settings.telemetryEnabled,
@@ -88,6 +88,7 @@ export default class Analytics extends React.Component<Props> {
         { name: 'analyticsReactionToTelemetryChange' }
       )
     );
+
     /**
      * send opt events when clicking ok button.
      */
@@ -204,8 +205,8 @@ export default class Analytics extends React.Component<Props> {
   };
 
   /**
-   *  Function to be called after a new profile event has been received
-   *  @param {Object} profile - An object that represents the newly created profile
+   * Function to be called after a new profile event has been received
+   * @param {Object} profile - An object that represents the newly created profile
    */
   newProfileCreated = (profile: *) => {
     if (this.props.config.settings.telemetryEnabled) {
@@ -229,8 +230,7 @@ export default class Analytics extends React.Component<Props> {
   };
 
   /**
-   *f
-   * function to be called when activity goes to the controller.
+   * Function to be called when activity goes to the controller.
    * @param {String} service - The service type that has been called.
    */
   controllerActivity = (service: *) => {
@@ -283,11 +283,11 @@ export default class Analytics extends React.Component<Props> {
   };
 
   /**
-   *  Function to send an event to the analytics service
-   *  @param {AnalyticsEvent} eventType - The AnalyticsEvent type that relates to this event
-   *  @param {String} eventLabel - (Optional) The 'label' of the event (could be an item it relates to)
-   *  @param {String} eventValue - (Optional) The 'value' of the event (could be the value of an item)
-   *  @param {String} eventCategory - (Optional) The overarching category of the event type
+   * Function to send an event to the analytics service
+   * @param {AnalyticsEvent} eventType - The AnalyticsEvent type that relates to this event
+   * @param {String} eventLabel - (Optional) The 'label' of the event (could be an item it relates to)
+   * @param {String} eventValue - (Optional) The 'value' of the event (could be the value of an item)
+   * @param {String} eventCategory - (Optional) The overarching category of the event type
    */
   _sendEvent = (eventType, eventCategory, eventLabel, eventValue) => {
     if (UAT) return;
