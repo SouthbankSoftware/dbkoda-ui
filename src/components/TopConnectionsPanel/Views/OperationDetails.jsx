@@ -3,7 +3,7 @@
  * @Date:   2018-04-12T16:16:27+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-14T14:31:01+10:00
+ * @Last modified time: 2018-05-15T17:20:01+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -110,11 +110,6 @@ export default class OperationDetails extends React.Component {
     this.props.api.getExplainForSelectedOp();
   }
 
-  @action.bound
-  getIndexAdvisorForSelectedOp() {
-    this.props.api.getIndexAdvisorForSelectedOp();
-  }
-
   render() {
     const { topConnectionsPanel } = this.props;
 
@@ -138,20 +133,6 @@ export default class OperationDetails extends React.Component {
                 text="Explain"
                 loading={topConnectionsPanel.bLoadingExplain}
                 onClick={this.getExplainForSelectedOp}
-              />
-            </Tooltip>
-            <Tooltip
-              className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-              content="Index Advisor"
-              hoverOpenDelay={1000}
-              inline
-              intent={Intent.PRIMARY}
-              position={Position.BOTTOM}
-            >
-              <Button
-                className="reset-button pt-button pt-intent-primary"
-                text="Index Advisor"
-                onClick={this.getIndexAdvisorForSelectedOp}
               />
             </Tooltip>
           </div>

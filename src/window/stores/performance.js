@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-15T09:28:58+10:00
+ * @Last modified time: 2018-05-15T16:58:33+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,9 +31,7 @@ import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
 import { ProfilingConstants, NavPanes } from '#/common/Constants';
 import { handleNewData, attachToMobx } from '~/api/PerformancePanel';
 import { setUser, toggleRaygun } from '~/helpers/loggingApi';
-import { featherClient } from '../../helpers/feathers';
-import { Broker, EventType } from '../../helpers/broker';
-import StorageDrilldownApi from '../../api/StorageDrilldown';
+import PerformanceWindowApi from '../api/PerformanceWindow';
 
 global.config = {
   settings: null
@@ -60,228 +58,6 @@ if (IS_ELECTRON) {
       toggleRaygun(_.get(global.config.settings, 'telemetryEnabled'));
     }
   });
-}
-
-class PerformanceWindowApi {
-  store = null;
-  constructor(store) {
-    this.store = store;
-    Broker.on(EventType.FEATHER_CLIENT_LOADED, () => {
-      this.featherClientLoaded = true;
-      this.createNewShell(this.profileId);
-    });
-  }
-  profileId = null;
-  setProfileId(id) {
-    this.profileId = id;
-  }
-
-  @action.bound
-  createNewShell(profileId) {
-    const { shellService } = featherClient();
-    if (!shellService || !profileId) {
-      return;
-    }
-    shellService.timeout = 30000;
-    shellService
-      .create({ id: profileId })
-      .then(res => {
-        console.log('create new shell ', res);
-        this.shellId = res.shellId;
-      })
-      .catch(err => {
-        l.error(err);
-      });
-  }
-
-  @action.bound
-  closeShell() {
-    const { shellService } = featherClient();
-    if (!shellService || !this.profileId) {
-      return;
-    }
-    shellService
-      .remove({ id: this.profileId, query: { shellId: this.shellId } })
-      .then(e => l.info('close shell ', e))
-      .catch(err => l.error(err));
-  }
-
-  @action.bound
-  sendCommandToMainProcess = (command, params) => {
-    if (IS_ELECTRON) {
-      const { ipcRenderer } = window.require('electron');
-
-      ipcRenderer.send('performance', {
-        command,
-        profileId: this.profileId,
-        ...params
-      });
-    }
-  };
-
-  @action.bound
-  resetHighWaterMark = () => {
-    this.sendCommandToMainProcess('pw_resetHighWaterMark');
-  };
-
-  @action.bound
-  resetPerformancePanel = () => {
-    this.sendCommandToMainProcess('pw_resetPerformancePanel');
-  };
-
-  @action.bound
-  openStorageDDView = () => {
-    // this.sendCommandToMainProcess('pw_openStorageDDView');
-    this.store.setActiveNavPane(NavPanes.STORAGE_PANEL);
-  };
-
-  @action.bound
-  getTopConnections = () => {
-    this.store.topConnectionsPanel.payload = null;
-    this.store.topConnectionsPanel.selectedConnection = null;
-    this.store.topConnectionsPanel.operations = null;
-    this.store.topConnectionsPanel.selectedOperation = null;
-    this.store.topConnectionsPanel.highWaterMarkConnection = null;
-    this.sendCommandToMainProcess('pw_getTopConnections');
-  };
-
-  @action.bound
-  killSelectedOperation = () => {
-    const { selectedConnection, selectedOperation } = this.store.topConnectionsPanel;
-    if (selectedOperation) {
-      const { opId } = selectedOperation;
-      this.sendCommandToMainProcess('pw_killOperation', { opId });
-      const ops = _.omit(selectedConnection.ops, opId);
-      selectedConnection.ops = ops;
-      this.store.topConnectionsPanel.operations = ops;
-    }
-  };
-
-  @action.bound
-  getProfilingDataBases = () => {
-    console.log('getProfilingDataBases');
-    this.store.profilingPanel.enabledDatabases = [];
-    this.store.profilingPanel.selectedDatabase = null;
-    this.sendCommandToMainProcess('pw_getProfilingDataBases');
-  };
-
-  @action.bound
-  getProfilingData = database => {
-    this.store.profilingPanel.payload = null;
-    this.sendCommandToMainProcess('pw_getProfilingData', { database });
-  };
-
-  @action.bound
-  getExplainForSelectedOp = () => {
-    const { topConnectionsPanel } = this.store;
-    const { selectedConnection, selectedOperation } = topConnectionsPanel;
-    if (selectedConnection && selectedOperation) {
-      const explainId = selectedConnection.connectionId + '_' + selectedOperation.opId;
-      topConnectionsPanel.lastExplainId = explainId;
-      topConnectionsPanel.bLoadingExplain = true;
-
-      const filterCommand = (value, key) => {
-        const loKey = key.toLowerCase();
-        if (
-          loKey === 'findandmodify' ||
-          loKey === 'find' ||
-          loKey === 'distinct' ||
-          loKey === 'count'
-        ) {
-          return true;
-        }
-        return false;
-      };
-      const cmdNotSupported = () => {
-        topConnectionsPanel.lastExplainId = null;
-        topConnectionsPanel.bLoadingExplain = false;
-        this.showToaster({
-          message: 'Command not supported for Explain.',
-          className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
-        });
-      };
-
-      let explainCommandStr = '';
-      let databaseStr = '';
-
-      if (
-        (selectedOperation.op === 'command' || selectedOperation.op === 'query') &&
-        selectedOperation.command &&
-        selectedOperation.command.$db
-      ) {
-        const cmdForExplain = selectedOperation.command;
-        const database = _.pick(cmdForExplain, '$db');
-        databaseStr = database.$db;
-        let commandParams = _.omit(cmdForExplain, '$db');
-        const command = _.pickBy(commandParams, filterCommand);
-        if (Object.keys(command).length > 0) {
-          const commandStr = JSON.stringify(command);
-          commandParams = _.omitBy(commandParams, filterCommand);
-          const commandParamsStr = JSON.stringify(commandParams);
-          explainCommandStr =
-            commandParamsStr.substr(0, 1) +
-            commandStr.substr(1, commandStr.length - 2) +
-            ',' +
-            commandParamsStr.substr(1);
-        } else {
-          cmdNotSupported();
-        }
-      } else if (selectedOperation.op === 'update') {
-        const nsParams = selectedOperation.ns.split('.');
-        [databaseStr] = nsParams;
-        const [, collection] = nsParams;
-        const commandStr = JSON.stringify(selectedOperation.command);
-        explainCommandStr = `{"update": "${collection}", "updates":[${commandStr}]}`;
-      } else if (selectedOperation.op === 'remove') {
-        const nsParams = selectedOperation.ns.split('.');
-        [databaseStr] = nsParams;
-        const [, collection] = nsParams;
-        const commandStr = JSON.stringify(selectedOperation.command);
-        explainCommandStr = `{"delete": "${collection}", "deletes":[${commandStr}]}`;
-      } else {
-        cmdNotSupported();
-      }
-
-      if (explainCommandStr.length > 0 && databaseStr.length > 0) {
-        this.sendCommandToMainProcess('pw_getOperationExplainPlan', {
-          explainId,
-          explainCmd: explainCommandStr,
-          database: databaseStr
-        });
-      }
-    }
-  };
-
-  @action.bound
-  getIndexAdvisorForSelectedOp = () => {
-    console.log('getIndexAdvisorForSelectedOp');
-  };
-
-  @action.bound
-  setProfilingDatabaseConfiguration = configs => {
-    console.log('send profiling database configuration ', configs);
-    this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', { configs });
-  };
-
-  @action.bound
-  showToaster(toasterObj) {
-    if (this.store && this.store.toasterCallback) {
-      this.store.toasterCallback(toasterObj);
-    }
-  }
-
-  storageDrillApi = new StorageDrilldownApi();
-
-  @action.bound
-  getStorageData(profileId, shellId) {
-    return this.storageDrillApi.getStorageData(profileId, shellId);
-  }
-
-  @action.bound
-  getChildStorageData(profileId, shellId, db, col) {
-    return this.storageDrillApi.getChildStorageData(profileId, shellId, db, col);
-  }
 }
 
 export default class Store {
@@ -336,7 +112,6 @@ export default class Store {
 
     if (IS_ELECTRON) {
       const { ipcRenderer } = window.require('electron');
-
       ipcRenderer.on('performance', this.handleDataSync);
     }
   }
@@ -460,7 +235,7 @@ export default class Store {
             this.profilingPanel.databases = newDbs;
           }
         } else if (args.command === 'mw_explainForOperation') {
-          console.log('args.payload: ', JSON.stringify(args.payload));
+          console.log('Explain Result: ', JSON.stringify(args.payload, null, 2));
           this.topConnectionsPanel.bLoadingExplain = false;
           if (args.explainId && args.explainId === this.topConnectionsPanel.lastExplainId) {
             if (

@@ -3,7 +3,7 @@
  * @Date:   2018-04-12T16:16:27+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-13T09:59:09+10:00
+ * @Last modified time: 2018-05-15T17:16:45+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,8 +31,9 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import React from 'react';
+import { Tooltip, Intent, Position, Button } from '@blueprintjs/core';
 import CodeMirror from '#/common/LegacyCodeMirror'; // eslint-disable-line
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/selection/active-line.js';
@@ -58,13 +59,17 @@ import ErrorView from '#/common/ErrorView';
 // import ShardsStageProgress from '#/ExplainPanel/ShardsStageProgress';
 import 'codemirror/theme/material.css';
 
+@inject(({ store }) => {
+  return {
+    api: store.api
+  };
+})
 @observer
 export default class OperationDetails extends React.Component {
   static propTypes = {};
 
   render() {
     const executionStages = getExecutionStages(this.props.execStats);
-    console.log('execStats::', this.props.execStats);
     return (
       <div className="explainView" style={{ height: '100%' }}>
         <nav className="pt-navbar explainToolbar">
@@ -75,6 +80,22 @@ export default class OperationDetails extends React.Component {
                 {globalString('performance/profiling/results/explainTitle')}
               </span>
             </div>
+          </div>
+          <div className="pt-navbar-group pt-align-right">
+            <Tooltip
+              className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+              content="Index Advisor"
+              hoverOpenDelay={1000}
+              inline
+              intent={Intent.PRIMARY}
+              position={Position.BOTTOM}
+            >
+              <Button
+                className="reset-button pt-button pt-intent-primary"
+                text="Index Advisor"
+                onClick={this.props.api.getIndexAdvisorForSelectedOp}
+              />
+            </Tooltip>
           </div>
         </nav>
         <div className="explainBody explain-statistic-container-view" style={{ height: '100%' }}>
