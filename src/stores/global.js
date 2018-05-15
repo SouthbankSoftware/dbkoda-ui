@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-07T16:52:58+10:00
+ * @Last modified time: 2018-05-15T12:06:44+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -656,12 +656,7 @@ export default class Store {
               featherClient()
                 .terminalService.get(terminalId)
                 .catch(
-                  action(err => {
-                    logToMain('error', 'Failed to fetch terminals: ' + err);
-                    if (err.code !== 404) {
-                      console.error(err);
-                    }
-
+                  action(() => {
                     this.terminals.delete(terminalId);
 
                     return this.api.getTerminalTabId(terminalId);
