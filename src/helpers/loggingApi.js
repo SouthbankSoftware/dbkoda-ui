@@ -5,7 +5,7 @@
  * @Date:   2018-05-04T10:41:36+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-08T14:58:32+10:00
+ * @Last modified time: 2018-05-15T11:28:13+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -67,7 +67,7 @@ const initRaygun = (manualBoot = true) => {
   // ui bundle
   // $FlowFixMe
   global.rg4js('apiKey', API_KEY); // eslint-disable-line no-undef
-  global.rg4js('enablePulse', true);
+  !UAT && global.rg4js('enablePulse', true);
   // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
   // DefinePlugin. The VERSION is retrieved automatically from package.json at the building time of
   // ui bundle

@@ -1,9 +1,11 @@
 /**
+ * @flow
+ *
  * @Author: chris
  * @Date:   2017-06-20T15:09:51+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-08T16:55:11+10:00
+ * @Last modified time: 2018-05-15T11:34:47+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,38 +36,27 @@ import { analytics, protocol } from '../../env';
 import { AnalyticsEvents } from './Events';
 import { Broker, EventType } from '../../helpers/broker';
 
+type Props = {
+  store: *,
+  config: *
+};
+
 @inject(allStores => ({
   store: allStores.store,
   config: allStores.config
 }))
 @observer
-export default class Analytics extends React.Component {
+export default class Analytics extends React.Component<Props> {
+  inited = false;
+  hasPinged = false;
   reactions = [];
 
-  constructor(props) {
-    super(props);
-    this.hasPinged = false;
-    let siteUrl = '';
-    const gaCode = analytics;
-    if (process.env.NODE_ENV === 'development') {
-      siteUrl = protocol + 'dev.dbkoda.com';
-      ReactGA.initialize(gaCode.development, {
-        debug: true,
-        titleCase: false,
-        gaOptions: {
-          userId: this.props.config.settings.user.id
-        }
-      });
-    } else if (process.env.NODE_ENV === 'production') {
-      siteUrl = protocol + 'electron.dbkoda.com';
-      ReactGA.initialize(gaCode.prod, {
-        titleCase: false,
-        gaOptions: {
-          userId: this.props.config.settings.user.id
-        }
-      });
+  componentDidMount() {
+    const { telemetryEnabled } = this.props.config.settings;
+
+    if (telemetryEnabled) {
+      this._sendEvent(AnalyticsEvents.APP_OPEN, 'App', this.props.store.version);
     }
-    ReactGA.set({ page: siteUrl });
 
     // provide our own user id
     this.reactions.push(
@@ -77,11 +68,6 @@ export default class Analytics extends React.Component {
       )
     );
 
-    if (this.props.config.settings.telemetryEnabled) {
-      // TODO Get App Version
-      const appVersion = this.props.store.version;
-      this._sendEvent(AnalyticsEvents.APP_OPEN, 'App', appVersion);
-    }
     /**
      * Reaction function for when a change occurs on the telemetryEnabled state
      * @param {function()} - The state that will trigger the reaction.
@@ -118,17 +104,7 @@ export default class Analytics extends React.Component {
         { name: 'analyticsReactionToTelemetryChange' }
       )
     );
-    this._sendEvent = this._sendEvent.bind(this);
-    this.newProfileCreated = this.newProfileCreated.bind(this);
-    this.feedbackEvent = this.feedbackEvent.bind(this);
-    this.keyFeatureEvent = this.keyFeatureEvent.bind(this);
-    this.controllerActivity = this.controllerActivity.bind(this);
-    this.pingHome = this.pingHome.bind(this);
-    this.getToday = this.getToday.bind(this);
-    this.hasOneDayPassed = this.hasOneDayPassed.bind(this);
-  }
 
-  componentDidMount() {
     Broker.on(EventType.NEW_PROFILE_CREATED, this.newProfileCreated);
     Broker.on(EventType.FEEDBACK, this.feedbackEvent);
     Broker.on(EventType.FEATURE_USE, this.keyFeatureEvent);
@@ -146,14 +122,41 @@ export default class Analytics extends React.Component {
     _.forEach(this.reactions, r => r());
   }
 
-  hasOneDayPassed(previousDate, currentDate) {
+  initialize = () => {
+    let siteUrl;
+    const gaCode = analytics;
+    const userId = this.props.config.settings.user.id;
+
+    if (process.env.NODE_ENV === 'development') {
+      siteUrl = protocol + 'dev.dbkoda.com';
+      ReactGA.initialize(gaCode.development, {
+        debug: true,
+        titleCase: false,
+        gaOptions: {
+          userId
+        }
+      });
+    } else if (process.env.NODE_ENV === 'production') {
+      siteUrl = protocol + 'electron.dbkoda.com';
+      ReactGA.initialize(gaCode.prod, {
+        titleCase: false,
+        gaOptions: {
+          userId
+        }
+      });
+    }
+
+    ReactGA.set({ page: siteUrl });
+  };
+
+  hasOneDayPassed = (previousDate: string, currentDate: string) => {
     if (Date.parse(currentDate) - Date.parse(previousDate) >= 1) {
       return true;
     }
     return false;
-  }
+  };
 
-  getToday() {
+  getToday = () => {
     let today = new Date();
     let dd = today.getDate();
     let mm = today.getMonth() + 1; // January is 0!
@@ -169,9 +172,9 @@ export default class Analytics extends React.Component {
 
     today = mm + '/' + dd + '/' + yyyy;
     return today;
-  }
+  };
 
-  pingHome() {
+  pingHome = () => {
     if (!this.hasPinged) {
       this.hasPinged = true;
       const today = Date.parse(this.getToday());
@@ -198,12 +201,13 @@ export default class Analytics extends React.Component {
           logToMain('error', 'Failed to send event to GA: ' + err);
         });
     }
-  }
+  };
+
   /**
    *  Function to be called after a new profile event has been received
    *  @param {Object} profile - An object that represents the newly created profile
    */
-  newProfileCreated(profile) {
+  newProfileCreated = (profile: *) => {
     if (this.props.config.settings.telemetryEnabled) {
       let mongoInfo =
         '{ dbVersion: ' +
@@ -222,13 +226,14 @@ export default class Analytics extends React.Component {
       mongoInfo += ', ssl: ' + profile.ssl + ', ssh: ' + profile.ssh + '}';
       this._sendEvent(AnalyticsEvents.NEW_PROFILE, 'Profiles', mongoInfo);
     }
-  }
+  };
+
   /**
    *f
    * function to be called when activity goes to the controller.
    * @param {String} service - The service type that has been called.
    */
-  controllerActivity(service) {
+  controllerActivity = (service: *) => {
     if (this.props.config.settings.telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.CONTROLLER_ACTIVITY, 'Service', service);
       if (
@@ -247,17 +252,19 @@ export default class Analytics extends React.Component {
         this.props.store.firstPingDate = this.getToday();
       }
     }
-  }
-  keyFeatureEvent(feature) {
+  };
+
+  keyFeatureEvent = (feature: *) => {
     if (this.props.config.settings.telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.KEY_FEATURE_USED, 'FeatureUsed', feature);
     }
-  }
+  };
+
   /**
    * function to be called when feedback is recieved
    * @param {String} comments - Any additional comments to be sent with the feedback.
    */
-  feedbackEvent(feedback) {
+  feedbackEvent = (feedback: *) => {
     let type;
     switch (feedback.type) {
       case 'PositiveFeedback':
@@ -273,7 +280,8 @@ export default class Analytics extends React.Component {
         break;
     }
     this._sendEvent(type, 'Feedback', feedback.comments);
-  }
+  };
+
   /**
    *  Function to send an event to the analytics service
    *  @param {AnalyticsEvent} eventType - The AnalyticsEvent type that relates to this event
@@ -281,19 +289,31 @@ export default class Analytics extends React.Component {
    *  @param {String} eventValue - (Optional) The 'value' of the event (could be the value of an item)
    *  @param {String} eventCategory - (Optional) The overarching category of the event type
    */
-  _sendEvent(eventType, eventCategory, eventLabel, eventValue) {
+  _sendEvent = (eventType, eventCategory, eventLabel, eventValue) => {
+    if (UAT) return;
+
+    if (!this.inited) {
+      this.initialize();
+    }
+
     const event = {
       category: eventCategory,
-      action: eventType
+      action: eventType,
+      label: undefined,
+      value: undefined
     };
+
     if (eventLabel) {
       event.label = eventLabel;
     }
+
     if (eventValue || eventValue === 0) {
       event.value = eventValue;
     }
+
     ReactGA.event(event);
-  }
+  };
+
   render() {
     return <div className="analytics" />;
   }
