@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-11T14:18:14+10:00
+ * @Last modified time: 2018-05-15T13:55:49+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -47,12 +47,12 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
-      autoRefreshTopCon: true,
+      autoRefreshTopCon: false,
       autoRefreshTimeout: 30,
       bottomSplitPos: window.innerWidth * 0.6 < 600 ? 600 : window.innerWidth * 0.6,
       topSplitPos: window.innerWidth - 61
     };
-    this.updateTopConnections();
+    this.props.api.getTopConnections();
   }
   componentDidMount() {
     window.addEventListener('resize', debounce(this.handleResize, 400));
@@ -63,8 +63,8 @@ export default class TopConnectionsPanel extends React.Component<Props> {
 
   @autobind
   updateTopConnections() {
-    this.props.api.getTopConnections();
     if (this.state.autoRefreshTopCon && this.state.autoRefreshTimeout > 0) {
+      this.props.api.getTopConnections();
       this.setTimerForUpdate();
     }
   }
@@ -111,7 +111,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
 
   @autobind
   onAutoRefreshCheckboxToggle(e) {
-    const fieldValue = e.target.checked;
+    const fieldValue = e.target.checked === true;
     const fieldName = e.target.id;
     console.log(fieldName, ':', fieldValue);
     this.setState({ autoRefreshTopCon: fieldValue });
