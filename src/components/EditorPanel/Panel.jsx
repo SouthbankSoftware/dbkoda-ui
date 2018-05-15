@@ -94,6 +94,8 @@ export default class Panel extends React.Component {
     this.onTabScrollLeftBtnClicked = this.onTabScrollLeftBtnClicked.bind(this);
     this.onTabScrollRightBtnClicked = this.onTabScrollRightBtnClicked.bind(this);
     this.onTabListBtnClicked = this.onTabListBtnClicked.bind(this);
+    this.showArrows = false;
+    this.updateShowArrows();
 
     this.reactions.push(
       reaction(
@@ -191,6 +193,7 @@ export default class Panel extends React.Component {
   newEditor(newId) {
     this.props.store.editorPanel.activeDropdownId = newId;
     this.props.store.editorPanel.activeEditorId = newId;
+    this.updateShowArrows();
   }
 
   /**
@@ -200,6 +203,7 @@ export default class Panel extends React.Component {
   @action
   closeTab(currEditor) {
     this.props.api.removeEditor(currEditor);
+    this.updateShowArrows();
     this.forceUpdate();
   }
 
@@ -868,9 +872,26 @@ export default class Panel extends React.Component {
   }
 
   /**
+   * Determine if the scroll arrows should be shown based on the width of the scrollable area
+   *   scrollWidth - scrollable area's width
+   *   clientWidth - width of the area that contains the scrollable area
+   */
+  updateShowArrows() {
+    setTimeout(() => {
+      const newShowArrows =
+        this.tabs && this.tabs.tablistElement.scrollWidth > this.tabs.tablistElement.clientWidth;
+      if (newShowArrows !== this.showArrows) {
+        this.showArrows = newShowArrows;
+        this.forceUpdate();
+      }
+    }, 0);
+  }
+
+  /**
    * Action for rendering the component.
    */
   render() {
+    this.updateShowArrows();
     const editors = [...this.props.store.editors.entries()];
     return (
       <div className="pt-dark editorPanel" onContextMenu={this.showContextMenu}>
@@ -882,7 +903,7 @@ export default class Panel extends React.Component {
         <Tabs
           ref={ref => (this.tabs = ref)}
           id="EditorTabs"
-          className="editorTabView"
+          className={this.showArrows ? 'editorTabView showArrows' : 'editorTabView'}
           renderActiveTabPanelOnly={false}
           animate={this.state.animate}
           onChange={this.changeTab}
@@ -904,16 +925,20 @@ export default class Panel extends React.Component {
             return comp;
           })}
         </Tabs>
-        <div
-          ref={ref => (this.tabScrollLeftBtn = ref)}
-          className="pt-icon-caret-left tabControlBtn tabScrollLeftBtn"
-          onClick={this.onTabScrollLeftBtnClicked}
-        />
-        <div
-          ref={ref => (this.tabScrollRightBtn = ref)}
-          className="pt-icon-caret-right tabControlBtn tabScrollRightBtn"
-          onClick={this.onTabScrollRightBtnClicked}
-        />
+        {this.showArrows && (
+          <div
+            ref={ref => (this.tabScrollLeftBtn = ref)}
+            className="pt-icon-caret-left tabControlBtn tabScrollLeftBtn"
+            onClick={this.onTabScrollLeftBtnClicked}
+          />
+        )}
+        {this.showArrows && (
+          <div
+            ref={ref => (this.tabScrollRightBtn = ref)}
+            className="pt-icon-caret-right tabControlBtn tabScrollRightBtn"
+            onClick={this.onTabScrollRightBtnClicked}
+          />
+        )}
         <div
           ref={ref => (this.tabListBtn = ref)}
           className="pt-icon-menu tabControlBtn tabListBtn"
