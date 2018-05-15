@@ -49,7 +49,8 @@ import 'codemirror/mode/markdown/markdown';
 import 'codemirror/addon/selection/active-line.js';
 import 'codemirror/addon/display/autorefresh.js';
 import 'codemirror/addon/edit/matchbrackets.js';
-// Patched for codemirror@5.28.0. Need to check this file when upgrade codemirror
+// Patched for codemirror@5.28.0. Need to check this file when upgrade
+// codemirror
 import '#/common/closebrackets.js';
 import 'codemirror/addon/fold/foldcode.js';
 import 'codemirror/addon/fold/foldgutter.js';
@@ -212,22 +213,17 @@ class View extends React.Component {
               });
               console.log(queries);
               service
-                .update(shell, {
-                  queries,
-                  schema: editor.db
-                })
+                .update(shell, { queries, schema: editor.db })
                 .then(res => {
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
                   if (res.output.length > 10000) {
-                    output.output = { output: _.slice(res.output, 0, 10000) }; // JSON.stringify(res);
+                    output.output = {
+                      output: _.slice(res.output, 0, 10000)
+                    }; // JSON.stringify(res);
                     const message = globalString('drill/drill_large_dataset');
-                    NewToaster.show({
-                      message,
-                      className: 'danger',
-                      icon: 'thumbs-down'
-                    });
+                    NewToaster.show({ message, className: 'danger', icon: 'thumbs-down' });
                   } else {
                     output.output = res; // JSON.stringify(res);
                   }
@@ -252,11 +248,7 @@ class View extends React.Component {
 
                     if (err.Message.match(/Timeout of 90000ms/)) {
                       const message = globalString('drill/drill_timed_out');
-                      NewToaster.show({
-                        message,
-                        className: 'danger',
-                        icon: 'thumbs-down'
-                      });
+                      NewToaster.show({ message, className: 'danger', icon: 'thumbs-down' });
                     }
 
                     const strOutput = JSON.stringify(err, null, 2);
@@ -327,11 +319,7 @@ class View extends React.Component {
                     } else if (err && err.statusCode === 600) {
                       message = globalString('drill/connection_not_exist');
                     }
-                    NewToaster.show({
-                      message,
-                      className: 'danger',
-                      icon: 'thumbs-down'
-                    });
+                    NewToaster.show({ message, className: 'danger', icon: 'thumbs-down' });
                   });
                 });
             }
@@ -397,13 +385,11 @@ class View extends React.Component {
                   output.id = editor.id;
                   output.profileId = profileId;
                   if (res.output.length > 10000) {
-                    output.output = { output: _.slice(res.output, 0, 10000) }; // JSON.stringify(res);
+                    output.output = {
+                      output: _.slice(res.output, 0, 10000)
+                    }; // JSON.stringify(res);
                     const message = globalString('drill/drill_large_dataset');
-                    NewToaster.show({
-                      message,
-                      className: 'danger',
-                      icon: 'thumbs-down'
-                    });
+                    NewToaster.show({ message, className: 'danger', icon: 'thumbs-down' });
                   } else {
                     output.output = res; // JSON.stringify(res);
                   }
@@ -428,11 +414,7 @@ class View extends React.Component {
 
                     if (err.Message.match(/Timeout of 90000ms/)) {
                       const message = globalString('drill/drill_timed_out');
-                      NewToaster.show({
-                        message,
-                        className: 'danger',
-                        icon: 'thumbs-down'
-                      });
+                      NewToaster.show({ message, className: 'danger', icon: 'thumbs-down' });
                     }
 
                     // Analyse Error for line number and highlight -> Only works for simple errors.
@@ -453,7 +435,10 @@ class View extends React.Component {
                             line: errStartLine + line - 1,
                             ch: errStartCol - 1
                           },
-                          { line: errEndLine + line - 1, ch: errEndCol },
+                          {
+                            line: errEndLine + line - 1,
+                            ch: errEndCol
+                          },
                           { scroll: true }
                         );
                       } else {
@@ -488,11 +473,7 @@ class View extends React.Component {
                     } else if (err && err.statusCode === 600) {
                       message = globalString('drill/connection_not_exist');
                     }
-                    NewToaster.show({
-                      message,
-                      className: 'danger',
-                      icon: 'thumbs-down'
-                    });
+                    NewToaster.show({ message, className: 'danger', icon: 'thumbs-down' });
                   });
                 });
             } else {
@@ -749,11 +730,7 @@ class View extends React.Component {
   clearAutoCompletion(cm) {
     const options = {
       hint() {
-        return {
-          from: 0,
-          to: 0,
-          list: []
-        };
+        return { from: 0, to: 0, list: [] };
       }
     };
     cm.showHint(options);
@@ -919,19 +896,14 @@ class View extends React.Component {
       // Send request to feathers client
       const service = featherClient().service('/mongo-sync-execution');
       const filteredContent = content.replace(/\t/g, '  ');
-      const saveExplainCommand =
-        'var explain_' + editor.id.replace(/\-/g, '_') + ' = ' + filteredContent + ';';
+      const tmpVar = 'explain_' + editor.id.replace(/\-/g, '_');
+      const saveExplainCommand = 'var ' + tmpVar + ' = ' + filteredContent + ';' + tmpVar;
       service.timeout = 300000;
       this.props.store.editorToolbar.isActiveExecuting = true;
-      service.update(id, {
-        shellId: shell, // eslint-disable-line
-        commands: saveExplainCommand
-      });
       service
         .update(id, {
           shellId: shell, // eslint-disable-line
-          commands: filteredContent,
-          responseType: 'explain'
+          commands: saveExplainCommand
         })
         .then(response => {
           runInAction(() => {
