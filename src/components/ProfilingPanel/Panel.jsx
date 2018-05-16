@@ -310,9 +310,9 @@ export default class ProfilingPanel extends React.Component<Props> {
                 disabled={!this.state.selectedDatabase}
               >
                 <span> {globalString('performance/profiling/results/all')}</span>
-                <Radio disabled={!this.state.selectedDatabase} value={1} />
-                <span> {globalString('performance/profiling/results/exceeding')}</span>
                 <Radio disabled={!this.state.selectedDatabase} value={2} />
+                <span> {globalString('performance/profiling/results/exceeding')}</span>
+                <Radio disabled={!this.state.selectedDatabase} value={1} />
               </RadioGroup>
               <NumericInput
                 value={this.state.currentConfig.exceedLimit}
