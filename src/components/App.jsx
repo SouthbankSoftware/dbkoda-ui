@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T14:05:45+10:00
+ * @Last modified time: 2018-05-16T16:32:20+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -99,7 +99,9 @@ class App extends React.Component {
       }
     });
 
-    this.props.api.setToasterCallback(this.showToaster);
+    if (this.props.api && this.props.api.setToasterCallback) {
+      this.props.api.setToasterCallback(this.showToaster);
+    }
   }
 
   showToaster(strErrorCode, err) {
