@@ -214,7 +214,7 @@ class PerformanceWindow extends React.Component {
             store.drawer.activeNavPane == NavPanes.STORAGE_PANEL &&
             store.api.shellId && (
               <div className="performance-storage">
-                <div className="title">Storage Panel</div>
+                <div className="title">Database Storage</div>
                 <StoragePanel profileId={store.api.profileId} shellId={store.api.shellId} />
               </div>
             )}
