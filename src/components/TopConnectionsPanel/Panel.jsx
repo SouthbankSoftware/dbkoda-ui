@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T13:02:08+10:00
+ * @Last modified time: 2018-05-16T16:09:41+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -100,6 +100,11 @@ export default class TopConnectionsPanel extends React.Component<Props> {
       this.props.store.topConnectionsPanel.bShowExplain = false;
       this.props.store.topConnectionsPanel.bLoadingExplain = false;
     }
+    if (selectedOperation && selectedOperation.suggestionText) {
+      this.props.store.topConnectionsPanel.bShowSuggestion = true;
+    } else {
+      this.props.store.topConnectionsPanel.bShowSuggestion = false;
+    }
   }
 
   @autobind
@@ -159,7 +164,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
         <SplitPane
           className="MainSplitPane"
           split="horizontal"
-          defaultSize="40%"
+          defaultSize="35%"
           minSize={200}
           maxSize={1000}
           pane2Style={splitPane2Style}
@@ -202,13 +207,17 @@ export default class TopConnectionsPanel extends React.Component<Props> {
                 <OperationDetails />
               </div>
             </SplitPane>
-            <div>
+            <div style={{ overflow: 'auto' }}>
               {topConnectionsPanel.bShowExplain &&
                 selectedOperation &&
                 selectedOperation.explainPlan &&
                 selectedOperation.explainPlan.queryPlanner &&
                 selectedOperation.explainPlan.queryPlanner.winningPlan && (
-                  <ExplainView execStats={selectedOperation.explainPlan.queryPlanner.winningPlan} />
+                  <ExplainView
+                    execStats={selectedOperation.explainPlan.queryPlanner.winningPlan}
+                    operation={selectedOperation}
+                    showSuggestion={topConnectionsPanel.bShowSuggestion}
+                  />
                 )}
             </div>
           </SplitPane>

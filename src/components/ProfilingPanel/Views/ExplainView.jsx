@@ -3,7 +3,7 @@
  * @Date:   2018-04-12T16:16:27+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T13:40:54+10:00
+ * @Last modified time: 2018-05-16T16:04:10+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -55,6 +55,7 @@ import '#/common/MongoScript.js';
 import StageProgress from '#/ExplainPanel/StageProgress';
 import { StageStepsTable } from '#/ExplainPanel/StageStepsTable';
 import { getExecutionStages } from '#/ExplainPanel/ExplainStep';
+import QueryCommandView from '#/ExplainPanel/QueryCommandView';
 import ErrorView from '#/common/ErrorView';
 // import ShardsStageProgress from '#/ExplainPanel/ShardsStageProgress';
 import 'codemirror/theme/material.css';
@@ -71,7 +72,12 @@ export default class OperationDetails extends React.Component {
   render() {
     const executionStages = getExecutionStages(this.props.execStats);
     return (
-      <div className="explainView" style={{ height: '100%' }}>
+      <div className="explainView">
+        {this.props.showSuggestion &&
+          this.props.operation &&
+          this.props.operation.suggestionText && (
+            <QueryCommandView command={this.props.operation.suggestionText} />
+          )}
         <nav className="pt-navbar explainToolbar">
           <div className="pt-navbar-group exampleGroup pt-align-left">
             <div className="pt-navbar-heading">
@@ -82,25 +88,28 @@ export default class OperationDetails extends React.Component {
             </div>
           </div>
           <div className="pt-navbar-group pt-align-right">
-            {this.props.queryPlanner && (
-              <Tooltip
-                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-                content="Index Advisor"
-                hoverOpenDelay={1000}
-                inline
-                intent={Intent.PRIMARY}
-                position={Position.BOTTOM}
-              >
-                <Button
-                  className="reset-button pt-button pt-intent-primary"
-                  text="Index Advisor"
-                  onClick={this.props.api.getIndexAdvisorForSelectedOp}
-                />
-              </Tooltip>
-            )}
+            {this.props.operation &&
+              this.props.operation.explainPlan && (
+                <Tooltip
+                  className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                  content="Index Advisor"
+                  hoverOpenDelay={1000}
+                  inline
+                  intent={Intent.PRIMARY}
+                  position={Position.BOTTOM}
+                >
+                  <Button
+                    className="reset-button pt-button pt-intent-primary"
+                    text="Index Advisor"
+                    onClick={() =>
+                      this.props.api.getIndexAdvisorForSelectedOp(this.props.operation)
+                    }
+                  />
+                </Tooltip>
+              )}
           </div>
         </nav>
-        <div className="explainBody explain-statistic-container-view" style={{ height: '100%' }}>
+        <div className="explainBody explain-statistic-container-view">
           {executionStages && <StageProgress stages={executionStages} />}
           {executionStages && (
             <StageStepsTable

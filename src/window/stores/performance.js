@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-15T16:58:33+10:00
+ * @Last modified time: 2018-05-16T15:50:23+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -75,7 +75,7 @@ export default class Store {
       highWaterMarkConnection: null,
       bLoadingExplain: false,
       bShowExplain: false,
-      lastExplainId: null
+      bShowSuggestion: false
     },
     null,
     { deep: false }
@@ -233,29 +233,6 @@ export default class Store {
               iconName: 'pt-icon-thumbs-down'
             });
             this.profilingPanel.databases = newDbs;
-          }
-        } else if (args.command === 'mw_explainForOperation') {
-          console.log('Explain Result: ', JSON.stringify(args.payload, null, 2));
-          this.topConnectionsPanel.bLoadingExplain = false;
-          if (args.explainId && args.explainId === this.topConnectionsPanel.lastExplainId) {
-            if (
-              args.payload &&
-              args.payload.queryPlanner &&
-              args.payload.queryPlanner.winningPlan
-            ) {
-              extendObservable(this.topConnectionsPanel.selectedOperation, {
-                explainPlan: args.payload,
-                execStats: args.payload.queryPlanner.winningPlan
-              });
-
-              this.topConnectionsPanel.bShowExplain = true;
-            }
-          } else if (args.error) {
-            this.api.showToaster({
-              message: 'Timeout exceeded while trying to execute explain for selected command.',
-              className: 'danger',
-              iconName: 'pt-icon-thumbs-down'
-            });
           }
         }
       }

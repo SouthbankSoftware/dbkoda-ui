@@ -3,7 +3,7 @@
  * @Date:   2018-05-15T16:12:25+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T13:26:42+10:00
+ * @Last modified time: 2018-05-16T16:11:04+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,6 +27,7 @@
 import _ from 'lodash';
 import { action, extendObservable, runInAction } from 'mobx';
 import { NavPanes } from '#/common/Constants';
+import { getIdxSuggestionCode, findKeyValue } from '#/ExplainPanel/Explain';
 import { featherClient } from '../../helpers/feathers';
 import { Broker, EventType } from '../../helpers/broker';
 import StorageDrilldownApi from '../../api/StorageDrilldown';
@@ -167,7 +168,6 @@ export default class PerformanceWindowApi {
         .catch(err => {
           console.log(err);
           runInAction(() => {
-            topConnectionsPanel.lastExplainId = null;
             topConnectionsPanel.bLoadingExplain = false;
           });
           this.showToaster({
@@ -275,10 +275,8 @@ export default class PerformanceWindowApi {
   };
 
   @action.bound
-  getIndexAdvisorForSelectedOp = () => {
-    const { topConnectionsPanel } = this.store;
-    const { selectedConnection, selectedOperation } = topConnectionsPanel;
-    if (selectedConnection && selectedOperation) {
+  getIndexAdvisorForSelectedOp = selectedOperation => {
+    if (selectedOperation) {
       if (selectedOperation.explainPlan) {
         const queryPlaner = _.pick(selectedOperation.explainPlan, ['queryPlanner']);
         const service = featherClient().service('/mongo-sync-execution');
@@ -291,7 +289,38 @@ export default class PerformanceWindowApi {
             commands: 'dbkInx.suggestIndexesAndRedundants(' + explainOutput + ');'
           })
           .then(res => {
-            console.log('Index Advisor Result: ', JSON.parse(res));
+            let suggestionResult = null;
+            try {
+              suggestionResult = JSON.parse(res);
+            } catch (err) {
+              console.error(res);
+              console.log(err);
+              this.showToaster({
+                message: 'Unable to get the index suggestion for selected Explain.',
+                className: 'danger',
+                iconName: 'pt-icon-thumbs-down'
+              });
+              return;
+            }
+            console.log('Index Advisor Result: ', suggestionResult);
+
+            const lineSep = this.getLineSeperator();
+            const suggestionText = getIdxSuggestionCode(
+              suggestionResult,
+              selectedOperation.explainPlan,
+              lineSep
+            );
+            console.log('suggestionText:: ', suggestionText);
+            if (selectedOperation.suggestionText) {
+              selectedOperation.suggestionText = suggestionText;
+            } else {
+              extendObservable(selectedOperation, {
+                suggestionText
+              });
+              runInAction(() => {
+                this.store.topConnectionsPanel.bShowSuggestion = true;
+              });
+            }
           })
           .catch(err => {
             console.error(err);
