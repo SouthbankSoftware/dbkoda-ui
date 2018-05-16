@@ -293,6 +293,10 @@ ul.profileListContextMenu {
   }
 }
 
+.profile-loading.pt-button.pt-intent-primary.pt-icon-chevron-right {
+  background-color: transparent !important;
+}
+
 .connection-profile-cell-selected {
   background-color: $profileListSelected !important;
   outline: none !important;

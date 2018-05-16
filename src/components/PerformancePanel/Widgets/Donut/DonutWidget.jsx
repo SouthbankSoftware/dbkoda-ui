@@ -251,10 +251,10 @@ export default class DonutWidget extends React.Component<Props, State> {
     this.svg
       .append('text')
       .attr('class', 'total-size')
-      .attr('transform', 'translate(-30, 0)')
+      .attr('transform', 'translate(-20, 0)')
       .style('font-size', 'small')
       .style('fill', 'white')
-      .text(`Total: ${bytesToSize(this.totalSize)}`);
+      .text(`${bytesToSize(this.totalSize)}`);
   }
 
   getUpdatedData(values: Array<Object>, items: Array<Object>): Object {

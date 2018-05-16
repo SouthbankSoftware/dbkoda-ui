@@ -109,13 +109,11 @@ export default class Paths extends React.Component {
             <input
               type="text"
               id="drillCmd"
-              disabled={settings.dockerEnabled}
               value={this.props.settings.drillCmd || ''}
               onChange={this.onPathEntered}
             />
             <Button
               className="formButton"
-              disabled={settings.dockerEnabled}
               onClick={() => {
                 this.openPath('drillCmd');
               }}
