@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-10T10:42:23+10:00
+ * @Last modified time: 2018-05-16T14:28:20+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -109,7 +109,9 @@ export default class ProfileManager extends React.Component<Props, State> {
       .then(() => {
         this.setState({ isConnecting: false });
       })
-      .catch(() => this.setState({ isConnecting: false }));
+      .catch(() => {
+        this.setState({ isConnecting: false });
+      });
   }
 
   closeDialog() {
@@ -220,9 +222,7 @@ export default class ProfileManager extends React.Component<Props, State> {
               static: true
             }}
           >
-            <div className="pt-dark form-scrollable">
-              <form>{this.renderUIFields(1)}</form>
-            </div>
+            <div className="pt-dark form-scrollable formFields">{this.renderUIFields(1)}</div>
           </div>
           <div
             key="column2"
@@ -234,9 +234,7 @@ export default class ProfileManager extends React.Component<Props, State> {
               static: true
             }}
           >
-            <div className="pt-dark form-scrollable">
-              <form>{this.renderUIFields(2)}</form>
-            </div>
+            <div className="pt-dark form-scrollable formFields">{this.renderUIFields(2)}</div>
           </div>
           <div
             key="column3"
