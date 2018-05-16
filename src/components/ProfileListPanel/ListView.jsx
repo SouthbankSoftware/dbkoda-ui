@@ -723,7 +723,7 @@ export default class ListView extends React.Component {
             <p className="profileListing">{profiles[rowIndex][1].alias}</p>
             <AnchorButton
               style={{ marginLeft: 'auto' }}
-              className="pt-button pt-intent-primary pt-icon-chevron-right"
+              className="profile-loading pt-button pt-intent-primary pt-icon-chevron-right"
               loading
             />
           </Cell>
