@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T16:09:41+10:00
+ * @Last modified time: 2018-05-16T16:20:30+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -84,6 +84,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
     this.props.store.topConnectionsPanel.selectedConnection = selectedConnection;
     this.props.store.topConnectionsPanel.operations = selectedConnection.ops;
     this.props.store.topConnectionsPanel.bShowExplain = false;
+    this.props.store.topConnectionsPanel.selectedOperation = null;
   }
 
   @action.bound

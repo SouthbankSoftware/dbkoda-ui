@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T15:50:23+10:00
+ * @Last modified time: 2018-05-16T16:26:47+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,7 +25,7 @@
  */
 
 import _ from 'lodash';
-import { observable, action, runInAction, extendObservable } from 'mobx';
+import { observable, action, runInAction } from 'mobx';
 import { restore } from 'dumpenvy';
 import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
 import { ProfilingConstants, NavPanes } from '#/common/Constants';

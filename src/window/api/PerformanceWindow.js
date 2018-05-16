@@ -3,7 +3,7 @@
  * @Date:   2018-05-15T16:12:25+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T16:11:04+10:00
+ * @Last modified time: 2018-05-16T16:26:37+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,7 @@
 import _ from 'lodash';
 import { action, extendObservable, runInAction } from 'mobx';
 import { NavPanes } from '#/common/Constants';
-import { getIdxSuggestionCode, findKeyValue } from '#/ExplainPanel/Explain';
+import { getIdxSuggestionCode } from '#/ExplainPanel/Explain';
 import { featherClient } from '../../helpers/feathers';
 import { Broker, EventType } from '../../helpers/broker';
 import StorageDrilldownApi from '../../api/StorageDrilldown';
@@ -312,7 +312,9 @@ export default class PerformanceWindowApi {
             );
             console.log('suggestionText:: ', suggestionText);
             if (selectedOperation.suggestionText) {
-              selectedOperation.suggestionText = suggestionText;
+              runInAction(() => {
+                selectedOperation.suggestionText = suggestionText;
+              });
             } else {
               extendObservable(selectedOperation, {
                 suggestionText
