@@ -18,6 +18,8 @@
     display: flex;
     flex-direction: column;
     margin: 10px 0px;
+    min-height: 400px;
+    overflow: auto;
     .db-item {
       margin: 10px 0px;
       font-size: $fontSize;
