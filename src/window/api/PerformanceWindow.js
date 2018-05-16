@@ -3,7 +3,7 @@
  * @Date:   2018-05-15T16:12:25+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-15T16:59:39+10:00
+ * @Last modified time: 2018-05-16T13:26:42+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,7 +25,7 @@
  */
 
 import _ from 'lodash';
-import { action } from 'mobx';
+import { action, extendObservable, runInAction } from 'mobx';
 import { NavPanes } from '#/common/Constants';
 import { featherClient } from '../../helpers/feathers';
 import { Broker, EventType } from '../../helpers/broker';
@@ -41,8 +41,18 @@ export default class PerformanceWindowApi {
     });
   }
   profileId = null;
+  lineSeperator = null;
+
   setProfileId(id) {
     this.profileId = id;
+  }
+
+  setLineSeperator(lineSep) {
+    this.lineSeperator = lineSep;
+  }
+
+  getLineSeperator() {
+    return this.lineSeperator || '\n';
   }
 
   @action.bound
@@ -141,86 +151,127 @@ export default class PerformanceWindowApi {
   };
 
   @action.bound
-  getExplainForSelectedOp = () => {
+  getExplainForSelectedTopOp = () => {
     const { topConnectionsPanel } = this.store;
-    const { selectedConnection, selectedOperation } = topConnectionsPanel;
-    if (selectedConnection && selectedOperation) {
-      const explainId = selectedConnection.connectionId + '_' + selectedOperation.opId;
-      topConnectionsPanel.lastExplainId = explainId;
+    const { selectedOperation } = topConnectionsPanel;
+    if (selectedOperation) {
       topConnectionsPanel.bLoadingExplain = true;
-
-      const filterCommand = (value, key) => {
-        const loKey = key.toLowerCase();
-        if (
-          loKey === 'findandmodify' ||
-          loKey === 'find' ||
-          loKey === 'distinct' ||
-          loKey === 'count'
-        ) {
-          return true;
-        }
-        return false;
-      };
-      const cmdNotSupported = () => {
-        topConnectionsPanel.lastExplainId = null;
-        topConnectionsPanel.bLoadingExplain = false;
-        this.showToaster({
-          message: 'Command not supported for Explain.',
-          className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+      this.getExplainForOperation(selectedOperation)
+        .then(operation => {
+          console.log(operation);
+          runInAction(() => {
+            topConnectionsPanel.bLoadingExplain = false;
+            topConnectionsPanel.bShowExplain = true;
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          runInAction(() => {
+            topConnectionsPanel.lastExplainId = null;
+            topConnectionsPanel.bLoadingExplain = false;
+          });
+          this.showToaster({
+            message: err.message,
+            className: 'danger',
+            iconName: 'pt-icon-thumbs-down'
+          });
         });
-      };
-
-      let explainCommandStr = '';
-      let databaseStr = '';
-
-      if (
-        (selectedOperation.op === 'command' || selectedOperation.op === 'query') &&
-        selectedOperation.command &&
-        selectedOperation.command.$db
-      ) {
-        const cmdForExplain = selectedOperation.command;
-        const database = _.pick(cmdForExplain, '$db');
-        databaseStr = database.$db;
-        let commandParams = _.omit(cmdForExplain, '$db');
-        const command = _.pickBy(commandParams, filterCommand);
-        if (Object.keys(command).length > 0) {
-          const commandStr = JSON.stringify(command);
-          commandParams = _.omitBy(commandParams, filterCommand);
-          const commandParamsStr = JSON.stringify(commandParams);
-          explainCommandStr =
-            commandParamsStr.substr(0, 1) +
-            commandStr.substr(1, commandStr.length - 2) +
-            ',' +
-            commandParamsStr.substr(1);
-        } else {
-          cmdNotSupported();
-        }
-      } else if (selectedOperation.op === 'update') {
-        const nsParams = selectedOperation.ns.split('.');
-        [databaseStr] = nsParams;
-        const [, collection] = nsParams;
-        const commandStr = JSON.stringify(selectedOperation.command);
-        explainCommandStr = `{"update": "${collection}", "updates":[${commandStr}]}`;
-      } else if (selectedOperation.op === 'remove') {
-        const nsParams = selectedOperation.ns.split('.');
-        [databaseStr] = nsParams;
-        const [, collection] = nsParams;
-        const commandStr = JSON.stringify(selectedOperation.command);
-        explainCommandStr = `{"delete": "${collection}", "deletes":[${commandStr}]}`;
-      } else {
-        cmdNotSupported();
-      }
-
-      if (explainCommandStr.length > 0 && databaseStr.length > 0) {
-        console.log('ExplainCommand: ', explainCommandStr);
-        this.sendCommandToMainProcess('pw_getOperationExplainPlan', {
-          explainId,
-          explainCmd: explainCommandStr,
-          database: databaseStr
-        });
-      }
     }
+  };
+
+  getExplainForOperation = (selectedOperation: *) => {
+    return new Promise((resolve, reject) => {
+      if (selectedOperation.op && selectedOperation.command && selectedOperation.ns) {
+        const filterCommand = (value, key) => {
+          const loKey = key.toLowerCase();
+          if (
+            loKey === 'findandmodify' ||
+            loKey === 'find' ||
+            loKey === 'distinct' ||
+            loKey === 'count'
+          ) {
+            return true;
+          }
+          return false;
+        };
+
+        let explainCmd = '';
+        let database = '';
+
+        if (
+          (selectedOperation.op === 'command' || selectedOperation.op === 'query') &&
+          selectedOperation.command &&
+          selectedOperation.command.$db
+        ) {
+          const cmdForExplain = selectedOperation.command;
+          const databaseObj = _.pick(cmdForExplain, '$db');
+          database = databaseObj.$db;
+          let commandParams = _.omit(cmdForExplain, '$db');
+          const command = _.pickBy(commandParams, filterCommand);
+          if (Object.keys(command).length > 0) {
+            const commandStr = JSON.stringify(command);
+            commandParams = _.omitBy(commandParams, filterCommand);
+            const commandParamsStr = JSON.stringify(commandParams);
+            explainCmd =
+              commandParamsStr.substr(0, 1) +
+              commandStr.substr(1, commandStr.length - 2) +
+              ',' +
+              commandParamsStr.substr(1);
+          } else {
+            reject(new Error('dbkoda: Command Not Supported for Explain.'));
+          }
+        } else if (selectedOperation.op === 'update') {
+          const nsParams = selectedOperation.ns.split('.');
+          [database] = nsParams;
+          const [, collection] = nsParams;
+          const commandStr = JSON.stringify(selectedOperation.command);
+          explainCmd = `{"update": "${collection}", "updates":[${commandStr}]}`;
+        } else if (selectedOperation.op === 'remove') {
+          const nsParams = selectedOperation.ns.split('.');
+          [database] = nsParams;
+          const [, collection] = nsParams;
+          const commandStr = JSON.stringify(selectedOperation.command);
+          explainCmd = `{"delete": "${collection}", "deletes":[${commandStr}]}`;
+        } else {
+          reject(new Error('dbkoda: Command Not Supported for Explain.'));
+        }
+
+        if (explainCmd.length > 0 && database.length > 0) {
+          console.log('ExplainCommand: ', explainCmd);
+          const driverService = featherClient().service('drivercommands');
+          driverService.timeout = 30000;
+          return driverService
+            .patch(this.profileId, {
+              database,
+              command: {
+                explain: JSON.parse(explainCmd),
+                verbosity: 'queryPlanner'
+              }
+            })
+            .then(res => {
+              console.log(res);
+              if (res && res.queryPlanner && res.queryPlanner.winningPlan) {
+                if (selectedOperation.explainPlan) {
+                  selectedOperation.explainPlan = res;
+                } else {
+                  extendObservable(selectedOperation, {
+                    explainPlan: res
+                  });
+                }
+              }
+              resolve(selectedOperation);
+            })
+            .catch(err => {
+              console.log(err);
+              reject(
+                new Error('Timeout exceeded while trying to execute explain for selected command.')
+              );
+            });
+        }
+      } else {
+        reject(new Error('dbkoda: Operation doesnot have required information for explain.'));
+      }
+    });
   };
 
   @action.bound

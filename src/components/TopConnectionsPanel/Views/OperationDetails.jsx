@@ -3,7 +3,7 @@
  * @Date:   2018-04-12T16:16:27+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-15T17:20:01+10:00
+ * @Last modified time: 2018-05-16T13:07:02+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -96,6 +96,7 @@ export default class OperationDetails extends React.Component {
     this.state = {
       code: ''
     };
+    this.codeMirror = null;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -107,11 +108,18 @@ export default class OperationDetails extends React.Component {
   }
   @action.bound
   getExplainForSelectedOp() {
-    this.props.api.getExplainForSelectedOp();
+    this.props.api.getExplainForSelectedTopOp();
+    try {
+      if (this.codeMirror) {
+        this.props.api.setLineSeperator(this.codeMirror.codeMirror.doc.cm.lineSeparator());
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {
-    const { topConnectionsPanel } = this.props;
+    const { topConnectionsPanel, operation } = this.props;
 
     return (
       <div style={{ height: '100%' }}>
@@ -120,25 +128,33 @@ export default class OperationDetails extends React.Component {
             <div className="pt-navbar-heading" />
           </div>
           <div className="pt-navbar-group pt-align-right">
-            <Tooltip
-              className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-              content="Fetch Explain Plan"
-              hoverOpenDelay={1000}
-              inline
-              intent={Intent.PRIMARY}
-              position={Position.BOTTOM}
-            >
-              <Button
-                className="reset-button pt-button pt-intent-primary"
-                text="Explain"
-                loading={topConnectionsPanel.bLoadingExplain}
-                onClick={this.getExplainForSelectedOp}
-              />
-            </Tooltip>
+            {operation && (
+              <Tooltip
+                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                content="Fetch Explain Plan"
+                hoverOpenDelay={1000}
+                inline
+                intent={Intent.PRIMARY}
+                position={Position.BOTTOM}
+              >
+                <Button
+                  className="reset-button pt-button pt-intent-primary"
+                  text="Explain"
+                  loading={topConnectionsPanel.bLoadingExplain}
+                  onClick={this.getExplainForSelectedOp}
+                />
+              </Tooltip>
+            )}
           </div>
         </nav>
         <div className="editorView">
-          <CodeMirror value={this.state.code} options={this.cmOptions} />
+          <CodeMirror
+            ref={cm => {
+              this.codeMirror = cm;
+            }}
+            value={this.state.code}
+            options={this.cmOptions}
+          />
         </div>
       </div>
     );

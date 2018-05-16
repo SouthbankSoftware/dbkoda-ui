@@ -3,7 +3,7 @@
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-11T10:36:38+10:00
+ * @Last modified time: 2018-05-16T13:34:50+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -160,7 +160,7 @@ export default class ConnectionsView extends React.Component<Props> {
       if (sortedRowIndex != null) {
         rowIndex = sortedRowIndex;
       }
-      if (this.props.onSelect) {
+      if (this.props.onSelect && this.state.data && this.state.data[rowIndex]) {
         this.props.onSelect(this.state.data[rowIndex]);
       }
     }

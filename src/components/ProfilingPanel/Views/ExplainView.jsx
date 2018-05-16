@@ -3,7 +3,7 @@
  * @Date:   2018-04-12T16:16:27+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-15T17:16:45+10:00
+ * @Last modified time: 2018-05-16T13:40:54+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -82,20 +82,22 @@ export default class OperationDetails extends React.Component {
             </div>
           </div>
           <div className="pt-navbar-group pt-align-right">
-            <Tooltip
-              className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-              content="Index Advisor"
-              hoverOpenDelay={1000}
-              inline
-              intent={Intent.PRIMARY}
-              position={Position.BOTTOM}
-            >
-              <Button
-                className="reset-button pt-button pt-intent-primary"
-                text="Index Advisor"
-                onClick={this.props.api.getIndexAdvisorForSelectedOp}
-              />
-            </Tooltip>
+            {this.props.queryPlanner && (
+              <Tooltip
+                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                content="Index Advisor"
+                hoverOpenDelay={1000}
+                inline
+                intent={Intent.PRIMARY}
+                position={Position.BOTTOM}
+              >
+                <Button
+                  className="reset-button pt-button pt-intent-primary"
+                  text="Index Advisor"
+                  onClick={this.props.api.getIndexAdvisorForSelectedOp}
+                />
+              </Tooltip>
+            )}
           </div>
         </nav>
         <div className="explainBody explain-statistic-container-view" style={{ height: '100%' }}>

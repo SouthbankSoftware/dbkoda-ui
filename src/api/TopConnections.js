@@ -5,7 +5,7 @@
  * @Date:   2018-03-27T10:39:44+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-14T15:47:45+10:00
+ * @Last modified time: 2018-05-16T12:27:42+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -113,39 +113,5 @@ export default class TopConnections {
       .catch(err => {
         this._handleError(profileId, err);
       });
-  };
-
-  getExplainForOperation = (profileId: UUID, params: *) => {
-    console.log(params);
-    if (params.database && params.explainCmd) {
-      console.log(params.explainCmd);
-      const driverService = featherClient().service('drivercommands');
-      driverService.timeout = 30000;
-      return driverService
-        .patch(profileId, {
-          database: params.database,
-          command: {
-            explain: JSON.parse(params.explainCmd),
-            verbosity: 'queryPlanner'
-          }
-        })
-        .then(res => {
-          console.log(res);
-          this.api.sendMsgToPerformanceWindow({
-            profileId,
-            command: 'mw_explainForOperation',
-            explainId: params.explainId,
-            payload: res
-          });
-        })
-        .catch(err => {
-          this._handleError(profileId, err);
-          this.api.sendMsgToPerformanceWindow({
-            profileId,
-            command: 'mw_explainForOperation',
-            error: err
-          });
-        });
-    }
   };
 }

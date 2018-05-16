@@ -22,7 +22,7 @@
  * @Date:   2017-04-20T17:58:30+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-06T10:14:08+10:00
+ * @Last modified time: 2018-05-16T09:42:38+10:00
  */
 /**
  * explain component is used to handle explain output
@@ -56,6 +56,77 @@ export const findKeyValue = (key, object) => {
       return findKeyValue(key, object[Object.keys(object)[i]]);
     }
   }
+};
+export const getIdxSuggestionCode = (suggestionResult, explainPlan, lineSep) => {
+  let suggestionCode = globalString('explain/panel/suggestIndexDescription') + lineSep;
+  // Iterate through each object in the result.
+  if (typeof suggestionResult === 'object') {
+    let namespace = findKeyValue('namespace', explainPlan);
+
+    namespace = namespace.split('.');
+    const table = namespace[0];
+    const collection = namespace[1];
+    if (suggestionResult.newIndexes.length <= 0 && suggestionResult.redundantIndexes.length <= 0) {
+      console.log('No Suggestions Found');
+      suggestionCode = globalString('explain/panel/noAdditionalIndexesRequired') + lineSep;
+    } else {
+      if (suggestionResult.redundantIndexes.length > 0) {
+        for (const key in suggestionResult.redundantIndexes) {
+          if (typeof suggestionResult.redundantIndexes[key] === 'object') {
+            suggestionCode +=
+              '// The index ' +
+              JSON.stringify(suggestionResult.redundantIndexes[key].indexName) +
+              ' on ' +
+              lineSep +
+              '//' +
+              JSON.stringify(suggestionResult.redundantIndexes[key].key) +
+              lineSep +
+              ' // can be replaced by a new index on ' +
+              lineSep +
+              '//' +
+              JSON.stringify(suggestionResult.redundantIndexes[key].because);
+          }
+        }
+      }
+      if (suggestionResult.newIndexes.length > 0) {
+        suggestionCode +=
+          lineSep + lineSep + globalString('explain/panel/addIndexCommandsPrompt') + lineSep;
+
+        // Indexes to add.
+        for (const key in suggestionResult.newIndexes) {
+          if (typeof suggestionResult.newIndexes[key] === 'object') {
+            suggestionCode +=
+              'db.getSiblingDB("' +
+              table +
+              '").' +
+              collection +
+              '.createIndex(' +
+              JSON.stringify(suggestionResult.newIndexes[key]) +
+              ');' +
+              lineSep;
+          }
+        }
+
+        // Indexes to remove.
+        for (const key in suggestionResult.redundantIndexes) {
+          if (typeof suggestionResult.redundantIndexes[key] === 'object') {
+            suggestionCode +=
+              'db.getSiblingDB("' +
+              table +
+              '").getCollection("' +
+              collection +
+              '").dropIndex(' +
+              JSON.stringify(suggestionResult.redundantIndexes[key].indexName) +
+              ');' +
+              lineSep;
+          }
+        }
+      }
+    }
+    return suggestionCode;
+  }
+  console.error('Did not return an array.');
+  return '';
 };
 
 @inject(allStores => ({
@@ -205,7 +276,7 @@ export default class Explain extends React.Component {
     } else {
       const editor = this.props.editors.get(this.props.store.editorPanel.activeEditorId);
       const lineSep = editor.doc.cm.lineSeparator() || '\n';
-      const profileId = editor.profileId;
+      const { profileId } = editor;
       const shell = editor.shellId;
 
       // Send a message to controller to fetch the suggested indicies.
@@ -220,83 +291,10 @@ export default class Explain extends React.Component {
         .then(res => {
           console.log(JSON.parse(res));
           this.suggestionsGenerated = true;
-          this.suggestionText = JSON.parse(res);
-          let suggestionCode = globalString('explain/panel/suggestIndexDescription') + lineSep;
-          // Iterate through each object in the result.
-          if (typeof this.suggestionText === 'object') {
-            const output = toJS(this.props.editor.explains.output);
-            let namespace = findKeyValue('namespace', output);
+          const suggestionResult = JSON.parse(res);
+          const explainPlan = toJS(this.props.editor.explains.output);
 
-            namespace = namespace.split('.');
-            const table = namespace[0];
-            const collection = namespace[1];
-            if (
-              this.suggestionText.newIndexes.length <= 0 &&
-              this.suggestionText.redundantIndexes.length <= 0
-            ) {
-              console.log('No Suggestions Found');
-              suggestionCode = globalString('explain/panel/noAdditionalIndexesRequired') + lineSep;
-            } else {
-              if (this.suggestionText.redundantIndexes.length > 0) {
-                for (const key in this.suggestionText.redundantIndexes) {
-                  if (typeof this.suggestionText.redundantIndexes[key] === 'object') {
-                    suggestionCode +=
-                      '// The index ' +
-                      JSON.stringify(this.suggestionText.redundantIndexes[key].indexName) +
-                      ' on ' +
-                      lineSep +
-                      '//' +
-                      JSON.stringify(this.suggestionText.redundantIndexes[key].key) +
-                      lineSep +
-                      ' // can be replaced by a new index on ' +
-                      lineSep +
-                      '//' +
-                      JSON.stringify(this.suggestionText.redundantIndexes[key].because);
-                  }
-                }
-              }
-              if (this.suggestionText.newIndexes.length > 0) {
-                suggestionCode +=
-                  lineSep +
-                  lineSep +
-                  globalString('explain/panel/addIndexCommandsPrompt') +
-                  lineSep;
-
-                // Indexes to add.
-                for (const key in this.suggestionText.newIndexes) {
-                  if (typeof this.suggestionText.newIndexes[key] === 'object') {
-                    suggestionCode +=
-                      'db.getSiblingDB("' +
-                      table +
-                      '").' +
-                      collection +
-                      '.createIndex(' +
-                      JSON.stringify(this.suggestionText.newIndexes[key]) +
-                      ');' +
-                      lineSep;
-                  }
-                }
-
-                // Indexes to remove.
-                for (const key in this.suggestionText.redundantIndexes) {
-                  if (typeof this.suggestionText.redundantIndexes[key] === 'object') {
-                    suggestionCode +=
-                      'db.getSiblingDB("' +
-                      table +
-                      '").getCollection("' +
-                      collection +
-                      '").dropIndex(' +
-                      JSON.stringify(this.suggestionText.redundantIndexes[key].indexName) +
-                      ');' +
-                      lineSep;
-                  }
-                }
-              }
-            }
-            this.suggestionText = suggestionCode;
-          } else {
-            console.error('Did not return an array.');
-          }
+          this.suggestionText = getIdxSuggestionCode(suggestionResult, explainPlan, lineSep);
 
           this.setState({ suggestionsGenerated: true });
         })
@@ -308,7 +306,7 @@ export default class Explain extends React.Component {
 
   @action.bound
   copySuggestion() {
-    const cm = this.props.editor.doc.cm;
+    const { cm } = this.props.editor.doc;
     cm.setValue(cm.getValue() + cm.lineSeparator() + this.suggestionText);
     cm.scrollIntoView({ line: cm.lineCount() - 1, ch: 0 });
   }
