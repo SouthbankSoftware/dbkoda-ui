@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-09T12:49:05+10:00
+ * @Last modified time: 2018-05-16T14:05:45+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,7 +30,9 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import SplitPane from 'react-split-pane';
 import { action, untracked, runInAction } from 'mobx';
 import { inject, observer, PropTypes } from 'mobx-react';
+import { Position } from '@blueprintjs/core';
 import DevTools from 'mobx-react-devtools';
+import { DBKodaToaster } from '#/common/Toaster';
 import { EditorPanel } from '#/EditorPanel';
 import { OutputPanel } from '#/OutputPanel';
 import { SidebarPanel } from '#/SidebarPanel';
@@ -96,7 +98,45 @@ class App extends React.Component {
         store.previousVersion = store.version;
       }
     });
+
+    this.props.api.setToasterCallback(this.showToaster);
   }
+
+  showToaster(strErrorCode, err) {
+    switch (strErrorCode) {
+      case 'existingAlias':
+        DBKodaToaster(Position.LEFT_BOTTOM).show({
+          message: globalString('connection/existingAlias'),
+          className: 'danger',
+          icon: 'thumbs-down'
+        });
+        break;
+      case 'connectionFail':
+        DBKodaToaster(Position.LEFT_BOTTOM).show({
+          message: (
+            <span
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{
+                __html: 'Error: ' + err.message.substring(0, 256) + '...'
+              }}
+            />
+          ),
+          className: 'danger',
+          icon: 'thumbs-down'
+        });
+        break;
+      case 'connectionSuccess':
+        DBKodaToaster(Position.RIGHT_TOP).show({
+          message: globalString('connection/success'),
+          className: 'success',
+          icon: 'thumbs-up'
+        });
+        break;
+      default:
+        break;
+    }
+  }
+
   @action.bound
   updateRightSplitPos(pos) {
     this.props.layout.rightSplitPos = pos;

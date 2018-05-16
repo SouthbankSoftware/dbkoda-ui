@@ -4,7 +4,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-10T12:09:45+10:00
+ * @Last modified time: 2018-05-16T14:04:07+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,7 +32,7 @@ import autobind from 'autobind-decorator';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import { Cell, Column, SelectionModes, Table } from '@blueprintjs/table';
-import { DBKodaToaster, NewToaster } from '#/common/Toaster';
+import { NewToaster } from '#/common/Toaster';
 import { DialogHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import {
   AnchorButton,
@@ -41,7 +41,6 @@ import {
   Menu,
   MenuDivider,
   MenuItem,
-  Position,
   Popover,
   PopoverInteractionKind
 } from '@blueprintjs/core';
@@ -93,9 +92,6 @@ export default class ListView extends React.Component {
     this.editProfile = this.editProfile.bind(this);
     this.deleteProfile = this.deleteProfile.bind(this);
     this.swapToEditor = this.swapToEditor.bind(this);
-    this.showToaster = this.showToaster.bind(this);
-
-    this.api.setToasterCallback(this.showToaster);
   }
 
   componentWillMount() {
@@ -122,41 +118,6 @@ export default class ListView extends React.Component {
   }
 
   reactionToEditorToolbarComboChange;
-
-  showToaster(strErrorCode, err) {
-    switch (strErrorCode) {
-      case 'existingAlias':
-        DBKodaToaster(Position.LEFT_BOTTOM).show({
-          message: globalString('connection/existingAlias'),
-          className: 'danger',
-          icon: 'thumbs-down'
-        });
-        break;
-      case 'connectionFail':
-        DBKodaToaster(Position.LEFT_BOTTOM).show({
-          message: (
-            <span
-              // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={{
-                __html: 'Error: ' + err.message.substring(0, 256) + '...'
-              }}
-            />
-          ),
-          className: 'danger',
-          icon: 'thumbs-down'
-        });
-        break;
-      case 'connectionSuccess':
-        DBKodaToaster(Position.RIGHT_TOP).show({
-          message: globalString('connection/success'),
-          className: 'success',
-          icon: 'thumbs-up'
-        });
-        break;
-      default:
-        break;
-    }
-  }
 
   @action
   onSelection(region) {
