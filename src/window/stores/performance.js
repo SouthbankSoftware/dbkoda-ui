@@ -181,7 +181,7 @@ export default class Store {
             allDbs.push(db);
           });
           this.profilingPanel.databases = allDbs;
-          this.profilingPanel.enabledDatabases = dbList;
+          this.profilingPanel.enabledDatabases = allDbs;
         } else if (args.command === 'mw_profilingData') {
           // Check if empty result set
           if (

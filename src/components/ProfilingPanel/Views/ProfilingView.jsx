@@ -83,7 +83,7 @@ export default class ProfilingView extends React.Component<Props> {
       }
     }
 
-    if (!this.state.data) {
+    if (!this.state.data || !this.state.data[rowIndex]) {
       return '';
     }
     let cellValue = '';

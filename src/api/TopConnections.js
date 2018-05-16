@@ -31,6 +31,8 @@ import { Broker, EventType } from '~/helpers/broker';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 
+import { performancePanelStatuses } from '~/api/PerformancePanel';
+
 export default class TopConnections {
   store: *;
   api: *;
@@ -77,6 +79,7 @@ export default class TopConnections {
     samplingRate: number = 100,
     dev: boolean = false
   ) => {
+    this.api.transformPerformancePanel(profileId, performancePanelStatuses.external);
     featherClient()
       .service('top-connections')
       .get(profileId, {
