@@ -3,7 +3,7 @@
  * @Date:   2017-08-02T10:00:30+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-08T16:44:26+10:00
+ * @Last modified time: 2018-05-17T15:41:45+10:00
  */
 
 /*
@@ -26,6 +26,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import autobind from 'autobind-decorator';
 import React from 'react';
 import StorageSunburstView from '#/common/SunburstView';
 import { action, observable } from 'mobx';
@@ -51,15 +52,18 @@ export default class StoragePanel extends React.Component {
 
     this.state = {
       data: {},
-      selectedNode: null
+      selectedNode: null,
+      bLoading: true
     };
 
     Broker.emit(EventType.FEATURE_USE, 'StorageView');
-    this.loadData();
+    this.loadData(false);
   }
   @action.bound
-  loadData() {
-    this.showLoading(true);
+  loadData(showLoading = true) {
+    if (showLoading) {
+      this.showLoading(true);
+    }
     this.props.api
       .getStorageData(this.props.profileId, this.props.shellId)
       .then(res => {
@@ -90,14 +94,19 @@ export default class StoragePanel extends React.Component {
         .getChildStorageData(this.props.profileId, this.props.shellId, db, col)
         .then(res => {
           try {
-            this.showLoading(false);
-            if (!nodeData.children) {
-              nodeData.children = res;
-              if (this.getChildrenSize(nodeData) > 0) {
-                nodeData.size = 0;
+            if (typeof res == 'string' && res.indexOf('Error') >= 0) {
+              console.error(res);
+            } else {
+              console.log(res);
+              if (!nodeData.children) {
+                nodeData.children = res;
+                if (this.getChildrenSize(nodeData) > 0) {
+                  nodeData.size = 0;
+                }
+                this.addParent(nodeData);
               }
-              this.addParent(nodeData);
             }
+            this.showLoading(false);
             resolve(true);
           } catch (err) {
             this.updateMsg('Unable to parse response from the query. ' + err.message);
@@ -111,7 +120,6 @@ export default class StoragePanel extends React.Component {
 
   childData;
   @observable msg = 'Loading Storage View...';
-  @observable bLoading = false;
   @observable bStorageView = false;
   // This function calculates the sum of the child size attribute
   getChildrenSize(nodeData) {
@@ -141,17 +149,17 @@ export default class StoragePanel extends React.Component {
   showView(value) {
     this.bStorageView = value;
   }
-  @action
+  @autobind
   showLoading(value) {
-    this.bLoading = value;
+    this.setState({ bLoading: value });
   }
   @action
   updateMsg(value) {
     this.msg = value;
     if (value === 'Loading Storage View...') {
-      this.bLoading = true;
+      this.showLoading(true);
     } else {
-      this.bLoading = false;
+      this.showLoading(false);
     }
   }
   onChartBreadCrumbClick = node => {
@@ -189,9 +197,10 @@ export default class StoragePanel extends React.Component {
       !nodeData.children
     ) {
       this.loadChildData(nodeData.parent.parent.name, nodeData.parent.name, nodeData).then(res => {
-        if (res) {
-          this.forceUpdate();
-        }
+        console.log(res);
+        // if (res) {
+        //   this.forceUpdate();
+        // }
         // this.setState({
         //   data: resNodeData,
         // });
@@ -202,10 +211,10 @@ export default class StoragePanel extends React.Component {
   render() {
     return (
       <div className="StoragePanel">
-        {!this.bLoading && (
+        {!this.state.bLoading && (
           <nav className="storageToolbar pt-navbar pt-dark">
             <div className="pt-navbar-group pt-align-right">
-              <AnchorButton className="refreshButton" onClick={this.loadData}>
+              <AnchorButton className="refreshButton" onClick={() => this.loadData(true)}>
                 <RefreshIcon width={50} height={50} className="dbKodaSVG" />
               </AnchorButton>
             </div>
@@ -221,16 +230,16 @@ export default class StoragePanel extends React.Component {
             store={this.props.store}
           />
         )}
-        {this.bLoading && (
+        {this.state.bLoading && (
           <div>
             <div className="details-msg-div">
               <div className="messageWrapper">
-                {this.bLoading && (
+                {this.state.bLoading && (
                   <div className="iconWrapper">
                     <div className="loader" />
                   </div>
                 )}
-                {!this.bLoading &&
+                {!this.state.bLoading &&
                   !this.bStorageView && <span className="failureText">{this.msg}</span>}
               </div>
             </div>

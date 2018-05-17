@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-08-01T10:50:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T10:55:45+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-17T14:43:53+10:00
  */
 
 /*
@@ -104,7 +104,7 @@ export default class View extends React.Component {
     width: PropTypes.number,
     height: PropTypes.number,
     data: PropTypes.object.isRequired,
-    selectedNode: PropTypes.object.isRequired,
+    selectedNode: PropTypes.object,
     onClick: PropTypes.func,
     onDblClick: PropTypes.func,
     onBreadCrumbClick: PropTypes.func
