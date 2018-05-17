@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-17T12:33:36+10:00
+ * @Last modified time: 2018-05-17T14:31:49+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -229,6 +229,7 @@ export default class ProfilingPanel extends React.Component<Props> {
     };
 
     const onOperationSelection = selectedOperation => {
+      console.debug(selectedOperation);
       this.setState({ selectedOperation: null });
       this.setState({ selectedOperation });
     };

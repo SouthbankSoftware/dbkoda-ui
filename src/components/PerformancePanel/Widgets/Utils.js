@@ -3,8 +3,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-15T15:05:45+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   mike
- * @Last modified time: 2018-02-19T14:55:25+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-17T14:28:01+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -109,6 +109,7 @@ export const convertTime = (value: any, unit: string, length: number) => {
         result.value /= 1000;
         break;
       case 'μs':
+      case 'us':
         result.unit = 'ms';
         result.value = timescale(value, 'μs', 'ms');
         break;
@@ -287,6 +288,7 @@ export const convertTimeToTarget = (
         result.value /= 1000;
         break;
       case 'μs':
+      case 'us':
         result.unit = 'ms';
         result.value = timescale(value, 'μs', 'ms');
         break;

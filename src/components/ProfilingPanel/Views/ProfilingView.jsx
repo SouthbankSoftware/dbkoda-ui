@@ -3,7 +3,7 @@
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  Mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-11T16:04:12+10:00
+ * @Last modified time: 2018-05-17T14:31:06+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -146,7 +146,7 @@ export default class ProfilingView extends React.Component<Props> {
     if (sortedRowIndex != null) {
       rowIndex = sortedRowIndex;
     }
-    if (this.props.onSelect) {
+    if (this.props.onSelect && this.state.data && this.state.data[rowIndex]) {
       this.props.onSelect(this.state.data[rowIndex]);
     }
   }
@@ -163,7 +163,7 @@ export default class ProfilingView extends React.Component<Props> {
     } else {
       loadingOptions.push(TableLoadingOption.CELLS);
     }
-    console.debug(ops);
+
     return (
       <div className="opsTableWrapper" style={{ height: '100%' }}>
         <div style={{ height: 'calc(100% - 50px)' }}>
