@@ -3,7 +3,7 @@
  * @Date:   2018-05-15T16:12:25+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T16:26:37+10:00
+ * @Last modified time: 2018-05-17T12:39:49+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -181,7 +181,12 @@ export default class PerformanceWindowApi {
 
   getExplainForOperation = (selectedOperation: *) => {
     return new Promise((resolve, reject) => {
-      if (selectedOperation.op && selectedOperation.command && selectedOperation.ns) {
+      if (
+        selectedOperation.op &&
+        (selectedOperation.command || selectedOperation.example) &&
+        selectedOperation.ns
+      ) {
+        const operationCommand = selectedOperation.command || selectedOperation.example;
         const filterCommand = (value, key) => {
           const loKey = key.toLowerCase();
           if (
@@ -200,10 +205,10 @@ export default class PerformanceWindowApi {
 
         if (
           (selectedOperation.op === 'command' || selectedOperation.op === 'query') &&
-          selectedOperation.command &&
-          selectedOperation.command.$db
+          operationCommand &&
+          operationCommand.$db
         ) {
-          const cmdForExplain = selectedOperation.command;
+          const cmdForExplain = operationCommand;
           const databaseObj = _.pick(cmdForExplain, '$db');
           database = databaseObj.$db;
           let commandParams = _.omit(cmdForExplain, '$db');
@@ -224,13 +229,13 @@ export default class PerformanceWindowApi {
           const nsParams = selectedOperation.ns.split('.');
           [database] = nsParams;
           const [, collection] = nsParams;
-          const commandStr = JSON.stringify(selectedOperation.command);
+          const commandStr = JSON.stringify(operationCommand);
           explainCmd = `{"update": "${collection}", "updates":[${commandStr}]}`;
         } else if (selectedOperation.op === 'remove') {
           const nsParams = selectedOperation.ns.split('.');
           [database] = nsParams;
           const [, collection] = nsParams;
-          const commandStr = JSON.stringify(selectedOperation.command);
+          const commandStr = JSON.stringify(operationCommand);
           explainCmd = `{"delete": "${collection}", "deletes":[${commandStr}]}`;
         } else {
           reject(new Error('dbkoda: Command Not Supported for Explain.'));
@@ -264,7 +269,9 @@ export default class PerformanceWindowApi {
             .catch(err => {
               console.log(err);
               reject(
-                new Error('Timeout exceeded while trying to execute explain for selected command.')
+                new Error(
+                  'dbkoda: Timeout exceeded while trying to execute explain for selected command.'
+                )
               );
             });
         }
@@ -276,8 +283,8 @@ export default class PerformanceWindowApi {
 
   @action.bound
   getIndexAdvisorForSelectedOp = selectedOperation => {
-    if (selectedOperation) {
-      if (selectedOperation.explainPlan) {
+    return new Promise((resolve, reject) => {
+      if (selectedOperation && selectedOperation.explainPlan) {
         const queryPlaner = _.pick(selectedOperation.explainPlan, ['queryPlanner']);
         const service = featherClient().service('/mongo-sync-execution');
         const explainOutput = "JSON.parse('" + JSON.stringify(queryPlaner) + "')";
@@ -288,47 +295,47 @@ export default class PerformanceWindowApi {
             shellId: this.shellId,
             commands: 'dbkInx.suggestIndexesAndRedundants(' + explainOutput + ');'
           })
-          .then(res => {
-            let suggestionResult = null;
-            try {
-              suggestionResult = JSON.parse(res);
-            } catch (err) {
-              console.error(res);
-              console.log(err);
-              this.showToaster({
-                message: 'Unable to get the index suggestion for selected Explain.',
-                className: 'danger',
-                iconName: 'pt-icon-thumbs-down'
-              });
-              return;
-            }
-            console.log('Index Advisor Result: ', suggestionResult);
+          .then(
+            action(res => {
+              let suggestionResult = null;
+              try {
+                suggestionResult = JSON.parse(res);
+              } catch (err) {
+                console.error(res);
+                console.log(err);
+                reject(new Error('Unable to get the index suggestion for selected Explain.'));
+              }
+              console.log('Index Advisor Result: ', suggestionResult);
 
-            const lineSep = this.getLineSeperator();
-            const suggestionText = getIdxSuggestionCode(
-              suggestionResult,
-              selectedOperation.explainPlan,
-              lineSep
-            );
-            console.log('suggestionText:: ', suggestionText);
-            if (selectedOperation.suggestionText) {
-              runInAction(() => {
+              const lineSep = this.getLineSeperator();
+              const suggestionText = getIdxSuggestionCode(
+                suggestionResult,
+                selectedOperation.explainPlan,
+                lineSep
+              );
+              console.log('suggestionText:: ', suggestionText);
+              if (selectedOperation.suggestionText) {
                 selectedOperation.suggestionText = suggestionText;
-              });
-            } else {
-              extendObservable(selectedOperation, {
-                suggestionText
-              });
-              runInAction(() => {
-                this.store.topConnectionsPanel.bShowSuggestion = true;
-              });
-            }
-          })
+              } else {
+                extendObservable(selectedOperation, {
+                  suggestionText
+                });
+              }
+              resolve(suggestionText);
+            })
+          )
           .catch(err => {
             console.error(err);
+            reject(
+              new Error(
+                'dbkoda: Timeout exceeded while trying to execute Index Advisor for selected explain.'
+              )
+            );
           });
+      } else {
+        reject(new Error('dbkoda: Operation doesnot have required information for Index Advisor.'));
       }
-    }
+    });
   };
 
   @action.bound

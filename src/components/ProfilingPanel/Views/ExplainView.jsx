@@ -3,7 +3,7 @@
  * @Date:   2018-04-12T16:16:27+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T16:04:10+10:00
+ * @Last modified time: 2018-05-17T12:48:08+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,15 +26,24 @@
 
 /* eslint import/no-dynamic-require: warn */
 
+import { observer, inject } from 'mobx-react';
+import React from 'react';
+import autobind from 'autobind-decorator';
+import { Tooltip, Intent, Position, Button } from '@blueprintjs/core';
+import CodeMirror from '#/common/LegacyCodeMirror'; // eslint-disable-line
+import StageProgress from '#/ExplainPanel/StageProgress';
+import { StageStepsTable } from '#/ExplainPanel/StageStepsTable';
+import { getExecutionStages } from '#/ExplainPanel/ExplainStep';
+import QueryCommandView from '#/ExplainPanel/QueryCommandView';
+import ErrorView from '#/common/ErrorView';
+// import ShardsStageProgress from '#/ExplainPanel/ShardsStageProgress';
+
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
-import { observer, inject } from 'mobx-react';
-import React from 'react';
-import { Tooltip, Intent, Position, Button } from '@blueprintjs/core';
-import CodeMirror from '#/common/LegacyCodeMirror'; // eslint-disable-line
+
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/selection/active-line.js';
 import 'codemirror/addon/display/autorefresh.js';
@@ -52,12 +61,6 @@ import 'codemirror/keymap/sublime.js';
 import 'codemirror-formatting';
 import '#/common/MongoScript.js';
 
-import StageProgress from '#/ExplainPanel/StageProgress';
-import { StageStepsTable } from '#/ExplainPanel/StageStepsTable';
-import { getExecutionStages } from '#/ExplainPanel/ExplainStep';
-import QueryCommandView from '#/ExplainPanel/QueryCommandView';
-import ErrorView from '#/common/ErrorView';
-// import ShardsStageProgress from '#/ExplainPanel/ShardsStageProgress';
 import 'codemirror/theme/material.css';
 
 @inject(({ store }) => {
@@ -69,15 +72,60 @@ import 'codemirror/theme/material.css';
 export default class OperationDetails extends React.Component {
   static propTypes = {};
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      suggestionText:
+        props.operation && props.operation.suggestionText ? props.operation.suggestionText : null
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps && nextProps.operation && nextProps.operation.suggestionText) {
+      this.setState({ suggestionText: nextProps.operation.suggestionText });
+    }
+  }
+
+  @autobind
+  getIndexAdvisorForSelectedOp() {
+    const { api, operation } = this.props;
+    const getSuggestionText = operation => {
+      api
+        .getIndexAdvisorForSelectedOp(operation)
+        .then(suggestionText => {
+          this.setState({ suggestionText });
+        })
+        .catch(error => {
+          api.showToaster({
+            message: error.message,
+            className: 'danger',
+            iconName: 'pt-icon-thumbs-down'
+          });
+        });
+    };
+    if (operation.explainPlan) {
+      getSuggestionText(operation);
+    } else {
+      api
+        .getExplainForOperation(operation)
+        .then(resOperation => {
+          getSuggestionText(resOperation);
+        })
+        .catch(error => {
+          api.showToaster({
+            message: error.message,
+            className: 'danger',
+            iconName: 'pt-icon-thumbs-down'
+          });
+        });
+    }
+  }
+
   render() {
     const executionStages = getExecutionStages(this.props.execStats);
     return (
       <div className="explainView">
-        {this.props.showSuggestion &&
-          this.props.operation &&
-          this.props.operation.suggestionText && (
-            <QueryCommandView command={this.props.operation.suggestionText} />
-          )}
+        {this.state.suggestionText && <QueryCommandView command={this.state.suggestionText} />}
         <nav className="pt-navbar explainToolbar">
           <div className="pt-navbar-group exampleGroup pt-align-left">
             <div className="pt-navbar-heading">
@@ -88,25 +136,22 @@ export default class OperationDetails extends React.Component {
             </div>
           </div>
           <div className="pt-navbar-group pt-align-right">
-            {this.props.operation &&
-              this.props.operation.explainPlan && (
-                <Tooltip
-                  className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-                  content="Index Advisor"
-                  hoverOpenDelay={1000}
-                  inline
-                  intent={Intent.PRIMARY}
-                  position={Position.BOTTOM}
-                >
-                  <Button
-                    className="reset-button pt-button pt-intent-primary"
-                    text="Index Advisor"
-                    onClick={() =>
-                      this.props.api.getIndexAdvisorForSelectedOp(this.props.operation)
-                    }
-                  />
-                </Tooltip>
-              )}
+            {this.props.operation && (
+              <Tooltip
+                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                content="Index Advisor"
+                hoverOpenDelay={1000}
+                inline
+                intent={Intent.PRIMARY}
+                position={Position.BOTTOM}
+              >
+                <Button
+                  className="reset-button pt-button pt-intent-primary"
+                  text="Index Advisor"
+                  onClick={this.getIndexAdvisorForSelectedOp}
+                />
+              </Tooltip>
+            )}
           </div>
         </nav>
         <div className="explainBody explain-statistic-container-view">
