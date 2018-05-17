@@ -3,7 +3,7 @@
  * @Date:   2017-08-01T10:50:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-17T14:43:53+10:00
+ * @Last modified time: 2018-05-18T08:11:42+10:00
  */
 
 /*
@@ -618,6 +618,9 @@ export default class View extends React.Component {
                 <circle r={this.state.radius} style={{ opacity: 0 }} />
               </g>
             </svg>
+          </div>
+          <div className="instructions">
+            <span>Double Click on a collection to show storage used by embedded documents</span>
           </div>
         </div>
         <div className="chartSeperator" />

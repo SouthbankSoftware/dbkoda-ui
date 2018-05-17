@@ -3,7 +3,7 @@
  * @Date:   2017-08-02T10:00:30+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-17T15:41:45+10:00
+ * @Last modified time: 2018-05-18T08:01:06+10:00
  */
 
 /*
@@ -26,6 +26,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
 import autobind from 'autobind-decorator';
 import React from 'react';
 import StorageSunburstView from '#/common/SunburstView';
@@ -47,6 +48,10 @@ import './Panel.scss';
 })
 @observer
 export default class StoragePanel extends React.Component {
+  childData;
+  @observable msg = 'Loading Storage View...';
+  @observable bStorageView = false;
+
   constructor(props) {
     super(props);
 
@@ -59,6 +64,7 @@ export default class StoragePanel extends React.Component {
     Broker.emit(EventType.FEATURE_USE, 'StorageView');
     this.loadData(false);
   }
+
   @action.bound
   loadData(showLoading = true) {
     if (showLoading) {
@@ -77,6 +83,8 @@ export default class StoragePanel extends React.Component {
         this.updateMsg('Error in SyncService: ' + reason);
       });
   }
+
+  @autobind
   setStorageData(data) {
     const newData = data;
     this.addParent(newData);
@@ -86,6 +94,7 @@ export default class StoragePanel extends React.Component {
     this.showLoading(false);
     this.showView(true);
   }
+
   @action.bound
   loadChildData(db, col, nodeData) {
     return new Promise(resolve => {
@@ -118,10 +127,8 @@ export default class StoragePanel extends React.Component {
     });
   }
 
-  childData;
-  @observable msg = 'Loading Storage View...';
-  @observable bStorageView = false;
   // This function calculates the sum of the child size attribute
+  @autobind
   getChildrenSize(nodeData) {
     let size = 0;
     if (nodeData.children) {
@@ -136,7 +143,9 @@ export default class StoragePanel extends React.Component {
     }
     return size;
   }
+
   // Here we make the tree backward navigatable. You can use your own navigation strategy, for example, dynamic loading
+  @autobind
   addParent(data) {
     if (data.children) {
       for (const child of data.children) {
@@ -145,14 +154,17 @@ export default class StoragePanel extends React.Component {
       }
     }
   }
+
   @action
   showView(value) {
     this.bStorageView = value;
   }
+
   @autobind
   showLoading(value) {
     this.setState({ bLoading: value });
   }
+
   @action
   updateMsg(value) {
     this.msg = value;
@@ -162,14 +174,18 @@ export default class StoragePanel extends React.Component {
       this.showLoading(false);
     }
   }
-  onChartBreadCrumbClick = node => {
+
+  @autobind
+  onChartBreadCrumbClick(node) {
     if (this.state.selectedNode != node) {
       this.setState({
         selectedNode: node
       });
     }
-  };
-  onChildDblClick = node => {
+  }
+
+  @autobind
+  onChildDblClick(node) {
     // node is a tree Node in d3-hierachy (https://github.com/d3/d3-hierarchy) that just clicked by user
     if (this.state.selectedNode == node) {
       // root is clicked, we should move upward in the data tree
@@ -183,10 +199,18 @@ export default class StoragePanel extends React.Component {
       this.setState({
         selectedNode: node
       });
+      const dataNode = _.find(node.children, child => {
+        return child.data.name === 'data';
+      });
+      if (dataNode) {
+        console.log(dataNode);
+        this.onChildClick(dataNode);
+      }
     }
-  };
+  }
 
-  onChildClick = node => {
+  @autobind
+  onChildClick(node) {
     const nodeData = node.data;
     if (
       nodeData.name == 'data' &&
@@ -196,17 +220,9 @@ export default class StoragePanel extends React.Component {
       nodeData.parent.parent.parent.name == 'total' &&
       !nodeData.children
     ) {
-      this.loadChildData(nodeData.parent.parent.name, nodeData.parent.name, nodeData).then(res => {
-        console.log(res);
-        // if (res) {
-        //   this.forceUpdate();
-        // }
-        // this.setState({
-        //   data: resNodeData,
-        // });
-      });
+      this.loadChildData(nodeData.parent.parent.name, nodeData.parent.name, nodeData);
     }
-  };
+  }
 
   render() {
     return (
