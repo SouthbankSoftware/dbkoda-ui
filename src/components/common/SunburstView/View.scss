@@ -1,10 +1,9 @@
-// @Author: Wahaj Shamim <wahaj>
-// @Date:   2017-08-01T10:50:03+10:00
-// @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   wahaj
-// @Last modified time: 2017-08-18T15:38:23+10:00
-
-/*
+/* @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-08-01T10:50:03+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-18T08:13:24+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -70,6 +69,11 @@
           font-size: 2.5em;
         }
       }
+    }
+    .instructions {
+      text-align: center;
+      font-size: 14px;
+      padding-top: 40px;
     }
   }
   .chartSeperator {
