@@ -732,7 +732,7 @@ export default class PerformancePanelApi {
   }
 
   @action.bound
-  transformPerformancePanel(profileId: UUID, to: ?PerformancePanelStatus, params) {
+  transformPerformancePanel(profileId: UUID, to: ?PerformancePanelStatus, params: ?Object) {
     const { performancePanels } = this.store;
     let performancePanel = performancePanels.get(profileId);
 
