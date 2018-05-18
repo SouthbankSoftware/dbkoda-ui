@@ -641,10 +641,11 @@ export default class PerformancePanelApi {
   }
 
   @action.bound
-  _focusPerformancePanelExternalWindow(profileId: UUID) {
+  _focusPerformancePanelExternalWindow(profileId: UUID, params) {
     this.sendMsgToPerformanceWindow({
       command: 'mw_focusWindow',
-      profileId
+      profileId,
+      params
     });
   }
 
@@ -853,7 +854,7 @@ export default class PerformancePanelApi {
         this._removePerformancePanel(profileId);
       } else if (to === performancePanelStatuses.external) {
         // case added to bring the performance panel to the front.
-        this._focusPerformancePanelExternalWindow(profileId);
+        this._focusPerformancePanelExternalWindow(profileId, params);
       }
     }
   }
