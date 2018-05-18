@@ -79,7 +79,9 @@ export default class TopConnections {
     samplingRate: number = 100,
     dev: boolean = false
   ) => {
-    this.api.transformPerformancePanel(profileId, performancePanelStatuses.external);
+    this.api.transformPerformancePanel(profileId, performancePanelStatuses.external, {
+      open: 'Top Connections'
+    });
     featherClient()
       .service('top-connections')
       .get(profileId, {

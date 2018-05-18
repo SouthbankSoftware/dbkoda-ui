@@ -217,7 +217,6 @@ export default class Store {
             }, 0);
           }
         } else if (args.command === 'mw_updateDatabaseConfiguration') {
-          console.log('update database configuration res:', args);
           if (this.profilingPanel.databases && args && args.dbConfigs) {
             const newDbs = this.profilingPanel.databases.map(db => {
               const find = args.dbConfigs.find(o => o.name === db.name);
@@ -232,6 +231,11 @@ export default class Store {
               iconName: 'pt-icon-thumbs-down'
             });
             this.profilingPanel.databases = newDbs;
+          }
+        } else if (args.command === 'mw_focusWindow') {
+          console.log('mw_focusWindow', args);
+          if (args.params && args.params.open) {
+            this.setActiveNavPane(args.params.open);
           }
         }
       }

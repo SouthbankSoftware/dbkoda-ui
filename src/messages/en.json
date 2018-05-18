@@ -378,7 +378,7 @@
         "showNewFeaturesDialogOnStart": "Show new features dialog on application start.",
         "tableOutputDefault": "Use Table Output as Default Output",
         "showWelcomePageAtStart": "Show Welcome Page on Startup",
-        "automaticAutoComplete": "Run AutoComplete automatically",
+        "automaticAutoComplete": "Run AutoComplete automatically when typing (Experimental)",
         "performancePanel": {
           "preventDisplaySleep":
             "Prevent display sleep when panel is visible. (Panel restart required)",

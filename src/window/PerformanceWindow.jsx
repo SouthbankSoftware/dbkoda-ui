@@ -27,6 +27,8 @@
 import React from 'react';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
+import qs from 'stringquery';
+
 import { PerformancePanel } from '#/PerformancePanel';
 import { TopConnectionsPanel } from '#/TopConnectionsPanel';
 import { ProfilingPanel } from '#/ProfilingPanel';
@@ -69,6 +71,12 @@ class PerformanceWindow extends React.Component {
     store.toasterCallback = this._showToasterFromMainWindow;
     store.errorHandler = this._errorHandler;
     document.addEventListener('visibilitychange', this._handleVisibilityChange, false);
+    if (window.location.search) {
+      const query = qs(window.location.search);
+      if (query && query.open) {
+        this.props.store.setActiveNavPane(decodeURI(query.open));
+      }
+    }
   }
 
   @action.bound
