@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-15T10:54:51+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T10:53:38+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-18T09:18:23+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,9 +27,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
-import { computed } from 'mobx';
+import { computed, action } from 'mobx';
 import { DragSource } from 'react-dnd';
 import { DragItemTypes } from '#/common/Constants.js';
+import {
+  AnchorButton,
+  Popover,
+  PopoverInteractionKind,
+  Intent,
+  Menu,
+  MenuItem,
+  MenuDivider,
+  Position
+} from '@blueprintjs/core';
+import TreeActions from '../templates/tree-actions/actions.json';
+import DropdownIcon from '../../../styles/icons/dropdown-menu-icon.svg';
+import SettingsIcon from '../../../styles/icons/settings-icon.svg';
+import DocumentIcon from '../../../styles/icons/document-solid-icon.svg';
+import RemoveUserIcon from '../../../styles/icons/users-icon-2.svg';
+import AddIcon from '../../../styles/icons/add-icon.svg';
+import CloseIcon from '../../../styles/icons/cross-icon.svg';
+import UserIcon from '../../../styles/icons/user-icon.svg';
+import ShardsIcon from '../../../styles/icons/shards-icon-2.svg';
+import CollectionIcon from '../../../styles/icons/collection-icon.svg';
 
 const labelSource = {
   /**
@@ -60,6 +80,82 @@ function collect(connect, monitor) {
 @inject('treeState')
 @observer
 class DragLabel extends React.Component {
+  Menus = [];
+  constructor(props) {
+    super(props);
+    this.store = props.store;
+    const Actions = TreeActions[props.type];
+    this.Menus = [];
+    if (Actions && Actions.length > 0) {
+      for (const objAction of Actions) {
+        if (objAction.type && objAction.type == 'divider') {
+          this.Menus.push(<MenuDivider key={objAction.name} />);
+        } else {
+          let bDevOnlyFeature = false;
+          if (process.env.NODE_ENV !== 'development' && objAction.development) {
+            bDevOnlyFeature = true;
+          }
+          if (!bDevOnlyFeature) {
+            const icon = this.getIconFor(objAction.icon);
+            if (icon != null) {
+              this.Menus.push(
+                <div className="menuItemWrapper" key={objAction.name} data-id={objAction.name}>
+                  <MenuItem
+                    onClick={this.handleTreeActionClick}
+                    text={objAction.text}
+                    key={objAction.name}
+                    icon={icon}
+                    intent={Intent.NONE}
+                  />
+                </div>
+              );
+            } else {
+              this.Menus.push(
+                <div className="menuItemWrapper" key={objAction.name} data-id={objAction.name}>
+                  <MenuItem
+                    onClick={this.handleTreeActionClick}
+                    text={objAction.text}
+                    key={objAction.name}
+                    icon={objAction.icon}
+                    intent={Intent.NONE}
+                  />
+                </div>
+              );
+            }
+          }
+        }
+      }
+    }
+  }
+  getIconFor(icon) {
+    switch (icon) {
+      case 'settings':
+        return <SettingsIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+      case 'document':
+        return <DocumentIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+      case 'user':
+        return <UserIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+      case 'remove-user':
+        return <RemoveUserIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+      case 'add':
+        return <AddIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+      case 'close':
+        return <CloseIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+      case 'shards':
+        return <ShardsIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+      case 'collection':
+        return <CollectionIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+      case 'dropdown':
+        return <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+      default:
+        return null;
+    }
+  }
+  @action
+  handleTreeActionClick = (e: React.MouseEvent) => {
+    this.store.treePanel.nodeOpened = this;
+    this.store.treePanel.action = e;
+  };
   /**
    * Get the trimmed server name in case of server config/shard treeNode
    */
@@ -115,15 +211,36 @@ class DragLabel extends React.Component {
   render() {
     const { connectDragSource, isDragging } = this.props;
     return connectDragSource(
-      <span
-        className="nodeLbl"
-        style={{
-          opacity: isDragging ? 0.5 : 1,
-          cursor: 'move'
-        }}
-      >
-        {this.FilteredTextLabel}
-      </span>
+      <div className="labelWrapper">
+        <span
+          className="nodeLbl"
+          style={{
+            opacity: isDragging ? 0.5 : 1,
+            cursor: 'move'
+          }}
+        >
+          {this.FilteredTextLabel}
+        </span>
+        <span className="additionalActions">
+          <Popover
+            minimal
+            interactionKind={PopoverInteractionKind.CLICK}
+            position={Position.TOP}
+            popoverClassName="toolTip"
+            content={<Menu>{this.Menus}</Menu>}
+            target={
+              <AnchorButton
+                className="button"
+                onClick={() => {
+                  console.log('Open Context Menu');
+                }}
+              >
+                <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+              </AnchorButton>
+            }
+          />
+        </span>
+      </div>
     );
   }
 }

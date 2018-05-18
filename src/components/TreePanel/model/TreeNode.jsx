@@ -22,24 +22,14 @@
  * @Date:   2017-03-08T11:56:51+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-02T09:25:38+10:00
+ * @Last modified time: 2018-05-18T09:14:23+10:00
  */
 
 import React from 'react';
-import { observable, action } from 'mobx';
-import {
-  AnchorButton,
-  Popover,
-  PopoverInteractionKind,
-  Intent,
-  Menu,
-  MenuItem,
-  MenuDivider,
-  Position
-} from '@blueprintjs/core';
+import { observable } from 'mobx';
 
 import DragLabel from './DragLabel.jsx';
-import TreeActions from '../templates/tree-actions/actions.json';
+
 import DatabaseIcon from '../../../styles/icons/database-icon-2.svg';
 import DatabasesIcon from '../../../styles/icons/database-icon-4.svg';
 import CollectionIcon from '../../../styles/icons/collection-icon.svg';
@@ -62,12 +52,6 @@ import ReplicaMemberIcon from '../../../styles/icons/replica-set-icon.svg';
 import PrimaryIcon from '../../../styles/icons/primary-icon.svg';
 import SecondaryIcon from '../../../styles/icons/secondary-icon.svg';
 import ArbiterIcon from '../../../styles/icons/arbiters-icon.svg';
-import SettingsIcon from '../../../styles/icons/settings-icon.svg';
-import DocumentIcon from '../../../styles/icons/document-solid-icon.svg';
-import RemoveUserIcon from '../../../styles/icons/users-icon-2.svg';
-import AddIcon from '../../../styles/icons/add-icon.svg';
-import CloseIcon from '../../../styles/icons/cross-icon.svg';
-import DropdownIcon from '../../../styles/icons/dropdown-menu-icon.svg';
 
 export default class TreeNode {
   id;
@@ -223,97 +207,14 @@ export default class TreeNode {
     }
     this.json = treeJSON;
 
-    const Actions = TreeActions[this.type];
-    const Menus = [];
-    /*  Menus.push(
-      <MenuItem
-        onClick={this.handleMakeRoot}
-        text="Make Root Node"
-        key="MakeRoot"
-        name="MakeRoot"
-        icon="git-new-branch"
-        intent={Intent.NONE}
-      />
-    ); */
-    if (Actions && Actions.length > 0) {
-      for (const objAction of Actions) {
-        /*         if (
-          objAction.name === 'ShowPerformancePanel' &&
-          this.props.store.profileList.selectedProfile
-        ) {
-          const hasPerformancePanel = this.props.api.hasPerformancePanel(
-            this.props.store.profileList.selectedProfile.id
-          );
-          objAction.text = globalString(
-            `profile/menu/${
-              !hasPerformancePanel
-                ? 'createPerformancePanel'
-                : 'openPerformancePanel'
-            }`
-          );
-        } */
-        if (objAction.type && objAction.type == 'divider') {
-          Menus.push(<MenuDivider key={objAction.name} />);
-        } else {
-          let bDevOnlyFeature = false;
-          if (process.env.NODE_ENV !== 'development' && objAction.development) {
-            bDevOnlyFeature = true;
-          }
-          if (!bDevOnlyFeature) {
-            const icon = this.getIconFor(objAction.icon);
-            if (icon != null) {
-              Menus.push(
-                <div className="menuItemWrapper" key={objAction.name} data-id={objAction.name}>
-                  <MenuItem
-                    onClick={this.handleTreeActionClick}
-                    text={objAction.text}
-                    key={objAction.name}
-                    icon={icon}
-                    intent={Intent.NONE}
-                  />
-                </div>
-              );
-            } else {
-              Menus.push(
-                <div className="menuItemWrapper" key={objAction.name} data-id={objAction.name}>
-                  <MenuItem
-                    onClick={this.handleTreeActionClick}
-                    text={objAction.text}
-                    key={objAction.name}
-                    icon={objAction.icon}
-                    intent={Intent.NONE}
-                  />
-                </div>
-              );
-            }
-          }
-        }
-      }
-    }
-
     this.label = (
-      <div className="labelWrapper">
-        <DragLabel label={this.text} id={this.id} type={this.type} refParent={this.refParent} />
-        <span className="additionalActions">
-          <Popover
-            minimal
-            interactionKind={PopoverInteractionKind.CLICK}
-            position={Position.TOP}
-            popoverClassName="toolTip"
-            content={<Menu>{Menus}</Menu>}
-            target={
-              <AnchorButton
-                className="button"
-                onClick={() => {
-                  console.log('Open Context Menu');
-                }}
-              >
-                <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />
-              </AnchorButton>
-            }
-          />
-        </span>
-      </div>
+      <DragLabel
+        label={this.text}
+        id={this.id}
+        type={this.type}
+        refParent={this.refParent}
+        store={this.store}
+      />
     );
     if (treeJSON.children) {
       this.allChildNodes = new Map();
@@ -321,37 +222,6 @@ export default class TreeNode {
         const child = new TreeNode(childJSON, this, this.store);
         this.allChildNodes.set(child.id, child);
       }
-    }
-  }
-
-  @action
-  handleTreeActionClick = (e: React.MouseEvent) => {
-    this.store.treePanel.nodeOpened = this;
-    this.store.treePanel.action = e;
-  };
-
-  getIconFor(icon) {
-    switch (icon) {
-      case 'settings':
-        return <SettingsIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
-      case 'document':
-        return <DocumentIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
-      case 'user':
-        return <UserIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
-      case 'remove-user':
-        return <RemoveUserIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
-      case 'add':
-        return <AddIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
-      case 'close':
-        return <CloseIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
-      case 'shards':
-        return <ShardsIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
-      case 'collection':
-        return <CollectionIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
-      case 'dropdown':
-        return <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
-      default:
-        return null;
     }
   }
 
