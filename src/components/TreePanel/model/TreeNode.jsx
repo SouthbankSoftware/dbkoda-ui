@@ -22,12 +22,12 @@
  * @Date:   2017-03-08T11:56:51+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-18T11:06:26+10:00
+ * @Last modified time: 2018-05-18T11:22:32+10:00
  */
 
 import React from 'react';
 import { observable } from 'mobx';
-
+import autobind from 'autobind-decorator';
 import DragLabel from './DragLabel.jsx';
 
 import DatabaseIcon from '../../../styles/icons/database-icon-2.svg';
@@ -81,109 +81,7 @@ export default class TreeNode {
       this.type = 'shards';
     }
     // Add label as secondaryLabel component.
-    switch (this.type) {
-      case 'shards':
-        this.secondaryLabel = (
-          <RootShardsIcon className="dbKodaSVG shardsIcon" width={30} height={30} />
-        );
-        break;
-      case 'group_shards':
-        this.secondaryLabel = (
-          <ShardsIcon className="dbKodaSVG shardsIcon" width={30} height={30} />
-        );
-        break;
-      case 'shard':
-        this.secondaryLabel = <ShardIcon className="dbKodaSVG shardIcon" width={30} height={30} />;
-        break;
-      case 'configservers':
-        this.secondaryLabel = (
-          <ConfigServersIcon className="dbKodaSVG configServersIcon" width={30} height={30} />
-        );
-        break;
-      case 'config':
-        this.secondaryLabel = (
-          <ConfigIcon className="dbKodaSVG configIcon" width={30} height={30} />
-        );
-        break;
-      case 'routers':
-        this.secondaryLabel = (
-          <RoutersIcon className="dbKodaSVG routersIcon" width={30} height={30} />
-        );
-        break;
-      case 'mongos':
-        this.secondaryLabel = (
-          <MongosIcon className="dbKodaSVG mongosIcon" width={30} height={30} />
-        );
-        break;
-      case 'databases':
-        this.secondaryLabel = (
-          <DatabasesIcon className="dbKodaSVG databasesIcon" width={30} height={30} />
-        );
-        break;
-      case 'database':
-        this.secondaryLabel = (
-          <DatabaseIcon className="dbKodaSVG databaseIcon" width={30} height={30} />
-        );
-        break;
-      case 'collection':
-        this.secondaryLabel = (
-          <CollectionIcon className="dbKodaSVG collectionIcon" width={30} height={30} />
-        );
-        break;
-      case 'index':
-        this.secondaryLabel = <IndexIcon className="dbKodaSVG indexIcon" width={30} height={30} />;
-        break;
-      case 'users':
-        this.secondaryLabel = <UsersIcon className="dbKodaSVG usersIcon" width={30} height={30} />;
-        break;
-      case 'user':
-        this.secondaryLabel = <UserIcon className="dbKodaSVG userIcon" width={30} height={30} />;
-        break;
-      case 'roles':
-        this.secondaryLabel = <RolesIcon className="dbKodaSVG rolesIcon" width={30} height={30} />;
-        break;
-      case 'role':
-        this.secondaryLabel = <RoleIcon className="dbKodaSVG roleIcon" width={30} height={30} />;
-        break;
-      case 'property':
-        this.secondaryLabel = (
-          <PropertyIcon className="dbKodaSVG propertyIcon" width={30} height={30} />
-        );
-        break;
-      case 'properties':
-        this.secondaryLabel = (
-          <PropertiesIcon className="dbKodaSVG propertiesIcon" width={30} height={30} />
-        );
-        break;
-      case 'replicaset':
-        this.secondaryLabel = (
-          <ReplicaSetIcon className="dbKodaSVG replicaSetIcon" width={30} height={30} />
-        );
-        break;
-      case 'primary':
-        this.secondaryLabel = (
-          <PrimaryIcon className="dbKodaSVG primaryIcon" width={30} height={30} />
-        );
-        break;
-      case 'secondary':
-        this.secondaryLabel = (
-          <SecondaryIcon className="dbKodaSVG secondaryIcon" width={30} height={30} />
-        );
-        break;
-      case 'arbiter':
-        this.secondaryLabel = (
-          <ArbiterIcon className="dbKodaSVG arbiterIcon" width={30} height={30} />
-        );
-        break;
-      case 'replica_member':
-        this.secondaryLabel = (
-          <ReplicaMemberIcon className="dbKodaSVG replicaMemberIcon" width={30} height={30} />
-        );
-        break;
-      default:
-        this.secondaryLabel = null;
-        break;
-    }
+    this.secondaryLabel = this.getIconForSecondaryLabel(this.type);
     this.className = this.type + 'Node';
     // this.icon = `pt-icon-${this.type}`;
     this.icon = null;
@@ -223,6 +121,64 @@ export default class TreeNode {
         const child = new TreeNode(childJSON, this, this.store);
         this.allChildNodes.set(child.id, child);
       }
+    }
+  }
+
+  /**
+   * Get a tree icon based on type
+   *
+   * @param {string} type - type of the tree node.
+   * @return {React.component} - svg icon as react component
+   */
+  @autobind
+  getIconForSecondaryLabel(type) {
+    switch (type) {
+      case 'shards':
+        return <RootShardsIcon className="dbKodaSVG shardsIcon" width={30} height={30} />;
+      case 'group_shards':
+        return <ShardsIcon className="dbKodaSVG shardsIcon" width={30} height={30} />;
+      case 'shard':
+        return <ShardIcon className="dbKodaSVG shardIcon" width={30} height={30} />;
+      case 'configservers':
+        return <ConfigServersIcon className="dbKodaSVG configServersIcon" width={30} height={30} />;
+      case 'config':
+        return <ConfigIcon className="dbKodaSVG configIcon" width={30} height={30} />;
+      case 'routers':
+        return <RoutersIcon className="dbKodaSVG routersIcon" width={30} height={30} />;
+      case 'mongos':
+        return <MongosIcon className="dbKodaSVG mongosIcon" width={30} height={30} />;
+      case 'databases':
+        return <DatabasesIcon className="dbKodaSVG databasesIcon" width={30} height={30} />;
+      case 'database':
+        return <DatabaseIcon className="dbKodaSVG databaseIcon" width={30} height={30} />;
+      case 'collection':
+        return <CollectionIcon className="dbKodaSVG collectionIcon" width={30} height={30} />;
+      case 'index':
+        return <IndexIcon className="dbKodaSVG indexIcon" width={30} height={30} />;
+      case 'users':
+        return <UsersIcon className="dbKodaSVG usersIcon" width={30} height={30} />;
+      case 'user':
+        return <UserIcon className="dbKodaSVG userIcon" width={30} height={30} />;
+      case 'roles':
+        return <RolesIcon className="dbKodaSVG rolesIcon" width={30} height={30} />;
+      case 'role':
+        return <RoleIcon className="dbKodaSVG roleIcon" width={30} height={30} />;
+      case 'property':
+        return <PropertyIcon className="dbKodaSVG propertyIcon" width={30} height={30} />;
+      case 'properties':
+        return <PropertiesIcon className="dbKodaSVG propertiesIcon" width={30} height={30} />;
+      case 'replicaset':
+        return <ReplicaSetIcon className="dbKodaSVG replicaSetIcon" width={30} height={30} />;
+      case 'primary':
+        return <PrimaryIcon className="dbKodaSVG primaryIcon" width={30} height={30} />;
+      case 'secondary':
+        return <SecondaryIcon className="dbKodaSVG secondaryIcon" width={30} height={30} />;
+      case 'arbiter':
+        return <ArbiterIcon className="dbKodaSVG arbiterIcon" width={30} height={30} />;
+      case 'replica_member':
+        return <ReplicaMemberIcon className="dbKodaSVG replicaMemberIcon" width={30} height={30} />;
+      default:
+        return null;
     }
   }
 
