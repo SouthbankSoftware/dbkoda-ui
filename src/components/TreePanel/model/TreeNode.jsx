@@ -22,7 +22,7 @@
  * @Date:   2017-03-08T11:56:51+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-18T09:14:23+10:00
+ * @Last modified time: 2018-05-18T11:06:26+10:00
  */
 
 import React from 'react';
@@ -213,6 +213,7 @@ export default class TreeNode {
         id={this.id}
         type={this.type}
         refParent={this.refParent}
+        node={this}
         store={this.store}
       />
     );

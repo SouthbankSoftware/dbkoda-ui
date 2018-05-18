@@ -3,7 +3,7 @@
  * @Date:   2017-03-15T10:54:51+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-18T09:18:23+10:00
+ * @Last modified time: 2018-05-18T11:08:20+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -151,9 +151,9 @@ class DragLabel extends React.Component {
         return null;
     }
   }
-  @action
+  @action.bound
   handleTreeActionClick = (e: React.MouseEvent) => {
-    this.store.treePanel.nodeOpened = this;
+    this.store.treePanel.nodeOpened = this.props.node;
     this.store.treePanel.action = e;
   };
   /**
