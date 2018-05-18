@@ -621,14 +621,15 @@ export default class PerformancePanelApi {
   }
 
   @action.bound
-  _mountPerformancePanelToExternalWindow(profileId: UUID, profileAlias: string) {
+  _mountPerformancePanelToExternalWindow(profileId: UUID, profileAlias: string, params) {
     if (this.eventQueue[profileId]) {
       delete this.eventQueue[profileId];
     }
     this.sendMsgToPerformanceWindow({
       command: 'mw_createWindow',
       profileId,
-      profileAlias
+      profileAlias,
+      params
     });
     this.externalPerformanceWindows.set(profileId, { status: 'started' });
   }
@@ -730,7 +731,7 @@ export default class PerformancePanelApi {
   }
 
   @action.bound
-  transformPerformancePanel(profileId: UUID, to: ?PerformancePanelStatus) {
+  transformPerformancePanel(profileId: UUID, to: ?PerformancePanelStatus, params) {
     const { performancePanels } = this.store;
     let performancePanel = performancePanels.get(profileId);
 
@@ -759,7 +760,11 @@ export default class PerformancePanelApi {
         // stopped => external
 
         this._runPerformancePanel(profileId, performancePanelStatuses.external);
-        this._mountPerformancePanelToExternalWindow(profileId, performancePanel.profileAlias);
+        this._mountPerformancePanelToExternalWindow(
+          profileId,
+          performancePanel.profileAlias,
+          params
+        );
         this._addPowerBlocker(profileId);
       } else if (to == null) {
         // stopped => none
@@ -777,7 +782,11 @@ export default class PerformancePanelApi {
         // background => external
 
         this._runPerformancePanel(profileId, performancePanelStatuses.external);
-        this._mountPerformancePanelToExternalWindow(profileId, performancePanel.profileAlias);
+        this._mountPerformancePanelToExternalWindow(
+          profileId,
+          performancePanel.profileAlias,
+          params
+        );
         this._addPowerBlocker(profileId);
       } else if (to === performancePanelStatuses.stopped) {
         // background => stopped
@@ -801,7 +810,11 @@ export default class PerformancePanelApi {
 
         this._unmountPerformancePanelFromMainWindow();
         performancePanel.status = to;
-        this._mountPerformancePanelToExternalWindow(profileId, performancePanel.profileAlias);
+        this._mountPerformancePanelToExternalWindow(
+          profileId,
+          performancePanel.profileAlias,
+          params
+        );
       } else if (to === performancePanelStatuses.stopped) {
         // foreground => stopped
 
