@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-22T17:09:32+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T15:24:46+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-21T13:32:20+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -76,7 +76,7 @@ describe('DragLabel', () => {
     const label = mount(
       <DDCDragLabel id={props.id} label={props.label} type={props.type} treeState={treeState} />
     );
-    expect(label.find('span').text()).toEqual('long:8888');
+    expect(label.find('div > span.nodeLbl').text()).toEqual('long:8888');
   });
 
   test('matches snapshot', () => {
@@ -101,6 +101,6 @@ describe('DragLabel', () => {
       <DDCDragLabel id={props1.id} label={props1.label} type={props1.type} treeState={treeState} />
     );
 
-    expect(label1.find('span').text()).toEqual(props1.label);
+    expect(label1.find('div > span.nodeLbl').text()).toEqual(props1.label);
   });
 });

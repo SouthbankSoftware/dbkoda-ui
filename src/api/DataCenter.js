@@ -3,7 +3,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T12:27:40+10:00
+ * @Last modified time: 2018-05-21T12:42:26+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -68,12 +68,17 @@ export default class DataCenter {
     // TODO this is basically a mixin pattern, use a mixin lib instead of typing heedlessly here? :D
 
     // Output API public functions
-    this.addOutput = this.outputApi.addOutput.bind(this);
-    this.removeOutput = this.outputApi.removeOutput.bind(this);
-    this.initJsonView = this.outputApi.initJsonView.bind(this);
-    this.swapOutputShellConnection = this.outputApi.swapOutputShellConnection.bind(this);
-    this.addDrillOutput = this.outputApi.addDrillOutput.bind(this);
-    this.drillOutputAvailable = this.outputApi.drillOutputAvailable.bind(this);
+    _.assign(
+      this,
+      _.pick(this.outputApi, [
+        'addOutput',
+        'removeOutput',
+        'initJsonView',
+        'swapOutputShellConnection',
+        'addDrillOutput',
+        'drillOutputAvailable'
+      ])
+    );
 
     // StorageDrilldown public APIs
     _.assign(this, _.pick(this.storageDrilldownApi, ['getStorageData', 'getChildStorageData']));
@@ -127,23 +132,23 @@ export default class DataCenter {
     _.assign(this, _.pick(this.widgetApi, ['addWidget', 'removeWidget']));
 
     // Editor API public functions
-    this.addEditor = this.editorApi.addEditor.bind(this);
-    this.setNewEditorState = this.editorApi.setNewEditorState.bind(this);
-    this.createNewEditorFailed = this.editorApi.createNewEditorFailed.bind(this);
-    this.getUnsavedEditorInternalFileName = this.editorApi.getUnsavedEditorInternalFileName.bind(
-      this
+    _.assign(
+      this,
+      _.pick(this.editorApi, [
+        'addEditor',
+        'setNewEditorState',
+        'createNewEditorFailed',
+        'getUnsavedEditorInternalFileName',
+        'getUnsavedEditorSuggestedFileName',
+        'getEditorDisplayName',
+        'removeEditor',
+        'addDrillEditor',
+        'openHomeTab'
+      ])
     );
-    this.getUnsavedEditorSuggestedFileName = this.editorApi.getUnsavedEditorSuggestedFileName.bind(
-      this
-    );
-    this.getEditorDisplayName = this.editorApi.getEditorDisplayName.bind(this);
-    this.removeEditor = this.editorApi.removeEditor.bind(this);
-    this.addDrillEditor = this.editorApi.addDrillEditor.bind(this);
-    this.openHomeTab = this.editorApi.openHomeTab.bind(this);
 
     // Tree API public functions
-    this.addNewEditorForTreeAction = this.treeApi.addNewEditorForTreeAction.bind(this);
-    this.showStorageStatsView = this.treeApi.showStorageStatsView.bind(this);
+    _.assign(this, _.pick(this.treeApi, ['addNewEditorForTreeAction', 'showStorageStatsView']));
 
     // Profile API public functions
     _.assign(
@@ -158,10 +163,15 @@ export default class DataCenter {
     );
 
     // Drill API public functions
-    this.addNewEditorForDrill = this.drillApi.addNewEditorForDrill.bind(this);
-    this.checkForExistingDrillProfile = this.drillApi.checkForExistingDrillProfile.bind(this);
-    this.openEditorWithDrillProfileId = this.drillApi.openEditorWithDrillProfileId.bind(this);
-    this.deleteProfileFromDrill = this.drillApi.deleteProfileFromDrill.bind(this);
+    _.assign(
+      this,
+      _.pick(this.drillApi, [
+        'addNewEditorForDrill',
+        'checkForExistingDrillProfile',
+        'openEditorWithDrillProfileId',
+        'deleteProfileFromDrill'
+      ])
+    );
   }
 
   init() {

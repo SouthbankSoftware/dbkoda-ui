@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T11:39:01+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-11T16:47:48+10:00
+ * @Last modified time: 2018-05-21T12:05:45+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -347,7 +347,7 @@ export default class TreeView extends React.Component {
           this.props.store.openNewAggregateBuilder(this.nodeRightClicked);
           break;
         case 'DbStorageStats':
-          this.props.api.showStorageStatsView();
+          this.props.api.showStorageStatsView(this.props.store.profileList.selectedProfile.id);
           break;
         case 'ShowPerformancePanel':
           this.showPerformancePanel();

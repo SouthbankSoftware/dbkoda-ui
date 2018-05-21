@@ -3,7 +3,7 @@
  * @Date:   2018-05-15T16:12:25+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-17T12:39:49+10:00
+ * @Last modified time: 2018-05-21T12:33:34+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,7 +25,7 @@
  */
 
 import _ from 'lodash';
-import { action, extendObservable, runInAction } from 'mobx';
+import { action, extendObservable, runInAction, observable } from 'mobx';
 import { NavPanes } from '#/common/Constants';
 import { getIdxSuggestionCode } from '#/ExplainPanel/Explain';
 import { featherClient } from '../../helpers/feathers';
@@ -43,6 +43,7 @@ export default class PerformanceWindowApi {
   }
   profileId = null;
   lineSeperator = null;
+  @observable shellId;
 
   setProfileId(id) {
     this.profileId = id;
@@ -65,10 +66,12 @@ export default class PerformanceWindowApi {
     shellService.timeout = 30000;
     shellService
       .create({ id: profileId })
-      .then(res => {
-        console.log('create new shell ', res);
-        this.shellId = res.shellId;
-      })
+      .then(
+        action(res => {
+          console.log('create new shell ', res);
+          this.shellId = res.shellId;
+        })
+      )
       .catch(err => {
         l.error(err);
       });

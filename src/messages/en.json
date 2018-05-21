@@ -404,6 +404,13 @@
           "host-path": "Path in the host",
           "container-path": "Path in the container"
         },
+        "docker-tooltip": {
+          "image": "Docker Image Name includes mongo shell binary",
+          "container": "Docker Container ID includes mongo shell binary",
+          "host-volume": "Host mount path",
+          "container-volume": "Docker container mount path",
+          "docker-shell-cmd": "Docker command to launch mongo shell"
+        },
         "remove_store_dialog": {
           "question": "Are you sure you would like to disable the password store?",
           "qualifier":
