@@ -84,7 +84,8 @@
           // width: 8em !important;
           border-radius: 5px;
           background-image: unset;
-          background-color: #313131;
+          background-color: unset !important;
+          background-color: #313131 !important;
           border: 1px solid $connectionButtonBorderColour;
           box-shadow: unset;
           height: 22px;
@@ -205,8 +206,10 @@
         padding-left: 2.5%;
         padding-right: 2.5%;
         height: 400px !important;
+
         .pt-table-quadrant-scroll-container {
           overflow-x: hidden;
+
           .pt-table-body-cells {
             .pt-table-cell-col-4,
             .pt-table-cell-col-5 {
@@ -214,6 +217,7 @@
             }
           }
         }
+
         .pt-table-quadrant-scroll-container:focus {
           outline: unset;
         }

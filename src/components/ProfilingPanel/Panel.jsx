@@ -257,22 +257,6 @@ export default class ProfilingPanel extends React.Component<Props> {
                   onClick={this._onRefreshOps}
                 />
               </Tooltip>
-              {showProfileConfiguration && (
-                <Tooltip
-                  className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-                  content={globalString('performance/profiling/profile-configuration-button-text')}
-                  hoverOpenDelay={1000}
-                  inline
-                  intent={Intent.PRIMARY}
-                  position={Position.BOTTOM}
-                >
-                  <Button
-                    className="top-con-button reset-button pt-button pt-intent-primary"
-                    text={globalString('performance/profiling/profile-configuration-button-text')}
-                    onClick={showProfileConfiguration}
-                  />
-                </Tooltip>
-              )}
             </div>
           </nav>
           <div className="tableWrapper">
@@ -338,7 +322,7 @@ export default class ProfilingPanel extends React.Component<Props> {
               />
               <Tooltip
                 className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-                content={globalString('performance/profiling/profile-configuration-button-text')}
+                content={globalString('performance/profiling/apply')}
                 hoverOpenDelay={1000}
                 inline
                 intent={Intent.PRIMARY}
