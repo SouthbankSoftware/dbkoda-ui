@@ -390,6 +390,7 @@
           "historyBrushSize": "History default brush size",
           "alarmDisplayingWindow": "Alarm keepalive (ms)"
         },
+        "maxOutputHistory": "Maximum number of lines should be kept as output history",
         "mongoCmd": "Mongo Binary Path",
         "drillCmd": "Apache Drill Path",
         "docker-image-name": "Docker Image Name",

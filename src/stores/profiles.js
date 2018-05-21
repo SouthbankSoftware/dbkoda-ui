@@ -29,6 +29,7 @@ import yaml from 'js-yaml';
 import _ from 'lodash';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
+import StaticApi from '~/api/static';
 
 export default class Profiles {
   saveDebounced = _.debounce(this.save, 500);
@@ -50,6 +51,27 @@ export default class Profiles {
     return profilesList;
   }
 
+  sanitizeLoad(profilesList) {
+    for (const profileIndex in profilesList) {
+      if (Object.prototype.hasOwnProperty.call(profilesList, profileIndex)) {
+        const profile = profilesList[profileIndex];
+        if (
+          typeof profile === 'object' &&
+          !profile.url &&
+          !profile.urlCluster &&
+          !profile.useClusterConfig
+        ) {
+          console.log(profile);
+          let connectionUrl = StaticApi.mongoProtocol + profile.host + ':' + profile.port;
+          const conDB = profile.authenticationDatabase;
+          connectionUrl += '/';
+          connectionUrl += conDB === '' ? 'test' : conDB;
+          profilesList[profileIndex].url = connectionUrl;
+        }
+      }
+    }
+  }
+
   @action.bound
   load() {
     if (!this.profilesFilePath) {
@@ -68,6 +90,7 @@ export default class Profiles {
         runInAction('Apply changes to profiles from yaml file', () => {
           const profileLoad = yaml.safeLoad(file.content);
           if (profileLoad) {
+            this.sanitizeLoad(profileLoad);
             this.profiles = observable.map(profileLoad);
           }
           this.profiles.observe(this.saveDebounced);

@@ -3,7 +3,7 @@
  * @Date:   2017-07-24T14:46:20+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-15T14:43:30+10:00
+ * @Last modified time: 2018-05-21T14:53:10+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -45,6 +45,7 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/sql/sql';
 import 'codemirror/mode/markdown/markdown';
+import 'codemirror/addon/comment/comment.js';
 import 'codemirror/addon/selection/active-line.js';
 import 'codemirror/addon/display/autorefresh.js';
 import 'codemirror/addon/edit/matchbrackets.js';

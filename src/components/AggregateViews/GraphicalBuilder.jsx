@@ -3,7 +3,7 @@
  * @Date:   2017-07-19 11:17:46
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-27T17:15:25+11:00
+ * @Last modified time: 2018-05-21T13:34:24+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -871,7 +871,7 @@ export default class GraphicalBuilder extends React.Component {
             output.output = globalString('aggregate_builder/no_output');
           }
           res.map(indexValue => {
-            output.output += JSON.stringify(indexValue) + '\n';
+            output.append(JSON.stringify(indexValue) + '\n');
           });
         });
       })
@@ -893,7 +893,7 @@ export default class GraphicalBuilder extends React.Component {
                   output.output = globalString('aggregate_builder/no_output');
                 }
                 res.map(indexValue => {
-                  output.output += JSON.stringify(indexValue) + '\n';
+                  output.append(JSON.stringify(indexValue) + '\n');
                 });
               });
             })

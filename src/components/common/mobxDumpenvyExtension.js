@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-03-29T13:25:34+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T20:33:06+11:00
+ * @Last modified time: 2018-05-20T22:14:58+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -36,9 +36,32 @@ import {
 import StaticApi from '~/api/static';
 import { Doc } from 'codemirror';
 import _ from 'lodash';
+import Output from '~/stores/Output';
 
 export function serializer(key, value) {
-  if (isObservable(value)) {
+  if (value instanceof Doc) {
+    return {
+      value: value.getValue(),
+      lineSep: value.lineSep,
+      cursor: value.getCursor(),
+      selections: value.listSelections(),
+      history: _.pick(value.history, [
+        'done',
+        'generation',
+        'maxGeneration',
+        'undoDepth',
+        'undone'
+      ]),
+      cleanGeneration: value.cleanGeneration,
+      modeOption: value.modeOption,
+      __dump__: 'Doc'
+    };
+  } else if (value instanceof Output) {
+    return {
+      value: _.assign({}, value),
+      __dump__: 'Output'
+    };
+  } else if (isObservable(value)) {
     if (isObservableMap(value)) {
       return { entries: [...value], __dump__: 'ObservableMap' };
     } else if (isObservableArray(value)) {
@@ -54,23 +77,8 @@ export function serializer(key, value) {
     } else if (isBoxedObservable(value)) {
       return { value: value.get(), __dump__: 'ObservableValue' };
     }
-  } else if (value instanceof Doc) {
-    return {
-      value: value.getValue(),
-      lineSep: value.lineSep,
-      cursor: value.getCursor(),
-      selections: value.listSelections(),
-      history: _.pick(value.history, [
-        'done',
-        'generation',
-        'maxGeneration',
-        'undoDepth',
-        'undone'
-      ]),
-      cleanGeneration: value.cleanGeneration,
-      __dump__: 'Doc'
-    };
   }
+
   return value;
 }
 
@@ -86,15 +94,17 @@ export function deserializer(key, value) {
     } else if (value.__dump__ === 'ObservableValue') {
       return observable.box(value.value, { deep: false });
     } else if (value.__dump__ === 'Doc') {
-      const newDoc = StaticApi.createNewDocumentObject(value.value);
+      const { value: v, lineSep, cursor, selections, history, cleanGeneration, modeOption } = value;
 
-      newDoc.lineSep = value.lineSep;
-      newDoc.setCursor(value.cursor);
-      newDoc.setSelections(value.selections);
-      newDoc.setHistory(value.history);
+      const newDoc = StaticApi.createNewDocumentObject(v, modeOption);
+
+      newDoc.lineSep = lineSep;
+      newDoc.setCursor(cursor);
+      newDoc.setSelections(selections);
+      newDoc.setHistory(history);
       // recover changes generation
       const _recoverGen = collectionName => {
-        for (const [i, v] of value.history[collectionName].entries()) {
+        for (const [i, v] of history[collectionName].entries()) {
           if (v.generation) {
             newDoc.history[collectionName][i].generation = v.generation;
           }
@@ -102,17 +112,38 @@ export function deserializer(key, value) {
       };
       _recoverGen('done');
       _recoverGen('undone');
-      _.assign(newDoc.history, _.pick(value.history, ['generation', 'maxGeneration', 'undoDepth']));
-      newDoc.cleanGeneration = value.cleanGeneration;
+      _.assign(newDoc.history, _.pick(history, ['generation', 'maxGeneration', 'undoDepth']));
+      newDoc.cleanGeneration = cleanGeneration;
 
       return newDoc;
+    } else if (value.__dump__ === 'Output') {
+      const { value: v } = value;
+
+      const newOutput = new Output();
+      newOutput._value = v;
+
+      return newOutput;
     }
   }
+
   return value;
 }
 
 export function postDeserializer(item, visited, deserializer) {
-  if (isObservable(item)) {
+  if (item instanceof Doc) {
+    return true;
+  } else if (item instanceof Output) {
+    _.forEach(item._value, (v, k) => {
+      const transformed = deserializer(k, v);
+
+      item[k] = transformed;
+      if (!visited.has(transformed)) visited.add(transformed);
+    });
+
+    delete item._value;
+
+    return true;
+  } else if (isObservable(item)) {
     if (isObservableMap(item)) {
       const mapEntries = [...item.entries()];
       item.clear();
@@ -143,9 +174,11 @@ export function postDeserializer(item, visited, deserializer) {
     } else {
       return false;
     }
-  } else if (item instanceof Doc) {
-    return null;
-  } else {
-    return false;
+
+    // return true means already handled
+    return true;
   }
+
+  // return false to let default post deserialization logic continue
+  return false;
 }

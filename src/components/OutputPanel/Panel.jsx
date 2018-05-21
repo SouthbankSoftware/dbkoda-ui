@@ -4,8 +4,8 @@
  * @Author: Chris Trott <christrott>
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-05-21T12:35:25+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-21T15:22:45+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -123,38 +123,13 @@ export default class Panel extends React.Component<Props> {
   shellOutputAvailable({ id, shellId }: { id: string, shellId: string }) {
     // Get the active editor:
     const activeEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-    if (IS_DEVELOPMENT) {
-      console.log(id);
-      console.log(shellId);
-      console.log(activeEditor);
-    }
 
-    if (shellId === activeEditor.shellId && id === activeEditor.profileId) {
+    if (activeEditor && shellId === activeEditor.shellId && id === activeEditor.profileId) {
       if (activeEditor.explains) {
         activeEditor.explains.active = false;
       }
       this.props.api.outputApi.openView(OutputToolbarContexts.RAW);
     }
-
-    // Check if new output matches current editor:
-
-    /* @Mike @TODO -> this logic is ooooooold and can probably be deleted. More testing is required.
-         const editors = [...this.props.store.editors.entries()];
-    editors.map(editor => {
-      if (
-        editor[1].visible &&
-        editor[1].shellId == this.props.store.editorToolbar.shellId &&
-        editor[1].shellId == shellId &&
-        editor[1].profileId == id
-      ) {
-        runInAction(() => {
-          this.props.store.outputPanel.currentTab = editor[1].id;
-          if (editor[1].explains) {
-            editor[1].explains.active = false;
-          }
-        });
-      }
-    }); */
   }
 
   @action.bound
@@ -586,6 +561,10 @@ export default class Panel extends React.Component<Props> {
       this.props.store.editorPanel.activeEditorId == 'Default' ? 'visible' : 'notVisible';
     return (
       <div className="pt-dark outputPanel">
+        <OutputToolbar
+          editorRefs={this.props.store.outputPanel.editorRefs}
+          getDocumentAtLine={this.getDocumentAtLine}
+        />
         <Tabs
           id="outputPanelTabs"
           className="outputTabView"
@@ -610,10 +589,6 @@ export default class Panel extends React.Component<Props> {
           />
           {this.renderTabs([...this.props.store.editors.entries()])}
         </Tabs>
-        <OutputToolbar
-          editorRefs={this.props.store.outputPanel.editorRefs}
-          getDocumentAtLine={this.getDocumentAtLine}
-        />
       </div>
     );
   }

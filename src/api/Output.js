@@ -5,7 +5,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@sout≈hbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T20:32:10+11:00
+ * @Last modified time: 2018-05-21T15:26:51+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,23 +32,10 @@ import { Broker, EventType } from '~/helpers/broker';
 import { EditorTypes, ProfileStatus, OutputToolbarContexts } from '#/common/Constants';
 import { NewToaster } from '#/common/Toaster';
 import { type ChartPanelStore } from '#/ChartPanel';
+import Output from '~/stores/Output';
 import StaticApi from './static';
 import { type Profile } from './Profile';
 import { type Editor } from './Editor';
-
-export type Output = {
-  id: string,
-  connId: string,
-  shellId: string,
-  title: string,
-  output: string & [string],
-  cannotShowMore: boolean,
-  showingMore: boolean,
-  commandHistory: [string],
-  enhancedJson: string,
-  tableJson: string,
-  currentExecStartLine: number
-};
 
 export type OutputPanel = {
   currentTab: string,
@@ -128,36 +115,33 @@ export default class OutputApi {
     this.outputHash[editor.profileId + '|' + editor.shellId] = editor.id;
 
     try {
-      if (this.store.outputs.get(editor.id)) {
-        this.store.outputs.get(editor.id).cannotShowMore = true;
-        this.store.outputs.get(editor.id).showingMore = false;
-        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
-          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
+      let outputObj = this.store.outputs.get(editor.id);
+
+      if (outputObj && outputObj instanceof Output) {
+        outputObj.cannotShowMore = true;
+        outputObj.showingMore = false;
+
+        if (editor.id != 'Default' && outputObj.output) {
+          outputObj.append(globalString('output/editor/restoreSession'));
         }
       } else {
         const editorTitle = editor.alias + ' (' + editor.fileName + ')';
-        this.store.outputs.set(
-          editor.id,
-          observable({
-            id: editor.id,
-            connId: editor.currentProfile,
-            shellId: editor.shellId,
-            title: editorTitle,
-            output: '',
-            cannotShowMore: true,
-            showingMore: false,
-            commandHistory: [],
-            enhancedJson: '',
-            tableJson: ''
-          })
-        );
+        const doc = StaticApi.createNewDocumentObject('', 'shell');
+        outputObj = new Output();
+        _.assign(outputObj, {
+          id: editor.id,
+          connId: editor.currentProfile,
+          shellId: editor.shellId,
+          title: editorTitle,
+          doc
+        });
+
+        this.store.outputs.set(editor.id, outputObj);
 
         if (editor.initialMsg && editor.id != 'Default') {
           let tmp = editor.initialMsg;
-          tmp = tmp.replace(/^\n/gm, '');
-          tmp = tmp.replace(/^\r/gm, '');
-          tmp = tmp.replace(/^\r\n/gm, '');
-          this.store.outputs.get(editor.id).output += tmp;
+          tmp = tmp.replace(/^(?:\n|\r|\r\n)/gm, '');
+          outputObj.append(tmp);
         }
       }
     } catch (err) {
@@ -168,6 +152,7 @@ export default class OutputApi {
       EventType.createShellOutputEvent(editor.profileId, editor.shellId),
       this.outputAvailable
     );
+
     Broker.on(
       EventType.createShellReconnectEvent(editor.profileId, editor.shellId),
       this.onReconnect
@@ -182,20 +167,18 @@ export default class OutputApi {
   removeOutput(editor: Editor) {
     this.store.outputs.delete(editor.id);
     delete this.outputHash[editor.profileId + '|' + editor.shellId];
+
     Broker.removeListener(
       EventType.createShellOutputEvent(editor.profileId, editor.shellId),
       this.outputAvailable
     );
+
     Broker.removeListener(
       EventType.createShellReconnectEvent(editor.profileId, editor.shellId),
       this.onReconnect
     );
   }
 
-  /**
-   * @TODO
-   * @param {*} event
-   */
   @action.bound
   swapOutputShellConnection(event: *) {
     const { oldId, oldShellId, id, shellId } = event;
@@ -249,12 +232,8 @@ export default class OutputApi {
     }
   }
 
-  /**
-   * @TODO
-   * @param {Object} output
-   */
   @action.bound
-  onReconnect(output: Output) {
+  onReconnect(output: *) {
     const outputId = this.outputHash[output.id + '|' + output.shellId];
     const combineOutput = output.output.join('\r');
     const totalOutput = this.store.outputs.get(outputId).output + combineOutput;
@@ -268,42 +247,40 @@ export default class OutputApi {
    */
   @action.bound
   addDrillOutput(editor: Editor, initialOutput: ?string = null) {
-    // this.outputHash[editor.profileId + '|' + editor.id] = editor.id;
-
     try {
-      if (this.store.outputs.get(editor.id)) {
-        this.store.outputs.get(editor.id).cannotShowMore = true;
-        this.store.outputs.get(editor.id).showingMore = false;
-        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
-          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
+      let outputObj = this.store.outputs.get(editor.id);
+
+      if (outputObj && outputObj instanceof Output) {
+        outputObj.cannotShowMore = true;
+        outputObj.showingMore = false;
+
+        if (editor.id != 'Default' && outputObj.output) {
+          outputObj.append(globalString('output/editor/restoreSession'));
         }
       } else {
         const outputJSON = initialOutput != null ? initialOutput : { loading: 'isLoaded' };
         const editorTitle = editor.alias + ' (' + editor.fileName + ')';
-        this.store.outputs.set(
-          editor.id,
-          observable({
-            id: editor.id,
-            connId: editor.currentProfile,
-            title: editorTitle,
-            output: JSON.stringify(outputJSON, null, 2),
-            cannotShowMore: true,
-            showingMore: false,
-            commandHistory: [],
-            tableJson: {
-              json: [outputJSON],
-              firstLine: 0,
-              lastLine: 0
-            }
-          })
-        );
+        const doc = StaticApi.createNewDocumentObject('', 'shell');
+        outputObj = new Output();
+        _.assign(outputObj, {
+          id: editor.id,
+          connId: editor.currentProfile,
+          title: editorTitle,
+          doc,
+          output: JSON.stringify(outputJSON, null, 2),
+          tableJson: {
+            json: [outputJSON],
+            firstLine: 0,
+            lastLine: 0
+          }
+        });
+
+        this.store.outputs.set(editor.id, outputObj);
 
         if (editor.initialMsg && editor.id != 'Default') {
           let tmp = editor.initialMsg;
-          tmp = tmp.replace(/^\n/gm, '');
-          tmp = tmp.replace(/^\r/gm, '');
-          tmp = tmp.replace(/^\r\n/gm, '');
-          this.store.outputs.get(editor.id).output += tmp;
+          tmp = tmp.replace(/^(?:\n|\r|\r\n)/gm, '');
+          outputObj.append(tmp);
         }
       }
     } catch (err) {

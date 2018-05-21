@@ -38,6 +38,7 @@ import TopConnectionsApi from './TopConnections';
 import ProfilingApi from './Profiling';
 import AggregationApi from './Aggregation';
 import StorageDrilldownApi from './StorageDrilldown';
+import StaticApi from './static';
 
 export default class DataCenter {
   store;
@@ -172,9 +173,12 @@ export default class DataCenter {
         'deleteProfileFromDrill'
       ])
     );
+
+    // Static APIs
+    this.static = StaticApi;
   }
 
   init() {
-    this.outputApi.init();
+    this.outputApi.init(['_getLineText']);
   }
 }

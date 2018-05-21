@@ -2,8 +2,8 @@
  * @Author: Chris Trott <chris>
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-22T18:01:27+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-21T15:43:04+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,20 +24,20 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { action, runInAction } from 'mobx';
-import CodeMirror from '#/common/LegacyCodeMirror';
+import { action, runInAction, reaction } from 'mobx';
+import CodeMirrorEditor from '#/common/CodeMirror';
+import CodeMirror from 'codemirror';
 import { ContextMenuTarget, Menu, MenuItem, Intent } from '@blueprintjs/core';
 import StaticApi from '~/api/static';
 import { terminalTypes } from '~/api/Terminal';
 import { NewToaster } from '#/common/Toaster';
-import LoadingView from '#/common/LoadingView';
 import 'codemirror/theme/material.css';
+import 'codemirror/mode/shell/shell';
+import 'codemirror/addon/comment/comment.js';
 import OutputTerminal from './Terminal';
-
-require('codemirror/mode/javascript/javascript');
-require('#/common/MongoScript.js');
 
 /**
  * Renders the window through which all output is shown for a specific editor
@@ -50,6 +50,8 @@ require('#/common/MongoScript.js');
 @observer
 @ContextMenuTarget
 export default class Editor extends React.Component {
+  _reactions = [];
+
   /**
    * @param {Object} props - The properties passed to the component.
    * Contains:
@@ -61,13 +63,71 @@ export default class Editor extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.outputObj = this.props.store.outputs.get(this.props.id);
+
+    if (this.outputObj) {
+      this.cmOptions = {
+        value: this.outputObj.doc,
+        smartIndent: true,
+        theme: 'material',
+        readOnly: true,
+        lineWrapping: false,
+        tabSize: 2,
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        styleActiveLine: true,
+        scrollbarStyle: null,
+        foldOptions: {
+          widget: '...'
+        },
+        foldGutter: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        keyMap: 'sublime',
+        extraKeys: {
+          'Ctrl-Space': 'autocomplete',
+          'Ctrl-Q': function(cm) {
+            cm.foldCode(cm.getCursor());
+          }
+        },
+        undoDepth: 0,
+        mode: 'shell'
+      };
+    }
+
     this.renderContextMenu = this.renderContextMenu.bind(this);
     this.getClickedDocument = this.getClickedDocument.bind(this);
+
+    this._reactions.push(
+      reaction(
+        () => this.props.store.outputPanel.currentTab,
+        currentTab => {
+          if (currentTab === this.props.id) {
+            requestAnimationFrame(() => {
+              this.refresh();
+            });
+          }
+        }
+      )
+    );
   }
 
   componentDidMount() {
     this.props.setEditorRef(this.props.id, this.editor);
   }
+
+  componentWillUnmount() {
+    _.forEach(this.reactions, r => r());
+  }
+
+  refresh = () => {
+    if (this.editor) {
+      const cm = this.editor.getCodeMirror();
+      cm.refresh();
+      cm.focus();
+      cm.scrollIntoView(cm.getCursor());
+    }
+  };
 
   /**
    * Action for handling a drop event from a drag-and-drop action.
@@ -203,58 +263,16 @@ export default class Editor extends React.Component {
   }
 
   render() {
-    const outputOptions = {
-      smartIndent: true,
-      theme: 'material',
-      readOnly: true,
-      lineWrapping: false,
-      tabSize: 2,
-      matchBrackets: true,
-      autoCloseBrackets: true,
-      styleActiveLine: true,
-      scrollbarStyle: null,
-      foldOptions: {
-        widget: '...'
-      },
-      foldGutter: true,
-      gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-      keyMap: 'sublime',
-      extraKeys: {
-        'Ctrl-Space': 'autocomplete',
-        'Ctrl-Q': function(cm) {
-          cm.foldCode(cm.getCursor());
-        }
-      },
-      mode: {
-        name: 'javascript',
-        json: 'true'
-      }
-    };
-    if (!this.props.store.outputs.get(this.props.id)) {
+    if (!this.outputObj) {
       return <div className="outputEditor" />;
     }
-    let isLoader = false;
-    if (
-      this.props.store.outputs.get(this.props.id) &&
-      this.props.store.outputs.get(this.props.id).output &&
-      (this.props.store.outputs.get(this.props.id).output ==
-        '  Loading results...\n  ----------------------------------  ' ||
-        this.props.store.outputs.get(this.props.id).output ==
-          '  Example of Result at current Stage: \n  ----------------------------------  \n')
-    ) {
-      isLoader = true;
-    }
+
     return (
       <div className="outputEditor">
-        {isLoader && <LoadingView />}
-        <CodeMirror
-          autosave
-          ref={c => {
-            this.editor = c;
-          }}
-          alwaysScrollToBottom
-          value={this.props.store.outputs.get(this.props.id).output}
-          options={outputOptions}
+        <CodeMirrorEditor
+          ref={ref => (this.editor = ref)}
+          codeMirrorInstance={CodeMirror}
+          options={this.cmOptions}
         />
         <OutputTerminal
           id={this.props.id}
