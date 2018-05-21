@@ -198,7 +198,7 @@ export default class ProfilingPanel extends React.Component<Props> {
   }
 
   render() {
-    const { store, showProfileConfiguration } = this.props;
+    const { store } = this.props;
     const { profilingPanel } = store;
     const { selectedDatabase, selectedOperation } = this.state;
     let ops = this.props.store.profilingPanel.payload;
