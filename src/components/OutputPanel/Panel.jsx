@@ -5,7 +5,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-08T16:30:46+10:00
+ * @Last modified time: 2018-05-21T12:35:25+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,7 +32,6 @@ import { inject, observer } from 'mobx-react';
 // $FlowFixMe
 import { Tab, Tabs, Button } from '@blueprintjs/core';
 import { DetailsPanel } from '#/DetailsPanel';
-import { StoragePanel } from '#/StoragePanel';
 import { ChartPanel } from '#/ChartPanel';
 import { LocalTerminal, SshTerminal } from '#/Terminal';
 import { EditorTypes, OutputToolbarContexts } from '#/common/Constants.js';
@@ -518,35 +517,6 @@ export default class Panel extends React.Component<Props> {
     });
 
     const { selectedProfile } = this.props.store.profileList;
-
-    if (selectedProfile && selectedProfile.status === 'OPEN') {
-      if (selectedProfile.storageView && selectedProfile.storageView.visible) {
-        const editorId = this.props.store.editorPanel.activeEditorId;
-        if (editorId) {
-          const editor = this.props.store.editors.get(editorId);
-          tabs.push(
-            <Tab
-              className="visible"
-              key={'Storage-' + selectedProfile.id}
-              id={'Storage-' + selectedProfile.id}
-              title={'Storage-' + selectedProfile.alias}
-              panel={<StoragePanel profileId={editor.profileId} shellId={editor.shellId} />}
-            >
-              <Button className="pt-minimal" onClick={() => this.closeStorageView()}>
-                <span className="pt-icon-cross" />
-              </Button>
-            </Tab>
-          );
-
-          if (selectedProfile.storageView.shouldFocus) {
-            runInAction(() => {
-              this.props.store.outputPanel.currentTab = 'Storage-' + selectedProfile.id;
-              this.props.store.profileList.selectedProfile.storageView.shouldFocus = false;
-            });
-          }
-        }
-      }
-    }
 
     // terminals
     const {

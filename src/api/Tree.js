@@ -3,13 +3,14 @@
  * @Date:   2017-07-31T14:53:10+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-29T10:26:21+11:00
+ * @Last modified time: 2018-05-21T12:36:54+10:00
  */
 
-import { runInAction, action, observable } from 'mobx';
+import { action } from 'mobx';
 import { Broker, EventType } from '~/helpers/broker';
 import { featherClient } from '~/helpers/feathers';
-import { EditorTypes } from '#/common/Constants';
+import { EditorTypes, NavPanes } from '#/common/Constants';
+import { performancePanelStatuses } from '~/api/PerformancePanel';
 
 export default class TreeApi {
   store;
@@ -78,17 +79,11 @@ export default class TreeApi {
     console.error(error);
   }
 
-  showStorageStatsView = () => {
-    runInAction('Using Active profile to store statistics', () => {
-      const { selectedProfile } = this.store.profileList;
-      this.store.profileList.selectedProfile = observable({
-        ...selectedProfile,
-        storageView: {
-          visible: true,
-          shouldFocus: true
-        }
+  showStorageStatsView = profileId => {
+    if (profileId) {
+      this.api.transformPerformancePanel(profileId, performancePanelStatuses.external, {
+        open: NavPanes.STORAGE_PANEL
       });
-      this.profileStore.profiles.set(selectedProfile.id, this.store.profileList.selectedProfile);
-    });
+    }
   };
 }
