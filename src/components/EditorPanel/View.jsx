@@ -1082,6 +1082,7 @@ class View extends React.Component {
 
   @action.bound
   finishedExecution(event) {
+    console.debug('Finished Executing');
     const editorIndex = this.props.store.editorPanel.activeEditorId;
     if (!this.props.store.editors.get(editorIndex)) {
       return;
