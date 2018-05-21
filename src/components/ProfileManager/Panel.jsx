@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T14:28:20+10:00
+ * @Last modified time: 2018-05-21T09:19:43+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -36,13 +36,14 @@ import DataCenter from '~/api/DataCenter';
 import { DialogHotkeys } from '#/common/hotkeys/hotkeyList';
 import SizeProvider from '#/PerformancePanel/SizeProvider';
 import TextField from '#/common/FormFields/TextField';
+import InplaceTextField from '#/common/FormFields/InplaceTextField';
 import NumericField from '#/common/FormFields/NumericField';
 import BooleanField from '#/common/FormFields/BooleanField';
 import FileField from '#/common/FormFields/FileField';
 import SelectField from '#/common/FormFields/SelectField';
 
 import TipsField from './TipsField';
-import { ConnectionForm } from './ConnectionForm';
+import { ConnectionForm, SubformCategory } from './ConnectionForm';
 import './Panel.scss';
 
 const ReactGridLayout = SizeProvider(Responsive);
@@ -119,8 +120,11 @@ export default class ProfileManager extends React.Component<Props, State> {
     store.hideConnectionPane();
   }
 
-  renderUIFields(column: number) {
-    const fields = this.form.getSubformFields(this.state.selectedSubform, column);
+  renderUIFields(column: number, subFormStr: string = '') {
+    if (subFormStr === '') {
+      subFormStr = this.state.selectedSubform;
+    }
+    const fields = this.form.getSubformFields(subFormStr, column);
     const uiFields = [];
     if (fields) {
       fields.forEach(field => {
@@ -135,6 +139,8 @@ export default class ProfileManager extends React.Component<Props, State> {
           uiField = <FileField key={field.name} field={field} />;
         } else if (field.type == 'select') {
           uiField = <SelectField key={field.name} field={field} />;
+        } else if (field.type === 'inplacetext') {
+          uiField = <InplaceTextField key={field.name} field={field} />;
         }
 
         uiFields.push(uiField);
@@ -204,9 +210,7 @@ export default class ProfileManager extends React.Component<Props, State> {
           >
             <div key="column0" className="connectionLeftPane">
               <div className="connection-form">
-                <div className="form-title">
-                  <span>{this.state.formTitle}</span>
-                </div>
+                <div className="pt-dark">{this.renderUIFields(0, SubformCategory.BASIC)}</div>
 
                 {this.renderMenu()}
               </div>
