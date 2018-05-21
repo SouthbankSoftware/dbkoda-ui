@@ -2,8 +2,8 @@
  * @Author: Chris <chris>
  * @Date:   2017-05-15T09:29:31+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-22T16:58:08+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-21T14:46:38+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -65,12 +65,11 @@
       flex-grow: 1;
 
       .outputEditor > .ReactCodeMirror {
-        height: calc(100% - 4px);
+        height: calc(100% - 50px);
 
         .CodeMirror-scroll {
           margin-bottom: unset;
           padding-bottom: unset;
-          height: calc(100% - 16px);
         }
       }
 
@@ -79,7 +78,6 @@
         width: 100%;
         order: 3;
         min-height: 0;
-        padding-bottom: 30px;
         .ReactCodeMirror {
           .CodeMirror {
             top: 0px;

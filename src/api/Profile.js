@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-05-11T11:39:12+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-20T11:47:43+10:00
  */
 
 import _ from 'lodash';
@@ -377,7 +377,7 @@ export default class ProfileApi {
     }
     if (!targetEditor) {
       const content = '';
-      const doc = StaticApi.createNewDocumentObject(content);
+      const doc = StaticApi.createNewDocumentObject(content, 'MongoScript');
       doc.lineSep = StaticApi.determineEol(content);
 
       const fileName = this.api.editorApi.getUnsavedEditorInternalFileName(EditorTypes.DEFAULT);

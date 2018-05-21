@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-31T09:42:43+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2018-02-28T11:58:07+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-20T17:18:07+10:00
  */
 
 import { Doc } from 'codemirror';
@@ -44,8 +44,8 @@ export default class StaticApi {
     return lfCount >= crlfCount ? '\n' : '\r\n';
   }
 
-  static createNewDocumentObject(content = '') {
-    return new Doc(content, 'MongoScript');
+  static createNewDocumentObject(content = '', modeOption = 'MongoScript') {
+    return new Doc(content, modeOption);
   }
 
   static parseShellJson(jsonStr) {

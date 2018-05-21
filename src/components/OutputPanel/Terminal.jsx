@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T13:02:48+11:00
+ * @Last modified time: 2018-05-20T20:33:45+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -179,7 +179,6 @@ class Terminal extends React.Component {
    */
   componentDidMount() {
     const cm = this.terminal.getCodeMirror();
-    console.log(CodeMirror.commands);
     const editorType = this.props.store.editors.get(this.props.id).type;
     if (this.props.config.settings.automaticAutoComplete && editorType !== EditorTypes.DRILL) {
       cm.on(

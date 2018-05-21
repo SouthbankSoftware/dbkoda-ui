@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-04-27T09:56:20+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-20T11:47:30+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -201,7 +201,7 @@ export default class EditorApi {
 
     const editorId = uuidV1();
 
-    const doc = StaticApi.createNewDocumentObject(content);
+    const doc = StaticApi.createNewDocumentObject(content, 'MongoScript');
     doc.lineSep = StaticApi.determineEol(content);
 
     this.store.editors.set(
@@ -360,7 +360,7 @@ SHOW TABLES
 
     const editorId = uuidV1();
 
-    const doc = StaticApi.createNewDocumentObject(content);
+    const doc = StaticApi.createNewDocumentObject(content, 'MongoScript');
     doc.lineSep = StaticApi.determineEol(content);
 
     this.store.editors.set(

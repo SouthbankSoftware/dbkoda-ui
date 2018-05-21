@@ -3,7 +3,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-15T10:25:39+11:00
+ * @Last modified time: 2018-05-20T16:44:14+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -117,6 +117,15 @@ export default class Application extends React.Component {
             {this.props.settings.showNewFeaturesDialogOnStart && globalString('general/on')}
             {!this.props.settings.showNewFeaturesDialogOnStart && globalString('general/off')}
           </div>
+        </div>
+        <div className="form-row">
+          {this.props.renderFieldLabel('maxOutputHistory')}
+          <input
+            type="text"
+            id="maxOutputHistory"
+            value={this.props.settings.maxOutputHistory}
+            onChange={this.onNumericalInputChange}
+          />
         </div>
       </div>
     );
