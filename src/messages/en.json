@@ -58,6 +58,7 @@
       },
       "profiling": {
         "profilingButtonText": "Profiling",
+        "apply": "Apply configuration to DB",
         "profile-configuration-button-text": "Configure Profiling",
         "refreshDBs": "Refresh DBs",
         "refreshOps": "Refresh",
