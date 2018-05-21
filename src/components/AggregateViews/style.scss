@@ -78,6 +78,7 @@ div.aggregateGraphicalBuilderWrapper {
         fill: $defaultFontColor !important;
         transform: translate(-50%, -50%);
       }
+
       .export {
         width: 15px;
       }
@@ -214,7 +215,6 @@ div.Pane.vertical.Pane1 {
           background-color: $aggregateBlockBackgroundHoverSecondary !important;
         }
 
-        overflow-y: auto;
         order: 1;
         flex-grow: 1;
         color: $navbarLeftHeading;
@@ -233,6 +233,9 @@ div.Pane.vertical.Pane1 {
         }
 
         .palletteTree {
+          overflow-y: auto;
+          height: calc(100% - 50px);
+
           .pt-tree-root {
             .pt-tree-node {
               .pt-tree-node-content-0 {
@@ -397,6 +400,7 @@ div.Pane.vertical.Pane1 {
             }
           }
         }
+
         .aggregateDetailsToolbar:hover {
           border-top: 1px solid #525252;
         }
@@ -436,10 +440,12 @@ div.Pane.vertical.Pane1 {
             float: right;
             width: unset;
             margin-right: 20px;
+
             button {
               background-color: $connectionButtonBackgroundColourConnect;
               color: $connectionButtonFontColour;
             }
+
             button:hover {
               background-color: $connectionButtonBackgroundColourConnectHover;
             }
