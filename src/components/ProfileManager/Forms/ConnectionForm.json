@@ -8,10 +8,9 @@
     "fields": [
       {
         "name": "alias",
-        "label": "Connection Name",
         "value": "Connection - 1",
-        "type": "text",
-        "column": 1
+        "type": "inplacetext",
+        "column": 0
       },
       {
         "name": "host",

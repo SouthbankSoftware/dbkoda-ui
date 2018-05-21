@@ -3,7 +3,7 @@
  * @Date:   2018-01-24T09:50:36+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-18T12:17:59+10:00
+ * @Last modified time: 2018-05-21T08:55:15+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,6 +30,7 @@ import Ajv from 'ajv';
 
 export const FieldBindings = {
   text: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
+  inplacetext: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onConfirm'],
   password: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
   number: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onValueChange', 'onBlur'],
   checkbox: [
@@ -136,7 +137,10 @@ export class JsonForm {
     };
     set(field, { error: '' });
     field.onChange = action(e => {
-      if (e.currentTarget.type === 'checkbox') {
+      if (field.type === 'checkbox') {
+        return;
+      } else if (field.type === 'inplacetext') {
+        this.updateFieldValue(field, e);
         return;
       }
       this.updateFieldValue(field, e.currentTarget.value);
@@ -152,6 +156,10 @@ export class JsonForm {
       field.onValueChange = action(value => {
         this.updateFieldValue(field, value);
       });
+    } else if (field.type === 'inplacetext') {
+      field.onConfirm = () => {
+        this.validateForm();
+      };
     }
     field.bind = () => {
       const binds = FieldBindings[field.type];

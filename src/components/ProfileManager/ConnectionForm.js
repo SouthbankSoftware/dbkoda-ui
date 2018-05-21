@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-11T11:23:01+10:00
+ * @Last modified time: 2018-05-21T09:13:36+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,7 +31,7 @@ import { JsonForm } from './JsonForm';
 
 const MAX_URL_ALIAS_LENGTH = 25;
 const MAX_HOSTNAME_ALIAS_LENGTH = 20;
-const SubformCategory = {
+export const SubformCategory = {
   BASIC: 'basic',
   AUTH: 'authentication',
   CLUSTER: 'cluster',
