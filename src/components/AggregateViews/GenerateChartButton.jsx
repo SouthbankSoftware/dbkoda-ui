@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-22T15:52:04+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-31T10:55:42+11:00
+ * @Last modified time: 2018-05-21T16:38:09+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -65,7 +65,7 @@ type State = {};
   };
 })
 export default class GenerateChartButton extends React.PureComponent<Props, State> {
-  parserRegex = /use\s+(\S+)\s*;[^]*db\.(\S+)\.aggregate\(\s*(\[[^]*\])\s*,\s*({[^]*})\s*\)\s*;/;
+  parserRegex = /use\s+(\S+)\s*;[^]*db\.getCollection\(['"](\S+)['"]\)\.aggregate\(\s*(\[[^]*\])\s*,\s*({[^]*})\s*\)\s*;/;
   commentStripperRegex = /\/\*[^]*\*\//g;
 
   constructor(props: Props) {
