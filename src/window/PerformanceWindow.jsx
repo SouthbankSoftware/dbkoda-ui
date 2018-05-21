@@ -127,7 +127,13 @@ class PerformanceWindow extends React.Component {
         this.setState({ sshStatus: Status.CONNECTION_BROKEN });
         break;
       case 'MONGO_CONNECTION_CLOSED':
+        l.error('mongo connection is closed');
         this.setState({ mongoStatus: Status.CONNECTION_BROKEN });
+        NewToaster.show({
+          message: globalString('performance/errors/driver_connection_closed'),
+          className: 'danger',
+          icon: 'thumbs-down'
+        });
         break;
       case 'MONGO_RECONNECT_SUCCESS':
         this.setState({ mongoStatus: Status.NORMAL });

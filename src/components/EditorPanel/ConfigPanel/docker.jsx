@@ -26,12 +26,10 @@
 import React from 'react';
 import { reaction, toJS } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { RadioGroup, Radio } from '@blueprintjs/core';
+import { RadioGroup, Radio, Tooltip, Intent, Position } from '@blueprintjs/core';
 import './docker.scss';
 
-@inject(allStores => ({
-  store: allStores.store
-}))
+@inject(allStores => ({ store: allStores.store }))
 @observer
 export default class Docker extends React.Component {
   constructor(props) {
@@ -54,9 +52,7 @@ export default class Docker extends React.Component {
       settingsObj => {
         this.calculateFinalCommand(settingsObj.docker);
       },
-      {
-        fireImmediately: true
-      }
+      { fireImmediately: true }
     );
   }
 
@@ -110,13 +106,21 @@ export default class Docker extends React.Component {
             label={globalString('editor/config/docker-image-name')}
           />
           <div className="inline-file-input">
-            <input
-              type="text"
-              id="docker.imageName"
-              disabled={!dockerEnabled || !docker.createNew}
-              value={docker.imageName || ''}
-              onChange={onPathEntered}
-            />
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              content={globalString('editor/config/docker-tooltip/image')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+            >
+              <input
+                type="text"
+                id="docker.imageName"
+                disabled={!dockerEnabled || !docker.createNew}
+                value={docker.imageName || ''}
+                onChange={onPathEntered}
+              />
+            </Tooltip>
           </div>
           <div
             style={{
@@ -130,34 +134,58 @@ export default class Docker extends React.Component {
             label={globalString('editor/config/docker-container-id')}
           />
           <div className="inline-file-input">
-            <input
-              type="text"
-              id="docker.containerID"
-              disabled={!dockerEnabled || docker.createNew}
-              value={docker.containerID || ''}
-              onChange={onPathEntered}
-            />
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              content={globalString('editor/config/docker-tooltip/container')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+            >
+              <input
+                type="text"
+                id="docker.containerID"
+                disabled={!dockerEnabled || docker.createNew}
+                value={docker.containerID || ''}
+                onChange={onPathEntered}
+              />
+            </Tooltip>
           </div>
         </RadioGroup>
         <div className="docker-mount-volume">
           <span className="config-label-width text-label">
             {globalString('editor/config/docker-volume')}
           </span>
-          <input
-            type="text"
-            id="docker.hostPath"
-            disabled={!dockerEnabled || !docker.createNew}
-            value={docker.hostPath || ''}
-            onChange={onPathEntered}
-          />
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            content={globalString('editor/config/docker-tooltip/host-volume')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <input
+              type="text"
+              id="docker.hostPath"
+              disabled={!dockerEnabled || !docker.createNew}
+              value={docker.hostPath || ''}
+              onChange={onPathEntered}
+            />
+          </Tooltip>
           <span className="text-label mount-separator">:</span>
-          <input
-            type="text"
-            id="docker.containerPath"
-            disabled={!dockerEnabled || !docker.createNew}
-            value={docker.containerPath || ''}
-            onChange={onPathEntered}
-          />
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            content={globalString('editor/config/docker-tooltip/container-volume')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <input
+              type="text"
+              id="docker.containerPath"
+              disabled={!dockerEnabled || !docker.createNew}
+              value={docker.containerPath || ''}
+              onChange={onPathEntered}
+            />
+          </Tooltip>
         </div>
         <div className="final-command-container">
           <div className="config-label-width text-label">
@@ -167,7 +195,7 @@ export default class Docker extends React.Component {
             type="text"
             id="docker.dockerCmd"
             className="final-command"
-            disabled={!dockerEnabled || !docker.createNew}
+            disabled={!dockerEnabled}
             value={this.state.finalCmd || ''}
             onChange={this.changeFinalCommand}
           />
