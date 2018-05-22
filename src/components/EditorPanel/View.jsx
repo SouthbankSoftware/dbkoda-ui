@@ -3,7 +3,7 @@
  * @Date:   2017-07-24T14:46:20+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-21T14:53:10+10:00
+ * @Last modified time: 2018-05-22T11:45:23+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -926,13 +926,12 @@ class View extends React.Component {
           });
         })
         .catch(err => {
-          l.error('error:', err);
+          l.error('Failed to execute explain:', err);
           NewToaster.show({
             message: globalString('explain/executionError'),
             className: 'danger',
             icon: 'thumbs-down'
           });
-          logToMain('error', 'Failed to execute explain: ' + err);
           runInAction(() => {
             editor.executing = false;
             this.props.store.editorToolbar.isActiveExecuting = false;
@@ -1074,8 +1073,7 @@ class View extends React.Component {
         editor.shellCode = shellCode;
         this.setState({ openTranslator: true });
       } catch (err) {
-        l.error('failed to translate the selected code ');
-        logToMain('error', 'Failed to translate to native code: ' + err);
+        l.error('Failed to translate to native code:', err);
       }
     }
   }

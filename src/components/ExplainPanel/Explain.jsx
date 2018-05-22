@@ -21,8 +21,8 @@
  * @Author: chris
  * @Date:   2017-04-20T17:58:30+10:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T09:42:38+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-22T11:49:18+10:00
  */
 /**
  * explain component is used to handle explain output
@@ -237,9 +237,14 @@ export default class Explain extends React.Component {
       }
       this.explainOutput = explainOutputJson;
     } catch (err) {
-      l.error('err parse explain output ', err);
-      logToMain('error', 'Failed to parse for Explain: ' + err);
-      l.error(output);
+      l.error('Failed to parse for Explain:', err, {
+        [Symbol.for('info')]: {
+          customData: {
+            output
+          }
+        }
+      });
+
       explainOutputJson = {
         error: globalString('explain/parseError'),
         command: this.explainCommand,

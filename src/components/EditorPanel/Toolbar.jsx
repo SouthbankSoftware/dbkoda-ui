@@ -1,5 +1,10 @@
-/*
- * @Mike TODO -> Add Flow.
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-21T09:27:03+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-22T11:44:36+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -17,13 +22,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-07-21T09:27:03+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-27T17:35:44+11:00
  */
 
 import _ from 'lodash';
@@ -286,8 +284,7 @@ export default class Toolbar extends React.Component {
     this.props.store.editorToolbar.saveAs = true;
     this.saveFile().catch(e => {
       if (e) {
-        l.error(e);
-        logToMain('error', 'Failed to save file ' + e);
+        l.error('Failed to save file:', e);
       }
     });
   }

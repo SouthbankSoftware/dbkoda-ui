@@ -21,8 +21,8 @@
  * @Author: mike
  * @Date:   2017-09-20 10:35:04
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-05-01T09:31:58+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-22T11:51:27+10:00
  */
 
 /* eslint no-prototype-builtins:warn */
@@ -216,7 +216,6 @@ export default class Panel extends React.Component {
             if (!filePath) {
               filePath = '/Users/mike/.dbKoda/';
               l.error('Did not recieve a file path back from controller');
-              logToMain('error', 'Did not recieve a file path back from controller');
             }
             window.require('electron').shell.showItemInFolder(filePath);
           }
@@ -283,8 +282,7 @@ export default class Panel extends React.Component {
           resolve(result);
         })
         .catch(err => {
-          l.error(err);
-          logToMain('error', 'Failed to create support bundle: ' + err);
+          l.error('Failed to create support bundle:', err);
           reject(err);
         });
     });

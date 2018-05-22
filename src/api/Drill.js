@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T16:48:07+11:00
+ * @Last modified time: 2018-05-22T12:02:53+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -102,8 +102,7 @@ export default class DrillApi {
         this.onDrillConnectionSuccess(res, query, profile, options);
       })
       .catch(err => {
-        l.error(err);
-        logToMain('error', 'Drill Response Error: ' + err);
+        l.error('Drill Response Error:', err);
         this.onFailCreate(options, err.code);
       });
   };

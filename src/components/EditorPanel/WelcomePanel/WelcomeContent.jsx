@@ -3,7 +3,7 @@
  * @Date:   2017-04-10 14:32:37
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-16T13:45:14+11:00
+ * @Last modified time: 2018-05-22T11:46:02+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -76,8 +76,7 @@ export default class WelcomeContent extends React.Component {
         xml2js.parseString(body, (err, result) => {
           // Create new array of objects from results.
           if (err) {
-            l.error('Error parsing News: ' + err);
-            logToMain('error', 'Failed to parse news feed ' + err);
+            l.error('Failed to parse news feed:', err);
           }
           const newsPosts = [{}, {}, {}];
           for (let i = 0; i < 3; i += 1) {
@@ -96,8 +95,7 @@ export default class WelcomeContent extends React.Component {
         });
       })
       .catch(error => {
-        l.error('Error fetching news: ' + error);
-        logToMain('error', 'Failed to fetch news: ' + error);
+        l.error('Failed to fetch news:', error);
       });
   }
 

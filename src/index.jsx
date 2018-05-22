@@ -3,7 +3,7 @@
  * @Date:   2017-07-13T10:36:10+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-20T22:55:03+10:00
+ * @Last modified time: 2018-05-22T11:53:58+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -96,7 +96,6 @@ Broker.once(EventType.APP_RENDERED, () => {
 });
 
 Broker.once(EventType.APP_CRASHED, () => {
-  logToMain('error', 'App window crashed!');
   l.error('App window crashed');
   if (IS_ELECTRON) {
     // make a backup of the old stateStore
@@ -133,7 +132,7 @@ if (IS_ELECTRON) {
   });
 
   ipcRenderer.on('windowClosing', () => {
-    logToMain('notice', 'executing app closing logic...');
+    l.notice('executing app closing logic...');
 
     Broker.emit(EventType.WINDOW_CLOSING);
 
@@ -145,7 +144,7 @@ if (IS_ELECTRON) {
 // NOTE: we cannot use this to show confirmation dialog because of this bug:
 // https://github.com/electron/electron/issues/9966
 window.onbeforeunload = () => {
-  logToMain('notice', 'executing app refreshing logic...');
+  l.notice('executing app refreshing logic...');
 
   Broker.emit(EventType.WINDOW_REFRESHING);
   store.api && store.api.deleteProfileFromDrill({ removeAll: true });

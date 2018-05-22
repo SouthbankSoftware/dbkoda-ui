@@ -22,8 +22,8 @@
  * @Author: Chris Trott <chris>
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   Michael
- * @Last modified time: 2018-01-23T15:33:23+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-22T11:26:07+10:00
  */
 
 import React from 'react';
@@ -849,6 +849,8 @@ export default class Toolbar extends React.Component {
           });
         })
         .catch(err => {
+          l.error(err);
+
           const message = globalString('output/editor/parseJsonError') + err;
           runInAction(() => {
             NewToaster.show({

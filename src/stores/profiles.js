@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-27T17:18:00+11:00
+ * @Last modified time: 2018-05-22T11:57:09+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -103,13 +103,12 @@ export default class Profiles {
         });
       })
       .catch(e => {
-        l.error(e);
+        l.error('Failed to read profiles.yml:', e);
         NewToaster.show({
           message: `Reading profiles.yml failed: ${e.message}`,
           className: 'danger',
           icon: 'thumbs-down'
         });
-        logToMain('error', 'Failed to read profiles.yml: ' + e.message);
       });
   }
 
@@ -136,13 +135,12 @@ export default class Profiles {
         })
         .catch(l.error);
     } catch (e) {
-      l.error(e);
+      l.error('Failed to save profiles.yml:', e);
       NewToaster.show({
         message: `Saving profiles.yml failed: ${e.message}`,
         className: 'danger',
         icon: 'thumbs-down'
       });
-      logToMain('error', 'Failed to save profiles.yml: ' + e.message);
     }
   }
 }

@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-07T17:09:11+10:00
+ * @Last modified time: 2018-05-22T11:42:29+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -252,11 +252,11 @@ export default class PerformancePanelApi {
       } = window.require('electron');
 
       const handleSuspend = () => {
-        logToMain('info', 'os is suspending');
+        l.notice('os is suspending');
       };
 
       const handleResume = () => {
-        logToMain('info', 'os is resuming');
+        l.notice('os is resuming');
       };
 
       powerMonitor.on('suspend', handleSuspend);
@@ -296,7 +296,7 @@ export default class PerformancePanelApi {
   @action.bound
   _handleVisibilityChange() {
     if (document.hidden) {
-      logToMain('info', 'becomes hidden');
+      l.notice('becomes hidden');
 
       for (const pP of this.store.performancePanels.values()) {
         const { status } = pP;
@@ -306,7 +306,7 @@ export default class PerformancePanelApi {
         }
       }
     } else {
-      logToMain('info', 'becomes visible');
+      l.notice('becomes visible');
 
       this._attachPerformancePanelsToMobx();
     }
@@ -454,11 +454,11 @@ export default class PerformancePanelApi {
       } = window.require('electron');
 
       const powerBlockerId = powerSaveBlocker.start('prevent-display-sleep');
-      logToMain('info', `started power blocker for Performance Panel ${profileId}`);
+      l.notice(`started power blocker for Performance Panel ${profileId}`);
 
       this._powerBlockerDisposers.set(profileId, () => {
         powerSaveBlocker.stop(powerBlockerId);
-        logToMain('info', `stopped power blocker for Performance Panel ${profileId}`);
+        l.notice(`stopped power blocker for Performance Panel ${profileId}`);
       });
     }
   };
@@ -504,11 +504,11 @@ export default class PerformancePanelApi {
         } = window.require('electron');
         const suspensionBlockerId = powerSaveBlocker.start('prevent-app-suspension');
 
-        logToMain('info', `started suspension blocker for Performance Panel ${profileId}`);
+        l.notice(`started suspension blocker for Performance Panel ${profileId}`);
 
         suspensionBlockerDisposer = () => {
           powerSaveBlocker.stop(suspensionBlockerId);
-          logToMain('info', `stopped suspension blocker for Performance Panel ${profileId}`);
+          l.notice(`stopped suspension blocker for Performance Panel ${profileId}`);
         };
       }
 
@@ -523,8 +523,6 @@ export default class PerformancePanelApi {
 
       // handle new data
       const _handleNewData = action(payload => {
-        logToMain('debug', `new data for Performance Panel ${profileId}`);
-
         handleNewData(payload, performancePanel);
 
         if (performancePanel.status === performancePanelStatuses.external) {
