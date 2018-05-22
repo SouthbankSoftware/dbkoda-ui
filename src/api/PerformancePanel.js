@@ -315,7 +315,7 @@ export default class PerformancePanelApi {
   _handleError = (profileId: UUID, err: Error | string, level: 'error' | 'warn' = 'error') => {
     const { profileAlias } = this.store.performancePanels.get(profileId);
 
-    console.error(err);
+    l.error(err);
 
     let errorMessage = err.message || err;
 
@@ -324,7 +324,7 @@ export default class PerformancePanelApi {
       try {
         const externalProfile = this.externalPerformanceWindows.get(profileId);
         if (externalProfile && externalProfile.status !== 'ready') {
-          console.log('put event to queue', err);
+          l.info('put event to queue', err);
           if (!this.eventQueue[profileId]) {
             this.eventQueue[profileId] = { events: [err] };
           } else {
@@ -340,7 +340,7 @@ export default class PerformancePanelApi {
           });
         }
       } catch (err) {
-        console.error(err);
+        l.error(err);
       }
     }
     if (!errorMessage) {
@@ -481,9 +481,7 @@ export default class PerformancePanelApi {
     const { status } = performancePanel;
 
     if (!_.includes(RUNNABLE_STATUSES, to)) {
-      console.error(
-        `PerformancePanel API: invalid (not runnable) to \`${to}\` for _runPerformancePanel`
-      );
+      l.error(`PerformancePanel API: invalid (not runnable) to \`${to}\` for _runPerformancePanel`);
       return;
     }
 
@@ -664,7 +662,7 @@ export default class PerformancePanelApi {
           status: 'ready'
         });
         if (this.eventQueue[args.profileId]) {
-          console.log('send event from queue ', this.eventQueue[args.profileId]);
+          l.info('send event from queue ', this.eventQueue[args.profileId]);
           // $FlowFixMe
           this.eventQueue[args.profileId].events.forEach(err =>
             this._handleError(args.profileId, err, 'error')
@@ -869,10 +867,10 @@ export default class PerformancePanelApi {
   };
 
   resetPerformancePanel = (profileId: UUID) => {
-    console.log('Stopping perf panel...');
+    l.info('Stopping perf panel...');
     this._stopPerformancePanel(profileId);
     setTimeout(() => {
-      console.log('Running perf panel...');
+      l.info('Running perf panel...');
       this._runPerformancePanel(profileId, 'external');
     }, 1000);
   };
@@ -908,12 +906,12 @@ export default class PerformancePanelApi {
   };
 
   setProfilingDatabseConfiguration = (profileId: UUID, configs: Object, cb: *) => {
-    console.log('send profile configuration ', profileId, configs);
+    l.info('send profile configuration ', profileId, configs);
     featherClient()
       .service('profile')
       .patch(profileId, configs)
       .then(res => {
-        console.log('set profile configuration ', res);
+        l.info('set profile configuration ', res);
         if (cb) {
           cb(res);
         }

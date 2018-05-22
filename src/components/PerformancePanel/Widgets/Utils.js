@@ -134,7 +134,7 @@ export const convertTime = (value: any, unit: string, length: number) => {
         result.value /= 1000;
         break;
       default: {
-        console.error('"' + unit + '" is not a valid unit of time.');
+        l.error('"' + unit + '" is not a valid unit of time.');
         return result;
       }
     }
@@ -182,7 +182,7 @@ export const convertBytes = (value: any, unit: string, length: number) => {
         result.unit = 'tb/s';
         break;
       default: {
-        console.error('"' + unit + '" is the maximum supported unit of bytes.');
+        l.error('"' + unit + '" is the maximum supported unit of bytes.');
         return result;
       }
     }
@@ -209,7 +209,7 @@ export const convertUnits = (value: any, unit: string, length: number) => {
       unit
     };
   }
-  console.log('Unknown unit is provided for conversion (unit=', unit, ').');
+  l.info('Unknown unit is provided for conversion (unit=', unit, ').');
   return {
     value: parseFloat(_.round(Number(value), 2)),
     unit
@@ -305,7 +305,7 @@ export const convertTimeToTarget = (
         result.value /= 1000;
         break;
       default: {
-        console.error('"' + unit + '" is not a valid unit of time.');
+        l.error('"' + unit + '" is not a valid unit of time.');
         return result;
       }
     }
@@ -358,7 +358,7 @@ export const convertBytesToTarget = (
         result.unit = 'tb/s';
         break;
       default: {
-        console.error('"' + unit + '" is the maximum supported unit of bytes.');
+        l.error('"' + unit + '" is the maximum supported unit of bytes.');
         return result;
       }
     }
@@ -381,7 +381,7 @@ export const convertToTarget = (value: any, unit: string, targetUnit: string, le
     ) < 0
   ) {
     // Invalid
-    console.log(
+    l.info(
       'Unit (',
       unit,
       ') and target unit (',
@@ -399,7 +399,7 @@ export const convertToTarget = (value: any, unit: string, targetUnit: string, le
     'b|kb|mb|gb|tb|pb|eb|b/s|kb/s|mb/s|gb/s|tb/s'.indexOf(unit) >= 0
   ) {
     // Invalid
-    console.log('Unit and target unit for conversion are not compatible.');
+    l.info('Unit and target unit for conversion are not compatible.');
     return {
       value: parseFloat(_.round(Number(value), 2)),
       unit
@@ -420,7 +420,7 @@ export const convertToTarget = (value: any, unit: string, targetUnit: string, le
       unit
     };
   }
-  console.log('Unknown unit is provided for conversion (unit=', unit, ').');
+  l.info('Unknown unit is provided for conversion (unit=', unit, ').');
   return {
     value: parseFloat(_.round(Number(value), 2)),
     unit

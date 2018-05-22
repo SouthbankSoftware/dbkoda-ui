@@ -67,7 +67,7 @@ export const getIdxSuggestionCode = (suggestionResult, explainPlan, lineSep) => 
     const table = namespace[0];
     const collection = namespace[1];
     if (suggestionResult.newIndexes.length <= 0 && suggestionResult.redundantIndexes.length <= 0) {
-      console.log('No Suggestions Found');
+      l.info('No Suggestions Found');
       suggestionCode = globalString('explain/panel/noAdditionalIndexesRequired') + lineSep;
     } else {
       if (suggestionResult.redundantIndexes.length > 0) {
@@ -125,7 +125,7 @@ export const getIdxSuggestionCode = (suggestionResult, explainPlan, lineSep) => 
     }
     return suggestionCode;
   }
-  console.error('Did not return an array.');
+  l.error('Did not return an array.');
   return '';
 };
 
@@ -221,7 +221,7 @@ export default class Explain extends React.Component {
                   shardName: key,
                   winningPlan: stageValue.queryPlanner.winningPlan
                 };
-                console.log('add to shard output ', shardOutput);
+                l.info('add to shard output ', shardOutput);
                 shardsOutput.queryPlanner.winningPlan.shards.push(shardOutput);
               }
             });
@@ -237,9 +237,9 @@ export default class Explain extends React.Component {
       }
       this.explainOutput = explainOutputJson;
     } catch (err) {
-      console.error('err parse explain output ', err);
+      l.error('err parse explain output ', err);
       logToMain('error', 'Failed to parse for Explain: ' + err);
-      console.error(output);
+      l.error(output);
       explainOutputJson = {
         error: globalString('explain/parseError'),
         command: this.explainCommand,
@@ -266,8 +266,8 @@ export default class Explain extends React.Component {
   @action.bound
   suggestIndex() {
     if (!this.explainOutput) {
-      console.error('Explain Plan needs to be re-executed.');
-      console.error(this);
+      l.error('Explain Plan needs to be re-executed.');
+      l.error(this);
       NewToaster.show({
         message: globalString('explain/panel/executeAgain'),
         className: 'error',
@@ -289,7 +289,7 @@ export default class Explain extends React.Component {
           commands: 'dbkInx.suggestIndexesAndRedundants(' + explainOutput + ');'
         })
         .then(res => {
-          console.log(JSON.parse(res));
+          l.info(JSON.parse(res));
           this.suggestionsGenerated = true;
           const suggestionResult = JSON.parse(res);
           const explainPlan = toJS(this.props.editor.explains.output);
@@ -299,7 +299,7 @@ export default class Explain extends React.Component {
           this.setState({ suggestionsGenerated: true });
         })
         .catch(err => {
-          console.error(err);
+          l.error(err);
         });
     }
   }

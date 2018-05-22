@@ -76,7 +76,7 @@ export default class WelcomeContent extends React.Component {
         xml2js.parseString(body, (err, result) => {
           // Create new array of objects from results.
           if (err) {
-            console.error('Error parsing News: ' + err);
+            l.error('Error parsing News: ' + err);
             logToMain('error', 'Failed to parse news feed ' + err);
           }
           const newsPosts = [{}, {}, {}];
@@ -96,7 +96,7 @@ export default class WelcomeContent extends React.Component {
         });
       })
       .catch(error => {
-        console.error('Error fetching news: ' + error);
+        l.error('Error fetching news: ' + error);
         logToMain('error', 'Failed to fetch news: ' + error);
       });
   }

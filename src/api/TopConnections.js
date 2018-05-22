@@ -44,8 +44,8 @@ export default class TopConnections {
     Broker.on(EventType.TOP_CONNECTIONS_DATA, ({ profileId, payload }) => {
       const { alias } = this.store.profileStore.profiles.get(profileId);
 
-      console.log(`%cTop connections for ${alias} (${profileId}):`, 'color: green');
-      console.table(payload);
+      l.info(`%cTop connections for ${alias} (${profileId}):`, 'color: green');
+      l.table(payload);
       this.api.sendMsgToPerformanceWindow({
         profileId,
         command: 'mw_topConnectionsData',
@@ -61,7 +61,7 @@ export default class TopConnections {
   _handleError = (profileId: UUID, err: Error | string, level: 'error' | 'warn' = 'error') => {
     const { alias } = this.store.profileStore.profiles.get(profileId);
 
-    console.error(err);
+    l.error(err);
     // $FlowFixMe
     const errorMessage = `Profile ${alias} (${profileId}) ${level}: ${err.message || err}`;
 
@@ -113,7 +113,7 @@ export default class TopConnections {
         }
       })
       .then(res => {
-        console.log(res);
+        l.info(res);
       })
       .catch(err => {
         this._handleError(profileId, err);

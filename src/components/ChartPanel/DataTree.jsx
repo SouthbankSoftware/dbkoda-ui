@@ -251,7 +251,7 @@ export default class DataTree extends React.Component<Props, State> {
 
     const dataTreePath = _.get(schema, `${valueSchemaPath}.dataTreePath`);
     if (!dataTreePath) {
-      console.error('Missing dataTreePath in schema');
+      l.error('Missing dataTreePath in schema');
       return null;
     }
 
@@ -341,7 +341,7 @@ export default class DataTree extends React.Component<Props, State> {
             icon: 'pt-icon-error',
             type
           });
-          console.error(`Unsupported data tree node type: ${v}`);
+          l.error(`Unsupported data tree node type: ${v}`);
         }
       }
 
@@ -367,7 +367,7 @@ export default class DataTree extends React.Component<Props, State> {
     if (schemaNode) {
       schemaNode.isExpanded = false;
     } else {
-      console.error('Missing schema node');
+      l.error('Missing schema node');
     }
 
     node.icon = 'pt-icon-folder-close';
@@ -385,7 +385,7 @@ export default class DataTree extends React.Component<Props, State> {
     if (schemaNode) {
       schemaNode.isExpanded = true;
     } else {
-      console.error('Missing schema node');
+      l.error('Missing schema node');
     }
 
     node.icon = 'pt-icon-folder-open';

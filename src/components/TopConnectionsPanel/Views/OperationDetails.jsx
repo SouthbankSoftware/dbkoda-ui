@@ -114,7 +114,7 @@ export default class OperationDetails extends React.Component {
         this.props.api.setLineSeperator(this.codeMirror.codeMirror.doc.cm.lineSeparator());
       }
     } catch (err) {
-      console.log(err);
+      l.info(err);
     }
   }
 

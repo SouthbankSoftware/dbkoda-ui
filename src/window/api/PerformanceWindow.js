@@ -68,7 +68,7 @@ export default class PerformanceWindowApi {
       .create({ id: profileId })
       .then(
         action(res => {
-          console.log('create new shell ', res);
+          l.info('create new shell ', res);
           this.shellId = res.shellId;
         })
       )
@@ -142,7 +142,7 @@ export default class PerformanceWindowApi {
 
   @action.bound
   getProfilingDataBases = () => {
-    console.log('getProfilingDataBases');
+    l.info('getProfilingDataBases');
     this.store.profilingPanel.enabledDatabases = [];
     this.store.profilingPanel.selectedDatabase = null;
     this.sendCommandToMainProcess('pw_getProfilingDataBases');
@@ -162,14 +162,14 @@ export default class PerformanceWindowApi {
       topConnectionsPanel.bLoadingExplain = true;
       this.getExplainForOperation(selectedOperation)
         .then(operation => {
-          console.log(operation);
+          l.info(operation);
           runInAction(() => {
             topConnectionsPanel.bLoadingExplain = false;
             topConnectionsPanel.bShowExplain = true;
           });
         })
         .catch(err => {
-          console.log(err);
+          l.info(err);
           runInAction(() => {
             topConnectionsPanel.bLoadingExplain = false;
           });
@@ -245,7 +245,7 @@ export default class PerformanceWindowApi {
         }
 
         if (explainCmd.length > 0 && database.length > 0) {
-          console.log('ExplainCommand: ', explainCmd);
+          l.info('ExplainCommand: ', explainCmd);
           const driverService = featherClient().service('drivercommands');
           driverService.timeout = 30000;
           return driverService
@@ -257,7 +257,7 @@ export default class PerformanceWindowApi {
               }
             })
             .then(res => {
-              console.log(res);
+              l.info(res);
               if (res && res.queryPlanner && res.queryPlanner.winningPlan) {
                 if (selectedOperation.explainPlan) {
                   selectedOperation.explainPlan = res;
@@ -270,7 +270,7 @@ export default class PerformanceWindowApi {
               resolve(selectedOperation);
             })
             .catch(err => {
-              console.log(err);
+              l.info(err);
               reject(
                 new Error(
                   'dbkoda: Timeout exceeded while trying to execute explain for selected command.'
@@ -291,7 +291,7 @@ export default class PerformanceWindowApi {
         const queryPlaner = _.pick(selectedOperation.explainPlan, ['queryPlanner']);
         const service = featherClient().service('/mongo-sync-execution');
         const explainOutput = "JSON.parse('" + JSON.stringify(queryPlaner) + "')";
-        console.log('Explain Output for Idx Advisor: ', explainOutput);
+        l.info('Explain Output for Idx Advisor: ', explainOutput);
         service.timeout = 30000;
         service
           .update(this.profileId, {
@@ -304,11 +304,11 @@ export default class PerformanceWindowApi {
               try {
                 suggestionResult = JSON.parse(res);
               } catch (err) {
-                console.error(res);
-                console.log(err);
+                l.error(res);
+                l.info(err);
                 reject(new Error('Unable to get the index suggestion for selected Explain.'));
               }
-              console.log('Index Advisor Result: ', suggestionResult);
+              l.info('Index Advisor Result: ', suggestionResult);
 
               const lineSep = this.getLineSeperator();
               const suggestionText = getIdxSuggestionCode(
@@ -316,7 +316,7 @@ export default class PerformanceWindowApi {
                 selectedOperation.explainPlan,
                 lineSep
               );
-              console.log('suggestionText:: ', suggestionText);
+              l.info('suggestionText:: ', suggestionText);
               if (selectedOperation.suggestionText) {
                 selectedOperation.suggestionText = suggestionText;
               } else {
@@ -328,7 +328,7 @@ export default class PerformanceWindowApi {
             })
           )
           .catch(err => {
-            console.error(err);
+            l.error(err);
             reject(
               new Error(
                 'dbkoda: Timeout exceeded while trying to execute Index Advisor for selected explain.'
@@ -343,7 +343,7 @@ export default class PerformanceWindowApi {
 
   @action.bound
   setProfilingDatabaseConfiguration = configs => {
-    console.log('send profiling database configuration ', configs);
+    l.info('send profiling database configuration ', configs);
     this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', { configs });
   };
 

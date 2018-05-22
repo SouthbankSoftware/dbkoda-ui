@@ -123,7 +123,7 @@ export default class DatabaseExport extends React.Component {
 
   openFile(action) {
     const properties = getDialogProperites(action, this.state.archive);
-    console.log(properties);
+    l.info(properties);
     dialog.showOpenDialog(
       BrowserWindow.getFocusedWindow(),
       {

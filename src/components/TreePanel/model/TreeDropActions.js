@@ -34,7 +34,7 @@ export default class TreeDropActions {
    * @return {Template}    - Handle Template to generate code based on context
    */
   static getTemplateByType(type, isSQL) {
-    console.log(type, ' - ', isSQL);
+    l.info(type, ' - ', isSQL);
     const templateId = Templates[type];
     let template;
     if (isSQL) {
@@ -42,7 +42,7 @@ export default class TreeDropActions {
     } else {
       template = require('../templates/dragdrop/' + templateId); //eslint-disable-line
     }
-    console.log(template);
+    l.info(template);
     return template;
   }
   /**
@@ -89,7 +89,7 @@ export default class TreeDropActions {
       const template = TreeDropActions.getTemplateByType(treeNode.type, false);
       return template(context);
     } catch (e) {
-      console.error(e);
+      l.error(e);
       return '';
     }
   }
@@ -100,7 +100,7 @@ export default class TreeDropActions {
       const template = TreeDropActions.getTemplateByType(treeNode.type, true);
       return template(context);
     } catch (e) {
-      console.error(e);
+      l.error(e);
       return '';
     }
   }

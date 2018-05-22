@@ -61,7 +61,7 @@ export default class Profiles {
           !profile.urlCluster &&
           !profile.useClusterConfig
         ) {
-          console.log(profile);
+          l.info(profile);
           let connectionUrl = StaticApi.mongoProtocol + profile.host + ':' + profile.port;
           const conDB = profile.authenticationDatabase;
           connectionUrl += '/';
@@ -99,11 +99,11 @@ export default class Profiles {
               this.loading = false;
             });
           }
-          console.log('Profiles loaded successfully!');
+          l.info('Profiles loaded successfully!');
         });
       })
       .catch(e => {
-        console.error(e);
+        l.error(e);
         NewToaster.show({
           message: `Reading profiles.yml failed: ${e.message}`,
           className: 'danger',
@@ -129,14 +129,14 @@ export default class Profiles {
           watching: false
         })
         .then(() => {
-          IS_DEVELOPMENT && console.debug('profiles.yml updated');
+          IS_DEVELOPMENT && l.debug('profiles.yml updated');
           runInAction(() => {
             this.loading = false;
           });
         })
-        .catch(console.error);
+        .catch(l.error);
     } catch (e) {
-      console.error(e);
+      l.error(e);
       NewToaster.show({
         message: `Saving profiles.yml failed: ${e.message}`,
         className: 'danger',

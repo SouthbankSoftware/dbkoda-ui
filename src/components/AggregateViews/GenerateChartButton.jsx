@@ -93,7 +93,7 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
   };
 
   _handleError = error => {
-    console.error(error);
+    l.error(error);
     NewToaster.show({
       message: error.message,
       className: 'danger',

@@ -153,7 +153,7 @@ export default class ProfileManager extends React.Component<Props, State> {
     const menuBtns = [];
     const subforms = this.form.getSubForms();
     subforms.forEach(formStr => {
-      console.log(formStr);
+      l.info(formStr);
       const subForm = this.form.formSchema[formStr];
       const btnClassName = 'btn-' + formStr;
       menuBtns.push(

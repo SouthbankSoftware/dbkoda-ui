@@ -178,7 +178,7 @@ export default class Toolbar extends React.Component {
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
         })
         .catch(err => {
-          console.error('error:', err);
+          l.error('error:', err);
           logToMain('error', 'Failed to close profile: ' + err);
           NewToaster.show({
             message: err.message,

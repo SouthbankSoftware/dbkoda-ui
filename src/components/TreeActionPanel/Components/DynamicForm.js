@@ -57,7 +57,7 @@ export class DynamicForm extends MobxReactForm {
       onError(form) {
         // get all form errors
         const fieldErrors = _.pickBy(form.errors(), _.identity);
-        console.error('All form errors', fieldErrors);
+        l.error('All form errors', fieldErrors);
         // invalidate the form with a custom error message
         if (_.keys(fieldErrors).length > 0 && !form.error) {
           form.invalidate(globalString('tree/genericValidateError'));

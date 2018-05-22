@@ -47,8 +47,8 @@ const { ipcRenderer } = electron;
 
 const renderApp = () => {
   if (store) {
-    console.log('Last Store Version:', store.version);
-    console.log('Last Ping:', store.dateLastPinged);
+    l.info('Last Store Version:', store.version);
+    l.info('Last Ping:', store.dateLastPinged);
   }
   const render = Component => {
     ReactDOM.render(
@@ -97,7 +97,7 @@ Broker.once(EventType.APP_RENDERED, () => {
 
 Broker.once(EventType.APP_CRASHED, () => {
   logToMain('error', 'App window crashed!');
-  console.error('App window crashed');
+  l.error('App window crashed');
   if (IS_ELECTRON) {
     // make a backup of the old stateStore
     store

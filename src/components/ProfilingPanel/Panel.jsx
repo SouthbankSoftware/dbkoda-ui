@@ -131,7 +131,7 @@ export default class ProfilingPanel extends React.Component<Props> {
         dbName: this.state.selectedDatabase
       };
       this.state.currentConfig.selectedValue = 0;
-      console.log('change profile configuration ', config);
+      l.info('change profile configuration ', config);
     } else {
       const config = {
         level: 1,
@@ -140,7 +140,7 @@ export default class ProfilingPanel extends React.Component<Props> {
         dbName: this.state.selectedDatabase
       };
       this.state.currentConfig.selectedValue = 1;
-      console.log('change profile configuration ', config);
+      l.info('change profile configuration ', config);
     }
     this.setState({ dirtyConfig: false });
   }
@@ -154,7 +154,7 @@ export default class ProfilingPanel extends React.Component<Props> {
       profileSize: this.state.currentConfig.profileCollectionSize,
       dbName: this.state.selectedDatabase
     };
-    console.log('change profile configuration ', config);
+    l.info('change profile configuration ', config);
     if (config) {
       this.props.api.setProfilingDatabaseConfiguration([config]);
     }
@@ -163,7 +163,7 @@ export default class ProfilingPanel extends React.Component<Props> {
 
   @autobind
   _onModeChange(event) {
-    console.debug('Mode changed to: ', event.currentTarget.value);
+    l.debug('Mode changed to: ', event.currentTarget.value);
     // Making modification to a profiling db means config is dirty.
     if (this.state.currentConfig.selectedValue > 0) {
       this.state.dirtyConfig = true;
@@ -175,7 +175,7 @@ export default class ProfilingPanel extends React.Component<Props> {
 
   @autobind
   _onUpdateSizeLimit(value) {
-    console.debug('Size limit changed to ', value);
+    l.debug('Size limit changed to ', value);
     // Making modification to a profiling db means config is dirty.
     if (this.state.currentConfig.selectedValue > 0) {
       this.state.dirtyConfig = true;
@@ -187,7 +187,7 @@ export default class ProfilingPanel extends React.Component<Props> {
 
   @autobind
   _onUpdateExceedLimit(value) {
-    console.debug('Exceeding value changed to ', value);
+    l.debug('Exceeding value changed to ', value);
     // Making modification to a profiling db means config is dirty.
     if (this.state.currentConfig.selectedValue > 0) {
       this.state.dirtyConfig = true;
@@ -229,7 +229,7 @@ export default class ProfilingPanel extends React.Component<Props> {
     };
 
     const onOperationSelection = selectedOperation => {
-      console.debug(selectedOperation);
+      l.debug(selectedOperation);
       this.setState({ selectedOperation: null });
       this.setState({ selectedOperation });
     };

@@ -233,7 +233,7 @@ export default class Store {
             this.profilingPanel.databases = newDbs;
           }
         } else if (args.command === 'mw_focusWindow') {
-          console.log('mw_focusWindow', args);
+          l.info('mw_focusWindow', args);
           if (args.params && args.params.open) {
             this.setActiveNavPane(args.params.open);
           }

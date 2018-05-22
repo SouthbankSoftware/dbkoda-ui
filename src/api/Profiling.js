@@ -41,8 +41,8 @@ export default class Profiling {
     Broker.on(EventType.PROFILING_DATABASES_DATA, ({ profileId, payload }) => {
       const { alias } = this.store.profileStore.profiles.get(profileId);
 
-      console.log(`%cProfling Databases for ${alias} (${profileId}):`, 'color: green');
-      console.log(payload);
+      l.info(`%cProfling Databases for ${alias} (${profileId}):`, 'color: green');
+      l.info(payload);
       this.api.sendMsgToPerformanceWindow({
         profileId,
         command: 'mw_profilingDatabaseData',
@@ -53,8 +53,8 @@ export default class Profiling {
     Broker.on(EventType.PROFILING_DATA, ({ profileId, payload }) => {
       const { alias } = this.store.profileStore.profiles.get(profileId);
 
-      console.log(`%cProfling Data for ${alias} (${profileId}):`, 'color: green');
-      console.log(payload);
+      l.info(`%cProfling Data for ${alias} (${profileId}):`, 'color: green');
+      l.info(payload);
       this.api.sendMsgToPerformanceWindow({
         profileId,
         command: 'mw_profilingData',
@@ -70,7 +70,7 @@ export default class Profiling {
   _handleError = (profileId: UUID, err: Error | string, level: 'error' | 'warn' = 'error') => {
     const { alias } = this.store.profileStore.profiles.get(profileId);
 
-    console.error(err);
+    l.error(err);
     // $FlowFixMe
     const errorMessage = `Profile ${alias} (${profileId}) ${level}: ${err.message || err}`;
     this.api.showToasterInPerformanceWindow(profileId, {
@@ -111,7 +111,7 @@ export default class Profiling {
         }
       })
       .then(res => {
-        console.log(res);
+        l.info(res);
         Broker.emit(EventType.PROFILING_DATA, {
           profileId,
           payload: res

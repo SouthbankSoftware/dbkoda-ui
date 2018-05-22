@@ -920,7 +920,7 @@ export default class ChartPanel extends React.Component<Props, State> {
       _.set(schema, schemaPath, newType);
       this.schemaRef = { schema };
     } else {
-      console.error('Unexpected schema inconsistency');
+      l.error('Unexpected schema inconsistency');
     }
   });
 

@@ -99,7 +99,7 @@ export default class Toolbar extends React.Component {
     this.saveFileHandleError = () =>
       this.saveFile().catch(e => {
         if (e) {
-          console.error(e);
+          l.error(e);
         }
       });
     this.saveFileAs = this.saveFileAs.bind(this);
@@ -286,7 +286,7 @@ export default class Toolbar extends React.Component {
     this.props.store.editorToolbar.saveAs = true;
     this.saveFile().catch(e => {
       if (e) {
-        console.error(e);
+        l.error(e);
         logToMain('error', 'Failed to save file ' + e);
       }
     });
@@ -496,7 +496,7 @@ export default class Toolbar extends React.Component {
           }
         })
         .catch(err => {
-          console.error(err);
+          l.error(err);
           runInAction('Revert dropdown change on failure', () => {
             this.props.store.editorPanel.activeDropdownId = prevDropdown;
             this.props.store.editorToolbar.currentProfile = prevDropdown;

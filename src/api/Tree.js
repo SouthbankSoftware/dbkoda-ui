@@ -76,7 +76,7 @@ export default class TreeApi {
 
   @action.bound
   _handleError(error) {
-    console.error(error);
+    l.error(error);
   }
 
   showStorageStatsView = profileId => {

@@ -229,7 +229,7 @@ export default class Toolbar extends React.Component {
   }
 
   onShellIdChanged() {
-    console.log(
+    l.info(
       `EventType.createShellExecutionFinishEvent(${this.props.store.editorPanel.activeEditorId}, ${
         this.props.store.editorToolbar.shellId
       })`
@@ -244,7 +244,7 @@ export default class Toolbar extends React.Component {
   }
 
   onExecutionFinished() {
-    console.log('Execution Finished!');
+    l.info('Execution Finished!');
     if (this.props.config.settings.tableOutputDefault) {
       setTimeout(() => {
         this.openTableView(false, true);

@@ -232,7 +232,7 @@ class DragLabel extends React.Component {
               <AnchorButton
                 className="button"
                 onClick={() => {
-                  console.log('Open Context Menu');
+                  l.info('Open Context Menu');
                 }}
               >
                 <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />

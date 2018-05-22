@@ -283,7 +283,7 @@ export default class FormBuilder {
                   try {
                     arrOptions = [''].concat(formFunctions[fldQuery.parseFn](resOpts));
                   } catch (e) {
-                    console.error(e.stack);
+                    l.error(e.stack);
                   }
                 }
                 if (result.options[fldName]) {

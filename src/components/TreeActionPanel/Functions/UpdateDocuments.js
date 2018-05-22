@@ -33,7 +33,7 @@ const debug = false;
 
 export const UpdateDocuments = {
   dbkoda_UpdateDocumentsPreFill: params => {
-    // console.log('invoked dbkoda_DeleteDocumentsPreFill');
+    // l.info('invoked dbkoda_DeleteDocumentsPreFill');
     const data = {};
     data.Database = params.Database;
     data.CollectionName = params.CollectionName;
@@ -53,7 +53,7 @@ export const UpdateDocuments = {
     data.UpdateMany = false;
     data.Upsert = false;
     data.Replace = false;
-    console.log('returns', data);
+    l.info('returns', data);
     return data;
   },
   dbkodaUpdateOperators: params => {
@@ -63,7 +63,7 @@ export const UpdateDocuments = {
   },
   dbkodaUpdateOperators_parse: res => {
     //eslint-disable-line
-    if (debug) console.log(res);
+    if (debug) l.info(res);
     return [
       '$set',
       '$inc',
