@@ -5,11 +5,21 @@ exports[`DragLabel matches snapshot 1`] = `
   className="labelWrapper"
 >
   <span
+    className="nodeIcon"
+  >
+    <test-file-stub
+      className="dbKodaSVG shardIcon"
+      height={30}
+      width={30}
+    />
+  </span>
+  <span
     className="nodeLbl"
     style={
       Object {
         "cursor": "move",
         "opacity": 1,
+        "width": "100%",
       }
     }
   >
