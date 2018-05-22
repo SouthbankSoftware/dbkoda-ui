@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-20T11:47:43+10:00
+ * @Last modified time: 2018-05-22T12:04:31+10:00
  */
 
 import _ from 'lodash';
@@ -229,8 +229,7 @@ export default class ProfileApi {
             selectedProfile.status = ProfileStatus.CLOSED;
           }
         });
-        console.error(err);
-        logToMain('error', 'Failed to add SSH Terminal: ' + err);
+        l.error('Failed to add SSH Terminal:', err);
         this.onFail();
         this.toasterCallback && this.toasterCallback('connectionFail', err);
       });
@@ -279,7 +278,7 @@ export default class ProfileApi {
         this.api.passwordApi.removeMissingStoreId(`${res.id}-s`);
       }
       const profileData = _.omit(data, ['password', 'passPhrase', 'remotePass']);
-      console.debug(profileData);
+      l.debug(profileData);
       const profile: Profile = {
         ...profileData,
         id: res.id,
@@ -290,7 +289,7 @@ export default class ProfileApi {
         shellVersion: res.shellVersion,
         mongoType: res.mongoType
       };
-      console.debug('profile:', profile);
+      l.debug('profile:', profile);
       if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {
         profile.bPassPhrase = true;
       }
@@ -322,8 +321,7 @@ export default class ProfileApi {
                 value.status = ProfileStatus.OPEN;
               })
               .catch(err => {
-                console.error('failed to create shell connection', err);
-                logToMain('error', 'Failed to create shell connection: + err');
+                l.error('failed to create shell connection', err);
               });
           }
         });

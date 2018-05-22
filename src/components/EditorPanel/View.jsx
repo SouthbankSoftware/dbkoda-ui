@@ -3,7 +3,7 @@
  * @Date:   2017-07-24T14:46:20+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-21T14:53:10+10:00
+ * @Last modified time: 2018-05-22T11:45:23+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -213,7 +213,7 @@ class View extends React.Component {
               queries = queries.map(query => {
                 return query.replace(/ *(\r\n|\r|\n)/gm, ' ');
               });
-              console.log(queries);
+              l.info(queries);
               service
                 .update(shell, { queries, schema: editor.db })
                 .then(res => {
@@ -239,7 +239,7 @@ class View extends React.Component {
                   });
                 })
                 .catch(err => {
-                  console.error(err);
+                  l.error(err);
                   runInAction(() => {
                     // Append this error to raw output:
                     err = {
@@ -290,7 +290,7 @@ class View extends React.Component {
                   commands: currEditorValue.replace(/\t/g, '  ')
                 })
                 .catch(err => {
-                  console.error(err);
+                  l.error(err);
                   runInAction(() => {
                     // Append this error to raw output:
                     err = {
@@ -368,7 +368,7 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 90000;
-              console.log(
+              l.info(
                 content
                   .replace(/\t/g, '  ')
                   .replace(/ *(\r\n|\r|\n)/gm, ' ')
@@ -405,7 +405,7 @@ class View extends React.Component {
                   });
                 })
                 .catch(err => {
-                  console.error('execute error:', err);
+                  l.error('execute error:', err);
                   // Append this error to raw output:
                   runInAction(() => {
                     err = {
@@ -447,7 +447,7 @@ class View extends React.Component {
                         cm.setSelection({ line, ch: 0 });
                       }
                     } catch (err) {
-                      console.error(err);
+                      l.error(err);
                     }
 
                     const strOutput = JSON.stringify(err, null, 2);
@@ -514,7 +514,7 @@ class View extends React.Component {
                   commands: content.replace(/\t/g, '  ')
                 })
                 .catch(err => {
-                  console.error('execute error:', err);
+                  l.error('execute error:', err);
                   runInAction(() => {
                     this.finishedExecution({ id: profileId, shellId: shell });
                     NewToaster.show({
@@ -540,10 +540,10 @@ class View extends React.Component {
             if (this.props.store.dragItem.item) {
               const { item } = this.props.store.dragItem;
               if (this.props.store.editors.get(this.props.id).type === 'drill') {
-                console.log('SQL DnD');
+                l.info('SQL DnD');
                 this.insertAtCursor(TreeDropActions.getSQLForTreeNode(item));
               } else {
-                console.log('JS DnD');
+                l.info('JS DnD');
                 this.insertAtCursor(TreeDropActions.getCodeForTreeNode(item));
               }
             }
@@ -608,7 +608,7 @@ class View extends React.Component {
                 this.finishedExecution({ id, shellId: shell });
               })
               .catch(reason => {
-                console.error(`Stopping Execution failed for ${id} / ${shell}! ${reason.message}`);
+                l.error(`Stopping Execution failed for ${id} / ${shell}! ${reason.message}`);
                 NewToaster.show({
                   message: globalString('editor/view/executionStoppedError', reason.message),
                   className: 'danger',
@@ -632,7 +632,7 @@ class View extends React.Component {
               cm.setValue(this.props.store.treeActionPanel.formValues);
               this.setEditorValue(this.props.store.treeActionPanel.formValues);
             } catch (e) {
-              console.error(e);
+              l.error(e);
             }
             this.props.store.treeActionPanel.isNewFormValues = false;
           }
@@ -803,7 +803,7 @@ class View extends React.Component {
     const { activeEditorId } = this.props.store.editorPanel;
     const outputCm = this.props.store.outputPanel.editorRefs[activeEditorId].getCodeMirror();
     this.props.store.outputs.get(activeEditorId).currentExecStartLine = outputCm.lineCount();
-    console.log(
+    l.info(
       `Output Exec Start Line: ${this.props.store.outputs.get(activeEditorId).currentExecStartLine}`
     );
   }
@@ -926,13 +926,12 @@ class View extends React.Component {
           });
         })
         .catch(err => {
-          console.error('error:', err);
+          l.error('Failed to execute explain:', err);
           NewToaster.show({
             message: globalString('explain/executionError'),
             className: 'danger',
             icon: 'thumbs-down'
           });
-          logToMain('error', 'Failed to execute explain: ' + err);
           runInAction(() => {
             editor.executing = false;
             this.props.store.editorToolbar.isActiveExecuting = false;
@@ -1074,15 +1073,14 @@ class View extends React.Component {
         editor.shellCode = shellCode;
         this.setState({ openTranslator: true });
       } catch (err) {
-        console.error('failed to translate the selected code ');
-        logToMain('error', 'Failed to translate to native code: ' + err);
+        l.error('Failed to translate to native code:', err);
       }
     }
   }
 
   @action.bound
   finishedExecution(event) {
-    console.debug('Finished Executing');
+    l.debug('Finished Executing');
     const editorIndex = this.props.store.editorPanel.activeEditorId;
     if (!this.props.store.editors.get(editorIndex)) {
       return;

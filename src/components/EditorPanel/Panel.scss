@@ -199,13 +199,21 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
         }
 
         .saveFileButton svg.dbKodaSVG {
+          padding: 1px;
+          width: 60%;
+          height: 60%;
+        }
+
+        .addEditorButton svg.dbKodaSVG {
+          padding-left: 1px;
           width: 60%;
           height: 60%;
         }
 
         .openFileButton svg.dbKodaSVG {
-          width: 60%;
-          height: 60%;
+          padding-left: 5px;
+          width: 70%;
+          height: 70%;
         }
       }
     }

@@ -58,7 +58,7 @@ export default class Profile extends React.Component {
   }
 
   applySelectedDatabase(selectedDb) {
-    console.log('selected db', selectedDb);
+    l.info('selected db', selectedDb);
     if (selectedDb) {
       const selectedValue = selectedDb.value.was;
       this.setState({ selectedDb, selectedValue });

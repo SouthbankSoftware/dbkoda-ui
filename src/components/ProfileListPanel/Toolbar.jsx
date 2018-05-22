@@ -4,7 +4,7 @@
  * @Date:   2017-03-15 13:34:55
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-02T02:49:51+11:00
+ * @Last modified time: 2018-05-22T11:50:58+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -178,8 +178,7 @@ export default class Toolbar extends React.Component {
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
         })
         .catch(err => {
-          console.error('error:', err);
-          logToMain('error', 'Failed to close profile: ' + err);
+          l.error('Failed to close profile:', err);
           NewToaster.show({
             message: err.message,
             className: 'danger',

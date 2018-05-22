@@ -114,7 +114,7 @@ export default class GraphicalBuilder extends React.Component {
           this.editor.isAggregateLoading = false;
         });
         this.setState({ failed: true });
-        console.error(err);
+        l.error(err);
       });
 
     // Set up broker events.
@@ -147,7 +147,7 @@ export default class GraphicalBuilder extends React.Component {
   @action.bound
   _onAggregateUpdate() {
     const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-    console.debug('Selecting last block: ', editor.blockList.length - 1);
+    l.debug('Selecting last block: ', editor.blockList.length - 1);
     this.selectBlock(editor.blockList.length - 1);
   }
 
@@ -178,7 +178,7 @@ export default class GraphicalBuilder extends React.Component {
                       editor.blockList[index].status = 'valid';
                     });
                   } else {
-                    console.error('Result[', index, '] is invalid: ', indexValue);
+                    l.error('Result[', index, '] is invalid: ', indexValue);
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
@@ -205,12 +205,12 @@ export default class GraphicalBuilder extends React.Component {
               this.clearResultsOutput(editor);
             } else {
               // Check for error.
-              console.error('updateResultSet: ', res);
+              l.error('updateResultSet: ', res);
               reject();
             }
           })
           .catch(e => {
-            console.error(e);
+            l.error(e);
             reject();
           });
       });
@@ -320,7 +320,7 @@ export default class GraphicalBuilder extends React.Component {
           resolve(res);
         })
         .catch(err => {
-          console.error(err);
+          l.error(err);
           reject(err);
         });
     });
@@ -335,7 +335,7 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   selectBlock(index) {
-    console.debug('Selecting index: ', index);
+    l.debug('Selecting index: ', index);
     return new Promise(resolve => {
       // 1. Update Editor List.
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
@@ -352,7 +352,7 @@ export default class GraphicalBuilder extends React.Component {
       this.updateShellPipeline(true).then(res => {
         if (res && res.unableToUpdateSteps) {
           // Partial update
-          console.error('[SELECT] - Unable to fully update steps: ', res);
+          l.error('[SELECT] - Unable to fully update steps: ', res);
           // 4. Is the current block valid?.
           if (editor.blockList[editor.selectedBlock].status === 'valid') {
             // 4.a Yes - Update Results.
@@ -389,7 +389,7 @@ export default class GraphicalBuilder extends React.Component {
                     });
                   } else {
                     if (!(typeof indexValue === 'string')) {
-                      console.error('Result[', index, '] is invalid: ', indexValue);
+                      l.error('Result[', index, '] is invalid: ', indexValue);
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
                     runInAction('Update Graphical Builder', () => {
@@ -500,7 +500,7 @@ export default class GraphicalBuilder extends React.Component {
                       editor.blockList[index].status = 'valid';
                     });
                   } else {
-                    console.error('Result[', index, '] is invalid: ', indexValue);
+                    l.error('Result[', index, '] is invalid: ', indexValue);
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
@@ -561,7 +561,7 @@ export default class GraphicalBuilder extends React.Component {
     this.updateShellPipeline(false).then(res => {
       if (res && res.unableToUpdateSteps) {
         // Partial update
-        console.error('Unable to complete full update!');
+        l.error('Unable to complete full update!');
 
         // 4. Was the block removed the selected block?.
         if (blockPosition === editor.selectedBlock) {
@@ -607,7 +607,7 @@ export default class GraphicalBuilder extends React.Component {
                     editor.blockList[index].status = 'valid';
                   });
                 } else {
-                  console.error('Result[', index, '] is invalid: ', indexValue);
+                  l.error('Result[', index, '] is invalid: ', indexValue);
                   if (!(typeof indexValue === 'string')) {
                     indexValue = '[ "' + indexValue.join('", "') + '"]';
                   }
@@ -646,7 +646,7 @@ export default class GraphicalBuilder extends React.Component {
             });
           } else {
             // Check for error.
-            console.error('updateResultSet: ', JSON.parse(res));
+            l.error('updateResultSet: ', JSON.parse(res));
           }
         });
       }
@@ -684,19 +684,19 @@ export default class GraphicalBuilder extends React.Component {
           try {
             res = JSON.parse(res);
           } catch (e) {
-            console.error(res);
-            console.error('Error validating step: ', step);
+            l.error(res);
+            l.error('Error validating step: ', step);
             resolve(false);
           }
           if (res.type === 'object') {
             resolve(true);
           } else {
-            console.error(res);
+            l.error(res);
             resolve(false);
           }
         })
         .catch(e => {
-          console.error(e);
+          l.error(e);
           if (e.code === 400) {
             NewToaster.show({
               message: globalString('aggregate_builder/no_active_connection'),
@@ -757,7 +757,7 @@ export default class GraphicalBuilder extends React.Component {
             try {
               stepArray.push(stepJSON.replace(/\n/g, ' '));
             } catch (e) {
-              console.error('Block generated invalid JSON: ', block);
+              l.error('Block generated invalid JSON: ', block);
             }
           }
         }
@@ -841,7 +841,7 @@ export default class GraphicalBuilder extends React.Component {
           resolve(res);
         })
         .catch(e => {
-          console.error(e);
+          l.error(e);
         });
     });
   }
@@ -886,9 +886,9 @@ export default class GraphicalBuilder extends React.Component {
         });
       })
       .catch(e => {
-        console.error(e);
+        l.error(e);
         if (e.match('Timeout of 30000ms exceeded')) {
-          console.error('Retry aggregation once more with higher timeout...');
+          l.error('Retry aggregation once more with higher timeout...');
           const service = featherClient().service('/mongo-sync-execution');
           service.timeout = 30000;
           service
@@ -908,7 +908,7 @@ export default class GraphicalBuilder extends React.Component {
               });
             })
             .catch(e => {
-              console.error(e);
+              l.error(e);
               // Fail aggregation.
             });
         }
@@ -1136,7 +1136,7 @@ export default class GraphicalBuilder extends React.Component {
             this.editor.isAggregateLoading = false;
           });
           this.forceUpdate();
-          console.error(err);
+          l.error(err);
         });
     } else {
       NewToaster.show({
@@ -1148,7 +1148,7 @@ export default class GraphicalBuilder extends React.Component {
         this.editor.isAggregateLoading = false;
       });
       this.forceUpdate();
-      console.error('Invalid import object: ', contentObject);
+      l.error('Invalid import object: ', contentObject);
     }
   }
 
@@ -1166,7 +1166,7 @@ export default class GraphicalBuilder extends React.Component {
       this.updateShellPipeline(false).then(res => {
         if (res && res.unableToUpdateSteps) {
           // Partial update
-          if (this.debug) console.error('Unable to complete full update!');
+          if (this.debug) l.error('Unable to complete full update!');
           editor.selectedBlock = 0;
           // 4. Is the current block valid?.
           if (editor.blockList[editor.selectedBlock].status === 'valid') {
@@ -1204,7 +1204,7 @@ export default class GraphicalBuilder extends React.Component {
                       editor.blockList[index].status = 'valid';
                     });
                   } else {
-                    console.error('Result[', index, '] is invalid: ', indexValue);
+                    l.error('Result[', index, '] is invalid: ', indexValue);
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
@@ -1232,7 +1232,7 @@ export default class GraphicalBuilder extends React.Component {
               });
             } else {
               // Check for error.
-              console.error('updateResultSet: ', JSON.parse(res));
+              l.error('updateResultSet: ', JSON.parse(res));
               reject();
             }
           });

@@ -3,7 +3,7 @@
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-20T11:47:30+10:00
+ * @Last modified time: 2018-05-22T12:03:52+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -97,17 +97,16 @@ export default class EditorApi {
         .catch(err => {
           this.createNewEditorFailed();
           // @TODO -> Object Object issue
-          console.error(err);
+          l.error(err);
           if (err.message == '[object Object]') {
-            console.error('Error retrieved from Primus');
+            l.error('Error retrieved from Primus');
           } else {
             NewToaster.show({
               message: 'Error: ' + err.message,
               className: 'danger',
               icon: 'thumbs-down'
             });
-            console.error(err.message);
-            logToMain('error', 'Error creating new editor: ' + err.message);
+            l.error('Error creating new editor:', err.message);
           }
         });
     } catch (err) {
@@ -266,11 +265,6 @@ export default class EditorApi {
       this.store.drawer.drawerChild = DrawerPanes.DEFAULT;
     }
 
-    NewToaster.show({
-      message: globalString('editor/toolbar/connectionSuccess'),
-      icon: 'pt-icon-thumbs-up',
-      className: 'success'
-    });
     return editorId;
   }
 
@@ -279,7 +273,7 @@ export default class EditorApi {
    */
   @action.bound
   closeNewFeaturesDialog() {
-    console.log('Hide New Features Dialog');
+    l.info('Hide New Features Dialog');
     this.store.editorPanel.showNewFeaturesDialog = false;
   }
 
@@ -305,8 +299,7 @@ export default class EditorApi {
         })
         .then()
         .catch(err => {
-          console.error('remove shell failed,', err);
-          logToMain('error', 'Failed to remove shell: ' + err);
+          l.error('Failed to remove shell:', err);
         });
     }
 

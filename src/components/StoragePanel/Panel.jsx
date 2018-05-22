@@ -104,9 +104,9 @@ export default class StoragePanel extends React.Component {
         .then(res => {
           try {
             if (typeof res == 'string' && res.indexOf('Error') >= 0) {
-              console.error(res);
+              l.error(res);
             } else {
-              console.log(res);
+              l.info(res);
               if (!nodeData.children) {
                 nodeData.children = res;
                 if (this.getChildrenSize(nodeData) > 0) {
@@ -203,7 +203,7 @@ export default class StoragePanel extends React.Component {
         return child.data.name === 'data';
       });
       if (dataNode) {
-        console.log(dataNode);
+        l.info(dataNode);
         this.onChildClick(dataNode);
       }
     }

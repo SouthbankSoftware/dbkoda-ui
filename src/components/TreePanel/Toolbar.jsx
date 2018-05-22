@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T12:00:43+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T10:57:25+11:00
+ * @Last modified time: 2018-05-22T11:52:46+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -105,8 +105,7 @@ export default class TreeToolbar extends React.Component {
         });
       })
       .catch(err => {
-        console.error(err.stack);
-        logToMain('error', 'Failed to refresh Tree: ' + err);
+        l.error('Failed to refresh Tree:', err);
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: err.message,
           className: 'danger',

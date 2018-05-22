@@ -3,8 +3,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T14:04:07+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-22T11:50:42+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -222,8 +222,7 @@ export default class ListView extends React.Component {
           this.closeConnectionCloseAlert();
         })
         .catch(err => {
-          console.error('error:', err);
-          logToMain('error', 'Failed to close profile: ' + err);
+          l.error('Failed to close profile:', err);
           NewToaster.show({
             message: 'Error: ' + err.message,
             className: 'danger',
@@ -574,18 +573,6 @@ export default class ListView extends React.Component {
               />
             </div>
           ) : null}
-          {IS_DEVELOPMENT && [
-            <MenuDivider key="getTopConnections-divider" />,
-            <div key="getTopConnections" className="menuItemWrapper">
-              <MenuItem
-                className="profileListContextMenu getTopConnections"
-                onClick={() => this.props.api.getTopConnections(profile.id)}
-                text={globalString('profile/menu/getTopConnections')}
-                intent={Intent.NONE}
-                icon="heat-grid"
-              />
-            </div>
-          ]}
         </div>
       );
     }
@@ -666,7 +653,7 @@ export default class ListView extends React.Component {
                   <AnchorButton
                     className="button"
                     onClick={() => {
-                      console.log('Open Context Menu');
+                      l.info('Open Context Menu');
                       [, this.state.targetProfile] = profiles[rowIndex];
                     }}
                   >
@@ -704,7 +691,7 @@ export default class ListView extends React.Component {
                 <AnchorButton
                   className="button"
                   onClick={() => {
-                    console.log('Open Context Menu');
+                    l.info('Open Context Menu');
                     [, this.state.targetProfile] = profiles[rowIndex];
                   }}
                 >

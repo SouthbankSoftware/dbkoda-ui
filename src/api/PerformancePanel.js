@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-07T17:09:11+10:00
+ * @Last modified time: 2018-05-22T11:42:29+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -252,11 +252,11 @@ export default class PerformancePanelApi {
       } = window.require('electron');
 
       const handleSuspend = () => {
-        logToMain('info', 'os is suspending');
+        l.notice('os is suspending');
       };
 
       const handleResume = () => {
-        logToMain('info', 'os is resuming');
+        l.notice('os is resuming');
       };
 
       powerMonitor.on('suspend', handleSuspend);
@@ -296,7 +296,7 @@ export default class PerformancePanelApi {
   @action.bound
   _handleVisibilityChange() {
     if (document.hidden) {
-      logToMain('info', 'becomes hidden');
+      l.notice('becomes hidden');
 
       for (const pP of this.store.performancePanels.values()) {
         const { status } = pP;
@@ -306,7 +306,7 @@ export default class PerformancePanelApi {
         }
       }
     } else {
-      logToMain('info', 'becomes visible');
+      l.notice('becomes visible');
 
       this._attachPerformancePanelsToMobx();
     }
@@ -315,7 +315,7 @@ export default class PerformancePanelApi {
   _handleError = (profileId: UUID, err: Error | string, level: 'error' | 'warn' = 'error') => {
     const { profileAlias } = this.store.performancePanels.get(profileId);
 
-    console.error(err);
+    l.error(err);
 
     let errorMessage = err.message || err;
 
@@ -324,7 +324,7 @@ export default class PerformancePanelApi {
       try {
         const externalProfile = this.externalPerformanceWindows.get(profileId);
         if (externalProfile && externalProfile.status !== 'ready') {
-          console.log('put event to queue', err);
+          l.info('put event to queue', err);
           if (!this.eventQueue[profileId]) {
             this.eventQueue[profileId] = { events: [err] };
           } else {
@@ -340,7 +340,7 @@ export default class PerformancePanelApi {
           });
         }
       } catch (err) {
-        console.error(err);
+        l.error(err);
       }
     }
     if (!errorMessage) {
@@ -454,11 +454,11 @@ export default class PerformancePanelApi {
       } = window.require('electron');
 
       const powerBlockerId = powerSaveBlocker.start('prevent-display-sleep');
-      logToMain('info', `started power blocker for Performance Panel ${profileId}`);
+      l.notice(`started power blocker for Performance Panel ${profileId}`);
 
       this._powerBlockerDisposers.set(profileId, () => {
         powerSaveBlocker.stop(powerBlockerId);
-        logToMain('info', `stopped power blocker for Performance Panel ${profileId}`);
+        l.notice(`stopped power blocker for Performance Panel ${profileId}`);
       });
     }
   };
@@ -481,9 +481,7 @@ export default class PerformancePanelApi {
     const { status } = performancePanel;
 
     if (!_.includes(RUNNABLE_STATUSES, to)) {
-      console.error(
-        `PerformancePanel API: invalid (not runnable) to \`${to}\` for _runPerformancePanel`
-      );
+      l.error(`PerformancePanel API: invalid (not runnable) to \`${to}\` for _runPerformancePanel`);
       return;
     }
 
@@ -506,11 +504,11 @@ export default class PerformancePanelApi {
         } = window.require('electron');
         const suspensionBlockerId = powerSaveBlocker.start('prevent-app-suspension');
 
-        logToMain('info', `started suspension blocker for Performance Panel ${profileId}`);
+        l.notice(`started suspension blocker for Performance Panel ${profileId}`);
 
         suspensionBlockerDisposer = () => {
           powerSaveBlocker.stop(suspensionBlockerId);
-          logToMain('info', `stopped suspension blocker for Performance Panel ${profileId}`);
+          l.notice(`stopped suspension blocker for Performance Panel ${profileId}`);
         };
       }
 
@@ -525,8 +523,6 @@ export default class PerformancePanelApi {
 
       // handle new data
       const _handleNewData = action(payload => {
-        logToMain('debug', `new data for Performance Panel ${profileId}`);
-
         handleNewData(payload, performancePanel);
 
         if (performancePanel.status === performancePanelStatuses.external) {
@@ -664,7 +660,7 @@ export default class PerformancePanelApi {
           status: 'ready'
         });
         if (this.eventQueue[args.profileId]) {
-          console.log('send event from queue ', this.eventQueue[args.profileId]);
+          l.info('send event from queue ', this.eventQueue[args.profileId]);
           // $FlowFixMe
           this.eventQueue[args.profileId].events.forEach(err =>
             this._handleError(args.profileId, err, 'error')
@@ -869,10 +865,10 @@ export default class PerformancePanelApi {
   };
 
   resetPerformancePanel = (profileId: UUID) => {
-    console.log('Stopping perf panel...');
+    l.info('Stopping perf panel...');
     this._stopPerformancePanel(profileId);
     setTimeout(() => {
-      console.log('Running perf panel...');
+      l.info('Running perf panel...');
       this._runPerformancePanel(profileId, 'external');
     }, 1000);
   };
@@ -908,12 +904,12 @@ export default class PerformancePanelApi {
   };
 
   setProfilingDatabseConfiguration = (profileId: UUID, configs: Object, cb: *) => {
-    console.log('send profile configuration ', profileId, configs);
+    l.info('send profile configuration ', profileId, configs);
     featherClient()
       .service('profile')
       .patch(profileId, configs)
       .then(res => {
-        console.log('set profile configuration ', res);
+        l.info('set profile configuration ', res);
         if (cb) {
           cb(res);
         }

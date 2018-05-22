@@ -144,7 +144,7 @@ export default class ProfileConfiguration extends React.Component {
   }
 
   render() {
-    console.log(this.props);
+    l.info(this.props);
     const { layouts } = this.state;
     return (
       <ResponsiveGridLayout

@@ -3,7 +3,7 @@
  * @Date:   2017-03-15T10:54:51+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-18T11:08:20+10:00
+ * @Last modified time: 2018-05-22T10:50:06+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -47,9 +47,29 @@ import DocumentIcon from '../../../styles/icons/document-solid-icon.svg';
 import RemoveUserIcon from '../../../styles/icons/users-icon-2.svg';
 import AddIcon from '../../../styles/icons/add-icon.svg';
 import CloseIcon from '../../../styles/icons/cross-icon.svg';
-import UserIcon from '../../../styles/icons/user-icon.svg';
-import ShardsIcon from '../../../styles/icons/shards-icon-2.svg';
+
+import DatabaseIcon from '../../../styles/icons/database-icon-2.svg';
+import DatabasesIcon from '../../../styles/icons/database-icon-4.svg';
 import CollectionIcon from '../../../styles/icons/collection-icon.svg';
+import IndexIcon from '../../../styles/icons/index-icon.svg';
+import UsersIcon from '../../../styles/icons/users-icon-4.svg';
+import UserIcon from '../../../styles/icons/user-icon.svg';
+import RolesIcon from '../../../styles/icons/users-icon-4.svg';
+import RoleIcon from '../../../styles/icons/user-icon.svg';
+import RootShardsIcon from '../../../styles/icons/shards-icon-4.svg';
+import ShardsIcon from '../../../styles/icons/shards-icon-2.svg';
+import ShardIcon from '../../../styles/icons/shards-icon-1.svg';
+import ConfigServersIcon from '../../../styles/icons/config-database-icon-4.svg';
+import ConfigIcon from '../../../styles/icons/config-database-icon-1.svg';
+import RoutersIcon from '../../../styles/icons/mongos-icon-2.svg';
+import MongosIcon from '../../../styles/icons/mongos-icon.svg';
+import PropertiesIcon from '../../../styles/icons/attribute-icon.svg';
+import PropertyIcon from '../../../styles/icons/attributes-icon.svg';
+import ReplicaSetIcon from '../../../styles/icons/replica-set-icon-2.svg';
+import ReplicaMemberIcon from '../../../styles/icons/replica-set-icon.svg';
+import PrimaryIcon from '../../../styles/icons/primary-icon.svg';
+import SecondaryIcon from '../../../styles/icons/secondary-icon.svg';
+import ArbiterIcon from '../../../styles/icons/arbiters-icon.svg';
 
 const labelSource = {
   /**
@@ -96,7 +116,7 @@ class DragLabel extends React.Component {
             bDevOnlyFeature = true;
           }
           if (!bDevOnlyFeature) {
-            const icon = this.getIconFor(objAction.icon);
+            const icon = this.getIconForMenu(objAction.icon);
             if (icon != null) {
               this.Menus.push(
                 <div className="menuItemWrapper" key={objAction.name} data-id={objAction.name}>
@@ -127,7 +147,7 @@ class DragLabel extends React.Component {
       }
     }
   }
-  getIconFor(icon) {
+  getIconForMenu(icon) {
     switch (icon) {
       case 'settings':
         return <SettingsIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
@@ -147,6 +167,62 @@ class DragLabel extends React.Component {
         return <CollectionIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'dropdown':
         return <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+      default:
+        return null;
+    }
+  }
+  /**
+   * Get a tree icon based on type
+   *
+   * @param {string} type - type of the tree node.
+   * @return {React.component} - svg icon as react component
+   */
+  getIconForSecondaryLabel(type) {
+    switch (type) {
+      case 'shards':
+        return <RootShardsIcon className="dbKodaSVG shardsIcon" width={30} height={30} />;
+      case 'group_shards':
+        return <ShardsIcon className="dbKodaSVG shardsIcon" width={30} height={30} />;
+      case 'shard':
+        return <ShardIcon className="dbKodaSVG shardIcon" width={30} height={30} />;
+      case 'configservers':
+        return <ConfigServersIcon className="dbKodaSVG configServersIcon" width={30} height={30} />;
+      case 'config':
+        return <ConfigIcon className="dbKodaSVG configIcon" width={30} height={30} />;
+      case 'routers':
+        return <RoutersIcon className="dbKodaSVG routersIcon" width={30} height={30} />;
+      case 'mongos':
+        return <MongosIcon className="dbKodaSVG mongosIcon" width={30} height={30} />;
+      case 'databases':
+        return <DatabasesIcon className="dbKodaSVG databasesIcon" width={30} height={30} />;
+      case 'database':
+        return <DatabaseIcon className="dbKodaSVG databaseIcon" width={30} height={30} />;
+      case 'collection':
+        return <CollectionIcon className="dbKodaSVG collectionIcon" width={30} height={30} />;
+      case 'index':
+        return <IndexIcon className="dbKodaSVG indexIcon" width={30} height={30} />;
+      case 'users':
+        return <UsersIcon className="dbKodaSVG usersIcon" width={30} height={30} />;
+      case 'user':
+        return <UserIcon className="dbKodaSVG userIcon" width={30} height={30} />;
+      case 'roles':
+        return <RolesIcon className="dbKodaSVG rolesIcon" width={30} height={30} />;
+      case 'role':
+        return <RoleIcon className="dbKodaSVG roleIcon" width={30} height={30} />;
+      case 'property':
+        return <PropertyIcon className="dbKodaSVG propertyIcon" width={30} height={30} />;
+      case 'properties':
+        return <PropertiesIcon className="dbKodaSVG propertiesIcon" width={30} height={30} />;
+      case 'replicaset':
+        return <ReplicaSetIcon className="dbKodaSVG replicaSetIcon" width={30} height={30} />;
+      case 'primary':
+        return <PrimaryIcon className="dbKodaSVG primaryIcon" width={30} height={30} />;
+      case 'secondary':
+        return <SecondaryIcon className="dbKodaSVG secondaryIcon" width={30} height={30} />;
+      case 'arbiter':
+        return <ArbiterIcon className="dbKodaSVG arbiterIcon" width={30} height={30} />;
+      case 'replica_member':
+        return <ReplicaMemberIcon className="dbKodaSVG replicaMemberIcon" width={30} height={30} />;
       default:
         return null;
     }
@@ -209,14 +285,17 @@ class DragLabel extends React.Component {
    * @return {connectDragSource} - returns the react component with the dragDrop api wrapper.
    */
   render() {
-    const { connectDragSource, isDragging } = this.props;
+    const { connectDragSource, isDragging, type } = this.props;
+    const nodeIcon = this.getIconForSecondaryLabel(type);
     return connectDragSource(
       <div className="labelWrapper">
+        <span className="nodeIcon">{nodeIcon}</span>
         <span
           className="nodeLbl"
           style={{
             opacity: isDragging ? 0.5 : 1,
-            cursor: 'move'
+            cursor: 'move',
+            width: '100%'
           }}
         >
           {this.FilteredTextLabel}
@@ -232,7 +311,7 @@ class DragLabel extends React.Component {
               <AnchorButton
                 className="button"
                 onClick={() => {
-                  console.log('Open Context Menu');
+                  l.info('Open Context Menu');
                 }}
               >
                 <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />

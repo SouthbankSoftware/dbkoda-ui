@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: chris
+ * @Date:   2017-08-08T15:59:13+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-22T11:23:38+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,13 +22,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: chris
- * @Date:   2017-08-08T15:59:13+10:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T13:10:04+11:00
  */
 
 self.addEventListener(
@@ -44,7 +43,6 @@ self.addEventListener(
           .replace(/="([^"]*)"/gm, '=\\"$1\\"');
       });
     try {
-      console.log(json);
       // eslint-disable-next-line no-undef
       json = JSOL.parse(json);
     } catch (e) {

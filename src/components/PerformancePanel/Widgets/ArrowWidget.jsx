@@ -204,7 +204,7 @@ export default class ArrowWidget extends React.Component<Props, State> {
         const latestValue = values.length > 0 ? values[values.length - 1].value : {};
 
         if (items.length !== 1) {
-          console.error('ArrowWidget only supports single item');
+          l.error('ArrowWidget only supports single item');
           return;
         }
 
@@ -213,7 +213,7 @@ export default class ArrowWidget extends React.Component<Props, State> {
         if (data === undefined) return;
 
         if (typeof data !== 'number') {
-          console.error('ArrowWidget only supports numeric data value');
+          l.error('ArrowWidget only supports numeric data value');
           return;
         }
         const { stats } = this.props.performancePanel;

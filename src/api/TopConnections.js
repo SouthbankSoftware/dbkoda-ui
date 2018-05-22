@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2018-03-27T10:39:44+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-05-21T12:02:42+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-22T11:29:52+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -42,10 +42,6 @@ export default class TopConnections {
     this.api = api;
 
     Broker.on(EventType.TOP_CONNECTIONS_DATA, ({ profileId, payload }) => {
-      const { alias } = this.store.profileStore.profiles.get(profileId);
-
-      console.log(`%cTop connections for ${alias} (${profileId}):`, 'color: green');
-      console.table(payload);
       this.api.sendMsgToPerformanceWindow({
         profileId,
         command: 'mw_topConnectionsData',
@@ -61,7 +57,7 @@ export default class TopConnections {
   _handleError = (profileId: UUID, err: Error | string, level: 'error' | 'warn' = 'error') => {
     const { alias } = this.store.profileStore.profiles.get(profileId);
 
-    console.error(err);
+    l.error(err);
     // $FlowFixMe
     const errorMessage = `Profile ${alias} (${profileId}) ${level}: ${err.message || err}`;
 
@@ -113,7 +109,7 @@ export default class TopConnections {
         }
       })
       .then(res => {
-        console.log(res);
+        l.info(res);
       })
       .catch(err => {
         this._handleError(profileId, err);

@@ -278,8 +278,8 @@ export default class TreeView extends React.Component {
       this.props.treeState.resetRootNode();
     } else if (nodeData.type === 'collection') {
       // this.props.treeState.selectNode(nodeData);
-      console.log('Double clicked Node:');
-      console.log('Collection: ', nodeData.text);
+      l.info('Double clicked Node:');
+      l.info('Collection: ', nodeData.text);
       this.props.api.treeApi.openNewTableViewForCollection(
         {
           collection: nodeData.text,
@@ -334,7 +334,7 @@ export default class TreeView extends React.Component {
     if (isTriggeredFromButton) {
       this.nodeRightClicked = this.props.store.treePanel.nodeOpened;
     }
-    console.log(this.nodeRightClicked);
+    l.info(this.nodeRightClicked);
     const action = findElementAttributeUpward(e.target, 'data-id');
     const noDialog = this.getNoDialogByName(action);
     this.actionSelected = this.getActionByName(action);
@@ -365,7 +365,7 @@ export default class TreeView extends React.Component {
           );
           break;
         default:
-          console.error('Tree Action not defined: ', action);
+          l.error('Tree Action not defined: ', action);
           break;
       }
     } else if (this.nodeRightClicked) {
@@ -459,7 +459,7 @@ export default class TreeView extends React.Component {
 
   @action.bound
   handleDrillDownloaderCommand = (event, command, message) => {
-    console.log('command: ', command, ', message:', message);
+    l.info('command: ', command, ', message:', message);
     if (command === 'START') {
       if (message === 'drill') {
         this.props.store.treePanel.drillStatusMsg = globalString(
@@ -475,7 +475,7 @@ export default class TreeView extends React.Component {
       this.props.store.treePanel.drillDownloadProgress = message;
     } else if (command === 'COMPLETE') {
       const drillCmd = message.split('|');
-      console.log('drillCmd:', drillCmd);
+      l.info('drillCmd:', drillCmd);
       if (drillCmd[0] == 'drillCmd') {
         this.props.store.treePanel.drillDownloadProgress = message;
         this.props.store.treePanel.drillStatusMsg = globalString(
@@ -511,7 +511,7 @@ export default class TreeView extends React.Component {
 
     return new Promise((resolve, reject) => {
       const drillPathExists = electronFS.existsSync(this.props.config.settings.drillCmd);
-      console.log('drillPathExists::', drillPathExists);
+      l.info('drillPathExists::', drillPathExists);
       if (
         this.props.config.settings.drillCmd == null ||
         this.props.config.settings.drillCmd == '' ||
@@ -558,7 +558,7 @@ export default class TreeView extends React.Component {
       const drillCtrlPathExists = electronFS.existsSync(
         this.props.config.settings.drillControllerCmd
       );
-      console.log('drillCtrlPathExists::', drillCtrlPathExists);
+      l.info('drillCtrlPathExists::', drillCtrlPathExists);
       if (
         this.props.config.settings.drillControllerCmd == null ||
         this.props.config.settings.drillControllerCmd == '' ||
@@ -626,7 +626,7 @@ export default class TreeView extends React.Component {
           });
       })
       .catch(() => {
-        console.log('user canceled');
+        l.info('user canceled');
       });
   };
   onDrillEditorAdded = (response, errorCode) => {

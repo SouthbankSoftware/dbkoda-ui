@@ -169,7 +169,7 @@ export default class AggregationApi {
               resolve(res);
             })
             .catch(e => {
-              console.error(e);
+              l.error(e);
               reject();
             });
         }

@@ -35,11 +35,11 @@ export const RedundantDBIndex = {
   dbkoda_RedundantDBPreFill: params => {
     const db = params.Database;
     const cmd = `dbkInx.redundantDbIndexes("${db}");`;
-    console.log(cmd);
+    l.info(cmd);
     return cmd;
   },
   dbkoda_RedundantDBPreFill_parse: indexList => {
-    console.log(indexList);
+    l.info(indexList);
     const output = {};
     output.UnecessaryIndexes = [];
     indexList.forEach(r => {
@@ -52,7 +52,7 @@ export const RedundantDBIndex = {
         becauseKeys: r.becauseKeys
       });
     });
-    console.log(output);
+    l.info(output);
     return output;
   }
 };

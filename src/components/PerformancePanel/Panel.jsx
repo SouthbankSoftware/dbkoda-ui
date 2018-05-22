@@ -153,7 +153,7 @@ export default class PerformancePanel extends React.Component<Props> {
                   className="reset-button pt-button pt-intent-primary"
                   text="Reset Connections"
                   onClick={() => {
-                    console.debug('Reset Performance Panel Clicked...');
+                    l.debug('Reset Performance Panel Clicked...');
                     // $FlowFixMe
                     resetPerformancePanel();
                   }}

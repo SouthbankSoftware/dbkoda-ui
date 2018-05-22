@@ -32,7 +32,7 @@ import * as common from './Common.js';
 
 export const DeleteDocuments = {
   dbkoda_DeleteDocumentsPreFill: params => {
-    // console.log('invoked dbkoda_DeleteDocumentsPreFill');
+    // l.info('invoked dbkoda_DeleteDocumentsPreFill');
     const data = {};
     data.Database = params.Database;
     data.CollectionName = params.CollectionName;
@@ -40,7 +40,7 @@ export const DeleteDocuments = {
     data.FilterKeys.push({ AttributeName: '_id', Operator: '$eq', Value: '"SomeValue"' });
     data.DeleteMany = false;
     data.UseOr = false;
-    // console.log('returns', data);
+    // l.info('returns', data);
     return data;
   },
   dbkoda_listdb: common.dbkoda_listdb,

@@ -55,12 +55,12 @@ export default class SshTerminal extends React.PureComponent<Props> {
   _attach = (xterm: Xterm) => {
     const { id } = this.props;
 
-    IS_DEVELOPMENT && console.debug('Attaching...');
+    IS_DEVELOPMENT && l.debug('Attaching...');
 
     this.terminalService
       .get(id)
       .then(() => {
-        IS_DEVELOPMENT && console.debug('Terminal already exists');
+        IS_DEVELOPMENT && l.debug('Terminal already exists');
         this._send('\f');
       })
       .catch(err => {
@@ -75,7 +75,7 @@ export default class SshTerminal extends React.PureComponent<Props> {
       });
 
     this._receive = data => {
-      IS_DEVELOPMENT && console.debug('Receiving: ', JSON.stringify(data));
+      IS_DEVELOPMENT && l.debug('Receiving: ', JSON.stringify(data));
 
       xterm.write(data);
     };
@@ -88,7 +88,7 @@ export default class SshTerminal extends React.PureComponent<Props> {
   _detach = (xterm: Xterm) => {
     const { id } = this.props;
 
-    IS_DEVELOPMENT && console.debug('Detaching...');
+    IS_DEVELOPMENT && l.debug('Detaching...');
 
     this._receive && Broker.off(EventType.TERMINAL_DATA(id), this._receive);
 
@@ -104,7 +104,7 @@ export default class SshTerminal extends React.PureComponent<Props> {
   _send = (code: string) => {
     const { id } = this.props;
 
-    IS_DEVELOPMENT && console.debug('Sending: ', JSON.stringify(code));
+    IS_DEVELOPMENT && l.debug('Sending: ', JSON.stringify(code));
 
     this.terminalService.patch(id, {
       cmd: code

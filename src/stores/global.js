@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-15T12:06:44+10:00
+ * @Last modified time: 2018-05-22T11:56:28+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -326,7 +326,7 @@ export default class Store {
         id: this.profileStore.profiles.get(this.editorPanel.activeDropdownId).id
       })
       .then(res => {
-        console.debug('Created new editor for Aggregate Builder: ', res);
+        l.debug('Created new editor for Aggregate Builder: ', res);
         // Create new editor as normal, but with "aggregate" type.
         return this.api.setNewEditorState(res, {
           type: 'aggregate',
@@ -340,13 +340,12 @@ export default class Store {
       })
       .catch(err => {
         this.api.createNewEditorFailed();
-        console.error(err);
+        l.error('Failed to create new editor:', err);
         NewToaster.show({
           message: 'Error: ' + err.message,
           className: 'danger',
           icon: 'thumbs-down'
         });
-        logToMain('error', 'Failed to create new editor: ' + err);
       });
   }
 
@@ -394,7 +393,7 @@ export default class Store {
             .patch(editor.path, {
               watching: false
             })
-            .catch(console.error);
+            .catch(l.error);
         },
         {
           name: `Unwatch file changes for ${editorId}`
@@ -447,8 +446,7 @@ export default class Store {
       this.cleanStore(newStore);
       _.assign(this, newStore);
     } catch (err) {
-      console.error(err);
-      logToMain('error', err.message);
+      l.error(err);
     }
 
     return Promise.resolve();
@@ -699,17 +697,16 @@ export default class Store {
       })
       .catch(err => {
         if (err.code === 404) {
-          console.error(
-            "State store doesn't exist. A new one will be created after app close or refreshing"
+          l.error(
+            "State store doesn't exist. A new one will be created after app close or refreshing",
+            err
           );
-          logToMain('error', 'State store does not exist: ' + err);
           return this.loadRest().then(() => {
             Broker.emit(EventType.APP_READY);
           });
         }
 
-        console.error(err);
-        logToMain('error', 'Failed to load state store: ' + stateStorePath + ',' + err);
+        l.error(`Failed to load state store at ${stateStorePath}:`, err);
         Broker.emit(EventType.APP_CRASHED);
       });
   }
@@ -726,7 +723,7 @@ export default class Store {
         watching: false
       })
       .then(() => {})
-      .catch(console.error);
+      .catch(l.error);
   }
 
   /**

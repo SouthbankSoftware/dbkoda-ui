@@ -60,7 +60,7 @@ const CodeMirror = createReactClass({
   componentWillMount() {
     this.componentWillReceiveProps = debounce(this.componentWillReceiveProps, 0);
     if (this.props.path) {
-      console.error('Warning: react-codemirror: the `path` prop has been changed to `name`');
+      l.error('Warning: react-codemirror: the `path` prop has been changed to `name`');
     }
   },
   componentDidMount() {

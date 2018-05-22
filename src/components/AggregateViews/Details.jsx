@@ -101,7 +101,7 @@ export default class Details extends React.Component {
                 params[arg.name] = editor.blockList[editor.selectedBlock].attributeList;
                 break;
               default:
-                console.error(
+                l.error(
                   'Invalid arguments to Aggregate Block (This should not really happen :( - ',
                   args
                 );
@@ -192,7 +192,7 @@ export default class Details extends React.Component {
 
   @action.bound
   _onApplyBlock() {
-    console.debug('Update aggregate builder...');
+    l.debug('Update aggregate builder...');
     Broker.emit(EventType.AGGREGATE_UPDATE, this.props.store.editorPanel.activeEditorId);
   }
 

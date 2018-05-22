@@ -88,7 +88,7 @@ export default class TreePanel extends React.Component {
                 }
               })
               .catch(err => {
-                console.error(err.stack);
+                l.error(err.stack);
                 this.updateStatus('FAILED');
                 DBKodaToaster(Position.LEFT_BOTTOM).show({
                   message: err.message,
