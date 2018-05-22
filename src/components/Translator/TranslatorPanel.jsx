@@ -2,7 +2,7 @@
  * Created by joey on 12/9/17
  *
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T13:05:21+11:00
+ * @Last modified time: 2018-05-22T11:52:27+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -84,21 +84,20 @@ export default class TranslatorPanel extends React.Component {
     let newValue = null;
     try {
       newValue = translator.translate(value, syntax);
-    } catch (_err) {
-      l.error(_err);
-      logToMain('error', 'Failed to translate shells cript to driver: ' + _err);
+    } catch (err) {
+      l.error('Failed to translate shells cript to driver:', err);
       let msg = 'Error: Failed to translate shell script.';
-      if (_err.lineNumber > 0 && _err.description) {
-        msg += `<br>${_err.description} on line ${_err.lineNumber}`;
+      if (err.lineNumber > 0 && err.description) {
+        msg += `<br>${err.description} on line ${err.lineNumber}`;
         if (this.props.editorCodeMirror) {
           this.props.editorCodeMirror.focus();
-          this.props.editorCodeMirror.setCursor({ line: _err.lineNumber - 1 });
+          this.props.editorCodeMirror.setCursor({ line: err.lineNumber - 1 });
           this.props.editorCodeMirror.addLineClass(
-            _err.lineNumber - 1,
+            err.lineNumber - 1,
             'background',
             'error-syntax-translator'
           );
-          newSyntaxErrors.push({ lineNumber: _err.lineNumber - 1 });
+          newSyntaxErrors.push({ lineNumber: err.lineNumber - 1 });
         }
       }
       // failed to translate code
@@ -135,8 +134,7 @@ export default class TranslatorPanel extends React.Component {
       .update(this.props.profileId, { commands: this.state.value, shellId: this.props.shellId })
       .then(_doc => {})
       .catch(err => {
-        l.error(err.message);
-        logToMain('error', 'Failed to execute commands through driver: ' + err);
+        l.error('Failed to execute commands through driver:', err.message);
         DBKodaToaster().show({
           message: <span dangerouslySetInnerHTML={{ __html: err.message }} />, // eslint-disable-line react/no-danger
           className: 'danger',

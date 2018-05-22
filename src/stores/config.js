@@ -5,7 +5,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-08T10:31:05+10:00
+ * @Last modified time: 2018-05-22T11:54:31+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -81,7 +81,7 @@ export default class Config {
 
           sendToMain('configLoaded', payload);
 
-          logToMain('debug', 'config loaded');
+          l.debug('config loaded');
         })
       )
       .catch(err => {

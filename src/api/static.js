@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T09:42:43+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-20T17:18:07+10:00
+ * @Last modified time: 2018-05-22T11:43:12+10:00
  */
 
 import { Doc } from 'codemirror';
@@ -79,8 +79,7 @@ export default class StaticApi {
           });
         })
         .catch(error => {
-          l.error(error);
-          logToMain('error', 'Error while parsing JSON:' + error);
+          l.error('Error while parsing JSON:', error);
         });
     });
   }
@@ -224,8 +223,6 @@ export default class StaticApi {
   }
 
   static getDocumentAtLine(editorId, lineNumber, direction, lines, cm) {
-    l.info('getDocumentAtLine()');
-    l.info(lines.start);
     const startLine = cm.getLine(lineNumber);
     // Skip these lines to continue reading result set
     if (['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(startLine)) {

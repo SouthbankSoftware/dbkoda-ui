@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-04-27T10:41:06+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-22T11:57:35+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -90,7 +90,7 @@ class PerformanceWindow extends React.Component {
   @action.bound
   _handleVisibilityChange() {
     if (document.hidden) {
-      logToMain('info', 'becomes hidden');
+      l.notice('becomes hidden');
 
       const {
         store: { performancePanel }
@@ -98,7 +98,7 @@ class PerformanceWindow extends React.Component {
 
       detachFromMobx(performancePanel);
     } else {
-      logToMain('info', 'becomes visible');
+      l.notice('becomes visible');
 
       const {
         store: { performancePanel }

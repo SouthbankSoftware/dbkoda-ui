@@ -5,7 +5,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@sout≈hbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-21T15:26:51+10:00
+ * @Last modified time: 2018-05-22T11:25:08+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -370,12 +370,11 @@ export default class OutputApi {
         });
       },
       error => {
-        runInAction(() => {
-          NewToaster.show({
-            message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
-            className: 'danger',
-            icon: ''
-          });
+        l.error(error);
+        NewToaster.show({
+          message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+          className: 'danger',
+          icon: ''
         });
       }
     );
@@ -435,12 +434,11 @@ export default class OutputApi {
           });
         },
         error => {
-          runInAction(() => {
-            NewToaster.show({
-              message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
-              className: 'danger',
-              icon: ''
-            });
+          l.error(error);
+          NewToaster.show({
+            message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+            className: 'danger',
+            icon: ''
           });
         }
       );
@@ -456,12 +454,13 @@ export default class OutputApi {
           });
         },
         error => {
+          l.error(error);
+          NewToaster.show({
+            message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+            className: 'danger',
+            icon: ''
+          });
           runInAction(() => {
-            NewToaster.show({
-              message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
-              className: 'danger',
-              icon: ''
-            });
             this.store.outputs.get(outputId)[displayType] = {
               json: false,
               firstLine: false,

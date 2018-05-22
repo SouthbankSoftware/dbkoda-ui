@@ -5,7 +5,7 @@
  * @Date:   2017-06-20T15:09:51+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-15T11:55:49+10:00
+ * @Last modified time: 2018-05-22T11:43:26+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -198,8 +198,7 @@ export default class Analytics extends React.Component<Props> {
           );
         })
         .catch(err => {
-          l.error(err);
-          logToMain('error', 'Failed to send event to GA: ' + err);
+          l.error('Failed to send event to GA:', err);
         });
     }
   };

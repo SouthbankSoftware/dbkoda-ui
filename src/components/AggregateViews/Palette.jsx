@@ -62,6 +62,11 @@ export default class Palette extends React.Component {
 
   @action.bound
   addBlock(blockType, position) {
+    runInAction('Agg Builder no longer loading', () => {
+      this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId
+      ).isAggregateLoading = true;
+    });
     if (
       this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList.length ===
       0
@@ -131,8 +136,18 @@ export default class Palette extends React.Component {
               // Check for error.
               l.error('updateResultSet: ', res);
             }
+            runInAction('Agg Builder no longer loading', () => {
+              this.props.store.editors.get(
+                this.props.store.editorPanel.activeEditorId
+              ).isAggregateLoading = false;
+            });
           })
           .catch(e => {
+            runInAction('Agg Builder no longer loading', () => {
+              this.props.store.editors.get(
+                this.props.store.editorPanel.activeEditorId
+              ).isAggregateLoading = false;
+            });
             l.error(e);
           });
       });
@@ -463,9 +478,6 @@ export default class Palette extends React.Component {
     editor.selectedBlock = position;
     this.props.store.editorPanel.updateAggregateDetails = true;
   }
-
-  @action.bound
-  updatePreviousBlocks() {}
 
   /**
    *

@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2018-03-27T10:39:44+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-05-21T12:02:42+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-22T11:29:52+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -42,10 +42,6 @@ export default class TopConnections {
     this.api = api;
 
     Broker.on(EventType.TOP_CONNECTIONS_DATA, ({ profileId, payload }) => {
-      const { alias } = this.store.profileStore.profiles.get(profileId);
-
-      l.info(`%cTop connections for ${alias} (${profileId}):`, 'color: green');
-      l.table(payload);
       this.api.sendMsgToPerformanceWindow({
         profileId,
         command: 'mw_topConnectionsData',

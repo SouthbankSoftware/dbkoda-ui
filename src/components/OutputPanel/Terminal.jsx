@@ -184,7 +184,13 @@ class Terminal extends React.Component {
       cm.on(
         'change',
         _.debounce(() => {
-          cm.execCommand('autocomplete');
+          if (
+            this.state.historyCursor >
+              this.props.store.outputs.get(this.props.id).commandHistory.length - 1 &&
+            this.state.command
+          ) {
+            cm.execCommand('autocomplete');
+          }
         }, 400)
       );
     }

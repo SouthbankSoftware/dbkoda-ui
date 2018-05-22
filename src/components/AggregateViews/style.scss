@@ -283,7 +283,7 @@ div.Pane.vertical.Pane1 {
                             width: 100%;
                             height: 30px;
                             font-size: 18px;
-                            cursor: all-scroll;
+                            cursor: -webkit-grab;
                             flex-grow: 1;
 
                             div.blockPalletteWrapper {
@@ -291,7 +291,7 @@ div.Pane.vertical.Pane1 {
                               flex-direction: row;
                               height: 100%;
                               width: 100%;
-                              cursor: all-scroll;
+                              cursor: -webkit-grab;
                               flex-grow: 1;
 
                               svg.dbKodaSVG {
