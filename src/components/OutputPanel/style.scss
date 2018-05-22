@@ -210,8 +210,9 @@
             top: 50%;
             bottom: 50%;
             transform: translate(-85%, -50%);
-            width: 40%;
-            height: 40%;
+            width: 60%;
+            height: 60%;
+            padding-left: 2px;
             fill: $buttonTertiaryIcon;
             path.st0 {
               fill: none;
@@ -224,6 +225,7 @@
           svg.dbKodaSVG {
             fill: $buttonDangerIcon;
           }
+          border: $buttonDangerBackground;
         }
         .clearOutputBtn:hover {
           background: $buttonDangerBackgroundHover !important;
