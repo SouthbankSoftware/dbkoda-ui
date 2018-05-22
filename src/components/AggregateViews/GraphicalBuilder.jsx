@@ -87,8 +87,6 @@ export default class GraphicalBuilder extends React.Component {
     this.currentDB = this.editor.collection.refParent.text;
     this.currentCollection = this.editor.collection.text;
 
-    // Set loading icon in graphical builder!
-
     // Add aggregate object to shell.
     const service = featherClient().service('/mongo-sync-execution');
     service.timeout = 30000;
@@ -99,7 +97,9 @@ export default class GraphicalBuilder extends React.Component {
       })
       .then(res => {
         this.editor.aggregateID = JSON.parse(res).id;
-        this.state.isLoading = false;
+        runInAction('Agg Builder no longer loading', () => {
+          this.editor.isAggregateLoading = false;
+        });
         if (this.editor.blockList.length === 0) {
           this.addStartBlock();
         }
@@ -110,7 +110,9 @@ export default class GraphicalBuilder extends React.Component {
         } else {
           this.state.failureReason = 'Unknown';
         }
-        this.state.isLoading = false;
+        runInAction('Agg Builder no longer loading', () => {
+          this.editor.isAggregateLoading = false;
+        });
         this.setState({ failed: true });
         console.error(err);
       });
@@ -130,7 +132,15 @@ export default class GraphicalBuilder extends React.Component {
   @action.bound
   addStartBlock() {
     this.getBlockAttributes(0).then(res => {
-      this.addBlockToEditor('Start', 0, res);
+      this.addBlockToEditor('Start', 0, res)
+        .then(() => {
+          runInAction('Aggregate builder is no longer loading', () => {
+            this.editor.isAggregateLoading = false;
+          });
+        })
+        .catch(e => {
+          l.error('Failed to add Start block to Agg Builder with error ' + e);
+        });
     });
   }
 
@@ -967,7 +977,9 @@ export default class GraphicalBuilder extends React.Component {
           _.forEach(fileNames, v => {
             this.props.store
               .openFile(v, ({ _id, content }) => {
-                this.setState({ isLoading: true });
+                runInAction('Agg Builder no longer loading', () => {
+                  this.editor.isAggregateLoading = true;
+                });
                 const contentObject = JSON.parse(content);
                 this.importFile(contentObject);
               })
@@ -1120,7 +1132,9 @@ export default class GraphicalBuilder extends React.Component {
             className: 'danger',
             icon: 'thumbs-down'
           });
-          this.setState({ isLoading: false });
+          runInAction('Agg Builder no longer loading', () => {
+            this.editor.isAggregateLoading = false;
+          });
           this.forceUpdate();
           console.error(err);
         });
@@ -1130,7 +1144,9 @@ export default class GraphicalBuilder extends React.Component {
         className: 'danger',
         icon: 'thumbs-down'
       });
-      this.setState({ isLoading: false });
+      runInAction('Agg Builder no longer loading', () => {
+        this.editor.isAggregateLoading = false;
+      });
       this.forceUpdate();
       console.error('Invalid import object: ', contentObject);
     }
@@ -1258,7 +1274,9 @@ export default class GraphicalBuilder extends React.Component {
             className: 'success',
             icon: 'pt-icon-thumbs-up'
           });
-          this.setState({ isLoading: false });
+          runInAction('Agg Builder no longer loading', () => {
+            this.editor.isAggregateLoading = false;
+          });
         });
       });
     });
@@ -1354,7 +1372,7 @@ export default class GraphicalBuilder extends React.Component {
         >
           <p>{globalString('aggregate_builder/alerts/importWarningText')}</p>
         </Alert>
-        {!this.state.isLoading ? (
+        {!this.editor.isAggregateLoading ? (
           <ul className="graphicalBuilderBlockList">
             <FirstBlockTarget />
             {this.props.store.editors.get(this.state.id).blockList.map((indexValue, index) => {

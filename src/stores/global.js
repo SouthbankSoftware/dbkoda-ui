@@ -334,6 +334,7 @@ export default class Store {
             text: nodeRightClicked.text,
             refParent: { text: nodeRightClicked.refParent.text }
           },
+          isAggregateLoading: true,
           blockList: []
         });
       })
@@ -496,6 +497,7 @@ export default class Store {
     newStore.editors.forEach(value => {
       value.executing = false;
       value.status = ProfileStatus.CLOSED;
+      value.isAggregateLoading = false;
     });
 
     // Outputs:

@@ -28,11 +28,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import autobind from 'autobind-decorator';
 import { inject } from 'mobx-react';
 import { action } from 'mobx';
 import { DragSource, DropTarget } from 'react-dnd';
 import { DragItemTypes } from '#/common/Constants.js';
-import DragIcon from '../../../styles/icons/drag-icon.svg';
+import DragIcon from '../../../styles/icons/add-icon.svg';
 import BlockIcon from '../../../styles/icons/center-block.svg';
 import BlockTopIcon from '../../../styles/icons/round-top-block.svg';
 import BlockBottomIcon from '../../../styles/icons/round-bottom-block.svg';
@@ -115,6 +116,12 @@ export default class Block extends React.Component {
     };
   }
 
+  @autobind
+  _handleDoubleClick(event) {
+    l.debug(event);
+    this.props.addBlock(this.state.type, 'END');
+  }
+
   renderStartBlock() {
     const connectDragSource = this.props.connectDragSource; // eslint-disable-line
     const connectDropTarget = this.props.connectDropTarget;
@@ -182,7 +189,7 @@ export default class Block extends React.Component {
     }
     return connectDragSource(
       connectDropTarget(
-        <div className={classes}>
+        <div onDoubleClick={this._handleDoubleClick} className={classes}>
           {!this.state.concrete && (
             <div className="blockPalletteWrapper">
               <DragIcon
