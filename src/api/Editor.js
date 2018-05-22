@@ -266,11 +266,6 @@ export default class EditorApi {
       this.store.drawer.drawerChild = DrawerPanes.DEFAULT;
     }
 
-    NewToaster.show({
-      message: globalString('editor/toolbar/connectionSuccess'),
-      icon: 'pt-icon-thumbs-up',
-      className: 'success'
-    });
     return editorId;
   }
 
