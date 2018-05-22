@@ -79,7 +79,7 @@ export default class StaticApi {
           });
         })
         .catch(error => {
-          console.error(error);
+          l.error(error);
           logToMain('error', 'Error while parsing JSON:' + error);
         });
     });
@@ -138,10 +138,10 @@ export default class StaticApi {
         // Probably invalid, let's see if there is something valid in there.
         if (jsonStr.match(/^.*{.*}/gim)) {
           // Lets try removing the incorrect json before hand.
-          console.warn('Initial: ', jsonStr);
+          l.warn('Initial: ', jsonStr);
           jsonStr = jsonStr.replace(/^.*\);?/gm, '');
-          console.warn('Right click action returned invalid result, tried replacing.');
-          console.warn('Replaced: ', jsonStr);
+          l.warn('Right click action returned invalid result, tried replacing.');
+          l.warn('Replaced: ', jsonStr);
         }
       }
 
@@ -224,8 +224,8 @@ export default class StaticApi {
   }
 
   static getDocumentAtLine(editorId, lineNumber, direction, lines, cm) {
-    console.log('getDocumentAtLine()');
-    console.log(lines.start);
+    l.info('getDocumentAtLine()');
+    l.info(lines.start);
     const startLine = cm.getLine(lineNumber);
     // Skip these lines to continue reading result set
     if (['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(startLine)) {
@@ -244,7 +244,7 @@ export default class StaticApi {
     }
     if (startLine[0] === '{') {
       if (!cm.getLine(lineNumber - 1)) {
-        console.info(
+        l.info(
           'Tried to parse a non-existing line at',
           lineNumber,
           ' + or - 1 : Ending parsing at this line.'
@@ -338,18 +338,18 @@ export default class StaticApi {
             typeof row[fieldName] === 'number' ||
             typeof row[fieldName] === 'boolean'
           ) {
-            console.log(`${fieldName}: ${JSON.stringify(row[fieldName])}`);
+            l.info(`${fieldName}: ${JSON.stringify(row[fieldName])}`);
             return JSON.stringify(row[fieldName]);
           }
-          console.log(`${fieldName}: "${JSON.stringify(row[fieldName]).replace(/"/g, "'")}"`);
+          l.info(`${fieldName}: "${JSON.stringify(row[fieldName]).replace(/"/g, "'")}"`);
           return `"${JSON.stringify(row[fieldName]).replace(/"/g, "'")}"`;
         })
         .join(',')
         .concat('\r\n');
       return newRow;
     });
-    console.log(headings.join(','));
-    console.log(csv);
+    l.info(headings.join(','));
+    l.info(csv);
     return `${headings.join(',')}\r\n${csv.join('')}`;
   }
 }

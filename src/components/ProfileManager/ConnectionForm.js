@@ -292,7 +292,7 @@ export class ConnectionForm extends JsonForm {
    */
   getProfileFromSchema(formData): Profile {
     const profile = {};
-    console.log('getProfileFromInstance:', formData);
+    l.info('getProfileFromInstance:', formData);
     for (const subform in formData) {
       if (formData.hasOwnProperty(subform)) {
         formData[subform].fields.forEach(field => {
@@ -316,9 +316,9 @@ export class ConnectionForm extends JsonForm {
    */
   onConnect() {
     const result = this.validateForm();
-    console.log('Validation: ', result.status, result.formData);
+    l.info('Validation: ', result.status, result.formData);
     const profile = this.getProfileFromSchema(result.formData);
-    console.log('Profile:', profile);
+    l.info('Profile:', profile);
     return this.api.connectProfile(profile);
   }
   /**
@@ -326,9 +326,9 @@ export class ConnectionForm extends JsonForm {
    */
   onSave() {
     const result = this.validateForm();
-    console.log('Validation: ', result.status, result.formData);
+    l.info('Validation: ', result.status, result.formData);
     const profile = this.getProfileFromSchema(result.formData);
-    console.log('Profile:', profile);
+    l.info('Profile:', profile);
     return this.api.saveProfile(profile);
   }
   /**
@@ -336,9 +336,9 @@ export class ConnectionForm extends JsonForm {
    */
   onTest() {
     const result = this.validateForm();
-    console.log('Validation: ', result.status, result.formData);
+    l.info('Validation: ', result.status, result.formData);
     const profile = this.getProfileFromSchema(result.formData);
-    console.log('Profile:', profile);
+    l.info('Profile:', profile);
     profile.test = true;
     return this.api.connectProfile(profile);
   }
@@ -348,6 +348,6 @@ export class ConnectionForm extends JsonForm {
   onReset() {
     this.formErrors = [];
     this.loadDefaultSchema();
-    console.log('onReset:', this.formSchema);
+    l.info('onReset:', this.formSchema);
   }
 }

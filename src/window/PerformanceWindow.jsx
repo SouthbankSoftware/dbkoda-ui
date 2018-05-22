@@ -81,7 +81,7 @@ class PerformanceWindow extends React.Component {
 
   @action.bound
   _handleNavigatingAway(event) {
-    console.log(event);
+    l.info(event);
     document.removeEventListener('visibilitychange', this._handleVisibilityChange);
     this.props.api.sendCommandToMainProcess('pw_windowReload');
     this.props.api.closeShell();
@@ -118,7 +118,7 @@ class PerformanceWindow extends React.Component {
 
   @action.bound
   _errorHandler(err) {
-    console.log('received an error', err);
+    l.info('received an error', err);
     switch (err.code) {
       case 'SSH_NOT_ENABLED':
         this.setState({ sshStatus: Status.NOT_ENABLED });

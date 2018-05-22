@@ -5,7 +5,7 @@
  * @Date:   2018-05-04T10:41:36+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-15T11:28:13+10:00
+ * @Last modified time: 2018-05-22T10:25:55+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -154,115 +154,106 @@ export const initLoggingApi = (tags: string[]) => {
   console._error = console.error;
 
   global.logger = global.l = {
-    error: null,
-    warn: null,
-    notice: null,
-    info: null,
-    debug: null
-  };
+    error: (...args) => {
+      const results = [];
+      let resultsWithErrors;
+      const info = {};
 
-  _.forEach(l, (v, k) => {
-    if (v) return;
+      for (const arg of args) {
+        const argType = typeof arg;
+        let isIgnored = false;
 
-    l[k] = (...args) => {
-      if (k === 'error') {
-        const results = [];
-        let resultsWithErrors;
-        const info = {};
+        if (argType === 'object' && arg) {
+          const c = arg[infoSymbol];
 
-        for (const arg of args) {
-          const argType = typeof arg;
-          let isIgnored = false;
-
-          if (argType === 'object' && arg) {
-            const c = arg[infoSymbol];
-
-            if (c) {
-              isIgnored = true;
-              _.assign(info, c);
-            }
-
-            if (info.raygun !== false && arg instanceof Error) {
-              isIgnored = true;
-
-              if (!resultsWithErrors) {
-                // lazy init
-                resultsWithErrors = results.slice();
-              }
-
-              // shallow clone original error
-              info.error = Object.create(
-                Object.getPrototypeOf(arg),
-                // $FlowFixMe
-                Object.getOwnPropertyDescriptors(arg)
-              );
-
-              results.push(arg);
-              resultsWithErrors.push(arg.message);
-            }
+          if (c) {
+            isIgnored = true;
+            _.assign(info, c);
           }
 
-          if (!isIgnored) {
+          if (info.raygun !== false && arg instanceof Error) {
+            isIgnored = true;
+
+            if (!resultsWithErrors) {
+              // lazy init
+              resultsWithErrors = results.slice();
+            }
+
+            // shallow clone original error
+            info.error = Object.create(
+              Object.getPrototypeOf(arg),
+              // $FlowFixMe
+              Object.getOwnPropertyDescriptors(arg)
+            );
+
             results.push(arg);
-            resultsWithErrors && resultsWithErrors.push(arg);
+            resultsWithErrors.push(arg.message);
           }
         }
 
-        // stringify input args
-        // $FlowFixMe
-        info.message = util.format(...results);
-
-        if (info.error) {
-          // $FlowFixMe
-          info.error.message = util.format(...resultsWithErrors);
-          info.error.stack = info.error.stack.replace(
-            /^.*/,
-            `${info.error.constructor.name}: ${info.error.message}`
-          );
-        } else if (info.raygun !== false) {
-          info.error = new Error(info.message);
-        }
-
-        // $FlowFixMe
-        console._error(info.error);
-
-        const usePiggyback = !isRaygunEnabled && info.raygun !== false;
-
-        if (usePiggyback) {
-          if (info.tags) {
-            info.tags = [...defaultPiggybackTags, ...info.tags];
-          } else {
-            info.tags = defaultPiggybackTags;
-          }
-        }
-
-        // piggyback error via main (dbkoda)
-        logToMain('error', info.error.message, {
-          usePiggyback,
-          stack: info.error.stack,
-          info: usePiggyback ? _.omit(info, ['message', 'error']) : undefined
-        });
-
-        if (isRaygunEnabled && info.raygun !== false) {
-          sendError(info.error, info);
-        }
-      } else if (k === 'warn') {
-        console.warn(...args);
-
-        logToMain('warn', util.format(...args));
-      } else if (k === 'notice') {
-        console.log('%cNotice: ', 'color: green', ...args);
-
-        logToMain('notice', util.format(...args));
-      } else if (k === 'info') {
-        console.log(...args);
-      } else if (k === 'debug') {
-        if (!IS_PRODUCTION) {
-          console.log('%cDebug: ', 'color: blue', ...args);
+        if (!isIgnored) {
+          results.push(arg);
+          resultsWithErrors && resultsWithErrors.push(arg);
         }
       }
-    };
-  });
+
+      // stringify input args
+      // $FlowFixMe
+      info.message = util.format(...results);
+
+      if (info.error) {
+        // $FlowFixMe
+        info.error.message = util.format(...resultsWithErrors);
+        info.error.stack = info.error.stack.replace(
+          /^.*/,
+          `${info.error.constructor.name}: ${info.error.message}`
+        );
+      } else if (info.raygun !== false) {
+        info.error = new Error(info.message);
+      }
+
+      // $FlowFixMe
+      console._error(info.error);
+
+      const usePiggyback = !isRaygunEnabled && info.raygun !== false;
+
+      if (usePiggyback) {
+        if (info.tags) {
+          info.tags = [...defaultPiggybackTags, ...info.tags];
+        } else {
+          info.tags = defaultPiggybackTags;
+        }
+      }
+
+      // piggyback error via main (dbkoda)
+      logToMain('error', info.error.message, {
+        usePiggyback,
+        stack: info.error.stack,
+        info: usePiggyback ? _.omit(info, ['message', 'error']) : undefined
+      });
+
+      if (isRaygunEnabled && info.raygun !== false) {
+        sendError(info.error, info);
+      }
+    },
+    warn: (...args) => {
+      console.warn(...args);
+
+      logToMain('warn', util.format(...args));
+    },
+    notice: (...args) => {
+      console.log('%cNotice: ', 'color: green', ...args);
+
+      logToMain('notice', util.format(...args));
+    },
+    info: console.log,
+    log: console.log,
+    debug: (...args) => {
+      if (!IS_PRODUCTION) {
+        console.log('%cDebug: ', 'color: blue', ...args);
+      }
+    }
+  };
 
   l._error = (...args) => {
     // $FlowFixMe

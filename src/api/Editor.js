@@ -97,16 +97,16 @@ export default class EditorApi {
         .catch(err => {
           this.createNewEditorFailed();
           // @TODO -> Object Object issue
-          console.error(err);
+          l.error(err);
           if (err.message == '[object Object]') {
-            console.error('Error retrieved from Primus');
+            l.error('Error retrieved from Primus');
           } else {
             NewToaster.show({
               message: 'Error: ' + err.message,
               className: 'danger',
               icon: 'thumbs-down'
             });
-            console.error(err.message);
+            l.error(err.message);
             logToMain('error', 'Error creating new editor: ' + err.message);
           }
         });
@@ -279,7 +279,7 @@ export default class EditorApi {
    */
   @action.bound
   closeNewFeaturesDialog() {
-    console.log('Hide New Features Dialog');
+    l.info('Hide New Features Dialog');
     this.store.editorPanel.showNewFeaturesDialog = false;
   }
 
@@ -305,7 +305,7 @@ export default class EditorApi {
         })
         .then()
         .catch(err => {
-          console.error('remove shell failed,', err);
+          l.error('remove shell failed,', err);
           logToMain('error', 'Failed to remove shell: ' + err);
         });
     }

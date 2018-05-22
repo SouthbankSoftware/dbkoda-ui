@@ -44,7 +44,7 @@ self.addEventListener(
           .replace(/="([^"]*)"/gm, '=\\"$1\\"');
       });
     try {
-      console.log(json);
+      l.info(json);
       // eslint-disable-next-line no-undef
       json = JSOL.parse(json);
     } catch (e) {

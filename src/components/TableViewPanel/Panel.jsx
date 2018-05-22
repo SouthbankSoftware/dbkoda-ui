@@ -79,12 +79,12 @@ export default class Panel extends React.Component {
 
   @action.bound
   onHeaderClick(string) {
-    if (this.debug) console.log('Clicked header: ', string);
+    if (this.debug) l.info('Clicked header: ', string);
   }
 
   @action.bound
   updateNestedState(number, state) {
-    if (this.debug) console.log('Set ', number, 'to ', state);
+    if (this.debug) l.info('Set ', number, 'to ', state);
     this.state.arrayState[number] = state;
   }
 
@@ -163,7 +163,7 @@ export default class Panel extends React.Component {
         </div>
       );
     }
-    if (this.debug) console.log(this.state.arrayState);
+    if (this.debug) l.info(this.state.arrayState);
     return (
       <div className="tableViewWrapper">
         <Toolbar

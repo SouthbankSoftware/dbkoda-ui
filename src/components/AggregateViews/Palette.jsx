@@ -106,7 +106,7 @@ export default class Palette extends React.Component {
                       editor.blockList[index].status = 'valid';
                     });
                   } else {
-                    console.error('Result[', index, '] is invalid: ', indexValue);
+                    l.error('Result[', index, '] is invalid: ', indexValue);
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
@@ -129,11 +129,11 @@ export default class Palette extends React.Component {
               this.clearResultsOutput(editor);
             } else {
               // Check for error.
-              console.error('updateResultSet: ', res);
+              l.error('updateResultSet: ', res);
             }
           })
           .catch(e => {
-            console.error(e);
+            l.error(e);
           });
       });
     }
@@ -301,7 +301,7 @@ export default class Palette extends React.Component {
             try {
               stepArray.push(stepJSON.replace(/\n/g, ' '));
             } catch (e) {
-              console.error('Block generated invalid JSON: ', block);
+              l.error('Block generated invalid JSON: ', block);
             }
           }
         });
@@ -343,7 +343,7 @@ export default class Palette extends React.Component {
           resolve(res);
         })
         .catch(e => {
-          console.error(e);
+          l.error(e);
           NewToaster.show({
             message: globalString('aggregate_builder/no_active_connection'),
             className: 'danger',
@@ -379,7 +379,7 @@ export default class Palette extends React.Component {
           resolve(res);
         })
         .catch(err => {
-          console.error(err);
+          l.error(err);
           reject(err);
         });
     });
@@ -410,7 +410,7 @@ export default class Palette extends React.Component {
         commands: AggregateCommands.ADD_STEP(editor.aggregateID, generatedCode, position)
       })
       .catch(err => {
-        console.error(err);
+        l.error(err);
       });
   }
 

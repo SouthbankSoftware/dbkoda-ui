@@ -222,7 +222,7 @@ export default class ListView extends React.Component {
           this.closeConnectionCloseAlert();
         })
         .catch(err => {
-          console.error('error:', err);
+          l.error('error:', err);
           logToMain('error', 'Failed to close profile: ' + err);
           NewToaster.show({
             message: 'Error: ' + err.message,
@@ -666,7 +666,7 @@ export default class ListView extends React.Component {
                   <AnchorButton
                     className="button"
                     onClick={() => {
-                      console.log('Open Context Menu');
+                      l.info('Open Context Menu');
                       [, this.state.targetProfile] = profiles[rowIndex];
                     }}
                   >
@@ -704,7 +704,7 @@ export default class ListView extends React.Component {
                 <AnchorButton
                   className="button"
                   onClick={() => {
-                    console.log('Open Context Menu');
+                    l.info('Open Context Menu');
                     [, this.state.targetProfile] = profiles[rowIndex];
                   }}
                 >

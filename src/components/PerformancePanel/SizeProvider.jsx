@@ -94,7 +94,7 @@ export default (ComposedComponent: ReactComponentType<any>) =>
           rowHeight
         });
       } else {
-        console.log(this.props.rowHeight);
+        l.info(this.props.rowHeight);
         const gridHeight = (this.props.rowHeight + margin[1]) * verticalGridSize;
         this.setState({
           width: node instanceof HTMLElement ? node.offsetWidth : this.state.width,

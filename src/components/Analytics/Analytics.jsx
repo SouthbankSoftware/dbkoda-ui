@@ -189,7 +189,7 @@ export default class Analytics extends React.Component<Props> {
       service
         .get(true)
         .then(result => {
-          console.debug('RESULT: ', result);
+          l.debug('RESULT: ', result);
           this._sendEvent(AnalyticsEvents.PING_HOME, 'Ping.daysSinceFirstPing', daysSince);
           this._sendEvent(
             AnalyticsEvents.PING_HOME,
@@ -198,7 +198,7 @@ export default class Analytics extends React.Component<Props> {
           );
         })
         .catch(err => {
-          console.error(err);
+          l.error(err);
           logToMain('error', 'Failed to send event to GA: ' + err);
         });
     }

@@ -50,7 +50,7 @@ export default class Password {
 
   @action.bound
   onPasswordReset() {
-    console.log('Due to too many login attempts, your password store has been reset!');
+    l.info('Due to too many login attempts, your password store has been reset!');
     this.closePasswordDialog();
     this.store.password.showResetDialog = true;
     this.config.patch({
@@ -60,7 +60,7 @@ export default class Password {
 
   @action.bound
   showPasswordDialog(verify: boolean = false) {
-    console.log('Show Password Dialog');
+    l.info('Show Password Dialog');
     this._setupKeyBind();
     this.store.password.verifyPassword = verify === true;
     this.store.password.showDialog = true;
@@ -68,7 +68,7 @@ export default class Password {
 
   @action.bound
   closePasswordDialog() {
-    console.log('Hide Password Dialog');
+    l.info('Hide Password Dialog');
     this._removeKeyBind();
     this.store.password.showDialog = false;
     this.store.password.initialPassword = '';
@@ -115,7 +115,7 @@ export default class Password {
       .service('master-pass')
       .create({ masterPassword: masterHash, profileIds })
       .then(missingProfileIds => {
-        console.log(`missingProfileIds: ${missingProfileIds}`);
+        l.info(`missingProfileIds: ${missingProfileIds}`);
         this.store.password.missingProfiles = missingProfileIds;
         if (!this.config.settings.passwordStoreEnabled) {
           this.config.patch({
@@ -125,7 +125,7 @@ export default class Password {
         this.closePasswordDialog();
       })
       .catch(error => {
-        console.log(error);
+        l.info(error);
         if (error.code === 401) {
           NewToaster.show({
             message: `${globalString('password_dialog/login_error_message')}`,

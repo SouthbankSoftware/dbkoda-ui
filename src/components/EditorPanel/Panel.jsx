@@ -537,7 +537,7 @@ export default class Panel extends React.Component {
         })
         .catch(e => {
           if (e) {
-            console.error(e);
+            l.error(e);
           }
         });
     }

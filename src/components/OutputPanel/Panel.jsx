@@ -156,7 +156,7 @@ export default class Panel extends React.Component<Props> {
         this.forceUpdate();
         break;
       default:
-        console.error('Closing unknown tab type?');
+        l.error('Closing unknown tab type?');
         break;
     }
 
@@ -281,7 +281,7 @@ export default class Panel extends React.Component<Props> {
   @action.bound
   changeTab(newTab: string) {
     if (IS_DEVELOPMENT) {
-      console.log(`changeTab(${newTab})`);
+      l.info(`changeTab(${newTab})`);
     }
     // Check if the tab has just been closed, if so, don't swap to it:
     if (this.closingTab) {

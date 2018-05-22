@@ -225,7 +225,7 @@ class App extends React.Component {
             resetHighWaterMark={() => api.resetHighWaterMark(store.performancePanel.profileId)}
             resetPerformancePanel={() => {
               api.resetPerformancePanel(store.performancePanel.profileId);
-              console.log('!!!');
+              l.info('!!!');
             }}
           />
         ) : null}

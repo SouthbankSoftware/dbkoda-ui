@@ -145,7 +145,7 @@ export default class OutputApi {
         }
       }
     } catch (err) {
-      console.error(err);
+      l.error(err);
     }
 
     Broker.on(
@@ -284,7 +284,7 @@ export default class OutputApi {
         }
       }
     } catch (err) {
-      console.error(err);
+      l.error(err);
     }
   }
 
@@ -406,7 +406,7 @@ export default class OutputApi {
       lines.end = cm.lineCount();
       StaticApi.parseDefaultTableJson(jsonStr, lines, cm, outputId).then(
         result => {
-          console.log(result);
+          l.info(result);
           runInAction(() => {
             this.store.outputs.get(outputId)[displayType] = {
               json: result,
@@ -566,7 +566,7 @@ export default class OutputApi {
   // $FlowFixMe
   openView(context: OutputToolbarContext) {
     if (IS_DEVELOPMENT) {
-      console.log('Opening Output View: ', context);
+      l.info('Opening Output View: ', context);
     }
     // $FlowFixMe
     const { activeEditorId } = this.store.editorPanel;

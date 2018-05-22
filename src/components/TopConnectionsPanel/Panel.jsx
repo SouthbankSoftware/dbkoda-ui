@@ -119,7 +119,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   onAutoRefreshCheckboxToggle(e) {
     const fieldValue = e.target.checked === true;
     const fieldName = e.target.id;
-    console.log(fieldName, ':', fieldValue);
+    l.info(fieldName, ':', fieldValue);
     this.setState({ autoRefreshTopCon: fieldValue });
     if (fieldValue && this.state.autoRefreshTimeout > 0) {
       this.setTimerForUpdate();
@@ -133,7 +133,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
 
   @autobind
   onAutoRefreshTimeoutChange(value) {
-    console.log('onAutoRefreshTimeoutChange:', value);
+    l.info('onAutoRefreshTimeoutChange:', value);
     this.setState({ autoRefreshTimeout: value });
     if (value > 0 && this.state.autoRefreshTopCon) {
       this.setTimerForUpdate();

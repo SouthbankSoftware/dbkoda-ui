@@ -50,7 +50,7 @@ export const RedundantIndex = {
     return `db.getSiblingDB("${db}").getCollection("${collection}").getIndexes()`;
   },
   dbkoda_DropUnecessaryPreFill_parse: existingIndexes => {
-    console.log(existingIndexes);
+    l.info(existingIndexes);
     const ns = existingIndexes[0].ns;
     const dbName = ns.split('.')[0];
     const collectionName = ns.split('.')[1];

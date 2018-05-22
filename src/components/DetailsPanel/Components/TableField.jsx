@@ -54,7 +54,7 @@ export default observer(({ field, data }) => {
       tableRows.push(<tr>{tableCells}</tr>);
     }
   } catch (e) {
-    console.error(e);
+    l.error(e);
   }
 
   return (

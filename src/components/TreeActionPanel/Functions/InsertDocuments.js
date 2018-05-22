@@ -32,11 +32,11 @@ import * as common from './Common.js';
 
 export const InsertDocuments = {
   dbkoda_InsertDocumentsPreFill: params => {
-    // console.log('invoked dbkoda_DeleteDocumentsPreFill');
+    // l.info('invoked dbkoda_DeleteDocumentsPreFill');
     const data = {};
     data.Database = params.Database;
     data.CollectionName = params.CollectionName;
-    console.log('returns', data);
+    l.info('returns', data);
     data.Ordered = false;
     return data;
   },

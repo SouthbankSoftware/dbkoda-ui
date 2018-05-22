@@ -45,7 +45,7 @@ function mongoPortOutputI(port, cmds) {
     mongo.stdin.write('\nexit;\n');
     let output = '';
     mongo.stderr.on('data', data => {
-      if (debug) console.log(`stderr: ${data}`);
+      if (debug) l.info(`stderr: ${data}`);
     });
     mongo.stdout.on('data', stdOut => {
       output += stdOut;

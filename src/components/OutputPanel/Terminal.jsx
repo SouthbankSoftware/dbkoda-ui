@@ -290,7 +290,7 @@ class Terminal extends React.Component {
     const outputCm = this.props.store.outputPanel.editorRefs[activeEditorId].getCodeMirror();
     this.props.store.editors.get(activeEditorId).lastExecutionStart = Date.now();
     this.props.store.outputs.get(activeEditorId).currentExecStartLine = outputCm.lineCount();
-    console.log(
+    l.info(
       `Output Exec Start Line: ${this.props.store.outputs.get(activeEditorId).currentExecStartLine}`
     );
   }

@@ -177,7 +177,7 @@ export default class TerminalApi {
       featherClient()
         .terminalService.create(reqObject)
         .then(() => {
-          console.debug('Terminal created');
+          l.debug('Terminal created');
         })
         .catch(error => {
           Broker.emit(EventType.TERMINAL_ERROR(id), {
@@ -229,7 +229,7 @@ export default class TerminalApi {
 
   _handleServiceRemoveError(error) {
     if (error.code !== 404) {
-      console.error(error);
+      l.error(error);
     }
   }
 

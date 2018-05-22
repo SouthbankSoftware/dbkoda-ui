@@ -105,7 +105,7 @@ export default class TreeToolbar extends React.Component {
         });
       })
       .catch(err => {
-        console.error(err.stack);
+        l.error(err.stack);
         logToMain('error', 'Failed to refresh Tree: ' + err);
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: err.message,

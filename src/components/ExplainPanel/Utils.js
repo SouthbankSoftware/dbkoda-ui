@@ -304,7 +304,7 @@ export const insertExplainOnCommand = (command, explainParam = 'queryPlanner') =
       return appendNextOnExplainFind(command);
     }
   } catch (err) {
-    console.error('failed to parse script ', command);
+    l.error('failed to parse script ', command);
     logToMain('error', 'Failed to parse script to explain: ' + command);
   }
   return command;

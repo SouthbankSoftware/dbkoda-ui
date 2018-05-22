@@ -197,7 +197,7 @@ export default class TreeState {
         profile.shellVersion.match(/^2.*/gi) ||
         profile.shellVersion.match(/^1.*/gi)
       ) {
-        console.error(
+        l.error(
           'Sample attributes does not currently support Shell versions lower than 3.1, detected version is: ',
           profile.shellVersion
         );
@@ -234,17 +234,17 @@ export default class TreeState {
                   this.updateCallback();
                 },
                 err => {
-                  console.error('Failed: ', err);
+                  l.error('Failed: ', err);
                 }
               );
             },
             err => {
-              console.error('Failed: ', err);
+              l.error('Failed: ', err);
             }
           );
       }
     } else {
-      console.error(
+      l.error(
         'Sample Attributes could not determine the shell version, detected version is: ',
         profile.shellVersion
       );

@@ -100,7 +100,7 @@ class FeatherClient {
     });
 
     this.performanceSrv.on('performance-output', ({ output }) => {
-      console.log('get performance output ', output);
+      l.info('get performance output ', output);
     });
 
     this.loggerService = this.service('logger');
@@ -118,7 +118,7 @@ class FeatherClient {
     // Profiling event handling.
     this.profilingService = this.service('profile');
     this.profilingService.on('data', data => {
-      console.log('Recieved Data from Profile Service: ', data);
+      l.info('Recieved Data from Profile Service: ', data);
       Broker.emit(EventType.PROFILING_DATA, data);
     });
     this.profilingService.on('error', data => {

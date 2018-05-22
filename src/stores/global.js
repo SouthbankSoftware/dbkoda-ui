@@ -326,7 +326,7 @@ export default class Store {
         id: this.profileStore.profiles.get(this.editorPanel.activeDropdownId).id
       })
       .then(res => {
-        console.debug('Created new editor for Aggregate Builder: ', res);
+        l.debug('Created new editor for Aggregate Builder: ', res);
         // Create new editor as normal, but with "aggregate" type.
         return this.api.setNewEditorState(res, {
           type: 'aggregate',
@@ -339,7 +339,7 @@ export default class Store {
       })
       .catch(err => {
         this.api.createNewEditorFailed();
-        console.error(err);
+        l.error(err);
         NewToaster.show({
           message: 'Error: ' + err.message,
           className: 'danger',
@@ -393,7 +393,7 @@ export default class Store {
             .patch(editor.path, {
               watching: false
             })
-            .catch(console.error);
+            .catch(l.error);
         },
         {
           name: `Unwatch file changes for ${editorId}`
@@ -446,7 +446,7 @@ export default class Store {
       this.cleanStore(newStore);
       _.assign(this, newStore);
     } catch (err) {
-      console.error(err);
+      l.error(err);
       logToMain('error', err.message);
     }
 
@@ -697,7 +697,7 @@ export default class Store {
       })
       .catch(err => {
         if (err.code === 404) {
-          console.error(
+          l.error(
             "State store doesn't exist. A new one will be created after app close or refreshing"
           );
           logToMain('error', 'State store does not exist: ' + err);
@@ -706,7 +706,7 @@ export default class Store {
           });
         }
 
-        console.error(err);
+        l.error(err);
         logToMain('error', 'Failed to load state store: ' + stateStorePath + ',' + err);
         Broker.emit(EventType.APP_CRASHED);
       });
@@ -724,7 +724,7 @@ export default class Store {
         watching: false
       })
       .then(() => {})
-      .catch(console.error);
+      .catch(l.error);
   }
 
   /**

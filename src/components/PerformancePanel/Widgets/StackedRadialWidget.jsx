@@ -314,7 +314,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
           (this._getOuterRadiusSize(data.index) - this._getInnerRadiusSize(data.index)) / 2
         );
     } catch (e) {
-      console.error('Caught Error: ', e);
+      l.error('Caught Error: ', e);
     }
   }
 
@@ -465,7 +465,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
 
         const latestValue = values.length > 0 ? values[values.length - 1].value : {};
         if (items.length == 1) {
-          console.error('Please use Radial and not StackedRadial for single item metrics.');
+          l.error('Please use Radial and not StackedRadial for single item metrics.');
           return;
         }
         if (latestValue === undefined) return;

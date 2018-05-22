@@ -127,7 +127,7 @@ export default class Panel extends React.Component {
             this.setState({ isUpdateDownloaded: false });
           }
         })
-        .catch(reason => console.log('user click no:', reason));
+        .catch(reason => l.info('user click no:', reason));
     } else if (this.state.isUpdateAvailable) {
       const downloadUpdate = remote.getGlobal('DownloadUpdate');
       downloadUpdate()
@@ -136,7 +136,7 @@ export default class Panel extends React.Component {
             this.setState({ isUpdateAvailable: false });
           }
         })
-        .catch(reason => console.log('user click no:', reason));
+        .catch(reason => l.info('user click no:', reason));
     }
   }
 
@@ -215,7 +215,7 @@ export default class Panel extends React.Component {
           if (IS_ELECTRON) {
             if (!filePath) {
               filePath = '/Users/mike/.dbKoda/';
-              console.error('Did not recieve a file path back from controller');
+              l.error('Did not recieve a file path back from controller');
               logToMain('error', 'Did not recieve a file path back from controller');
             }
             window.require('electron').shell.showItemInFolder(filePath);
@@ -283,7 +283,7 @@ export default class Panel extends React.Component {
           resolve(result);
         })
         .catch(err => {
-          console.error(err);
+          l.error(err);
           logToMain('error', 'Failed to create support bundle: ' + err);
           reject(err);
         });

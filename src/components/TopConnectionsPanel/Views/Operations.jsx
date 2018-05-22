@@ -88,7 +88,7 @@ export default class OperationsView extends React.Component<Props> {
 
   @autobind
   killProcessAction() {
-    console.log('kill operation action ');
+    l.info('kill operation action ');
     this.setState({
       removeOperationAlert: true
     });

@@ -102,14 +102,14 @@ export default class DrillApi {
         this.onDrillConnectionSuccess(res, query, profile, options);
       })
       .catch(err => {
-        console.error(err);
+        l.error(err);
         logToMain('error', 'Drill Response Error: ' + err);
         this.onFailCreate(options, err.code);
       });
   };
 
   onDrillConnectionSuccess(res, query, profile, options) {
-    console.log('Drill service result:', res);
+    l.info('Drill service result:', res);
     this.profileDBHash[query.alias] = {};
     this.profileDBHash[query.alias][query.db] = {
       id: res.id,
@@ -130,7 +130,7 @@ export default class DrillApi {
         schema: query.db
       })
       .then(res => {
-        console.log('result for init query: ', res);
+        l.info('result for init query: ', res);
       });
 
     if (options.cbFunc) {
@@ -139,7 +139,7 @@ export default class DrillApi {
   }
 
   onFailCreate(options, code) {
-    console.log('failed to launch or connect to drill');
+    l.info('failed to launch or connect to drill');
     if (options.cbFunc) {
       options.cbFunc('error', code);
     }
@@ -147,7 +147,7 @@ export default class DrillApi {
 
   @action.bound
   openEditorWithDrillProfileId = drillJdbcConnection => {
-    console.log(drillJdbcConnection.id, drillJdbcConnection.profile);
+    l.info(drillJdbcConnection.id, drillJdbcConnection.profile);
     this.api.addDrillEditor(drillJdbcConnection.profile, {
       shellId: drillJdbcConnection.id,
       type: EditorTypes.DRILL,
@@ -183,7 +183,7 @@ export default class DrillApi {
   };
 
   onDrillConnectionDeleteSuccess(res, query) {
-    console.log('Drill delete service result:', res);
+    l.info('Drill delete service result:', res);
     if (res && query.removeAll) {
       this.profileDBHash = {};
     } else {
@@ -192,6 +192,6 @@ export default class DrillApi {
   }
 
   onFailDelete(options) {
-    console.log('failed to launch or connect to drill: ', options);
+    l.info('failed to launch or connect to drill: ', options);
   }
 }

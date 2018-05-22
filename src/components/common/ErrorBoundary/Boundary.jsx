@@ -54,7 +54,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
   // componentDidCatch(error: *, errorInfo: *) {
   //   this.setState({ error, errorInfo });
   //
-  //   // react will use `console.error` to print out this error so we don't have to double log it
+  //   // react will use `l.error` to print out this error so we don't have to double log it
   //
   //   this.props.emitCrashEvent && Broker.emit(EventType.APP_CRASHED);
   // }

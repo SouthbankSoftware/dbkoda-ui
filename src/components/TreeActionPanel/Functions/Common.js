@@ -36,7 +36,7 @@ const debug = false;
 
 export function dbkoda_listdb(params) {
   //eslint-disable-line
-  console.log(params);
+  l.info(params);
   return 'db.adminCommand({listDatabases: 1}).databases';
 }
 
@@ -84,7 +84,7 @@ export function dbkoda_listActions_parse(res) {
 export function dbkoda_listcollections(params) {
   //eslint-disable-line
   const cmd = 'db.getSiblingDB("' + params.db + '").getCollectionNames()';
-  console.log(cmd);
+  l.info(cmd);
   return cmd;
 }
 
@@ -100,7 +100,7 @@ export function dbkoda_listcollections_parse(res) {
 export function dbkoda_listcollectionsAgg(params) {
   //eslint-disable-line
   const cmd = 'db.getSiblingDB("' + params.db + '").getCollectionNames()';
-  if (debug) console.log('listCollAgg:', cmd);
+  if (debug) l.info('listCollAgg:', cmd);
   return cmd;
 }
 
@@ -110,7 +110,7 @@ export function dbkoda_listcollectionsAgg_parse(res) {
   res.forEach(d => {
     collectionList.push(d);
   });
-  if (debug) console.log('listCollAgg:', collectionList.sort());
+  if (debug) l.info('listCollAgg:', collectionList.sort());
   return JSON.parse(collectionList.sort());
 }
 
@@ -121,15 +121,15 @@ export function dbkodaParameterList() {
 
 export function dbkodaParameterList_parse(res) {
   //eslint-disable-line
-  console.log('got parameters', res);
+  l.info('got parameters', res);
   const params = Object.keys(res);
-  console.log(params);
+  l.info(params);
   return params;
 }
 
 export function dbkodaListAttributes(params) {
   const cmd = sprintf('dbe.sampleCollection("%s","%s");', params.db, params.collection);
-  console.log(cmd);
+  l.info(cmd);
   return cmd;
 }
 
@@ -161,13 +161,13 @@ export function dbkodaListAttributesProject(params) {
 }
 
 export function dbkodaListAttributesProject_parse(res) {
-  console.log(res);
+  l.info(res);
   let output = res.prevAttributes;
   if (typeof res.prevAttributes === 'string') {
     output = JSON.parse(res.prevAttributes);
   }
   output.unshift('NewAttributeName');
-  if (debug) console.log('output: ', output);
+  if (debug) l.info('output: ', output);
   return output;
 }
 
@@ -178,7 +178,7 @@ export function dbkodaListAttributesProjectTarget(params) {
 }
 
 export function dbkodaListAttributesProjectTarget_parse(res) {
-  console.log(res);
+  l.info(res);
   let output = res.prevAttributes;
   if (typeof res.prevAttributes === 'string') {
     output = JSON.parse(res.prevAttributes);
@@ -188,7 +188,7 @@ export function dbkodaListAttributesProjectTarget_parse(res) {
   }
   output.unshift('1');
   output.unshift('0');
-  if (debug) console.log('target output: ', output);
+  if (debug) l.info('target output: ', output);
   return output;
 }
 
@@ -199,7 +199,7 @@ export function dbkodaAggOperators(params) {
 
 export function dbkodaAggOperators_parse(res) {
   //eslint-disable-line
-  if (debug) console.log(res);
+  if (debug) l.info(res);
   return ['sum', 'max', 'min', 'avg', 'first', 'last'];
 }
 
@@ -210,7 +210,7 @@ export function dbkodaMatchOperators(params) {
 
 export function dbkodaMatchOperators_parse(res) {
   //eslint-disable-line
-  if (debug) console.log(res);
+  if (debug) l.info(res);
   return ['$eq', '$gt', '$gte', '$in', '$lt', '$lte', '$ne', '$nin', '$regex'];
 }
 
@@ -220,6 +220,6 @@ export function dbkoda_sortOptions(params) {
 }
 
 export function dbkoda_sortOptions_parse(res) {
-  if (debug) console.log(res);
+  if (debug) l.info(res);
   return [1, -1];
 }

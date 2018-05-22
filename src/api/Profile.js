@@ -229,7 +229,7 @@ export default class ProfileApi {
             selectedProfile.status = ProfileStatus.CLOSED;
           }
         });
-        console.error(err);
+        l.error(err);
         logToMain('error', 'Failed to add SSH Terminal: ' + err);
         this.onFail();
         this.toasterCallback && this.toasterCallback('connectionFail', err);
@@ -279,7 +279,7 @@ export default class ProfileApi {
         this.api.passwordApi.removeMissingStoreId(`${res.id}-s`);
       }
       const profileData = _.omit(data, ['password', 'passPhrase', 'remotePass']);
-      console.debug(profileData);
+      l.debug(profileData);
       const profile: Profile = {
         ...profileData,
         id: res.id,
@@ -290,7 +290,7 @@ export default class ProfileApi {
         shellVersion: res.shellVersion,
         mongoType: res.mongoType
       };
-      console.debug('profile:', profile);
+      l.debug('profile:', profile);
       if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {
         profile.bPassPhrase = true;
       }
@@ -322,7 +322,7 @@ export default class ProfileApi {
                 value.status = ProfileStatus.OPEN;
               })
               .catch(err => {
-                console.error('failed to create shell connection', err);
+                l.error('failed to create shell connection', err);
                 logToMain('error', 'Failed to create shell connection: + err');
               });
           }
