@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-21T09:13:36+10:00
+ * @Last modified time: 2018-05-22T17:12:12+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -101,7 +101,12 @@ export class ConnectionForm extends JsonForm {
       field.name == 'urlRadio' ||
       field.name == 'port' ||
       field.name == 'username' ||
-      field.name == 'url'
+      field.name == 'url' ||
+      field.name == 'usernameCluster' ||
+      field.name == 'replicaSetName' ||
+      field.name == 'useClusterConfig' ||
+      field.name == 'urlClusterRadio' ||
+      field.name == 'urlCluster'
     ) {
       this.updateAlias(field);
     }
@@ -115,8 +120,16 @@ export class ConnectionForm extends JsonForm {
     }
 
     if (field.name === 'urlClusterRadio' && field.value) {
+      // update cluster fields from basic connection fields
+      this.updateClusterFields(field);
       // disable the cluster config to use the cluster url
       this.updateFieldValue(field.$('useClusterConfig'), false);
+    }
+    if (field.name === 'useClusterConfig' && field.value) {
+      // update cluster fields from basic connection fields
+      this.updateClusterFields(field);
+      // disable the cluster url to use the cluster config
+      this.updateFieldValue(field.$('urlClusterRadio'), false);
     }
     if (
       field.subForm.value === SubformCategory.CLUSTER &&
@@ -139,7 +152,7 @@ export class ConnectionForm extends JsonForm {
     if (!isUrlMode) {
       let connectionUrl =
         StaticApi.mongoProtocol + field.$('host').value + ':' + field.$('port').value;
-      const conDB = field.$('authenticationDatabase', SubformCategory.AUTH).value;
+      const conDB = field.$('database').value;
       connectionUrl += '/';
       connectionUrl += conDB === '' ? 'test' : conDB;
       urlField.value = connectionUrl;
@@ -152,17 +165,11 @@ export class ConnectionForm extends JsonForm {
     const isUrlMode = field.$('urlClusterRadio').value;
     if (!isUrlMode) {
       let connectionUrl = StaticApi.mongoProtocol;
-      if (field.$('hostsList').value === '') {
-        connectionUrl +=
-          field.$('host', SubformCategory.BASIC).value +
-          ':' +
-          field.$('port', SubformCategory.BASIC).value;
-      } else {
-        connectionUrl += field.$('hostsList').value;
-      }
+
+      connectionUrl += field.$('hostsList').value;
       connectionUrl += '/';
 
-      const conDB = field.$('authenticationDatabase', SubformCategory.AUTH).value;
+      const conDB = field.$('databaseCluster').value;
       connectionUrl += conDB === '' ? 'test' : conDB;
 
       const addQueryParam = (key, value) => {
@@ -202,69 +209,155 @@ export class ConnectionForm extends JsonForm {
    */
   @action
   updateAlias(field) {
-    if (!this.isEditMode && !this.hasAliasChanged && field.subForm.value == SubformCategory.BASIC) {
-      const isUrlMode = field.$('urlRadio').value;
-      const aliasField = field.$('alias');
-
-      if (!isUrlMode) {
-        if (
-          field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH &&
-          field.$('username', SubformCategory.AUTH).value.length > 0
-        ) {
-          aliasField.value =
-            field.$('username', SubformCategory.AUTH).value +
-            '@' +
-            field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
-            ':' +
-            field.$('port').value +
-            ' - ' +
-            (this.api.getProfiles().size + 1);
-        } else if (field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH) {
-          aliasField.value =
-            field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
-            ':' +
-            field.$('port').value +
-            ' - ' +
-            (this.api.getProfiles().size + 1);
-        } else if (field.$('username', SubformCategory.AUTH).value.length > 0) {
-          aliasField.value =
-            field.$('username', SubformCategory.AUTH).value +
-            '@' +
-            field.$('host').value +
-            ':' +
-            field.$('port').value +
-            ' - ' +
-            (this.api.getProfiles().size + 1);
+    if (!this.isEditMode && !this.hasAliasChanged) {
+      const aliasField = field.$('alias', SubformCategory.BASIC);
+      if (field.subForm.value == SubformCategory.BASIC) {
+        const isUrlMode = field.$('urlRadio').value;
+        if (!isUrlMode) {
+          if (
+            field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH &&
+            field.$('username').value.length > 0
+          ) {
+            aliasField.value =
+              field.$('username').value +
+              '@' +
+              field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
+              ':' +
+              field.$('port').value +
+              ' - ' +
+              (this.api.getProfiles().size + 1);
+          } else if (field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH) {
+            aliasField.value =
+              field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
+              ':' +
+              field.$('port').value +
+              ' - ' +
+              (this.api.getProfiles().size + 1);
+          } else if (field.$('username').value.length > 0) {
+            aliasField.value =
+              field.$('username').value +
+              '@' +
+              field.$('host').value +
+              ':' +
+              field.$('port').value +
+              ' - ' +
+              (this.api.getProfiles().size + 1);
+          } else {
+            aliasField.value =
+              field.$('host').value +
+              ':' +
+              field.$('port').value +
+              ' - ' +
+              (this.api.getProfiles().size + 1);
+          }
         } else {
-          aliasField.value =
-            field.$('host').value +
-            ':' +
-            field.$('port').value +
-            ' - ' +
-            (this.api.getProfiles().size + 1);
+          this.updateAliasViaUrlValue(aliasField, field.$('url').value);
         }
-      } else if (field.$('url').value.length > MAX_URL_ALIAS_LENGTH) {
-        //eslint-disable-line
-        if (field.$('url').value.split('//').length > 1) {
-          aliasField.value = field
-            .$('url')
-            .value.split('//')[1]
-            .substring(0, MAX_URL_ALIAS_LENGTH);
+      } else if (field.subForm.value == SubformCategory.CLUSTER) {
+        const isUrlMode = field.$('urlClusterRadio').value;
+        if (!isUrlMode) {
+          if (field.$('usernameCluster').value.length > 0) {
+            aliasField.value =
+              field.$('usernameCluster').value +
+              '@' +
+              field.$('replicaSetName').value +
+              ' - ' +
+              (this.api.getProfiles().size + 1);
+          } else if (field.$('replicaSetName').value.length > 0) {
+            aliasField.value =
+              field.$('replicaSetName').value + ' - ' + (this.api.getProfiles().size + 1);
+          } else {
+            aliasField.value = 'New Cluster Profile - ' + (this.api.getProfiles().size + 1);
+          }
         } else {
-          aliasField.value = field.$('url').value.substring(0, MAX_URL_ALIAS_LENGTH);
+          let urlCluster = field.$('urlCluster').value;
+          if (urlCluster.indexOf('replicaSet=') > 0) {
+            const rgx1 = /^(\S+)(replicaSet=)(\S*)(&\S*)/g;
+            const rgx2 = /^(\S+)(replicaSet=)(\S*)/g;
+            if (rgx1.test(urlCluster)) {
+              [, , , urlCluster] = urlCluster.split(rgx1);
+            } else if (rgx2.test(urlCluster)) {
+              [, , , urlCluster] = urlCluster.split(rgx2);
+            }
+            this.updateAliasViaUrlValue(aliasField, urlCluster);
+          } else {
+            this.updateAliasViaUrlValue(aliasField, field.$('urlCluster').value);
+          }
         }
-      } else if (field.$('url').value.split('//').length > 1) {
-        if (field.$('url').value.split('//')[1] === '') {
-          aliasField.value = 'New Profile - ' + (this.api.getProfiles().size + 1);
-        } else {
-          aliasField.value = field.$('url').value.split('//')[1]; //eslint-disable-line
-        }
-      } else {
-        aliasField.value = field.$('url').value;
       }
     }
   }
+  updateAliasViaUrlValue(aliasField, urlValue) {
+    if (urlValue.length > MAX_URL_ALIAS_LENGTH) {
+      //eslint-disable-line
+      if (urlValue.split('//').length > 1) {
+        aliasField.value =
+          urlValue.split('//')[1].substring(0, MAX_URL_ALIAS_LENGTH) +
+          ' - ' +
+          (this.api.getProfiles().size + 1);
+      } else {
+        aliasField.value =
+          urlValue.substring(0, MAX_URL_ALIAS_LENGTH) + ' - ' + (this.api.getProfiles().size + 1);
+      }
+    } else if (urlValue.split('//').length > 1) {
+      if (urlValue.split('//')[1] === '') {
+        aliasField.value = 'New Profile - ' + (this.api.getProfiles().size + 1);
+      } else {
+        aliasField.value = urlValue.split('//')[1] + ' - ' + (this.api.getProfiles().size + 1); //eslint-disable-line
+      }
+    } else {
+      aliasField.value = urlValue + ' - ' + (this.api.getProfiles().size + 1);
+    }
+  }
 
+  updateClusterFields(field) {
+    const hostListField = field.$('hostsList');
+    const hostField = field.$('host', SubformCategory.BASIC);
+    const portField = field.$('port', SubformCategory.BASIC);
+    if (hostField.value !== '' && portField.value !== '' && hostListField.value === '') {
+      hostListField.value = hostField.value + ':' + portField.value;
+    }
+    const databaseField = field.$('database', SubformCategory.BASIC);
+    if (databaseField.value !== '' && databaseField.value !== field.$('databaseCluster').value) {
+      field.$('databaseCluster').value = databaseField.value;
+    }
+    const sslField = field.$('ssl', SubformCategory.BASIC);
+    if (sslField.value && sslField.value !== field.$('sslCluster').value) {
+      field.$('sslCluster').value = sslField.value;
+    }
+    const sslAllowInvalidCertificatesField = field.$(
+      'sslAllowInvalidCertificates',
+      SubformCategory.BASIC
+    );
+    if (
+      sslAllowInvalidCertificatesField.value &&
+      sslAllowInvalidCertificatesField.value !== field.$('sslAllowInvalidCertificatesCluster').value
+    ) {
+      field.$('sslAllowInvalidCertificatesCluster').value = sslAllowInvalidCertificatesField.value;
+    }
+    const shaField = field.$('sha', SubformCategory.BASIC);
+    if (shaField.value && shaField.value !== field.$('shaCluster').value) {
+      field.$('shaCluster').value = shaField.value;
+      if (field.$('shaCluster').refFields) {
+        this.updateReferencedFields(field.$('shaCluster'));
+      }
+    }
+    const usernameField = field.$('username', SubformCategory.BASIC);
+    if (usernameField.value !== '' && usernameField.value !== field.$('usernameCluster').value) {
+      field.$('usernameCluster').value = usernameField.value;
+    }
+    const passwordField = field.$('password', SubformCategory.BASIC);
+    if (passwordField.value !== '' && passwordField.value !== field.$('passwordCluster').value) {
+      field.$('passwordCluster').value = passwordField.value;
+    }
+    const authenticationDatabaseField = field.$('authenticationDatabase', SubformCategory.BASIC);
+    if (
+      authenticationDatabaseField.value !== '' &&
+      authenticationDatabaseField.value !== field.$('authenticationDatabaseCluster').value
+    ) {
+      field.$('authenticationDatabaseCluster').value = authenticationDatabaseField.value;
+    }
+  }
   updateRemoteHost(field) {
     if (field.value) {
       const remoteHostField = field.$('remoteHost');

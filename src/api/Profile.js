@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-05-20T11:47:43+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-22T16:22:04+10:00
  */
 
 import _ from 'lodash';
@@ -123,25 +123,54 @@ export default class ProfileApi {
     }
     const query = {};
     let connectionUrl;
+    // fix to add hostRadio variable if it is not present
     if (data.hostRadio === null || data.hostRadio === undefined) {
       data.hostRadio = !data.urlRadio;
     }
+
+    if (data.useClusterConfig || data.urlClusterRadio) {
+      connectionUrl = data.urlCluster;
+      if (data.shaCluster) {
+        query.username = data.usernameCluster;
+        query.password = data.passwordCluster;
+        query.authenticationDatabase = data.authenticationDatabaseCluster;
+      }
+      if (data.sslCluster) {
+        connectionUrl.indexOf('?') > 0
+          ? (connectionUrl += '&ssl=true')
+          : (connectionUrl += '?ssl=true');
+      }
+
+      query.database = data.databaseCluster;
+      query.ssl = data.sslCluster;
+      query.sslAllowInvalidCertificates = data.sslAllowInvalidCertificatesCluster;
+    } else {
+      if (data.hostRadio) {
+        connectionUrl = StaticApi.mongoProtocol + data.host + ':' + data.port;
+      } else if (data.urlRadio) {
+        connectionUrl = data.url;
+      }
+      if (data.sha) {
+        query.username = data.username;
+        query.password = data.password;
+        query.authenticationDatabase = data.authenticationDatabase;
+      }
+      if (data.ssl) {
+        connectionUrl.indexOf('?') > 0
+          ? (connectionUrl += '&ssl=true')
+          : (connectionUrl += '?ssl=true');
+      }
+
+      query.database = data.database;
+      query.ssl = data.ssl;
+      query.sslAllowInvalidCertificates = data.sslAllowInvalidCertificates;
+    }
+
+    let terminalQuery = null;
+    // fix to add passRadio variable if it is not present
     if (data.passRadio === null || data.passRadio === undefined) {
       data.passRadio = !data.keyRadio;
     }
-    if (data.useClusterConfig || data.urlClusterRadio) {
-      connectionUrl = data.urlCluster;
-    } else {
-      connectionUrl = data.url;
-    }
-    // if (data.hostRadio) {
-    //   connectionUrl = StaticApi.mongoProtocol + data.host + ':' + data.port;
-    // } else if (data.urlRadio) {
-    //   connectionUrl = data.url;
-    // }
-
-    let terminalQuery = null;
-
     if (data.ssh) {
       query.ssh = data.ssh;
       query.sshTunnel = data.sshTunnel;
@@ -174,23 +203,15 @@ export default class ProfileApi {
         terminalQuery.passPhrase = data.passPhrase;
       }
     }
-    if (data.sha) {
-      query.username = data.username;
-      query.password = data.password;
-      query.authenticationDatabase = data.authenticationDatabase;
+
+    query.url = connectionUrl;
+    if (data.test) {
+      query.test = data.test;
     }
-    if (data.ssl) {
-      connectionUrl.indexOf('?') > 0
-        ? (connectionUrl += '&ssl=true')
-        : (connectionUrl += '?ssl=true');
+    if (data.authorization) {
+      query.authorization = data.authorization;
     }
 
-    query.database = data.database;
-    query.url = connectionUrl;
-    query.ssl = data.ssl;
-    query.sslAllowInvalidCertificates = data.sslAllowInvalidCertificates;
-    query.test = data.test;
-    query.authorization = data.authorization;
     if (selectedProfile) {
       query.id = selectedProfile.id;
       query.shellId = selectedProfile.shellId;

@@ -3,7 +3,7 @@
  * @Date:   2018-01-10T09:56:16+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-21T09:15:56+10:00
+ * @Last modified time: 2018-05-22T11:58:03+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -571,13 +571,22 @@
     color: $fieldHeadingFontColor !important;
   }
 
-  .pt-select select {
-    height: 30px;
-    width: 100%;
-    border-radius: 0;
-    border-style: none;
-    background-color: $fieldBrightBackgroundColor !important;
-    color: $fieldBrightFontColor !important;
+  .pt-select {
+    background-color: unset !important;
+    select {
+      height: 30px;
+      width: 100%;
+      border-radius: 0;
+      border-style: none;
+      background-color: $searchPrimaryBackground !important;
+      color: $connectionActiveTextFieldTextColour !important;
+    }
+    select:disabled {
+      background-color: $searchPrimaryBackground !important;
+    }
+  }
+  .pt-select::after {
+    color: #5c7080 !important;
   }
 
   .pt-checkbox-form,

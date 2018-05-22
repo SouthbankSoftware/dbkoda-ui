@@ -3,7 +3,7 @@
  * @Date:   2018-01-24T09:50:36+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-21T08:55:15+10:00
+ * @Last modified time: 2018-05-22T15:34:59+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -236,7 +236,7 @@ export class JsonForm {
             .substr(1, error.schemaPath.length);
           field = _.at(this.formSchema, schemaPath);
         }
-        if (field.length > 0 && field[0]) {
+        if (field.length > 0 && field[0] && typeof field[0] === 'object') {
           runInAction(() => {
             field[0].error = '';
           });
@@ -262,7 +262,7 @@ export class JsonForm {
             .substr(1, error.schemaPath.length);
           field = _.at(this.formSchema, schemaPath);
         }
-        if (field.length > 0 && field[0]) {
+        if (field.length > 0 && field[0] && typeof field[0] === 'object') {
           runInAction(() => {
             field[0].error = error.message;
           });

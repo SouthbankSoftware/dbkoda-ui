@@ -96,22 +96,6 @@
               }
             },
             {
-              "$id": "ssl",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "boolean" }
-              }
-            },
-            {
-              "$id": "sslAllowInvalidCertificates",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "boolean" }
-              }
-            },
-            {
               "$id": "urlRadio",
               "additionalProperties": false,
               "properties": {
@@ -149,18 +133,23 @@
                   }
                 }
               }
-            }
-          ]
-        }
-      }
-    },
-    "authentication": {
-      "type": "object",
-      "properties": {
-        "fields": {
-          "type": "array",
-          "additionalProperties": false,
-          "items": [
+            },
+            {
+              "$id": "ssl",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
+            {
+              "$id": "sslAllowInvalidCertificates",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
             {
               "$id": "sha",
               "additionalProperties": false,
@@ -270,6 +259,62 @@
             },
             {
               "$id": "urlCluster",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "$id": "databaseCluster",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "$id": "sslCluster",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
+            {
+              "$id": "sslAllowInvalidCertificatesCluster",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
+            {
+              "$id": "shaCluster",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
+            {
+              "$id": "usernameCluster",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "$id": "passwordCluster",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "$id": "authenticationDatabaseCluster",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },

@@ -45,6 +45,24 @@
         "column": 1
       },
       {
+        "name": "urlRadio",
+        "label": "Use URI instead",
+        "value": false,
+        "type": "checkbox",
+        "column": 1,
+        "refFields": ["url", "host", "port"]
+      },
+      {
+        "name": "url",
+        "label": "URI",
+        "placeholder": "mongodb://",
+        "value": "mongodb://",
+        "type": "text",
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
         "name": "ssl",
         "value": false,
         "label": "Use SSL for all connections",
@@ -59,36 +77,11 @@
         "column": 2
       },
       {
-        "name": "urlRadio",
-        "label": "Use URI instead",
-        "value": false,
-        "type": "checkbox",
-        "column": 2,
-        "refFields": ["url", "host", "port"]
-      },
-      {
-        "name": "url",
-        "label": "URI",
-        "placeholder": "mongodb://",
-        "value": "mongodb://",
-        "type": "text",
-        "column": 2,
-        "disabled": true,
-        "checkbox": "enabled"
-      }
-    ]
-  },
-  "authentication": {
-    "name": "Authentication",
-    "value": "authentication",
-    "tips": ["This page allows you to configure items specific to authentication of database.'"],
-    "fields": [
-      {
         "name": "sha",
         "value": false,
         "label": "SCRAM-SHA-1(username/password)",
         "type": "checkbox",
-        "column": 1,
+        "column": 2,
         "refFields": ["username", "password", "authenticationDatabase"]
       },
       {
@@ -97,7 +90,7 @@
         "icon": "user",
         "type": "text",
         "value": "",
-        "column": 1,
+        "column": 2,
         "width": 0.5,
         "disabled": true,
         "checkbox": "enabled"
@@ -108,7 +101,7 @@
         "icon": "password",
         "type": "password",
         "value": "",
-        "column": 1,
+        "column": 2,
         "width": 0.5,
         "disabled": true,
         "checkbox": "enabled"
@@ -140,8 +133,7 @@
         "type": "checkbox",
         "column": 1,
         "refFields": ["hostsList", "replicaSetName", "w", "wtimeoutMS", "journal", "readPref"],
-        "disabled": false,
-        "checkbox": "disabled"
+        "disabled": false
       },
       {
         "name": "hostsList",
@@ -173,7 +165,7 @@
         "options": { "tooltip": "write concern: specifiy a number, 'majority' or a tagSet" },
         "value": "",
         "type": "text",
-        "column": 2,
+        "column": 1,
         "rules": "string",
         "disabled": true,
         "checkbox": "enabled"
@@ -184,7 +176,7 @@
         "options": { "tooltip": "Time in ms to wait for write concern. 0=no timeout" },
         "value": 0,
         "type": "number",
-        "column": 2,
+        "column": 1,
         "rules": "string",
         "disabled": true,
         "checkbox": "enabled"
@@ -197,7 +189,7 @@
         },
         "value": false,
         "type": "checkbox",
-        "column": 2,
+        "column": 1,
         "disabled": true,
         "checkbox": "enabled"
       },
@@ -216,7 +208,7 @@
           ]
         },
         "type": "select",
-        "column": 2,
+        "column": 1,
         "disabled": true,
         "checkbox": "enabled"
       },
@@ -226,7 +218,7 @@
         "value": false,
         "type": "checkbox",
         "column": 2,
-        "refFields": ["urlCluster", "useClusterConfig"]
+        "refFields": ["urlCluster"]
       },
       {
         "name": "urlCluster",
@@ -236,6 +228,71 @@
         "value": "mongodb://",
         "type": "text",
         "column": 2,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "databaseCluster",
+        "label": "Database",
+        "value": "test",
+        "options": {
+          "tooltip": "The database in which this connection will initially be established"
+        },
+        "type": "text",
+        "column": 2
+      },
+      {
+        "name": "sslCluster",
+        "value": false,
+        "label": "Use SSL for all connections",
+        "type": "checkbox",
+        "column": 2
+      },
+      {
+        "name": "sslAllowInvalidCertificatesCluster",
+        "value": false,
+        "label": "Allow invalid certificates",
+        "type": "checkbox",
+        "column": 2
+      },
+      {
+        "name": "shaCluster",
+        "value": false,
+        "label": "SCRAM-SHA-1(username/password)",
+        "type": "checkbox",
+        "column": 2,
+        "refFields": ["usernameCluster", "passwordCluster", "authenticationDatabaseCluster"]
+      },
+      {
+        "name": "usernameCluster",
+        "label": "Username",
+        "icon": "user",
+        "type": "text",
+        "value": "",
+        "column": 2,
+        "width": 0.5,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "passwordCluster",
+        "label": "Password",
+        "icon": "password",
+        "type": "password",
+        "value": "",
+        "column": 2,
+        "width": 0.5,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "authenticationDatabaseCluster",
+        "label": "Authentication Database",
+        "options": { "tooltip": "The database in which this user was created" },
+        "type": "text",
+        "value": "",
+        "column": 2,
+        "width": 0.5,
         "disabled": true,
         "checkbox": "enabled"
       }
