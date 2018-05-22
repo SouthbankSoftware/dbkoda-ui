@@ -223,8 +223,6 @@ export default class StaticApi {
   }
 
   static getDocumentAtLine(editorId, lineNumber, direction, lines, cm) {
-    l.info('getDocumentAtLine()');
-    l.info(lines.start);
     const startLine = cm.getLine(lineNumber);
     // Skip these lines to continue reading result set
     if (['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(startLine)) {
