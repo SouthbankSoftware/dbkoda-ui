@@ -104,7 +104,14 @@ export default class Paths extends React.Component {
               {globalString('general/browse')}
             </Button>
           </div>
-          <div className="form-row">{this.props.renderFieldLabel('drillCmd')}</div>
+          <Radio className="sectionHeader docker-section-header" label="Docker" value />
+          <Docker
+            dockerEnabled={settings.dockerEnabled}
+            onPathEntered={this.onPathEntered}
+            updateValue={this.props.updateValue}
+            docker={this.props.settings.docker}
+          />
+          <div className="sectionHeader">{this.props.renderFieldLabel('drillCmd')}</div>
           <div className="fileInput">
             <input
               type="text"
@@ -121,13 +128,6 @@ export default class Paths extends React.Component {
               {globalString('general/browse')}
             </Button>
           </div>
-          <Radio className="sectionHeader docker-section-header" label="Docker" value />
-          <Docker
-            dockerEnabled={settings.dockerEnabled}
-            onPathEntered={this.onPathEntered}
-            updateValue={this.props.updateValue}
-            docker={this.props.settings.docker}
-          />
         </RadioGroup>
       </div>
     );
