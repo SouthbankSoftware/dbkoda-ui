@@ -194,6 +194,12 @@ div.aggregateGraphicalBuilderWrapper {
     width: 15px;
     background-color: $tabBackground;
   }
+
+  div.loaderWrapper {
+    div.loader {
+      position: relative !important;
+    }
+  }
 }
 
 div.Pane.vertical.Pane1 {
@@ -207,6 +213,8 @@ div.Pane.vertical.Pane1 {
       font-family: Arial, Helvetica, sans-serif;
 
       div.aggregatePaletteWrapper {
+        height: 100%;
+
         .pt-tree-node-content:hover {
           background-color: unset;
         }
@@ -356,6 +364,22 @@ div.Pane.vertical.Pane1 {
             }
           }
         }
+
+        div.loaderWrapper {
+          order: 4;
+          flex-grow: 1;
+
+          div.loader {
+            position: absolute !important;
+          }
+        }
+      }
+
+      .aggregatePaletteContainer {
+        display: flex;
+        order: 1;
+        flex-grow: 1;
+        flex-direction: column;
       }
 
       div.aggregateDetailsWrapper {
@@ -449,6 +473,15 @@ div.Pane.vertical.Pane1 {
             button:hover {
               background-color: $connectionButtonBackgroundColourConnectHover;
             }
+          }
+        }
+
+        div.loaderWrapper {
+          order: 4;
+          flex-grow: 1;
+
+          div.loader {
+            position: absolute !important;
           }
         }
 

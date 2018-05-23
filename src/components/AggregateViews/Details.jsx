@@ -51,7 +51,8 @@ export default class Details extends React.Component {
     this.state = {
       form: null,
       previousActiveBlock: null,
-      reproduceCode: false
+      reproduceCode: false,
+      debug: false
     };
     this.reactionToUpdateDetails = reaction(
       () => this.props.store.editorPanel.updateAggregateDetails,
@@ -60,7 +61,6 @@ export default class Details extends React.Component {
 
     // Get variables for action:
     this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-    this.debug = false;
 
     /**
      * Resolve the prefetch arguments and return them as params
@@ -118,9 +118,13 @@ export default class Details extends React.Component {
     this.reactionToUpdateDetails();
   }
   updateDetails() {
+    if (this.state.debug) l.debug('Update Details');
     if (this.props.store.editorPanel.updateAggregateDetails) {
       this.props.store.editorPanel.updateAggregateDetails = false;
       this.state.reproduceCode = true;
+      this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId
+      ).isAggregateDetailsLoading = false;
       this.forceUpdate();
       // Current hack to handle the async nature of the mobx form builder.
       _.delay(() => {
@@ -132,6 +136,7 @@ export default class Details extends React.Component {
   // Triggered when a mobx field is changed, this will update the store to reflect the new values.
   @action.bound
   updateBlockFields(fields, editorObject) {
+    if (this.state.debug) l.debug('Update Block Fields');
     const selectedBlock = editorObject.selectedBlock;
     editorObject.blockList[selectedBlock].modified = true;
     for (const key in fields) {
@@ -192,7 +197,6 @@ export default class Details extends React.Component {
 
   @action.bound
   _onApplyBlock() {
-    l.debug('Update aggregate builder...');
     Broker.emit(EventType.AGGREGATE_UPDATE, this.props.store.editorPanel.activeEditorId);
   }
 
@@ -343,44 +347,50 @@ export default class Details extends React.Component {
               )}
           </div>
         </nav>
-        <div className="aggregateDetailsContent">
-          {activeBlock && <h2 className="aggregateBlockType">{activeBlock.type}</h2>}
-          {activeBlock && (
-            <p className="aggregateBlockDescription">
-              {BlockTypes[activeBlock.type.toUpperCase()].description}
-            </p>
-          )}
-          {activeBlock && (
-            <div className={'dynamic-form columns-' + maxColumns + '-max'}>
-              {this.state.form && <View mobxForm={this.state.form.mobxForm} isAggregate />}
-              {!this.bForm && (
-                <div>
-                  <div className="tree-msg-div">
-                    <span>{this.msg}</span>
-                  </div>
-                </div>
-              )}
-              <Tooltip
-                className="applyButton pt-tooltip-indicator pt-tooltip-indicator-form"
-                content={globalString('aggregate_builder/applyTooltip')}
-                hoverOpenDelay={1000}
-                inline
-                intent={Intent.PRIMARY}
-                position={Position.BOTTOM}
-              >
-                <Button
-                  className="top-con-button reset-button pt-button pt-intent-primary"
-                  text={globalString('aggregate_builder/apply')}
-                  disabled={!activeBlock}
-                  onClick={this._onApplyBlock}
-                />
-              </Tooltip>
-            </div>
-          )}
-        </div>
-        {!activeBlock && (
+        {!this.editor.isAggregateDetailsLoading ? (
           <div className="aggregateDetailsContent">
-            <p> {globalString('aggregate_builder/no_block_selected')}</p>
+            {activeBlock && <h2 className="aggregateBlockType">{activeBlock.type}</h2>}
+            {activeBlock && (
+              <p className="aggregateBlockDescription">
+                {BlockTypes[activeBlock.type.toUpperCase()].description}
+              </p>
+            )}
+            {activeBlock && (
+              <div className={'dynamic-form columns-' + maxColumns + '-max'}>
+                {this.state.form && <View mobxForm={this.state.form.mobxForm} isAggregate />}
+                {!this.bForm && (
+                  <div>
+                    <div className="tree-msg-div">
+                      <span>{this.msg}</span>
+                    </div>
+                  </div>
+                )}
+                <Tooltip
+                  className="applyButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                  content={globalString('aggregate_builder/applyTooltip')}
+                  hoverOpenDelay={1000}
+                  inline
+                  intent={Intent.PRIMARY}
+                  position={Position.BOTTOM}
+                >
+                  <Button
+                    className="top-con-button reset-button pt-button pt-intent-primary"
+                    text={globalString('aggregate_builder/apply')}
+                    disabled={!activeBlock}
+                    onClick={this._onApplyBlock}
+                  />
+                </Tooltip>
+              </div>
+            )}
+            {!activeBlock && (
+              <div className="aggregateDetailsContent">
+                <p> {globalString('aggregate_builder/no_block_selected')}</p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="loaderWrapper">
+            <div className="loader" />
           </div>
         )}
       </div>

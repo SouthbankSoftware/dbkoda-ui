@@ -79,7 +79,7 @@ export default class GraphicalBuilder extends React.Component {
 
     Broker.emit(EventType.FEATURE_USE, 'AggregateBuilder');
 
-    this.debug = true;
+    this.state.debug = false;
     // Set up the aggregate builder in the shell.
     this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     this.profileId = this.editor.profileId;
@@ -97,9 +97,6 @@ export default class GraphicalBuilder extends React.Component {
       })
       .then(res => {
         this.editor.aggregateID = JSON.parse(res).id;
-        runInAction('Agg Builder no longer loading', () => {
-          this.editor.isAggregateLoading = false;
-        });
         if (this.editor.blockList.length === 0) {
           this.addStartBlock();
         }
@@ -140,6 +137,9 @@ export default class GraphicalBuilder extends React.Component {
         })
         .catch(e => {
           l.error('Failed to add Start block to Agg Builder with error ' + e);
+          runInAction('Aggregate builder is no longer loading', () => {
+            this.editor.isAggregateLoading = false;
+          });
         });
     });
   }
@@ -153,6 +153,7 @@ export default class GraphicalBuilder extends React.Component {
 
   @action.bound
   addBlock(block, position) {
+    if (this.state.debug) l.debug('Add new Agg Block');
     return new Promise((resolve, reject) => {
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
 
@@ -174,11 +175,13 @@ export default class GraphicalBuilder extends React.Component {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
                     runInAction('Update Graphical Builder', () => {
+                      l.debug('OLD: ', editor.blockList[index].attributeList);
+                      l.debug('NEW: ', res.stepAttributes[attributeIndex]);
                       editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
                       editor.blockList[index].status = 'valid';
                     });
                   } else {
-                    l.error('Result[', index, '] is invalid: ', indexValue);
+                    if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
@@ -225,6 +228,7 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   addBlockToEditor(blockType, position, attributeList, isImport, block) {
+    if (this.state.debug) l.debug('Add new Agg Block to Editor');
     return new Promise(resolve => {
       // Get relevant editor.
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
@@ -304,6 +308,7 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   getBlockAttributes(position) {
+    if (this.state.debug) l.debug('Get Block Attributes');
     return new Promise((resolve, reject) => {
       // Get the relevant editor object.
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
@@ -335,7 +340,10 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   selectBlock(index) {
-    l.debug('Selecting index: ', index);
+    if (this.state.debug) l.debug('Select Block: ', index);
+    runInAction('Agg Builder details is loading', () => {
+      this.editor.isAggregateDetailsLoading = true;
+    });
     return new Promise(resolve => {
       // 1. Update Editor List.
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
@@ -362,9 +370,8 @@ export default class GraphicalBuilder extends React.Component {
             this.clearResultsOutput(editor);
           }
 
-          runInAction('Update Graphical Builder', () => {
+          runInAction('Update Details', () => {
             this.props.store.editorPanel.updateAggregateDetails = true;
-            this.forceUpdate();
           });
         } else {
           // All steps validated, full update.
@@ -384,12 +391,14 @@ export default class GraphicalBuilder extends React.Component {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
                     runInAction('Update Graphical Builder', () => {
+                      l.debug('OLD: ', editor.blockList[index].attributeList);
+                      l.debug('NEW: ', res.stepAttributes[attributeIndex]);
                       editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
                       editor.blockList[index].status = 'valid';
                     });
                   } else {
                     if (!(typeof indexValue === 'string')) {
-                      l.error('Result[', index, '] is invalid: ', indexValue);
+                      if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
                     runInAction('Update Graphical Builder', () => {
@@ -397,6 +406,10 @@ export default class GraphicalBuilder extends React.Component {
                     });
                   }
                 }
+              });
+              runInAction('Update Graphical Builder Details', () => {
+                this.props.store.editorPanel.updateAggregateDetails = true;
+                resolve();
               });
               // 4. Is the current block valid?.
               if (editor.blockList[editor.selectedBlock].status === 'valid') {
@@ -406,12 +419,6 @@ export default class GraphicalBuilder extends React.Component {
                 // 4.b No - Clear Results.
                 this.clearResultsOutput(editor);
               }
-
-              runInAction('Update Graphical Builder', () => {
-                this.props.store.editorPanel.updateAggregateDetails = true;
-                this.forceUpdate();
-                resolve();
-              });
             }
           });
         }
@@ -496,15 +503,19 @@ export default class GraphicalBuilder extends React.Component {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
                     runInAction('Update Block Status - Valid', () => {
+                      l.debug('OLD: ', editor.blockList[index].attributeList);
+                      l.debug('NEW: ', res.stepAttributes[attributeIndex]);
                       editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
                       editor.blockList[index].status = 'valid';
                     });
                   } else {
-                    l.error('Result[', index, '] is invalid: ', indexValue);
+                    if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
                     runInAction('Update Block Status - Invalid', () => {
+                      l.debug('OLD: ', editor.blockList[index].attributeList);
+                      l.debug('NEW: ', res.stepAttributes[attributeIndex]);
                       editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
                       editor.blockList[index].status = 'pending';
                     });
@@ -556,7 +567,7 @@ export default class GraphicalBuilder extends React.Component {
   removeBlock(blockPosition) {
     const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     // 1. Remove from Editor Structure.
-    editor.blockList.splice(blockPosition, 1);
+    l.debug(editor.blockList.splice(blockPosition, 1));
     // 2. Update Shell Steps.
     this.updateShellPipeline(false).then(res => {
       if (res && res.unableToUpdateSteps) {
@@ -566,10 +577,12 @@ export default class GraphicalBuilder extends React.Component {
         // 4. Was the block removed the selected block?.
         if (blockPosition === editor.selectedBlock) {
           // 4.a Yes - Set selected block to current - 1.
-          editor.selectedBlock -= 1;
-          if (editor.selectedBlock < 0) {
-            editor.selectedBlock = 0;
-          }
+          runInAction('Select previous block', () => {
+            editor.selectedBlock -= 1;
+            if (editor.selectedBlock < 0) {
+              editor.selectedBlock = 0;
+            }
+          });
         }
         // 4. Is the current block valid?.
         if (editor.blockList[editor.selectedBlock].status === 'valid') {
@@ -580,7 +593,7 @@ export default class GraphicalBuilder extends React.Component {
           this.clearResultsOutput(editor);
         }
 
-        runInAction('Update Graphical Builder', () => {
+        runInAction('Update Details', () => {
           this.props.store.editorPanel.updateAggregateDetails = true;
           this.forceUpdate();
         });
@@ -607,7 +620,7 @@ export default class GraphicalBuilder extends React.Component {
                     editor.blockList[index].status = 'valid';
                   });
                 } else {
-                  l.error('Result[', index, '] is invalid: ', indexValue);
+                  if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
                   if (!(typeof indexValue === 'string')) {
                     indexValue = '[ "' + indexValue.join('", "') + '"]';
                   }
@@ -640,7 +653,7 @@ export default class GraphicalBuilder extends React.Component {
               this.clearResultsOutput(editor);
             }
 
-            runInAction('Update Graphical Builder', () => {
+            runInAction('Update Details', () => {
               this.props.store.editorPanel.updateAggregateDetails = true;
               this.forceUpdate();
             });
@@ -671,6 +684,7 @@ export default class GraphicalBuilder extends React.Component {
    * @return {Boolean} - Whether or not the step is valid.
    */
   validateBlock(step) {
+    if (this.state.debug) l.debug('Validate Agg Block');
     return new Promise((resolve, reject) => {
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       const service = featherClient().service('/mongo-sync-execution');
@@ -711,6 +725,7 @@ export default class GraphicalBuilder extends React.Component {
   }
 
   validateAllBlocks(stepArray) {
+    if (this.state.debug) l.debug('Add all Agg Block');
     return new Promise(resolve => {
       const returnObject = {
         areAllValid: true,
@@ -742,6 +757,7 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   updateShellPipeline(preserve) {
+    if (this.state.debug) l.debug('Update Shell Pipeline');
     return new Promise((resolve, reject) => {
       // Assemble Step Array.
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
@@ -827,6 +843,7 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   updateResultSet() {
+    if (this.state.debug) l.debug('Update Result Set');
     return new Promise(resolve => {
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       // Update steps in Shell:
@@ -865,8 +882,8 @@ export default class GraphicalBuilder extends React.Component {
   @action.bound
   updateResultsOutput(editor, stepId) {
     const output = this.props.store.outputs.get(editor.id);
-    output.output = globalString('aggregate_builder/valid_output');
 
+    if (this.state.debug) l.debug('Get Agg Results');
     const service = featherClient().service('/mongo-sync-execution');
     service.timeout = 30000;
     service
@@ -875,11 +892,13 @@ export default class GraphicalBuilder extends React.Component {
         commands: AggregateCommands.GET_RESULTS(editor.aggregateID, stepId, false)
       })
       .then(res => {
+        output.output = globalString('aggregate_builder/valid_output');
         runInAction('Update Graphical Builder', () => {
-          res = JSON.parse(res);
-          if (res.length === 0) {
+          // if (this.state.debug) l.debug('Got Agg Results: ', res);
+          if (!res || res.length === 0) {
             output.output = globalString('aggregate_builder/no_output');
           }
+          res = JSON.parse(res);
           res.map(indexValue => {
             output.append(JSON.stringify(indexValue) + '\n');
           });
@@ -1166,7 +1185,7 @@ export default class GraphicalBuilder extends React.Component {
       this.updateShellPipeline(false).then(res => {
         if (res && res.unableToUpdateSteps) {
           // Partial update
-          if (this.debug) l.error('Unable to complete full update!');
+          if (this.state.debug) l.error('Unable to complete full update!');
           editor.selectedBlock = 0;
           // 4. Is the current block valid?.
           if (editor.blockList[editor.selectedBlock].status === 'valid') {
@@ -1204,7 +1223,7 @@ export default class GraphicalBuilder extends React.Component {
                       editor.blockList[index].status = 'valid';
                     });
                   } else {
-                    l.error('Result[', index, '] is invalid: ', indexValue);
+                    if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
@@ -1225,7 +1244,7 @@ export default class GraphicalBuilder extends React.Component {
                 // 4.b No - Clear Results.
                 this.clearResultsOutput(editor);
               }
-              runInAction('Update Graphical Builder', () => {
+              runInAction('Update Details', () => {
                 this.props.store.editorPanel.updateAggregateDetails = true;
                 this.forceUpdate();
                 resolve();
@@ -1372,7 +1391,7 @@ export default class GraphicalBuilder extends React.Component {
         >
           <p>{globalString('aggregate_builder/alerts/importWarningText')}</p>
         </Alert>
-        {!this.editor.isAggregateLoading ? (
+        {!this.editor.isAggregateDetailsLoading ? (
           <ul className="graphicalBuilderBlockList">
             <FirstBlockTarget />
             {this.props.store.editors.get(this.state.id).blockList.map((indexValue, index) => {
@@ -1446,7 +1465,9 @@ export default class GraphicalBuilder extends React.Component {
                   status={indexValue.status}
                   moveBlock={this.moveBlock}
                   onClickCallback={this.selectBlock}
-                  onClickCloseCallback={this.removeBlock}
+                  onClickCloseCallback={() => {
+                    this.removeBlock(index);
+                  }}
                   concrete
                 />
               );
