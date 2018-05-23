@@ -23,7 +23,7 @@
  * @Date:   2017-04-19T15:43:32+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-21T08:41:18+10:00
+ * @Last modified time: 2018-05-23T07:45:36+10:00
  */
 
 import React from 'react';
@@ -38,7 +38,11 @@ export default observer(({ field, showLabel = true, formGroup = false }) => {
   if (field.error) {
     fldClassName += ' pt-intent-danger';
   }
-  let inputClassName = 'pt-input';
+  let inputClassName = 'pt-input pt-inplace-input';
+  if (field.name !== '') {
+    inputClassName += ' pt-input-' + field.name;
+  }
+
   let tooltipClassName = 'pt-tooltip-indicator pt-tooltip-indicator-form';
   if (formGroup) {
     if (field.options && field.options.tooltip) {

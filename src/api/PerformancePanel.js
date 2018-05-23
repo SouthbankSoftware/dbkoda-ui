@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:42:29+10:00
+ * @Last modified time: 2018-05-22T13:35:52+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -296,7 +296,7 @@ export default class PerformancePanelApi {
   @action.bound
   _handleVisibilityChange() {
     if (document.hidden) {
-      l.notice('becomes hidden');
+      l.debug('window becomes hidden');
 
       for (const pP of this.store.performancePanels.values()) {
         const { status } = pP;
@@ -306,7 +306,7 @@ export default class PerformancePanelApi {
         }
       }
     } else {
-      l.notice('becomes visible');
+      l.debug('window becomes visible');
 
       this._attachPerformancePanelsToMobx();
     }
