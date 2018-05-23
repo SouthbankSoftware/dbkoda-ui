@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-22T17:12:12+10:00
+ * @Last modified time: 2018-05-23T12:48:02+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -71,6 +71,8 @@ export class ConnectionForm extends JsonForm {
         } else if (selectedSubform === SubformCategory.CLUSTER) {
           if (field.name === 'urlCluster') {
             this.updateClusterUrl(field);
+          } else if (field.name === 'useClusterConfig') {
+            this.updateReferencedFields(field);
           }
         }
 
@@ -119,17 +121,9 @@ export class ConnectionForm extends JsonForm {
       this.updateUrl(field);
     }
 
-    if (field.name === 'urlClusterRadio' && field.value) {
+    if ((field.name === 'urlClusterRadio' || field.name === 'useClusterConfig') && field.value) {
       // update cluster fields from basic connection fields
       this.updateClusterFields(field);
-      // disable the cluster config to use the cluster url
-      this.updateFieldValue(field.$('useClusterConfig'), false);
-    }
-    if (field.name === 'useClusterConfig' && field.value) {
-      // update cluster fields from basic connection fields
-      this.updateClusterFields(field);
-      // disable the cluster url to use the cluster config
-      this.updateFieldValue(field.$('urlClusterRadio'), false);
     }
     if (
       field.subForm.value === SubformCategory.CLUSTER &&

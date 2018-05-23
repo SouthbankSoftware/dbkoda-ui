@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-22T16:22:04+10:00
+ * @Last modified time: 2018-05-23T13:28:56+10:00
  */
 
 import _ from 'lodash';
@@ -128,7 +128,7 @@ export default class ProfileApi {
       data.hostRadio = !data.urlRadio;
     }
 
-    if (data.useClusterConfig || data.urlClusterRadio) {
+    if (data.useClusterConfig) {
       connectionUrl = data.urlCluster;
       if (data.shaCluster) {
         query.username = data.usernameCluster;
@@ -146,6 +146,7 @@ export default class ProfileApi {
       query.sslAllowInvalidCertificates = data.sslAllowInvalidCertificatesCluster;
     } else {
       if (data.hostRadio) {
+        // we can remove this check and use url by default but I kept it for the case of old profiles
         connectionUrl = StaticApi.mongoProtocol + data.host + ':' + data.port;
       } else if (data.urlRadio) {
         connectionUrl = data.url;
