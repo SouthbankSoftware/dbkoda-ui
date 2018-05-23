@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:56:28+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-23T12:05:29+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -524,7 +524,9 @@ export default class Store {
     newStore.treeActionPanel.isNewFormValues = false;
 
     // Aggregate Builder:
-    newStore.aggregateBuilder.showViewNameDialog = false;
+    if (newStore.aggregateBuilder) {
+      newStore.aggregateBuilder.showViewNameDialog = false;
+    }
   }
 
   hasUnsavedEditorTabs() {

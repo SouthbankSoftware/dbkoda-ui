@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-21T09:19:43+10:00
+ * @Last modified time: 2018-05-23T12:26:49+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -153,7 +153,6 @@ export default class ProfileManager extends React.Component<Props, State> {
     const menuBtns = [];
     const subforms = this.form.getSubForms();
     subforms.forEach(formStr => {
-      l.info(formStr);
       const subForm = this.form.formSchema[formStr];
       const btnClassName = 'btn-' + formStr;
       menuBtns.push(
