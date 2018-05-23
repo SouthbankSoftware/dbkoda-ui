@@ -54,19 +54,18 @@ export default class Palette extends React.Component {
         groupAndJoin: false,
         transform: false,
         other: false,
-        all: false
+        all: false,
+        debug: false
       }
     };
     this.blockList = this.getBlockList();
+    this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
   }
 
   @action.bound
   addBlock(blockType, position) {
-    runInAction('Agg Builder no longer loading', () => {
-      this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      ).isAggregateLoading = true;
-    });
+    this.editor.isAggregateDetailsLoading = true;
+    if (this.state.debug) l.debug('Add new Agg Block');
     if (
       this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList.length ===
       0
@@ -136,6 +135,7 @@ export default class Palette extends React.Component {
               // Check for error.
               l.error('updateResultSet: ', res);
             }
+            l.debug('Stop Loading');
             runInAction('Agg Builder no longer loading', () => {
               this.props.store.editors.get(
                 this.props.store.editorPanel.activeEditorId
@@ -302,6 +302,7 @@ export default class Palette extends React.Component {
    */
   @action.bound
   updateShellPipeline() {
+    if (this.state.debug) l.debug('Update Shell Pipeline');
     return new Promise((resolve, reject) => {
       // Assemble Step Array.
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
@@ -344,6 +345,7 @@ export default class Palette extends React.Component {
    */
   @action.bound
   updateResultSet() {
+    if (this.state.debug) l.debug('Update Result Set');
     return new Promise((resolve, reject) => {
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       // Update steps in Shell:
@@ -378,6 +380,7 @@ export default class Palette extends React.Component {
    */
   @action.bound
   getBlockAttributes(position) {
+    if (this.state.debug) l.debug('Get block attributes');
     return new Promise((resolve, reject) => {
       // Get the relevant editor object.
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
@@ -408,6 +411,7 @@ export default class Palette extends React.Component {
    */
   @action.bound
   addBlockToShell(blockType, position) {
+    if (this.state.debug) l.debug('Add new Agg Block to shell');
     const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     if (position === 'END') {
       position = editor.blockList.length - 1;
@@ -437,6 +441,7 @@ export default class Palette extends React.Component {
    */
   @action.bound
   addBlockToEditor(blockType, position, attributeList) {
+    if (this.state.debug) l.debug('Add new Agg Block to editor');
     // Get relevant editor.
     const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
 
@@ -527,17 +532,25 @@ export default class Palette extends React.Component {
 
   render() {
     return (
-      <div className="aggregatePaletteWrapper">
-        <nav className="aggregatePaletteToolbar pt-navbar pt-dark">
-          <h2 className="paletteHeader">{globalString('aggregate_builder/palette_title')}</h2>
-        </nav>
-        <Tree
-          contents={this.blockList}
-          onNodeClick={this.handleNodeClick}
-          onNodeCollapse={this.handleNodeCollapse}
-          onNodeExpand={this.handleNodeExpand}
-          className="palletteTree"
-        />
+      <div className="aggregatePaletteContainer">
+        <div className="aggregatePaletteWrapper">
+          <nav className="aggregatePaletteToolbar pt-navbar pt-dark">
+            <h2 className="paletteHeader">{globalString('aggregate_builder/palette_title')}</h2>
+          </nav>
+          {!this.editor.isAggregateDetailsLoading ? (
+            <Tree
+              contents={this.blockList}
+              onNodeClick={this.handleNodeClick}
+              onNodeCollapse={this.handleNodeCollapse}
+              onNodeExpand={this.handleNodeExpand}
+              className="palletteTree"
+            />
+          ) : (
+            <div className="loaderWrapper">
+              <div className="loader" />
+            </div>
+          )}
+        </div>
       </div>
     );
   }

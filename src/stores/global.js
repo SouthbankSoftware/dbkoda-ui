@@ -335,6 +335,7 @@ export default class Store {
             refParent: { text: nodeRightClicked.refParent.text }
           },
           isAggregateLoading: true,
+          isAggregateDetailsLoading: true,
           blockList: []
         });
       })
@@ -496,6 +497,7 @@ export default class Store {
       value.executing = false;
       value.status = ProfileStatus.CLOSED;
       value.isAggregateLoading = false;
+      value.isAggregateDetailsLoading = false;
     });
 
     // Outputs:
