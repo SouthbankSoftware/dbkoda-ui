@@ -391,8 +391,6 @@ export default class GraphicalBuilder extends React.Component {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
                     runInAction('Update Graphical Builder', () => {
-                      l.debug('OLD: ', editor.blockList[index].attributeList);
-                      l.debug('NEW: ', res.stepAttributes[attributeIndex]);
                       editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
                       editor.blockList[index].status = 'valid';
                     });

@@ -147,6 +147,10 @@ export default class ListView extends React.Component {
     profile.passPhrase = this.state.passPhrase;
     profile.bReconnect = true;
 
+    // Fix to make sure loading spinner begins before the profile is actually connecting, otherwise it won't appear until re-render.
+    this.store.profileStore.profiles.get(profile.id).status = ProfileStatus.CONNECTING;
+    this.forceUpdate();
+
     this.api.connectProfile(profile).then(res => {
       runInAction('Turn off loading spinner in dialog.', () => {
         this.props.store.layout.alertIsLoading = false;
@@ -639,6 +643,7 @@ export default class ListView extends React.Component {
           ? 'connection-profile-cell connection-profile-cell-selected'
           : 'connection-profile-cell';
       if (profiles[rowIndex][1].status == 'OPEN') {
+        l.debug('CELL ', rowIndex, 'IS  OPEN');
         return (
           <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
             <ConnectionIcon className="pt-icon dbKodaSVG" width={40} height={40} />
@@ -665,6 +670,7 @@ export default class ListView extends React.Component {
           </Cell>
         );
       } else if (profiles[rowIndex][1].status == ProfileStatus.CONNECTING) {
+        l.debug('CELL ', rowIndex, 'IS LOADING');
         return (
           <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
             <ConnectionIcon className="pt-icon dbKodaSVG" width={40} height={40} />
@@ -677,6 +683,7 @@ export default class ListView extends React.Component {
           </Cell>
         );
       }
+      l.debug('CELL ', rowIndex, 'IS  CLOSED');
       return (
         <Cell className={className}>
           <ConnectionIcon className="pt-icon dbKodaSVG closedProfile" width={40} height={40} />
