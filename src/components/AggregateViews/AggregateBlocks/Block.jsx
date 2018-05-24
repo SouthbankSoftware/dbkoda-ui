@@ -117,7 +117,7 @@ export default class Block extends React.Component {
   }
 
   @autobind
-  _handleDoubleClick(event) {
+  _handleDoubleClick() {
     this.props.addBlock(this.state.type, 'END');
   }
 
