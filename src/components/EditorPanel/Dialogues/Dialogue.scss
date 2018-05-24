@@ -1,0 +1,33 @@
+.dbSelectWrapper {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 40px;
+
+  span {
+    margin-right: 20px;
+  }
+
+  select {
+  }
+
+  button {
+    width: 200px;
+  }
+}
+
+.collectionSelectWrapper {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+
+  span {
+    margin-right: 17px;
+  }
+
+  select {
+  }
+
+  button {
+    width: 200px;
+  }
+}

@@ -605,6 +605,8 @@ export default class Toolbar extends React.Component {
       <nav className="pt-navbar editorToolbar">
         <SimpleQueryDialogue
           profile={profile}
+          title="Simple Query"
+          subtitle="Please fill in the following form and press okay."
           isOpen={this.state.isSimpleQueryDialogueOpen}
           closeCallBack={() => {
             this.setState({ isSimpleQueryDialogueOpen: false });
@@ -625,8 +627,10 @@ export default class Toolbar extends React.Component {
             }
           }}
         />
-        <AggregateBuilderDialogue
+        <SimpleQueryDialogue
           profile={profile}
+          title="Aggregate Builder"
+          subtitle="Please fill in the following form and press okay."
           isOpen={this.state.isAggregateQueryDialogueOpen}
           closeCallBack={() => {
             this.setState({ isAggregateQueryDialogueOpen: false });

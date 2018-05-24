@@ -10,6 +10,7 @@ import { Select } from '@blueprintjs/select';
 import { featherClient } from '~/helpers/feathers';
 import { ProfileStatus } from '#/common/Constants';
 import autobind from 'autobind-decorator';
+import './Dialogue.scss';
 
 @inject(allStores => ({
   store: allStores.store,
@@ -77,7 +78,7 @@ export default class SimpleQueryDialogue extends React.Component {
         const arrayLength = collectionArray.length;
         for (let i = 0; i < arrayLength; i += 1) {
           this.state.collectionList.push({
-            name: collectionArray[i].replace(/['"]+/g, '').slice(1, -1)
+            name: collectionArray[i].replace(/['"]+/g, '')
           });
           if (i === arrayLength - 1) {
             this.forceUpdate();
@@ -112,40 +113,53 @@ export default class SimpleQueryDialogue extends React.Component {
       <Dialog className="newFeaturesDialog" isOpen={this.state.isOpen}>
         <div className="dialogContent">
           <div className="header">
-            <span className="title">Create a Simple Query</span>
-            <p className="versionNumber">Fill in the below form and click Okay</p>
+            <span className="title">{this.props.title}</span>
+            <p className="versionNumber">{this.props.subtitle}</p>
           </div>
           <div className="body">
-            <span>Please select a database</span>
-            <Select
-              filterable={false}
-              items={this.state.databaseList}
-              itemRenderer={renderItem}
-              noResults={<MenuItem disabled text="Fetching DB List..." />}
-              onItemSelect={this._onDBSelect}
-            >
-              <Button
-                className="select-button"
-                text={this.state.selectedDatabase || 'Select DB'}
-                rightIcon="double-caret-vertical"
-              />
-            </Select>
-            <span>Please select a collection</span>
-            <Select
-              filterable={false}
-              disabled={!this.state.selectedDatabase}
-              items={this.state.collectionList}
-              itemRenderer={renderItem}
-              noResults={<MenuItem disabled text="Please select a database first." />}
-              onItemSelect={this._onCollectionSelect}
-            >
-              <Button
-                className="select-button"
-                disabled={!this.state.selectedDatabase}
-                text={this.state.selectedCollection || 'Select Collection'}
-                rightIcon="double-caret-vertical"
-              />
-            </Select>
+            <div className="dbSelectWrapper">
+              <span>Database: </span>
+              <Select
+                filterable={false}
+                items={this.state.databaseList}
+                itemRenderer={renderItem}
+                noResults={<MenuItem disabled text="Fetching DB List..." />}
+                onItemSelect={this._onDBSelect}
+              >
+                <Button
+                  className="select-button"
+                  text={
+                    (this.state.selectedDatabase && this.state.selectedDatabase.substring(0, 30)) ||
+                    'Select DB'
+                  }
+                  rightIcon="double-caret-vertical"
+                />
+              </Select>
+            </div>
+            {this.state.selectedDatabase && (
+              <div className="collectionSelectWrapper">
+                <span>Collection: </span>
+                <Select
+                  filterable={false}
+                  disabled={!this.state.selectedDatabase}
+                  items={this.state.collectionList}
+                  itemRenderer={renderItem}
+                  noResults={<MenuItem disabled text="Please select a database first." />}
+                  onItemSelect={this._onCollectionSelect}
+                >
+                  <Button
+                    className="select-button"
+                    disabled={!this.state.selectedDatabase}
+                    text={
+                      (this.state.selectedCollection &&
+                        this.state.selectedCollection.substring(0, 30)) ||
+                      'Select Collection'
+                    }
+                    rightIcon="double-caret-vertical"
+                  />
+                </Select>{' '}
+              </div>
+            )}
           </div>
         </div>
         <div className="dialogButtons">
