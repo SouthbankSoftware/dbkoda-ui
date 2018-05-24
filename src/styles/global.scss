@@ -73,10 +73,12 @@ p {
   min-height: 10px; /*Prevent it from getting too small */
   min-width: 10px;
 }
+
 ::-webkit-scrollbar-thumb:active {
   background: darken($scrollBarThumb, 5) !important; /* Some darker color when you click it */
   -webkit-border-radius: 100px;
 }
+
 ::-webkit-scrollbar-corner {
   background-color: rgba(0, 0, 0, 0);
 }
@@ -132,6 +134,11 @@ h3 {
   background-color: $toolTipBackgroundColour !important;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 10pt;
+
+  ul.pt-menu {
+    max-height: 400px;
+    overflow-y: auto;
+  }
 }
 
 .pt-popover-arrow {
@@ -423,6 +430,7 @@ span.cm-error {
 .ReactCodeMirror {
   height: 100%;
 }
+
 //  //// Global CSS: ////  //
 /////////////////////////////
 
@@ -472,6 +480,7 @@ textarea {
   border-radius: 6px;
   padding: 5px 0;
   font-size: 12px;
+
   /* Position the tooltip */
   position: absolute;
   z-index: 1;
@@ -606,6 +615,7 @@ div.optInDialog {
   color: #333;
   border-radius: 2px;
 }
+
 /* Creates a small triangle extender for the tooltip */
 .d3-tip-top:after {
   box-sizing: border-box;
