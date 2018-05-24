@@ -40,7 +40,6 @@ import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { EditorTypes } from '#/common/Constants.js';
 import './Panel.scss';
 import SimpleQueryDialogue from './Dialogues/SimpleQueryDialogue.jsx';
-import AggregateBuilderDialogue from './Dialogues/AggregateBuilderDialogue.jsx';
 import { Broker, EventType } from '../../helpers/broker';
 
 // Icon Imports.
