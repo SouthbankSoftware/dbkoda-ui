@@ -74,7 +74,7 @@ describe('Toolbar', () => {
   });
 
   test('has buttons', () => {
-    expect(app.find('AnchorButton').length).toEqual(8);
+    expect(app.find('AnchorButton').length).toEqual(10);
   });
 
   test('has disabled buttons', () => {
