@@ -32,12 +32,15 @@ import { featherClient } from '~/helpers/feathers';
 import { performancePanelStatuses } from '~/api/PerformancePanel';
 import { inject, observer } from 'mobx-react';
 import { action, reaction, runInAction } from 'mobx';
+import autobind from 'autobind-decorator';
 import path from 'path';
 import { AnchorButton, Intent, Position, Tooltip, Dialog } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { EditorTypes } from '#/common/Constants.js';
 import './Panel.scss';
+import SimpleQueryDialogue from './Dialogues/SimpleQueryDialogue.jsx';
+import AggregateBuilderDialogue from './Dialogues/AggregateBuilderDialogue.jsx';
 import { Broker, EventType } from '../../helpers/broker';
 
 // Icon Imports.
@@ -47,6 +50,8 @@ import AddIcon from '../../styles/icons/add-icon.svg';
 import OpenFileIcon from '../../styles/icons/open-icon.svg';
 import SaveFileIcon from '../../styles/icons/save-icon.svg';
 import PerfPanelIcon from '../../styles/icons/performance-icon.svg';
+import SearchIcon from '../../styles/icons/search-icon.svg';
+import AggregateIcon from '../../styles/icons/enhanced-json-icon.svg';
 
 const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
@@ -81,7 +86,9 @@ export default class Toolbar extends React.Component {
     super(props);
 
     this.state = {
-      showLoadSQLWarning: false
+      showLoadSQLWarning: false,
+      isSimpleQueryDialogueOpen: false,
+      isAggregateQueryDialogueOpen: false
     };
     /**
      * @Mike TODO -> These can probably all be moved to using @action.bound instead of binding up the top, since it's a lot neater.
@@ -560,6 +567,26 @@ export default class Toolbar extends React.Component {
     );
   }
 
+  @autobind
+  checkExistingEditor(editorType) {
+    const treeEditors = this.props.store.treeActionPanel.editors.entries();
+    let bExistingEditor = false;
+    for (const editor of treeEditors) {
+      if (
+        editor[1].currentProfile == this.props.store.profileList.selectedProfile.id &&
+        editor[1].type == editorType
+      ) {
+        bExistingEditor = true;
+        runInAction('update state var', () => {
+          this.props.store.editorPanel.activeEditorId = editor[1].id;
+          this.props.store.treeActionPanel.treeActionEditorId = editor[1].id;
+        });
+        break;
+      }
+    }
+    return bExistingEditor;
+  }
+
   /**
    * Render function for this component.
    */
@@ -576,6 +603,40 @@ export default class Toolbar extends React.Component {
 
     return (
       <nav className="pt-navbar editorToolbar">
+        <SimpleQueryDialogue
+          profile={profile}
+          isOpen={this.state.isSimpleQueryDialogueOpen}
+          closeCallBack={() => {
+            this.setState({ isSimpleQueryDialogueOpen: false });
+          }}
+          acceptCallBack={(db, collection) => {
+            this.setState({ isSimpleQueryDialogueOpen: false });
+            const nodeClicked = {
+              text: collection,
+              type: 'collection',
+              json: { db, text: collection },
+              refParent: { json: { text: db }, text: db }
+            };
+            this.props.store.setTreeAction(nodeClicked, 'SimpleQuery');
+            if (this.checkExistingEditor(EditorTypes.TREE_ACTION)) {
+              this.props.store.showTreeActionPane(EditorTypes.TREE_ACTION);
+            } else {
+              this.props.api.addNewEditorForTreeAction({ type: EditorTypes.TREE_ACTION });
+            }
+          }}
+        />
+        <AggregateBuilderDialogue
+          profile={profile}
+          isOpen={this.state.isAggregateQueryDialogueOpen}
+          closeCallBack={() => {
+            this.setState({ isAggregateQueryDialogueOpen: false });
+          }}
+          acceptCallBack={(db, collection) => {
+            this.setState({ isAggregateQueryDialogueOpen: false });
+            const nodeClicked = { text: collection, refParent: { text: db } };
+            this.props.store.openNewAggregateBuilder(nodeClicked);
+          }}
+        />
         {this.renderSQLImportWarning()}
         <div className="pt-navbar-group pt-align-left leftEditorToolbar">
           <div className="pt-navbar-heading">{globalString('editor/toolbar/queryInput')}</div>
@@ -650,6 +711,42 @@ export default class Toolbar extends React.Component {
         </div>
 
         <div className="pt-button-group pt-navbar-group pt-intent-primary perfButtonGroup">
+          <Tooltip
+            intent={Intent.DANGER}
+            hoverOpenDelay={1000}
+            content={globalString('profile/menu/simpleQuery')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              disabled={this.props.store.editorToolbar.noActiveProfile}
+              className="pt-button pt-intent-primary simpleQuery"
+              onClick={() => {
+                this.setState({ isSimpleQueryDialogueOpen: true });
+              }}
+              icon="pt-icon-heat-grid"
+            >
+              <SearchIcon className="dbKodaSVG" width={20} height={20} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.DANGER}
+            hoverOpenDelay={1000}
+            content={globalString('profile/menu/aggregateBuilder')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              disabled={this.props.store.editorToolbar.noActiveProfile}
+              className="pt-button pt-intent-primary aggregateBuilder"
+              onClick={() => {
+                this.setState({ isAggregateQueryDialogueOpen: true });
+              }}
+              icon="pt-icon-heat-grid"
+            >
+              <AggregateIcon className="dbKodaSVG" width={20} height={20} />
+            </AnchorButton>
+          </Tooltip>
           <Tooltip
             intent={Intent.DANGER}
             hoverOpenDelay={1000}

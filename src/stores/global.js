@@ -276,6 +276,7 @@ export default class Store {
 
   @action.bound
   setTreeAction = (treeNode, treeAction) => {
+    l.debug(treeNode, treeAction);
     this.treeActionPanel.treeNode = treeNode;
     this.treeActionPanel.treeAction = treeAction;
   };

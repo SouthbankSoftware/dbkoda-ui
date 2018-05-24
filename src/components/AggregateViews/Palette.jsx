@@ -135,7 +135,6 @@ export default class Palette extends React.Component {
               // Check for error.
               l.error('updateResultSet: ', res);
             }
-            l.debug('Stop Loading');
             runInAction('Agg Builder no longer loading', () => {
               this.props.store.editors.get(
                 this.props.store.editorPanel.activeEditorId

@@ -487,7 +487,9 @@
         "destroyPerformancePanel": "Destroy Performance Panel",
         "resetHWM": "Reset High Water Mark",
         "deleteProfile": "Delete Profile",
-        "getTopConnections": "Get Top 10 Connections"
+        "getTopConnections": "Get Top 10 Connections",
+        "simpleQuery": "Create a Simple Query",
+        "aggregateBuilder": "Create an Aggregate Pipeline"
       },
       "closeAlert": {
         "prompt": "Are you sure you want to close this connection?",
