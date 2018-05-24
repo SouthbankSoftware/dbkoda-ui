@@ -3,7 +3,7 @@
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T12:03:52+10:00
+ * @Last modified time: 2018-05-24T15:38:10+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -158,12 +158,12 @@ export default class EditorApi {
    * @param editor - editor Object
    * @return suggested file name
    */
-  getUnsavedEditorSuggestedFileName(editor: {}): string {
+  getUnsavedEditorSuggestedFileName = (editor: {}): string => {
     if (editor.type === 'drill') {
       return camelise(`new${this.getEditorDisplayName(editor)}`) + '.sql';
     }
     return camelise(`new${this.getEditorDisplayName(editor)}`) + '.js';
-  }
+  };
 
   /**
    * Get editor display name. For example, tab title of an editor
