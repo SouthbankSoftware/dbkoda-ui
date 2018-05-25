@@ -3,7 +3,7 @@
  * @Date:   2018-05-15T16:12:25+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-25T10:59:31+10:00
+ * @Last modified time: 2018-05-25T14:10:42+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -120,6 +120,7 @@ export default class PerformanceWindowApi {
 
   @action.bound
   getTopConnections = () => {
+    this.store.topConnectionsPanel.bLoading = true;
     this.sendCommandToMainProcess('pw_getTopConnections');
   };
 

@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T10:33:36+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-25T13:49:19+10:00
+ * @Last modified time: 2018-05-25T14:32:25+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -98,11 +98,8 @@
 
   .profilingResultsWrapper {
     .panelHeader {
-      padding-left: 0;
-
       .pt-navbar-heading {
         font-size: large;
-        margin-left: 12px;
       }
     }
 
@@ -110,7 +107,7 @@
       max-height: 400px;
 
       .dbSelectWrapper {
-        margin-left: 12px;
+        margin-left: 15px;
         display: flex;
         align-items: center;
 

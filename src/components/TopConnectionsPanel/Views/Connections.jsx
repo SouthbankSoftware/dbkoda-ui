@@ -3,7 +3,7 @@
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-25T13:50:02+10:00
+ * @Last modified time: 2018-05-25T14:23:05+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -45,7 +45,8 @@ const columnsWidthsPercent = [10, 15, 15, 10, 10, 15, 10, 15];
   return {
     api: store.api,
     connections: topConnectionsPanel.payload,
-    highWaterMark: topConnectionsPanel.highWaterMarkConnection
+    highWaterMark: topConnectionsPanel.highWaterMarkConnection,
+    bLoading: topConnectionsPanel.bLoading
   };
 })
 @observer
@@ -210,6 +211,26 @@ export default class ConnectionsView extends React.Component<Props> {
             <div className="pt-navbar-heading">Top Connections</div>
           </div>
           <div className="pt-navbar-group pt-align-right">
+            <Tooltip
+              className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
+              content="Refresh Top Connections"
+              hoverOpenDelay={1000}
+              inline
+              intent={Intent.PRIMARY}
+              position={Position.BOTTOM}
+            >
+              <AnchorButton
+                className="refreshButton"
+                loading={this.props.bLoading}
+                onClick={this.props.api.getTopConnections}
+              >
+                <RefreshIcon width={50} height={50} className="dbKodaSVG" />
+              </AnchorButton>
+            </Tooltip>
+          </div>
+        </nav>
+        <nav className="pt-navbar connectionsSubToolbar">
+          <div className="pt-navbar-group pt-align-left">
             <label htmlFor="lblTCAuto">Refresh Top Connections</label>
             <div className="Switch">
               <Switch
@@ -218,10 +239,6 @@ export default class ConnectionsView extends React.Component<Props> {
                 defaultChecked={false}
                 onChange={this.props.onAutoRefreshCheckboxToggle}
               />
-              {/* <div className="switchLabel">
-                {this.props.autoRefreshTopCon && globalString('general/on')}
-                {!this.props.autoRefreshTopCon && globalString('general/off')}
-              </div> */}
             </div>
             <label htmlFor="lblTCPreTime">every</label>
             <NumericInput
@@ -234,21 +251,9 @@ export default class ConnectionsView extends React.Component<Props> {
             <label className="lblTCPostTime" htmlFor="lblTCPostTime">
               seconds
             </label>
-            <Tooltip
-              className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
-              content="Refresh Top Connections"
-              hoverOpenDelay={1000}
-              inline
-              intent={Intent.PRIMARY}
-              position={Position.BOTTOM}
-            >
-              <AnchorButton className="refreshButton" onClick={this.props.api.getTopConnections}>
-                <RefreshIcon width={50} height={50} className="dbKodaSVG" />
-              </AnchorButton>
-            </Tooltip>
           </div>
         </nav>
-        <div style={{ height: 'calc(100% - 50px)' }}>
+        <div style={{ height: 'calc(100% - 90px)' }}>
           <Table
             enableMultipleSelection={false}
             numRows={numRows}
