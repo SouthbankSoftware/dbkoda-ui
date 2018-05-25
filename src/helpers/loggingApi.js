@@ -5,7 +5,7 @@
  * @Date:   2018-05-04T10:41:36+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T10:25:55+10:00
+ * @Last modified time: 2018-05-25T17:17:36+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -213,7 +213,7 @@ export const initLoggingApi = (tags: string[]) => {
       }
 
       // $FlowFixMe
-      console._error(info.error);
+      console._error(...results);
 
       const usePiggyback = !isRaygunEnabled && info.raygun !== false;
 
@@ -248,11 +248,7 @@ export const initLoggingApi = (tags: string[]) => {
     },
     info: console.log,
     log: console.log,
-    debug: (...args) => {
-      if (!IS_PRODUCTION) {
-        console.log('%cDebug: ', 'color: blue', ...args);
-      }
-    }
+    debug: IS_PRODUCTION ? _.noop : console.log.bind(null, '%cDebug: ', 'color: blue')
   };
 
   l._error = (...args) => {
