@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-25T08:47:32+10:00
+ * @Last modified time: 2018-05-25T14:10:04+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -68,6 +68,7 @@ export default class Store {
   @observable
   topConnectionsPanel = observable.object(
     {
+      bLoading: false,
       payload: null,
       selectedConnection: null,
       operations: null,
@@ -157,6 +158,7 @@ export default class Store {
             this.errorHandler(args.err);
           }
         } else if (args.command === 'mw_topConnectionsData') {
+          this.topConnectionsPanel.bLoading = false;
           this.topConnectionsPanel.selectedConnection = null;
           this.topConnectionsPanel.operations = null;
           this.topConnectionsPanel.selectedOperation = null;

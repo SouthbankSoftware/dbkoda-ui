@@ -22,8 +22,8 @@
  * @Author: Michael Harrison
  * @Date:   2017-07-21 12:36:36
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   Mike
- * @Last modified time: 2017-07-21 12:36:40
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-25T13:59:28+10:00
  */
 
 import React from 'react';
@@ -52,8 +52,8 @@ const collectTarget = (connect, monitor) => {
 @inject(allStores => ({
   store: allStores.store
 }))
-@observer
 @DropTarget(DragItemTypes.VISUAL_BLOCK, blockTarget, collectTarget)
+@observer
 export default class FirstBlockTarget extends React.Component {
   static propTypes = {
     connectDropTarget: PropTypes.func.isRequired,

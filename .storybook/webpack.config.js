@@ -3,7 +3,7 @@
  * @Date:   2018-05-23T12:13:42+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-23T12:15:06+10:00
+ * @Last modified time: 2018-05-25T00:21:41+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,6 +29,11 @@ const path = require('path');
 module.exports = {
   module: {
     rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+        include: path.resolve(__dirname, '../')
+      },
       {
         test: /\.scss$/,
         loaders: ['style-loader', 'css-loader', 'sass-loader'],

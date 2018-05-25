@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-23T11:03:23+11:00
+ * @Last modified time: 2018-05-25T00:01:43+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,54 +28,54 @@ declare module '@blueprintjs/core' {
     /**
      * Child tree nodes of this node.
      */
-    childNodes?: ITreeNode[],
+    childNodes?: ITreeNode[];
 
     /**
      * A space-delimited string of class names to apply to the node.
      */
-    className?: string,
+    className?: string;
 
     /**
      * Whether the caret to expand/collapse a node should be shown.
      * If not specified, this will be true if the node has children and false otherwise.
      */
-    hasCaret?: boolean,
+    hasCaret?: boolean;
 
     /**
      * The name of a Blueprint icon to display next to the node's label.
      */
-    icon?: string,
+    icon?: string;
 
     /**
      * A unique identifier for the node.
      */
-    id: string | number,
+    id: string | number;
 
     /**
      * Whether the children of this node are displayed.
      * @default false
      */
-    isExpanded?: boolean,
+    isExpanded?: boolean;
 
     /**
      * Whether this node is selected.
      * @default false
      */
-    isSelected?: boolean,
+    isSelected?: boolean;
 
     /**
      * The main label for the node.
      */
-    label: string | React.Element,
+    label: string | React.Element;
 
     /**
      * A secondary label/component that is displayed at the right side of the node.
      */
-    secondaryLabel?: string | React.Element,
+    secondaryLabel?: string | React.Element;
   }
 
   declare export class ContextMenu {
-    static show(menu: React.Element, offset: {left: number, top: number}): void;
+    static show(menu: React.Element, offset: { left: number, top: number }): void;
   }
 
   declare export var Tree;
@@ -89,6 +89,7 @@ declare module '@blueprintjs/core' {
   declare export var MenuDivider;
   declare export var Dialog;
   declare export var PopoverInteractionKind;
+  declare export var Icon;
 
   declare export default any;
 }
