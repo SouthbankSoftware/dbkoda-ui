@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-17T14:31:49+10:00
+ * @Last modified time: 2018-05-25T13:36:15+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,6 +33,7 @@ import { debounce } from 'lodash';
 import {
   Classes,
   Button,
+  AnchorButton,
   MenuItem,
   Intent,
   Position,
@@ -43,6 +44,7 @@ import {
   NumericInput
 } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
+import RefreshIcon from '~/styles/icons/refresh-icon.svg';
 import ProfilingView from './Views/ProfilingView';
 import ExplainView from './Views/ExplainView';
 import OperationDetails from './Views/OperationDetails';
@@ -243,19 +245,20 @@ export default class ProfilingPanel extends React.Component<Props> {
             </div>
             <div className="pt-navbar-group pt-align-right">
               <Tooltip
-                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
                 content={globalString('performance/profiling/refreshOps')}
                 hoverOpenDelay={1000}
                 inline
                 intent={Intent.PRIMARY}
                 position={Position.BOTTOM}
               >
-                <Button
-                  className="top-con-button reset-button pt-button pt-intent-primary"
-                  text={globalString('performance/profiling/refreshOps')}
-                  disabled={this.selectedDatabase}
+                <AnchorButton
+                  className="refreshButton"
                   onClick={this._onRefreshOps}
-                />
+                  disabled={this.selectedDatabase}
+                >
+                  <RefreshIcon width={50} height={50} className="dbKodaSVG" />
+                </AnchorButton>
               </Tooltip>
             </div>
           </nav>
@@ -321,7 +324,7 @@ export default class ProfilingPanel extends React.Component<Props> {
                 disabled={!this.state.selectedDatabase}
               />
               <Tooltip
-                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
                 content={globalString('performance/profiling/apply')}
                 hoverOpenDelay={1000}
                 inline
@@ -330,7 +333,7 @@ export default class ProfilingPanel extends React.Component<Props> {
               >
                 <Button
                   disabled={!this.state.selectedDatabase}
-                  className="applybutton pt-button top-con-button reset-button pt-button pt-intent-primary"
+                  className="applybutton reset-button pt-button pt-intent-primary"
                   text="Apply"
                   onClick={this._onClickApply}
                 />

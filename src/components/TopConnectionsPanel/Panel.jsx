@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-25T10:54:10+10:00
+ * @Last modified time: 2018-05-25T13:39:27+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -157,7 +157,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
     }
 
     return (
-      <div>
+      <div className="topConnectionsPanel">
         <SplitPane
           className="MainSplitPane"
           split="horizontal"

@@ -125,7 +125,7 @@ export default class PerformancePanel extends React.Component<Props> {
             {resetHighWaterMark &&
               !isUnresponsive && (
                 <Tooltip
-                  className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                  className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
                   content="Reset High Water Mark"
                   hoverOpenDelay={1000}
                   inline
@@ -142,7 +142,7 @@ export default class PerformancePanel extends React.Component<Props> {
             {// @TODO -> 0.10.1 fix to add a reset connections button.
             false && (
               <Tooltip
-                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
                 content="Reset Connections."
                 hoverOpenDelay={1000}
                 inline

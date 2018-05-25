@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:57:35+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-25T11:40:32+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -228,7 +228,6 @@ class PerformanceWindow extends React.Component {
             store.drawer.activeNavPane == NavPanes.STORAGE_PANEL &&
             store.api.shellId && (
               <div className="performance-storage">
-                <div className="title">Database Storage</div>
                 <StoragePanel profileId={store.api.profileId} shellId={store.api.shellId} />
               </div>
             )}

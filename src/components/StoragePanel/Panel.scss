@@ -3,7 +3,7 @@
  * @Date:   2017-11-02T09:44:13+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-18T08:18:35+10:00
+ * @Last modified time: 2018-05-25T13:48:50+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,6 +31,8 @@
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 
   .details-msg-div {
     overflow-y: auto;
@@ -104,9 +106,15 @@
   }
 
   .storageToolbar {
-    width: 60px;
-    float: right;
-    background-color: $tabBackgroundSelected !important;
+    width: 100%;
+    background-color: $editorBackground !important;
+    color: $tableBodyText;
+    padding-left: 0px;
+
+    .pt-navbar-heading {
+      font-size: large;
+      margin-left: 12px;
+    }
 
     .pt-button {
       background: $buttonDark !important;
@@ -119,6 +127,32 @@
     .pt-button:hover {
       background: $buttonSecondaryBackgroundHover !important;
     }
+
+    .btnTooltip {
+      align-self: center;
+      border-bottom: unset;
+
+      button.reset-button {
+        font-weight: lighter;
+        font-size: small;
+        color: $connectionButtonFontColour;
+        width: 8em !important;
+        border-radius: 5px;
+        background-image: unset;
+        background-color: #474747;
+        border: 1px solid $connectionButtonBorderColour;
+        box-shadow: unset;
+        height: 22px;
+        line-height: 10px;
+        min-height: 22px;
+      }
+
+      button.reset-button:hover {
+        background-color: $performanceButtonHover;
+        color: $connectionButtonFontColourHover;
+      }
+    }
+
     div.pt-align-right {
       a.pt-button {
         svg.dbKodaSVG {

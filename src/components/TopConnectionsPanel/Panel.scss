@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T10:33:36+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T12:18:36+10:00
+ * @Last modified time: 2018-05-25T13:51:57+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,480 +25,501 @@
  */
 @import '../../styles/_defaultTheme.scss';
 
-.Pane .vertical .Pane1 {
-  overflow-y: hidden !important;
-}
-
-.BottomSplitPane {
-  height: 100%;
-  width: 100%;
-}
-
-.BottomSplitPane > .Pane2 {
-  background-color: #292929 !important;
-}
-
-.connectionList {
-  width: 100%;
-  height: 100%;
-}
-
-.operationList {
-  width: 100%;
-  height: 100%;
-}
-
-.operationDetails {
-  height: 100%;
-
-  .editorView {
-    height: calc(100% - 50px);
-  }
-}
-
-.explainView {
-  flex-grow: 1;
-
-  .explainToolbar {
-    height: 40px;
-
-    .explainTitle {
-    }
+.topConnectionsPanel {
+  .Pane .vertical .Pane1 {
+    overflow-y: hidden !important;
   }
 
-  .explainBody {
-    color: #bfbec0;
-
-    .explain-stage-progress {
-      display: flex;
-      flex-direction: row;
-
-      .explain-stage-wrapper {
-        display: flex;
-        flex-direction: row;
-        margin: 5px 0px;
-        flex: 1;
-
-        //max-height: 45px;
-        max-width: 200px;
-
-        .explain-stage-shard-name {
-          align-self: center;
-          color: $explainLabelColor;
-          margin-top: 0px;
-        }
-      }
-
-      .explain-stage {
-        flex: 1;
-        display: flex;
-        flex-direction: row;
-        position: relative;
-        background: $explainStageTailBkColor;
-        max-width: 200px;
-        height: 35px;
-        line-height: 35px;
-        margin-right: 15px;
-        color: $explainLabelColor;
-        text-align: center;
-        font-size: $explainLabelFontSize;
-
-        .stage-label {
-          flex: 1;
-          color: white;
-        }
-
-        .after {
-          position: absolute;
-          right: -27px;
-          border-left: 17px solid $explainStageTailBkColor;
-          border-top: 17.5px solid transparent;
-          border-bottom: 17.5px solid transparent;
-          top: 0;
-          border-right: 10px solid transparent;
-        }
-      }
-
-      //.explain-stage:after,
-      .explain-stage:before {
-        content: ' ';
-        position: absolute;
-        top: 0;
-        right: -16px;
-        width: 0;
-        height: 0;
-        border-top: 18px solid transparent;
-        border-bottom: 18px solid transparent;
-        border-left: 17px solid $explainStageTailBkColor;
-        z-index: 2;
-        transition: border-color 0.2s ease;
-      }
-
-      .explain-stage:before {
-        right: auto;
-        left: 0;
-        border-left: 17px solid $explainPanelBKColor;
-        z-index: 0;
-      }
-
-      .explain-stage-array {
-        //background: $explainStageHeaderBkColor !important;
-      }
-
-      //.explain-stage-array:after {
-      //  border-left-color: $explainStageHeaderBkColor !important;
-      //}
-
-      .empty-explain-stage {
-        background-color: transparent !important;
-      }
-
-      .empty-explain-stage:after {
-        border-left-color: transparent !important;
-      }
-
-      //  tree
-      .explain-stage-tree-root {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        max-width: 200px;
-
-        .explain-stage:nth-child(n + 2) {
-          margin-top: 10px;
-        }
-      }
-    }
-
-    .explain-stages-table {
-      margin-top: 20px;
-
-      .explain-worst-shard-description {
-        color: $explainLabelColor;
-        margin-bottom: 10px;
-      }
-
-      .stage-header {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        height: 30px;
-        line-height: 30px;
-        color: $explainLabelColor;
-
-        .column-header {
-          background-color: $explainStageTableHeaderColor;
-          flex: 1;
-          padding-right: 10px;
-          padding-left: 10px;
-          font-size: $explainLabelFontSize;
-        }
-
-        .column-header:nth-child(1) {
-          flex: 1;
-        }
-
-        .column-header:nth-child(2) {
-          flex: 2;
-        }
-
-        .column-header:nth-child(3) {
-          flex: 1;
-          text-align: right;
-        }
-
-        .column-header:nth-child(4) {
-          flex: 1;
-          text-align: right;
-        }
-
-        .column-header:nth-child(5) {
-          flex: 1;
-          text-align: right;
-        }
-
-        .column-header:nth-child(6) {
-          flex: 3;
-        }
-      }
-
-      .stage-row {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        min-height: 30px;
-        line-height: 30px;
-
-        .stage-cell {
-          color: $explainLabelColor;
-          padding-right: 10px;
-          padding-left: 10px;
-          word-break: break-word;
-          font-size: $explainLabelFontSize;
-          flex: 1;
-        }
-
-        .stage-cell:nth-child(1) {
-          flex: 1;
-        }
-
-        .stage-cell:nth-child(2) {
-          flex: 2;
-        }
-
-        .stage-cell:nth-child(3) {
-          flex: 1;
-
-          .text {
-            min-width: 50px;
-            text-align: right;
-          }
-        }
-
-        .stage-cell:nth-child(4) {
-          flex: 1;
-
-          .text {
-            min-width: 50px;
-            text-align: right;
-          }
-        }
-
-        .stage-cell:nth-child(5) {
-          flex: 1;
-
-          .text {
-            min-width: 50px;
-            text-align: right;
-          }
-        }
-
-        .stage-cell:nth-child(6) {
-          flex: 3;
-        }
-      }
-
-      .stage-row:nth-child(odd) {
-        background: $explainTableEvenBKColor;
-      }
-    }
-  }
-}
-
-.pt-navbar {
-  overflow: hidden !important;
-  background-color: $editorBackground !important;
-  color: $tableBodyText;
-
-  .pt-navbar-heading {
-    font-size: small;
-  }
-}
-
-.ResetButton {
-  align-self: center;
-  margin-left: 40px;
-  margin-right: 40px;
-  height: 22px;
-  border-bottom: unset !important;
-
-  button.reset-button {
-    font-weight: lighter;
-    font-size: small;
-    color: $connectionButtonFontColour;
-
-    // width: 8em !important;
-    border-radius: 5px;
-    background-image: unset;
-    background-color: #313131 !important;
-    border: 1px solid $connectionButtonBorderColour;
-    box-shadow: unset;
-    height: 22px;
-    line-height: 10px;
-    min-height: 22px;
-    text-align: center;
+  .BottomSplitPane {
+    height: 100%;
+    width: 100%;
   }
 
-  button.reset-button:hover {
-    background-color: $performanceButtonHover !important;
-    color: $connectionButtonFontColourHover;
+  .BottomSplitPane > .Pane2 {
+    background-color: #292929 !important;
   }
 
-  button.top-con-button {
-    width: 10em !important;
-  }
-}
-
-.Switch {
-  display: flex;
-  flex-direction: row;
-
-  .switchLabel {
-    margin-left: 8px;
-    margin-right: 8px;
-  }
-
-  .pt-switch {
-    font-size: 10pt;
-    font-weight: lighter;
-    color: $connectionHeadingsFontColour !important;
-    text-align: left;
-    margin: 0;
-    margin-left: 12px;
-  }
-}
-
-.NumericInput {
-  width: 80px;
-  margin-left: 8px;
-  margin-right: 8px;
-
-  .pt-input-group {
-    width: calc(100% - 30px);
-
-    .pt-input {
-      background-color: $selectDarkPrimaryBackground !important;
-      color: $buttonPrimaryBackground !important;
-    }
-  }
-}
-
-.pt-table-container {
-  .pt-table-quadrant {
-    background-color: $editorBackground;
-  }
-
-  .pt-table-top-container {
-    .pt-table-column-headers {
-      background-color: #425f58;
-      color: $tableHeaderText;
-
-      .pt-table-header {
-        .pt-table-column-name {
-          .pt-table-truncated-text {
-            font-size: smaller;
-          }
-
-          .pt-table-th-menu-container-background {
-            background: unset;
-          }
-        }
-      }
-
-      .pt-table-header:hover {
-        background-color: darken(#425f58, 10%);
-      }
-
-      .pt-table-header:hover::before {
-        background: unset;
-      }
-    }
-  }
-
-  .pt-table-bottom-container {
-    .pt-table-quadrant-body-container {
-      background-color: rgba(0, 0, 0, 0) !important;
-
-      div {
-        .pt-table-body-virtual-client {
-          background-color: rgba(0, 0, 0, 0) !important;
-
-          .pt-table-body-cells {
-            background-color: rgba(0, 0, 0, 0) !important;
-
-            .pt-table-cell {
-              background-color: rgba(0, 0, 0, 0);
-              color: $tableBodyText;
-              display: flex;
-              align-items: center;
-            }
-
-            .pt-table-cell-ledger-even {
-              background-color: $tableBackgroundEven;
-            }
-
-            .pt-table-cell-ledger-odd {
-              background-color: $tableBackgroundOdd;
-            }
-          }
-        }
-
-        .pt-table-overlay-layer {
-          .pt-table-selection-region {
-            background-color: rgba(250, 250, 250, 0.2);
-            border: unset;
-          }
-        }
-      }
-    }
-  }
-}
-
-.progressBarCell {
-  .pt-table-no-wrap-text,
-  .pt-table-truncated-text {
+  .connectionList {
     width: 100%;
     height: 100%;
   }
-}
 
-.cm-s-material.CodeMirror {
-  background-color: #292929;
-}
-
-.CodeMirror pre {
-  box-shadow: unset;
-}
-
-.actionsColumnCell {
-  div {
+  .operationList {
     width: 100%;
+    height: 100%;
   }
-}
 
-.actionToolbar {
-  width: 100%;
-  display: flex;
-  justify-content: center;
+  .operationDetails {
+    height: 100%;
 
-  .pt-button {
-    background: $buttonSecondaryBackground !important;
-    color: $buttonSecondaryIcon !important;
-    border-radius: 50%;
-    margin-left: 5px;
-    margin-right: 5px;
-    position: relative;
-    min-height: 24px;
-    min-width: 24px;
-
-    svg.dbKodaSVG {
-      position: absolute;
-      top: 50%;
-      bottom: 50%;
-      width: 50%;
-      height: 50%;
-      transform: translate(-50%, -50%);
-      fill: $buttonSecondaryIcon;
+    .editorView {
+      height: calc(100% - 50px);
     }
   }
 
-  .pt-button:hover {
-    background: $performanceButtonHover !important;
+  .explainView {
+    flex-grow: 1;
+
+    .explainToolbar {
+      height: 40px;
+
+      .explainTitle {
+      }
+    }
+
+    .explainBody {
+      color: #bfbec0;
+
+      .explain-stage-progress {
+        display: flex;
+        flex-direction: row;
+
+        .explain-stage-wrapper {
+          display: flex;
+          flex-direction: row;
+          margin: 5px 0px;
+          flex: 1;
+
+          //max-height: 45px;
+          max-width: 200px;
+
+          .explain-stage-shard-name {
+            align-self: center;
+            color: $explainLabelColor;
+            margin-top: 0px;
+          }
+        }
+
+        .explain-stage {
+          flex: 1;
+          display: flex;
+          flex-direction: row;
+          position: relative;
+          background: $explainStageTailBkColor;
+          max-width: 200px;
+          height: 35px;
+          line-height: 35px;
+          margin-right: 15px;
+          color: $explainLabelColor;
+          text-align: center;
+          font-size: $explainLabelFontSize;
+
+          .stage-label {
+            flex: 1;
+            color: white;
+          }
+
+          .after {
+            position: absolute;
+            right: -27px;
+            border-left: 17px solid $explainStageTailBkColor;
+            border-top: 17.5px solid transparent;
+            border-bottom: 17.5px solid transparent;
+            top: 0;
+            border-right: 10px solid transparent;
+          }
+        }
+
+        //.explain-stage:after,
+        .explain-stage:before {
+          content: ' ';
+          position: absolute;
+          top: 0;
+          right: -16px;
+          width: 0;
+          height: 0;
+          border-top: 18px solid transparent;
+          border-bottom: 18px solid transparent;
+          border-left: 17px solid $explainStageTailBkColor;
+          z-index: 2;
+          transition: border-color 0.2s ease;
+        }
+
+        .explain-stage:before {
+          right: auto;
+          left: 0;
+          border-left: 17px solid $explainPanelBKColor;
+          z-index: 0;
+        }
+
+        .explain-stage-array {
+          //background: $explainStageHeaderBkColor !important;
+        }
+
+        //.explain-stage-array:after {
+        //  border-left-color: $explainStageHeaderBkColor !important;
+        //}
+
+        .empty-explain-stage {
+          background-color: transparent !important;
+        }
+
+        .empty-explain-stage:after {
+          border-left-color: transparent !important;
+        }
+
+        //  tree
+        .explain-stage-tree-root {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          max-width: 200px;
+
+          .explain-stage:nth-child(n + 2) {
+            margin-top: 10px;
+          }
+        }
+      }
+
+      .explain-stages-table {
+        margin-top: 20px;
+
+        .explain-worst-shard-description {
+          color: $explainLabelColor;
+          margin-bottom: 10px;
+        }
+
+        .stage-header {
+          display: flex;
+          flex-direction: row;
+          width: 100%;
+          height: 30px;
+          line-height: 30px;
+          color: $explainLabelColor;
+
+          .column-header {
+            background-color: $explainStageTableHeaderColor;
+            flex: 1;
+            padding-right: 10px;
+            padding-left: 10px;
+            font-size: $explainLabelFontSize;
+          }
+
+          .column-header:nth-child(1) {
+            flex: 1;
+          }
+
+          .column-header:nth-child(2) {
+            flex: 2;
+          }
+
+          .column-header:nth-child(3) {
+            flex: 1;
+            text-align: right;
+          }
+
+          .column-header:nth-child(4) {
+            flex: 1;
+            text-align: right;
+          }
+
+          .column-header:nth-child(5) {
+            flex: 1;
+            text-align: right;
+          }
+
+          .column-header:nth-child(6) {
+            flex: 3;
+          }
+        }
+
+        .stage-row {
+          display: flex;
+          flex-direction: row;
+          width: 100%;
+          min-height: 30px;
+          line-height: 30px;
+
+          .stage-cell {
+            color: $explainLabelColor;
+            padding-right: 10px;
+            padding-left: 10px;
+            word-break: break-word;
+            font-size: $explainLabelFontSize;
+            flex: 1;
+          }
+
+          .stage-cell:nth-child(1) {
+            flex: 1;
+          }
+
+          .stage-cell:nth-child(2) {
+            flex: 2;
+          }
+
+          .stage-cell:nth-child(3) {
+            flex: 1;
+
+            .text {
+              min-width: 50px;
+              text-align: right;
+            }
+          }
+
+          .stage-cell:nth-child(4) {
+            flex: 1;
+
+            .text {
+              min-width: 50px;
+              text-align: right;
+            }
+          }
+
+          .stage-cell:nth-child(5) {
+            flex: 1;
+
+            .text {
+              min-width: 50px;
+              text-align: right;
+            }
+          }
+
+          .stage-cell:nth-child(6) {
+            flex: 3;
+          }
+        }
+
+        .stage-row:nth-child(odd) {
+          background: $explainTableEvenBKColor;
+        }
+      }
+    }
   }
 
-  .pt-button.deleteButton {
-    background: $buttonDangerBackground !important;
+  .pt-navbar {
+    overflow: hidden !important;
+    background-color: $editorBackground !important;
+    color: $tableBodyText;
+
+    .pt-navbar-heading {
+      font-size: large;
+    }
+    .pt-navbar-subheading {
+      font-size: 14px;
+    }
+
+    .refreshButton {
+      max-width: 30px;
+      max-height: 30px;
+      background: $buttonDark !important;
+      color: $buttonSecondaryIcon !important;
+      border-radius: 50%;
+      margin-left: 5px;
+      margin-right: 5px;
+      .pt-button-text {
+        width: 20px;
+        height: 20px;
+      }
+      svg.dbKodaSVG {
+        width: 20px;
+        height: 20px;
+        fill: $buttonSecondaryIcon;
+      }
+    }
+    .refreshButton:hover {
+      background: $buttonSecondaryBackgroundHover !important;
+    }
   }
 
-  .pt-button.deleteButton:hover {
-    background: $buttonDangerBackgroundHover !important;
+  .btnTooltip {
+    align-self: center;
+    margin-left: 40px;
+    border-bottom: unset !important;
+
+    button.reset-button {
+      font-weight: lighter;
+      font-size: small;
+      color: $connectionButtonFontColour;
+
+      // width: 8em !important;
+      border-radius: 5px;
+      background-image: unset;
+      background-color: #313131 !important;
+      border: 1px solid $connectionButtonBorderColour;
+      box-shadow: unset;
+      height: 22px;
+      line-height: 10px;
+      min-height: 22px;
+      text-align: center;
+    }
+
+    button.reset-button:hover {
+      background-color: $performanceButtonHover !important;
+      color: $connectionButtonFontColourHover;
+    }
   }
 
-  .pt-button.pt-disabled:hover {
-    background: $buttonSecondaryBackground !important;
+  .Switch {
+    display: flex;
+    flex-direction: row;
+
+    .switchLabel {
+      margin-left: 8px;
+      margin-right: 8px;
+    }
+
+    .pt-switch {
+      font-size: 10pt;
+      font-weight: lighter;
+      color: $connectionHeadingsFontColour !important;
+      text-align: left;
+      margin: 0;
+      margin-left: 12px;
+    }
   }
 
-  .pt-button.pt-disabled.deleteButton:hover {
-    background: $buttonDangerBackground !important;
+  .NumericInput {
+    width: 80px;
+    margin-left: 8px;
+    margin-right: 8px;
+
+    .pt-input-group {
+      width: calc(100% - 30px);
+
+      .pt-input {
+        background-color: $selectDarkPrimaryBackground !important;
+        color: $buttonPrimaryBackground !important;
+      }
+    }
+  }
+
+  .pt-table-container {
+    .pt-table-quadrant {
+      background-color: $editorBackground;
+    }
+
+    .pt-table-top-container {
+      .pt-table-column-headers {
+        background-color: #425f58;
+        color: $tableHeaderText;
+
+        .pt-table-header {
+          .pt-table-column-name {
+            .pt-table-truncated-text {
+              font-size: smaller;
+            }
+
+            .pt-table-th-menu-container-background {
+              background: unset;
+            }
+          }
+        }
+
+        .pt-table-header:hover {
+          background-color: darken(#425f58, 10%);
+        }
+
+        .pt-table-header:hover::before {
+          background: unset;
+        }
+      }
+    }
+
+    .pt-table-bottom-container {
+      .pt-table-quadrant-body-container {
+        background-color: rgba(0, 0, 0, 0) !important;
+
+        div {
+          .pt-table-body-virtual-client {
+            background-color: rgba(0, 0, 0, 0) !important;
+
+            .pt-table-body-cells {
+              background-color: rgba(0, 0, 0, 0) !important;
+
+              .pt-table-cell {
+                background-color: rgba(0, 0, 0, 0);
+                color: $tableBodyText;
+                display: flex;
+                align-items: center;
+              }
+
+              .pt-table-cell-ledger-even {
+                background-color: $tableBackgroundEven;
+              }
+
+              .pt-table-cell-ledger-odd {
+                background-color: $tableBackgroundOdd;
+              }
+            }
+          }
+
+          .pt-table-overlay-layer {
+            .pt-table-selection-region {
+              background-color: rgba(250, 250, 250, 0.2);
+              border: unset;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .progressBarCell {
+    .pt-table-no-wrap-text,
+    .pt-table-truncated-text {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .cm-s-material.CodeMirror {
+    background-color: #292929;
+  }
+
+  .CodeMirror pre {
+    box-shadow: unset;
+  }
+
+  .actionsColumnCell {
+    div {
+      width: 100%;
+    }
+  }
+
+  .actionToolbar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .pt-button {
+      background: $buttonSecondaryBackground !important;
+      color: $buttonSecondaryIcon !important;
+      border-radius: 50%;
+      margin-left: 5px;
+      margin-right: 5px;
+      position: relative;
+      min-height: 24px;
+      min-width: 24px;
+
+      svg.dbKodaSVG {
+        position: absolute;
+        top: 50%;
+        bottom: 50%;
+        width: 50%;
+        height: 50%;
+        transform: translate(-50%, -50%);
+        fill: $buttonSecondaryIcon;
+      }
+    }
+
+    .pt-button:hover {
+      background: $performanceButtonHover !important;
+    }
+
+    .pt-button.deleteButton {
+      background: $buttonDangerBackground !important;
+    }
+
+    .pt-button.deleteButton:hover {
+      background: $buttonDangerBackgroundHover !important;
+    }
+
+    .pt-button.pt-disabled:hover {
+      background: $buttonSecondaryBackground !important;
+    }
+
+    .pt-button.pt-disabled.deleteButton:hover {
+      background: $buttonDangerBackground !important;
+    }
   }
 }

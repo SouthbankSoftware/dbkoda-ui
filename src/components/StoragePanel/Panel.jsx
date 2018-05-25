@@ -3,7 +3,7 @@
  * @Date:   2017-08-02T10:00:30+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-18T08:01:06+10:00
+ * @Last modified time: 2018-05-25T13:30:56+10:00
  */
 
 /*
@@ -33,7 +33,7 @@ import StorageSunburstView from '#/common/SunburstView';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Broker, EventType } from '~/helpers/broker';
-import { AnchorButton } from '@blueprintjs/core';
+import { AnchorButton, Intent, Position, Tooltip } from '@blueprintjs/core';
 import RefreshIcon from '~/styles/icons/refresh-icon.svg';
 import './Panel.scss';
 
@@ -227,15 +227,29 @@ export default class StoragePanel extends React.Component {
   render() {
     return (
       <div className="StoragePanel">
-        {!this.state.bLoading && (
-          <nav className="storageToolbar pt-navbar pt-dark">
-            <div className="pt-navbar-group pt-align-right">
-              <AnchorButton className="refreshButton" onClick={() => this.loadData(true)}>
+        <nav className="storageToolbar pt-navbar pt-dark">
+          <div className="pt-navbar-group pt-align-left">
+            <div className="pt-navbar-heading viewHeading">Database Storage</div>
+          </div>
+          <div className="pt-navbar-group pt-align-right">
+            <Tooltip
+              className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
+              content={globalString('performance/profiling/refreshOps')}
+              hoverOpenDelay={1000}
+              inline
+              intent={Intent.PRIMARY}
+              position={Position.BOTTOM}
+            >
+              <AnchorButton
+                className="refreshButton"
+                loading={this.state.bLoading}
+                onClick={() => this.loadData(true)}
+              >
                 <RefreshIcon width={50} height={50} className="dbKodaSVG" />
               </AnchorButton>
-            </div>
-          </nav>
-        )}
+            </Tooltip>
+          </div>
+        </nav>
         {this.bStorageView && (
           <StorageSunburstView
             data={this.state.data}

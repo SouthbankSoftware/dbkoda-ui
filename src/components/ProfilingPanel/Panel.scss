@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T10:33:36+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T12:18:53+10:00
+ * @Last modified time: 2018-05-25T13:49:19+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,8 +34,31 @@
   display: flex;
   flex-direction: column;
 
-  .ResetButton {
+  .btnTooltip {
+    align-self: center;
     margin-left: 10px;
+    margin-right: 40px;
+    border-bottom: unset;
+
+    button.reset-button {
+      font-weight: lighter;
+      font-size: small;
+      color: $connectionButtonFontColour;
+      width: 8em !important;
+      border-radius: 5px;
+      background-image: unset;
+      background-color: #474747;
+      border: 1px solid $connectionButtonBorderColour;
+      box-shadow: unset;
+      height: 22px;
+      line-height: 10px;
+      min-height: 22px;
+    }
+
+    button.reset-button:hover {
+      background-color: $performanceButtonHover;
+      color: $connectionButtonFontColourHover;
+    }
   }
 
   .pt-button-text {
@@ -44,16 +67,41 @@
 
   .pt-align-right {
     .pt-popover-wrapper {
-      margin-right: 0px;
+      margin-right: 0;
+    }
+
+    .refreshButton {
+      max-width: 30px;
+      max-height: 30px;
+      background: $buttonDark !important;
+      color: $buttonSecondaryIcon !important;
+      border-radius: 50%;
+      margin-left: 5px;
+      margin-right: 5px;
+
+      .pt-button-text {
+        width: 20px;
+        height: 20px;
+      }
+
+      svg.dbKodaSVG {
+        width: 20px;
+        height: 20px;
+        fill: $buttonSecondaryIcon;
+      }
+    }
+
+    .refreshButton:hover {
+      background: $buttonSecondaryBackgroundHover !important;
     }
   }
 
   .profilingResultsWrapper {
     .panelHeader {
-      padding-left: 0px;
+      padding-left: 0;
 
       .pt-navbar-heading {
-        font-size: 20px;
+        font-size: large;
         margin-left: 12px;
       }
     }
@@ -68,7 +116,7 @@
 
         label.profilingStatus {
           margin-left: 10px;
-          margin-bottom: 0px;
+          margin-bottom: 0;
         }
 
         span.profilingSwitchLabel {
@@ -80,7 +128,6 @@
           font-weight: lighter;
           font-size: small;
           color: $connectionButtonFontColour;
-
           // width: 8em !important;
           border-radius: 5px;
           background-image: unset;
@@ -117,7 +164,7 @@
 
         .pt-label,
         .pt-radio {
-          margin-bottom: 0px;
+          margin-bottom: 0;
         }
 
         .pt-label {
@@ -267,16 +314,15 @@
           .explain-stage-wrapper {
             display: flex;
             flex-direction: row;
-            margin: 5px 0px;
+            margin: 5px 0;
             flex: 1;
-
             //max-height: 45px;
             max-width: 200px;
 
             .explain-stage-shard-name {
               align-self: center;
               color: $explainLabelColor;
-              margin-top: 0px;
+              margin-top: 0;
             }
           }
 
@@ -309,7 +355,6 @@
               border-right: 10px solid transparent;
             }
           }
-
           //.explain-stage:after,
           .explain-stage:before {
             content: ' ';
@@ -335,11 +380,9 @@
           .explain-stage-array {
             //background: $explainStageHeaderBkColor !important;
           }
-
           //.explain-stage-array:after {
           //  border-left-color: $explainStageHeaderBkColor !important;
           //}
-
           .empty-explain-stage {
             background-color: transparent !important;
           }
@@ -347,7 +390,6 @@
           .empty-explain-stage:after {
             border-left-color: transparent !important;
           }
-
           //  tree
           .explain-stage-tree-root {
             display: flex;
@@ -496,114 +538,114 @@
     background-color: $connectionButtonBackgroundColourHover;
     color: $connectionButtonFontColourHover;
   }
-}
 
-.Pane {
-  background-color: $editorBackground !important;
-}
-
-.Pane .vertical .Pane1 {
-  overflow-y: hidden !important;
-}
-
-.BottomSplitPane {
-  height: 100%;
-}
-
-.pt-navbar {
-  overflow: hidden !important;
-  background-color: $editorBackground !important;
-  color: $tableBodyText;
-  padding: none;
-
-  .pt-navbar-heading {
-    font-size: 14px;
-  }
-}
-
-.pt-table-container {
-  .pt-table-quadrant {
-    background-color: $editorBackground;
+  .Pane {
+    background-color: $editorBackground !important;
   }
 
-  .pt-table-top-container {
-    .pt-table-column-headers {
-      background-color: #425f58;
-      color: $tableHeaderText;
-
-      .pt-table-header {
-        .pt-table-column-name {
-          .pt-table-truncated-text {
-            font-size: smaller;
-          }
-
-          .pt-table-th-menu-container-background {
-            background: unset;
-          }
-        }
-      }
-
-      .pt-table-header:hover {
-        background-color: darken(#425f58, 10%);
-      }
-
-      .pt-table-header:hover::before {
-        background: unset;
-      }
-    }
+  .Pane .vertical .Pane1 {
+    overflow-y: hidden !important;
   }
 
-  .pt-table-bottom-container {
-    .pt-table-quadrant-body-container {
-      background-color: rgba(0, 0, 0, 0) !important;
-
-      div {
-        .pt-table-body-virtual-client {
-          background-color: rgba(0, 0, 0, 0) !important;
-
-          .pt-table-body-cells {
-            background-color: rgba(0, 0, 0, 0) !important;
-
-            .pt-table-cell {
-              background-color: rgba(0, 0, 0, 0);
-              color: $tableBodyText;
-              display: flex;
-              align-items: center;
-            }
-
-            .pt-table-cell-ledger-even {
-              background-color: $tableBackgroundEven;
-            }
-
-            .pt-table-cell-ledger-odd {
-              background-color: $tableBackgroundOdd;
-            }
-          }
-        }
-
-        .pt-table-overlay-layer {
-          .pt-table-selection-region {
-            background-color: rgba(250, 250, 250, 0.2);
-            border: unset;
-          }
-        }
-      }
-    }
-  }
-}
-
-.progressBarCell {
-  .pt-table-no-wrap-text,
-  .pt-table-truncated-text {
-    width: 100%;
+  .BottomSplitPane {
     height: 100%;
   }
-}
 
-.cm-s-material.CodeMirror {
-  background-color: #292929;
-}
+  .pt-navbar {
+    overflow: hidden !important;
+    background-color: $editorBackground !important;
+    color: $tableBodyText;
+    padding: none;
 
-.CodeMirror pre {
-  box-shadow: unset;
+    .pt-navbar-heading {
+      font-size: 14px;
+    }
+  }
+
+  .pt-table-container {
+    .pt-table-quadrant {
+      background-color: $editorBackground;
+    }
+
+    .pt-table-top-container {
+      .pt-table-column-headers {
+        background-color: #425f58;
+        color: $tableHeaderText;
+
+        .pt-table-header {
+          .pt-table-column-name {
+            .pt-table-truncated-text {
+              font-size: smaller;
+            }
+
+            .pt-table-th-menu-container-background {
+              background: unset;
+            }
+          }
+        }
+
+        .pt-table-header:hover {
+          background-color: darken(#425f58, 10%);
+        }
+
+        .pt-table-header:hover::before {
+          background: unset;
+        }
+      }
+    }
+
+    .pt-table-bottom-container {
+      .pt-table-quadrant-body-container {
+        background-color: rgba(0, 0, 0, 0) !important;
+
+        div {
+          .pt-table-body-virtual-client {
+            background-color: rgba(0, 0, 0, 0) !important;
+
+            .pt-table-body-cells {
+              background-color: rgba(0, 0, 0, 0) !important;
+
+              .pt-table-cell {
+                background-color: rgba(0, 0, 0, 0);
+                color: $tableBodyText;
+                display: flex;
+                align-items: center;
+              }
+
+              .pt-table-cell-ledger-even {
+                background-color: $tableBackgroundEven;
+              }
+
+              .pt-table-cell-ledger-odd {
+                background-color: $tableBackgroundOdd;
+              }
+            }
+          }
+
+          .pt-table-overlay-layer {
+            .pt-table-selection-region {
+              background-color: rgba(250, 250, 250, 0.2);
+              border: unset;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .progressBarCell {
+    .pt-table-no-wrap-text,
+    .pt-table-truncated-text {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .cm-s-material.CodeMirror {
+    background-color: #292929;
+  }
+
+  .CodeMirror pre {
+    box-shadow: unset;
+  }
 }

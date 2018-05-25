@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T15:31:22+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-25T10:20:48+10:00
+ * @Last modified time: 2018-05-25T13:52:11+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -226,7 +226,7 @@ export default class OperationsView extends React.Component<Props> {
       <div style={{ height: '100%' }}>
         <nav className="pt-navbar connectionsToolbar">
           <div className="pt-navbar-group pt-align-left">
-            <div className="pt-navbar-heading">Operations</div>
+            <div className="pt-navbar-heading pt-navbar-subheading">Operations</div>
           </div>
         </nav>
         <div style={{ height: 'calc(100% - 50px)' }}>

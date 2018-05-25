@@ -3,7 +3,7 @@
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-25T10:46:27+10:00
+ * @Last modified time: 2018-05-25T13:50:02+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,10 +28,11 @@ import _ from 'lodash';
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
-import { Tooltip, Intent, Position, Button } from '@blueprintjs/core';
+import { Tooltip, Intent, Position, AnchorButton } from '@blueprintjs/core';
 import { SelectionModes, Table, Utils, TableLoadingOption } from '@blueprintjs/table';
 import { Switch, NumericInput } from '@blueprintjs/core';
 import autobind from 'autobind-decorator';
+import RefreshIcon from '~/styles/icons/refresh-icon.svg';
 
 import TextSortableColumn from '../Components/TextSortableColumn';
 import ProgressBarColumn from '../Components/ProgressBarColumn';
@@ -203,10 +204,10 @@ export default class ConnectionsView extends React.Component<Props> {
       loadingOptions.push(TableLoadingOption.CELLS);
     }
     return (
-      <div className="pt-dark" style={{ height: '100%' }}>
+      <div style={{ height: '100%' }}>
         <nav className="pt-navbar connectionsToolbar">
           <div className="pt-navbar-group pt-align-left">
-            <div className="pt-navbar-heading">Connections</div>
+            <div className="pt-navbar-heading">Top Connections</div>
           </div>
           <div className="pt-navbar-group pt-align-right">
             <label htmlFor="lblTCAuto">Refresh Top Connections</label>
@@ -234,18 +235,16 @@ export default class ConnectionsView extends React.Component<Props> {
               seconds
             </label>
             <Tooltip
-              className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+              className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
               content="Refresh Top Connections"
               hoverOpenDelay={1000}
               inline
               intent={Intent.PRIMARY}
               position={Position.BOTTOM}
             >
-              <Button
-                className="reset-button pt-button pt-intent-primary"
-                text="Refresh Now"
-                onClick={this.props.api.getTopConnections}
-              />
+              <AnchorButton className="refreshButton" onClick={this.props.api.getTopConnections}>
+                <RefreshIcon width={50} height={50} className="dbKodaSVG" />
+              </AnchorButton>
             </Tooltip>
           </div>
         </nav>

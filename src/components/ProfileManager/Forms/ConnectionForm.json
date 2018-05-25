@@ -146,7 +146,8 @@
         "label": "List of hosts:ports",
         "placeholder": "e.g. localhost:27017, localhost:27016",
         "options": {
-          "tooltip": "If blank, we'll connect to nominated host and deduce the host list"
+          "tooltip":
+            "If you specify only one host, we'll connect to nominated host and deduce the host list"
         },
         "value": "",
         "type": "text",

@@ -2,8 +2,8 @@
  * @Author: Michael Harrison
  * @Date:   2017-07-19 11:17:46
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2018-02-05T10:25:31+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-25T13:35:54+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -374,7 +374,7 @@ export default class Details extends React.Component {
                   position={Position.BOTTOM}
                 >
                   <Button
-                    className="top-con-button reset-button pt-button pt-intent-primary"
+                    className="reset-button pt-button pt-intent-primary"
                     text={globalString('aggregate_builder/apply')}
                     disabled={!activeBlock}
                     onClick={this._onApplyBlock}

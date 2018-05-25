@@ -130,7 +130,7 @@ export default class OperationDetails extends React.Component {
           <div className="pt-navbar-group pt-align-right">
             {operation && (
               <Tooltip
-                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
                 content="Fetch Explain Plan"
                 hoverOpenDelay={1000}
                 inline
