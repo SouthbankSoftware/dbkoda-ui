@@ -129,16 +129,18 @@ h3 {
   margin-top: 4px;
 }
 
+.pt-select-popover.pt-minimal {
+  ul.pt-menu {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+}
+
 .pt-popover-content {
   color: $toolTipFontColour !important;
   background-color: $toolTipBackgroundColour !important;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 10pt;
-
-  ul.pt-menu {
-    max-height: 400px;
-    overflow-y: auto;
-  }
 }
 
 .pt-popover-arrow {
