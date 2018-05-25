@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-17T12:18:49+10:00
+ * @Last modified time: 2018-05-25T10:54:10+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -104,15 +104,13 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   }
 
   @autobind
-  setTimerForUpdate() {
+  setTimerForUpdate(timerValue = 0) {
+    const autoRefreshTimeout = timerValue > 0 ? timerValue : this.state.autoRefreshTimeout;
     if (this.timeoutUpdateId) {
       clearTimeout(this.timeoutUpdateId);
       this.timeoutUpdateId = null;
     }
-    this.timeoutUpdateId = setTimeout(
-      this.updateTopConnections,
-      this.state.autoRefreshTimeout * 1000
-    );
+    this.timeoutUpdateId = setTimeout(this.updateTopConnections, autoRefreshTimeout * 1000);
   }
 
   @autobind
@@ -134,9 +132,12 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   @autobind
   onAutoRefreshTimeoutChange(value) {
     l.info('onAutoRefreshTimeoutChange:', value);
+    if (value < 5) {
+      value = 5;
+    }
     this.setState({ autoRefreshTimeout: value });
     if (value > 0 && this.state.autoRefreshTopCon) {
-      this.setTimerForUpdate();
+      this.setTimerForUpdate(value);
     }
   }
 
@@ -169,7 +170,6 @@ export default class TopConnectionsPanel extends React.Component<Props> {
             <ConnectionsView
               onSelect={this.onConnectionSelection}
               tableWidth={this.state.topSplitPos}
-              autoRefreshTopCon={this.state.autoRefreshTopCon}
               onAutoRefreshCheckboxToggle={this.onAutoRefreshCheckboxToggle}
               autoRefreshTimeout={this.state.autoRefreshTimeout}
               onAutoRefreshTimeoutChange={this.onAutoRefreshTimeoutChange}

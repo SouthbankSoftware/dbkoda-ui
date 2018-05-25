@@ -3,7 +3,7 @@
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T13:34:50+10:00
+ * @Last modified time: 2018-05-25T10:46:27+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,6 +31,7 @@ import { action } from 'mobx';
 import { Tooltip, Intent, Position, Button } from '@blueprintjs/core';
 import { SelectionModes, Table, Utils, TableLoadingOption } from '@blueprintjs/table';
 import { Switch, NumericInput } from '@blueprintjs/core';
+import autobind from 'autobind-decorator';
 
 import TextSortableColumn from '../Components/TextSortableColumn';
 import ProgressBarColumn from '../Components/ProgressBarColumn';
@@ -54,6 +55,7 @@ export default class ConnectionsView extends React.Component<Props> {
     this.state = {
       lastSelectRegion: null,
       sortedIndexMap: [],
+      lastSortedIndex: -1,
       data: null,
       highWaterMark: null,
       columns: [
@@ -72,6 +74,12 @@ export default class ConnectionsView extends React.Component<Props> {
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.connections) {
       this.setState({ data: nextProps.connections });
+      if (this.state.lastSortedIndex >= 0 && this.state.columns) {
+        const col = this.state.columns[this.state.lastSortedIndex];
+        if (col && col.sortColumn) {
+          this.sortColumn(this.state.lastSortedIndex, col.getSortFunction(), nextProps.connections);
+        }
+      }
     }
     if (nextProps && nextProps.highWaterMark) {
       this.setState({ highWaterMark: nextProps.highWaterMark });
@@ -82,7 +90,13 @@ export default class ConnectionsView extends React.Component<Props> {
     }
   }
 
-  getCellData = (rowIndex: number, columnIndex: number, bUseIndex: boolen = true) => {
+  getCellData = (
+    rowIndex: number,
+    columnIndex: number,
+    bUseIndex: boolen = true,
+    dataToSort: any = null
+  ) => {
+    const data = dataToSort == null ? this.state.data : dataToSort;
     if (bUseIndex) {
       const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
       if (sortedRowIndex != null) {
@@ -90,8 +104,8 @@ export default class ConnectionsView extends React.Component<Props> {
       }
     }
     let cellValue = '';
-    if (this.state.data && this.state.data.length > 0) {
-      const rowData = this.state.data[rowIndex];
+    if (data && data.length > 0) {
+      const rowData = data[rowIndex];
       if (rowData) {
         switch (columnIndex) {
           case 0:
@@ -133,17 +147,18 @@ export default class ConnectionsView extends React.Component<Props> {
     return cellValue;
   };
 
-  sortColumn = (columnIndex: number, comparator: (a: any, b: any) => number) => {
-    const { data } = this.state;
+  @autobind
+  sortColumn(columnIndex: number, comparator: (a: any, b: any) => number, dataToSort: any = null) {
+    const data = dataToSort == null ? this.state.data : dataToSort;
     const sortedIndexMap = Utils.times(data.length, (i: number) => i);
     sortedIndexMap.sort((a: number, b: number) => {
       return comparator(
-        this.getCellData(a, columnIndex, false),
-        this.getCellData(b, columnIndex, false)
+        this.getCellData(a, columnIndex, false, dataToSort),
+        this.getCellData(b, columnIndex, false, dataToSort)
       );
     });
-    this.setState({ sortedIndexMap });
-  };
+    this.setState({ sortedIndexMap, lastSortedIndex: columnIndex });
+  }
 
   @action
   onSelection(region) {
@@ -154,6 +169,11 @@ export default class ConnectionsView extends React.Component<Props> {
     regionObj = _.pick(regionObj, 'rows');
 
     this.setState({ lastSelectRegion: [regionObj] });
+    this.setSelection(regionObj);
+  }
+
+  @autobind
+  setSelection(regionObj) {
     if (regionObj && regionObj.rows) {
       let rowIndex = regionObj.rows[0];
       const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
@@ -170,6 +190,10 @@ export default class ConnectionsView extends React.Component<Props> {
     const { connections } = this.props;
 
     const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
+
+    if (this.state.lastSelectRegion && this.state.lastSelectRegion.length > 0) {
+      this.setSelection(this.state.lastSelectRegion[0]);
+    }
 
     const loadingOptions = [];
     let numRows = 10;
@@ -190,7 +214,7 @@ export default class ConnectionsView extends React.Component<Props> {
               <Switch
                 type="text"
                 id="autoRefreshTopCon"
-                checked={this.props.autoRefreshTopCon}
+                defaultChecked={false}
                 onChange={this.props.onAutoRefreshCheckboxToggle}
               />
               {/* <div className="switchLabel">

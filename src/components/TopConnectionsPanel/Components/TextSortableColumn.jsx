@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-04-11T15:24:47+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-04-24T16:54:13+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-25T09:25:32+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,6 +27,7 @@
 import * as React from 'react';
 import { Menu, MenuItem } from '@blueprintjs/core';
 import { Cell, Column, ColumnHeaderCell } from '@blueprintjs/table';
+import autobind from 'autobind-decorator';
 
 export type ICellLookup = (rowIndex: number, columnIndex: number) => any;
 export type ISortCallback = (columnIndex: number, comparator: (a: any, b: any) => number) => void;
@@ -35,15 +36,17 @@ export default class TextSortableColumn {
   constructor(name: string, index: number) {
     this.name = name;
     this.index = index;
+    this.sort = '';
+    this.sortColumnCallBack = null;
   }
 
   getColumn(getCellData: ICellLookup, sortColumn: ISortCallback) {
+    this.sortColumnCallBack = sortColumn;
     const cellRenderer = (rowIndex: number, columnIndex: number) => (
       <Cell>{getCellData(rowIndex, columnIndex)}</Cell>
     );
-    const menuRenderer = this.renderMenu.bind(this, sortColumn);
     const columnHeaderCellRenderer = () => (
-      <ColumnHeaderCell name={this.name} menuRenderer={menuRenderer} /> // eslint-disable-line
+      <ColumnHeaderCell name={this.name} menuRenderer={this.renderMenu} /> // eslint-disable-line
     );
     return (
       <Column
@@ -55,9 +58,37 @@ export default class TextSortableColumn {
     );
   }
 
-  renderMenu(sortColumn: ISortCallback) {
-    const sortAsc = () => sortColumn(this.index, (a, b) => this.compare(a, b));
-    const sortDesc = () => sortColumn(this.index, (a, b) => this.compare(b, a));
+  @autobind
+  getSortFunction() {
+    if (this.sort === 'asc') {
+      return (a, b) => this.compare(a, b);
+    } else if (this.sort === 'dsc') {
+      return (a, b) => this.compare(b, a);
+    }
+  }
+
+  @autobind
+  sortColumn() {
+    if (!this.sortColumnCallBack) {
+      return;
+    }
+    if (this.sort === 'asc') {
+      this.sortColumnCallBack(this.index, this.getSortFunction());
+    } else if (this.sort === 'dsc') {
+      this.sortColumnCallBack(this.index, this.getSortFunction());
+    }
+  }
+
+  @autobind
+  renderMenu() {
+    const sortAsc = () => {
+      this.sort = 'asc';
+      this.sortColumn();
+    };
+    const sortDesc = () => {
+      this.sort = 'dsc';
+      this.sortColumn();
+    };
     return (
       <Menu>
         <MenuItem icon="sort-asc" onClick={sortAsc} text="Sort Asc" />

@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T15:31:22+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-17T14:22:24+10:00
+ * @Last modified time: 2018-05-25T10:20:48+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -54,6 +54,7 @@ export default class OperationsView extends React.Component<Props> {
     this.state = {
       lastSelectRegion: null,
       sortedIndexMap: [],
+      lastSortedIndex: -1,
       data: null,
       columns: [
         new TextSortableColumn('OpId', 0),
@@ -77,6 +78,12 @@ export default class OperationsView extends React.Component<Props> {
         }
       }
       this.setState({ data: operations });
+      if (this.state.lastSortedIndex >= 0 && this.state.columns) {
+        const col = this.state.columns[this.state.lastSortedIndex];
+        if (col && col.sortColumn) {
+          this.sortColumn(this.state.lastSortedIndex, col.getSortFunction(), operations);
+        }
+      }
     } else {
       this.setState({ data: null });
     }
@@ -94,7 +101,13 @@ export default class OperationsView extends React.Component<Props> {
     });
   }
 
-  getCellData = (ogRowIndex: number, columnIndex: number, bUseIndex: boolen = true) => {
+  getCellData = (
+    ogRowIndex: number,
+    columnIndex: number,
+    bUseIndex: boolen = true,
+    dataToSort: any = null
+  ) => {
+    const data = dataToSort == null ? this.state.data : dataToSort;
     let rowIndex = ogRowIndex;
     if (bUseIndex) {
       const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
@@ -103,38 +116,38 @@ export default class OperationsView extends React.Component<Props> {
       }
     }
 
-    if (!this.state.data || this.state.data.length === 0) {
-      return '';
-    }
     let cellValue = '';
-    switch (columnIndex) {
-      case 0:
-        cellValue = this.state.data[rowIndex].opId;
-        break;
-      case 1:
-        cellValue = this.state.data[rowIndex].ns;
-        break;
-      case 2:
-        cellValue = this.state.data[rowIndex].op;
-        break;
-      case 3:
-        cellValue = this.state.data[rowIndex].us;
-        break;
-      case 4:
-        cellValue = this.state.data[rowIndex].planSummary;
-        break;
-      case 5:
-        cellValue = {
-          opId: this.state.data[rowIndex].opId,
-          bDelete:
-            this.state.lastSelectRegion &&
-            this.state.lastSelectRegion[0].rows &&
-            this.state.lastSelectRegion[0].rows[0] === ogRowIndex
-        };
-        break;
-      default:
-        cellValue = this.state.data[rowIndex].opId;
-        break;
+    if (data && data.length > 0) {
+      const rowData = data[rowIndex];
+      switch (columnIndex) {
+        case 0:
+          cellValue = rowData.hasOwnProperty('opId') ? rowData.opId : '';
+          break;
+        case 1:
+          cellValue = rowData.hasOwnProperty('ns') ? rowData.ns : '';
+          break;
+        case 2:
+          cellValue = rowData.hasOwnProperty('op') ? rowData.op : '';
+          break;
+        case 3:
+          cellValue = rowData.hasOwnProperty('us') ? rowData.us : '';
+          break;
+        case 4:
+          cellValue = rowData.hasOwnProperty('planSummary') ? rowData.planSummary : '';
+          break;
+        case 5:
+          cellValue = {
+            opId: rowData.hasOwnProperty('opId') ? rowData.opId : '',
+            bDelete:
+              this.state.lastSelectRegion &&
+              this.state.lastSelectRegion[0].rows &&
+              this.state.lastSelectRegion[0].rows[0] === ogRowIndex
+          };
+          break;
+        default:
+          cellValue = '';
+          break;
+      }
     }
     if (typeof cellValue === 'object') {
       cellValue = JSON.stringify(cellValue);
@@ -142,16 +155,20 @@ export default class OperationsView extends React.Component<Props> {
     return cellValue;
   };
 
-  sortColumn = (columnIndex: number, comparator: (a: any, b: any) => number) => {
-    const { data } = this.state;
+  sortColumn = (
+    columnIndex: number,
+    comparator: (a: any, b: any) => number,
+    dataToSort: any = null
+  ) => {
+    const data = dataToSort == null ? this.state.data : dataToSort;
     const sortedIndexMap = Utils.times(data.length, (i: number) => i);
     sortedIndexMap.sort((a: number, b: number) => {
       return comparator(
-        this.getCellData(a, columnIndex, false),
-        this.getCellData(b, columnIndex, false)
+        this.getCellData(a, columnIndex, false, dataToSort),
+        this.getCellData(b, columnIndex, false, dataToSort)
       );
     });
-    this.setState({ sortedIndexMap });
+    this.setState({ sortedIndexMap, lastSortedIndex: columnIndex });
   };
 
   @action
@@ -164,6 +181,11 @@ export default class OperationsView extends React.Component<Props> {
 
     this.setState({ lastSelectRegion: [regionObj] });
 
+    this.setSelection(regionObj);
+  }
+
+  @autobind
+  setSelection(regionObj) {
     if (regionObj && regionObj.rows) {
       let rowIndex = regionObj.rows[0];
       const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
@@ -190,6 +212,9 @@ export default class OperationsView extends React.Component<Props> {
 
   render() {
     const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
+    if (this.state.lastSelectRegion && this.state.lastSelectRegion.length > 0) {
+      this.setSelection(this.state.lastSelectRegion[0]);
+    }
     const loadingOptions = [];
     let numRows = 10;
     if (this.state.data && this.state.data.length) {

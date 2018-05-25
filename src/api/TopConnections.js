@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2018-03-27T10:39:44+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:29:52+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-25T11:03:22+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,8 +30,8 @@ import { Broker, EventType } from '~/helpers/broker';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
-import { NavPanes } from '#/common/Constants';
-import { performancePanelStatuses } from '~/api/PerformancePanel';
+// import { NavPanes } from '#/common/Constants';
+// import { performancePanelStatuses } from '~/api/PerformancePanel';
 
 export default class TopConnections {
   store: *;
@@ -75,9 +75,9 @@ export default class TopConnections {
     samplingRate: number = 100,
     dev: boolean = false
   ) => {
-    this.api.transformPerformancePanel(profileId, performancePanelStatuses.external, {
-      open: NavPanes.TOP_CONNECTIONS
-    });
+    // this.api.transformPerformancePanel(profileId, performancePanelStatuses.external, {
+    //   open: NavPanes.TOP_CONNECTIONS
+    // });
     featherClient()
       .service('top-connections')
       .get(profileId, {
