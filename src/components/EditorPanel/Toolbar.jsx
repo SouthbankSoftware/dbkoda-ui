@@ -39,7 +39,7 @@ import { NewToaster } from '#/common/Toaster';
 import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { EditorTypes } from '#/common/Constants.js';
 import './Panel.scss';
-import SimpleQueryDialogue from './Dialogues/SimpleQueryDialogue.jsx';
+import QuickTreeActionDialogue from './Dialogues/QuickTreeActionDialogue.jsx';
 import { Broker, EventType } from '../../helpers/broker';
 
 // Icon Imports.
@@ -602,7 +602,7 @@ export default class Toolbar extends React.Component {
 
     return (
       <nav className="pt-navbar editorToolbar">
-        <SimpleQueryDialogue
+        <QuickTreeActionDialogue
           profile={profile}
           title="Simple Query"
           subtitle="Please fill in the following form and press okay."
@@ -626,7 +626,7 @@ export default class Toolbar extends React.Component {
             }
           }}
         />
-        <SimpleQueryDialogue
+        <QuickTreeActionDialogue
           profile={profile}
           title="Aggregate Builder"
           subtitle="Please fill in the following form and press okay."
