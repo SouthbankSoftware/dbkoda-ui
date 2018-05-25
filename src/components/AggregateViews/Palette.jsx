@@ -322,7 +322,7 @@ export default class Palette extends React.Component {
         });
         // Update steps in Shell:
         const service = featherClient().service('/mongo-sync-execution');
-        service.timeout = 30000;
+        service.timeout = 60000;
         service
           .update(editor.profileId, {
             shellId: editor.shellId, // eslint-disable-line
@@ -349,7 +349,7 @@ export default class Palette extends React.Component {
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       // Update steps in Shell:
       const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 30000;
+      service.timeout = 60000;
       service
         .update(editor.profileId, {
           shellId: editor.shellId, // eslint-disable-line
@@ -385,7 +385,7 @@ export default class Palette extends React.Component {
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       // Fetch response from shell object for all steps up to position - 1
       const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 30000;
+      service.timeout = 60000;
       service
         .update(editor.profileId, {
           shellId: editor.shellId, // eslint-disable-line
@@ -421,7 +421,7 @@ export default class Palette extends React.Component {
     // Determine if the previous block is valid.
     const service = featherClient().service('/mongo-sync-execution');
     const generatedCode = '';
-    service.timeout = 30000;
+    service.timeout = 60000;
     service
       .update(editor.profileId, {
         shellId: editor.shellId, // eslint-disable-line

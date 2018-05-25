@@ -72,7 +72,6 @@ export default class GraphicalBuilder extends React.Component {
         .selectedBlock,
       colorMatching: [],
       collection: props.collection,
-      isLoading: true,
       failed: false,
       failureReason: 'Unknown'
     };
@@ -89,7 +88,7 @@ export default class GraphicalBuilder extends React.Component {
 
     // Add aggregate object to shell.
     const service = featherClient().service('/mongo-sync-execution');
-    service.timeout = 30000;
+    service.timeout = 60000;
     service
       .update(this.profileId, {
         shellId: this.shell, // eslint-disable-line
@@ -108,9 +107,10 @@ export default class GraphicalBuilder extends React.Component {
           this.state.failureReason = 'Unknown';
         }
         runInAction('Agg Builder no longer loading', () => {
-          this.editor.isAggregateLoading = false;
+          this.editor.isAggregateDetailsLoading = false;
         });
         this.setState({ failed: true });
+        this.setState({ failureReason: err });
         l.error(err);
       });
 
@@ -132,13 +132,15 @@ export default class GraphicalBuilder extends React.Component {
       this.addBlockToEditor('Start', 0, res)
         .then(() => {
           runInAction('Aggregate builder is no longer loading', () => {
-            this.editor.isAggregateLoading = false;
+            this.editor.isAggregateDetailsLoading = false;
           });
         })
         .catch(e => {
           l.error('Failed to add Start block to Agg Builder with error ' + e);
+          this.setState({ failed: true });
+          this.setState({ failureReason: e });
           runInAction('Aggregate builder is no longer loading', () => {
-            this.editor.isAggregateLoading = false;
+            this.editor.isAggregateDetailsLoading = false;
           });
         });
     });
@@ -314,7 +316,7 @@ export default class GraphicalBuilder extends React.Component {
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       // Fetch response from shell object for all steps up to position - 1
       const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 30000;
+      service.timeout = 60000;
       service
         .update(editor.profileId, {
           shellId: editor.shellId, // eslint-disable-line
@@ -686,7 +688,7 @@ export default class GraphicalBuilder extends React.Component {
     return new Promise((resolve, reject) => {
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 30000;
+      service.timeout = 60000;
       service
         .update(editor.profileId, {
           shellId: editor.shellId, // eslint-disable-line
@@ -715,6 +717,8 @@ export default class GraphicalBuilder extends React.Component {
               className: 'danger',
               icon: 'thumbs-down'
             });
+            this.setState({ failed: true });
+            this.setState({ failureReason: e });
             this.setOutputBroken();
           }
           reject(e);
@@ -782,7 +786,7 @@ export default class GraphicalBuilder extends React.Component {
         if (res.areAllValid === true) {
           // Update steps in Shell:
           const service = featherClient().service('/mongo-sync-execution');
-          service.timeout = 30000;
+          service.timeout = 60000;
           service
             .update(editor.profileId, {
               shellId: editor.shellId, // eslint-disable-line
@@ -810,7 +814,7 @@ export default class GraphicalBuilder extends React.Component {
           const validArray = stepArray.slice(0, res.firstInvalid);
           // Update steps in Shell:
           const service = featherClient().service('/mongo-sync-execution');
-          service.timeout = 30000;
+          service.timeout = 60000;
           service
             .update(editor.profileId, {
               shellId: editor.shellId, // eslint-disable-line
@@ -846,7 +850,7 @@ export default class GraphicalBuilder extends React.Component {
       const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       // Update steps in Shell:
       const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 30000;
+      service.timeout = 60000;
       service
         .update(editor.profileId, {
           shellId: editor.shellId, // eslint-disable-line
@@ -883,7 +887,7 @@ export default class GraphicalBuilder extends React.Component {
 
     if (this.state.debug) l.debug('Get Agg Results');
     const service = featherClient().service('/mongo-sync-execution');
-    service.timeout = 30000;
+    service.timeout = 60000;
     service
       .update(editor.profileId, {
         shellId: editor.shellId, // eslint-disable-line
@@ -907,7 +911,7 @@ export default class GraphicalBuilder extends React.Component {
         if (e.match('Timeout of 30000ms exceeded')) {
           l.error('Retry aggregation once more with higher timeout...');
           const service = featherClient().service('/mongo-sync-execution');
-          service.timeout = 30000;
+          service.timeout = 60000;
           service
             .update(editor.profileId, {
               shellId: editor.shellId, // eslint-disable-line
@@ -926,7 +930,8 @@ export default class GraphicalBuilder extends React.Component {
             })
             .catch(e => {
               l.error(e);
-              // Fail aggregation.
+              this.setState({ failed: true });
+              this.setState({ failureReason: e });
             });
         }
       });
@@ -995,7 +1000,7 @@ export default class GraphicalBuilder extends React.Component {
             this.props.store
               .openFile(v, ({ _id, content }) => {
                 runInAction('Agg Builder no longer loading', () => {
-                  this.editor.isAggregateLoading = true;
+                  this.editor.isAggregateDetailsLoading = true;
                 });
                 const contentObject = JSON.parse(content);
                 this.importFile(contentObject);
@@ -1033,7 +1038,7 @@ export default class GraphicalBuilder extends React.Component {
       // Save file function.
       const _saveFile = (path, fileContent) => {
         const service = featherClient().service('files');
-        service.timeout = 30000;
+        service.timeout = 60000;
         return service
           .create({ _id: path, content: fileContent, watching: false })
           .then(() => currentEditor.doc.markClean())
@@ -1150,9 +1155,11 @@ export default class GraphicalBuilder extends React.Component {
             icon: 'thumbs-down'
           });
           runInAction('Agg Builder no longer loading', () => {
-            this.editor.isAggregateLoading = false;
+            this.editor.isAggregateDetailsLoading = false;
           });
           this.forceUpdate();
+          this.setState({ failed: true });
+          this.setState({ failureReason: err });
           l.error(err);
         });
     } else {
@@ -1162,7 +1169,7 @@ export default class GraphicalBuilder extends React.Component {
         icon: 'thumbs-down'
       });
       runInAction('Agg Builder no longer loading', () => {
-        this.editor.isAggregateLoading = false;
+        this.editor.isAggregateDetailsLoading = false;
       });
       this.forceUpdate();
       l.error('Invalid import object: ', contentObject);
@@ -1292,7 +1299,7 @@ export default class GraphicalBuilder extends React.Component {
             icon: 'pt-icon-thumbs-up'
           });
           runInAction('Agg Builder no longer loading', () => {
-            this.editor.isAggregateLoading = false;
+            this.editor.isAggregateDetailsLoading = false;
           });
         });
       });
