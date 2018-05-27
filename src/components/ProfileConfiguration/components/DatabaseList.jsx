@@ -20,7 +20,7 @@
 import React from 'react';
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import Checkbox from '../../common/Checkbox';
+import Checkbox from './Checkbox';
 
 import './DatabaseList.scss';
 
