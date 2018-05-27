@@ -18,7 +18,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import TipsCard from '../../common/TipsCard';
+import TipsCard from './TipsCard';
 
 const tips = [
   {
