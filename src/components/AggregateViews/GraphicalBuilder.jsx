@@ -73,7 +73,8 @@ export default class GraphicalBuilder extends React.Component {
       colorMatching: [],
       collection: props.collection,
       failed: false,
-      failureReason: 'Unknown'
+      failureReason: 'Unknown',
+      firstTry: true
     };
 
     Broker.emit(EventType.FEATURE_USE, 'AggregateBuilder');
@@ -380,17 +381,28 @@ export default class GraphicalBuilder extends React.Component {
         } else {
           // All steps validated, full update.
           this.updateResultSet().then(res => {
-            if (this.state.debug) l.debug('update result set result line 383:', res);
+            if (this.state.debug) {
+ l.debug(
+                'update result set result line 383:',
+                res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
+              );
+}
             try {
               // Regex work around.
-              res = JSON.parse(res.replace(/\"\$regex\" : \/(.*)\//, '"$regex" : "/$1/"'));
+              res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
             } catch (e) {
               l.error(e);
-              this.setState({ failed: true });
-              this.setState({ failureReason: e });
-              return;
+              // If first error - Try again!
+              if (this.state.firstTry) {
+                this.setState({ firstTry: false });
+                this.selectBlock(index);
+                resolve();
+              } else {
+                this.setState({ failed: true });
+                this.setState({ failureReason: e });
+                return;
+              }
             }
-
             if (res && res.stepAttributes && res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
               res.stepAttributes.map((indexValue, index) => {
@@ -500,12 +512,19 @@ export default class GraphicalBuilder extends React.Component {
           this.updateResultSet().then(res => {
             if (this.state.debug) l.debug('update result set result line 493:', res);
             try {
-              res = JSON.parse(res.replace(/\"\$regex\" : \/(.*)\//, '"$regex" : "/$1/"'));
+              res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
             } catch (e) {
               l.error(e);
-              this.setState({ failed: true });
-              this.setState({ failureReason: e });
-              return;
+              // If first error - Try again!
+              if (this.state.firstTry) {
+                this.setState({ firstTry: false });
+                this.moveBlock(blockFrom, blockTo);
+                resolve();
+              } else {
+                this.setState({ failed: true });
+                this.setState({ failureReason: e });
+                return;
+              }
             }
             if (res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
@@ -621,12 +640,19 @@ export default class GraphicalBuilder extends React.Component {
         this.updateResultSet().then(res => {
           if (this.state.debug) l.debug('update result set result line 606:', res);
           try {
-            res = JSON.parse(res.replace(/\"\$regex\" : \/(.*)\//, '"$regex" : "/$1/"'));
+            res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
           } catch (e) {
             l.error(e);
-            this.setState({ failed: true });
-            this.setState({ failureReason: e });
-            return;
+            // If first error - Try again!
+            if (this.state.firstTry) {
+              this.setState({ firstTry: false });
+              this.removeBlock(blockPosition);
+              return;
+            }
+              // eslint-disable-line
+              this.setState({ failed: true });
+              this.setState({ failureReason: e });
+              return;
           }
           if (res.stepAttributes.constructor === Array) {
             // 3. Update Valid for each block.
@@ -729,11 +755,20 @@ export default class GraphicalBuilder extends React.Component {
         })
         .then(res => {
           try {
-            res = JSON.parse(res);
+            res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
           } catch (e) {
-            l.error(res);
-            l.error('Error validating step: ', step);
-            resolve(false);
+            l.error('parsing: ', res);
+            l.error(e);
+            // If first error - Try again!
+            if (this.state.firstTry) {
+              this.setState({ firstTry: false });
+              this.validateBlock(step);
+              resolve();
+            } else {
+              this.setState({ failed: true });
+              this.setState({ failureReason: e });
+              return;
+            }
           }
           if (res.type === 'object') {
             resolve(true);
@@ -845,6 +880,7 @@ export default class GraphicalBuilder extends React.Component {
           });
           // Update only first N blocks.
           const validArray = stepArray.slice(0, res.firstInvalid);
+
           // Update steps in Shell:
           const service = featherClient().service('/mongo-sync-execution');
           service.timeout = 60000;
@@ -935,12 +971,19 @@ export default class GraphicalBuilder extends React.Component {
           }
           if (this.state.debug) l.debug('get result res  line 906:', res);
           try {
-            res = JSON.parse(res);
+            res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
           } catch (e) {
             l.error(e);
-            this.setState({ failed: true });
-            this.setState({ failureReason: e });
-            return;
+            // If first error - Try again!
+            if (this.state.firstTry) {
+              this.setState({ firstTry: false });
+              this.updateResultsOutput(editor, stepId);
+              return;
+            }
+              // eslint-disable-line
+              this.setState({ failed: true });
+              this.setState({ failureReason: e });
+              return;
           }
           res.map(indexValue => {
             output.append(JSON.stringify(indexValue) + '\n');
@@ -963,9 +1006,14 @@ export default class GraphicalBuilder extends React.Component {
             })
             .then(res => {
               runInAction('Update Graphical Builder', () => {
-                if (this.state.debug) l.debug('get result res  line 926:', res);
+                if (this.state.debug) {
+l.debug(
+                    'get result res  line 926:',
+                    res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
+                  );
+}
                 try {
-                  res = JSON.parse(res);
+                  res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
                 } catch (e) {
                   l.error(e);
                   this.setState({ failed: true });
@@ -1262,14 +1310,26 @@ export default class GraphicalBuilder extends React.Component {
           });
         } else {
           this.updateResultSet().then(res => {
-            if (this.state.debug) l.debug('update result set result line 1216:', res);
+            if (this.state.debug) {
+ l.debug(
+                'update result set result line 1216:',
+                res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
+              );
+}
             try {
-              res = JSON.parse(res.replace(/\"\$regex\" : \/(.*)\//, '"$regex" : "/$1/"'));
+              res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
             } catch (e) {
               l.error(e);
-              this.setState({ failed: true });
-              this.setState({ failureReason: e });
-              return;
+              // If first error - Try again!
+              if (this.state.firstTry) {
+                this.setState({ firstTry: false });
+                this.removeAllBlocks();
+                resolve();
+              } else {
+                this.setState({ failed: true });
+                this.setState({ failureReason: e });
+                return;
+              }
             }
             if (res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.

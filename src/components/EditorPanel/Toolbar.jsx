@@ -48,9 +48,9 @@ import StopExecutionIcon from '../../styles/icons/stop-execute-icon.svg';
 import AddIcon from '../../styles/icons/add-icon.svg';
 import OpenFileIcon from '../../styles/icons/open-icon.svg';
 import SaveFileIcon from '../../styles/icons/save-icon.svg';
-import PerfPanelIcon from '../../styles/icons/performance-icon.svg';
-import SearchIcon from '../../styles/icons/search-icon.svg';
-import AggregateIcon from '../../styles/icons/enhanced-json-icon.svg';
+import PerfPanelIcon from '../../styles/icons/performance-view-icon-1.svg';
+import SearchIcon from '../../styles/icons/enhanced-json-icon.svg';
+import AggregateIcon from '../../styles/icons/aggregate-builder-icon.svg';
 
 const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
