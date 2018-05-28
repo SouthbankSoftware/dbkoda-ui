@@ -474,6 +474,14 @@ export default class ListView extends React.Component {
     this.props.store.editorPanel.activeEditorId = event.id;
   }
 
+  @action.bound
+  onDoubleClickHandler(profile) {
+    this.state.targetProfile = profile;
+    this.props.store.profileList.selectedProfile = profile;
+    this.openOpenConnectionAlert(profile);
+    // setTimeout(this.openOpenConnectionAlert(profile), 0);
+  }
+
   @action
   renderBodyContextMenu(context, buttonProfile) {
     // Get profiles, sort alphabetically and use that as a reference.
@@ -739,28 +747,33 @@ export default class ListView extends React.Component {
         );
       }
       return (
-        <Cell className={className}>
-          <ConnectionIcon className="pt-icon dbKodaSVG closedProfile" width={40} height={40} />
-          <i className="profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
-          <span className="additionalActions">
-            <Popover
-              minimal
-              interactionKind={PopoverInteractionKind.CLICK}
-              popoverClassName="toolTip"
-              content={this.renderBodyContextMenu(null, profiles[rowIndex][1])}
-              target={
-                <AnchorButton
-                  className="button"
-                  onClick={() => {
-                    l.info('Open Context Menu');
-                    [, this.state.targetProfile] = profiles[rowIndex];
-                  }}
-                >
-                  <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />
-                </AnchorButton>
-              }
-            />
-          </span>
+        <Cell interactive className={className}>
+          <div
+            className="doubleClickWrapper"
+            onDoubleClick={() => this.onDoubleClickHandler(profiles[rowIndex][1])}
+          >
+            <ConnectionIcon className="pt-icon dbKodaSVG closedProfile" width={40} height={40} />
+            <i className="profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
+            <span className="additionalActions">
+              <Popover
+                minimal
+                interactionKind={PopoverInteractionKind.CLICK}
+                popoverClassName="toolTip"
+                content={this.renderBodyContextMenu(null, profiles[rowIndex][1])}
+                target={
+                  <AnchorButton
+                    className="button"
+                    onClick={() => {
+                      l.info('Open Context Menu');
+                      [, this.state.targetProfile] = profiles[rowIndex];
+                    }}
+                  >
+                    <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+                  </AnchorButton>
+                }
+              />
+            </span>
+          </div>
         </Cell>
       );
     };

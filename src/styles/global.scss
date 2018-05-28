@@ -90,6 +90,7 @@ p {
 
 .CodeMirror-scroll {
   overflow: auto !important;
+  position: static;
 }
 
 .CodeMirror-scrollbar-filler {
