@@ -56,6 +56,11 @@ import './styles.scss';
 
 const React = require('react');
 
+const PasswordDialogTypes = {
+  SHA: 'sha',
+  SSH: 'ssh'
+};
+
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
@@ -341,22 +346,50 @@ export default class ListView extends React.Component {
   }
 
   @autobind
-  openOpenConnectionAlert() {
-    const { id, sha, ssh } = this.state.targetProfile;
+  needPassword(id, isSshPassword) {
+    if (isSshPassword) {
+      return this.api.passwordApi.isProfileMissingFromStore(`${id}-s`);
+    }
+    return this.api.passwordApi.isProfileMissingFromStore(id);
+  }
+
+  @autobind
+  shouldShowPasswordDialog(profile, dialogType) {
+    console.log('shouldShowPasswordDialog');
+    console.log(profile);
+    let showPasswordDialog = false;
     const { passwordStoreEnabled } = this.props.config.settings;
-    const storeNeedsPassword = passwordStoreEnabled
-      ? this.api.passwordApi.isProfileMissingFromStore(id) && sha
-      : false;
-    const storeNeedsRemotePassword = passwordStoreEnabled
-      ? this.api.passwordApi.isProfileMissingFromStore(`${id}-s`) && ssh
-      : false;
-    if (
-      (((passwordStoreEnabled && storeNeedsPassword) || !passwordStoreEnabled) &&
-        this.state.targetProfile.sha) ||
-      (((passwordStoreEnabled && storeNeedsRemotePassword) || !passwordStoreEnabled) &&
-        this.state.targetProfile.ssh &&
-        (this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass))
-    ) {
+    const { id, clusterConfig, shaCluster, sshCluster, sshKeyFile } = profile;
+    const sha = clusterConfig ? shaCluster : profile.sha;
+    const ssh = clusterConfig ? sshCluster && !sshKeyFile : profile.ssh && !sshKeyFile;
+
+    if (dialogType === PasswordDialogTypes.SHA) {
+      if (!passwordStoreEnabled) {
+        if (sha || profile.bRemotePass) {
+          showPasswordDialog = true;
+        }
+      } else if (sha) {
+        const storeNeedsPassword = this.needPassword(id, false);
+        showPasswordDialog = storeNeedsPassword;
+      } else if (profile.bRemotePass) {
+        const storeNeedsRemotePassword = this.needPassword(id, true);
+        showPasswordDialog = storeNeedsRemotePassword;
+      }
+    } else if (dialogType === PasswordDialogTypes.SSH) {
+      if (!passwordStoreEnabled && ssh) {
+        showPasswordDialog = true;
+      } else if (ssh) {
+        const storeNeedsRemotePassword = this.needPassword(id, true);
+        showPasswordDialog = storeNeedsRemotePassword;
+      }
+    }
+    return showPasswordDialog;
+  }
+
+  @autobind
+  openOpenConnectionAlert() {
+    const profile = this.state.targetProfile;
+    if (this.shouldShowPasswordDialog(profile, PasswordDialogTypes.SHA)) {
       this.setState({ isOpenWarningActive: true });
       Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
       Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.openProfile);
@@ -375,19 +408,9 @@ export default class ListView extends React.Component {
 
   @action.bound
   openSshConnectionAlert(options) {
-    const { targetProfile, remotePass, passPhrase } = this.state;
     this._openSshTerminalOptions = options;
-    const { id } = this.state.targetProfile;
-    const { passwordStoreEnabled } = this.props.config.settings;
-    const storeNeedsPassword = passwordStoreEnabled
-      ? this.api.passwordApi.isProfileMissingFromStore(`${id}-s`)
-      : false;
-    if (
-      (((passwordStoreEnabled && storeNeedsPassword) || !passwordStoreEnabled) &&
-        (targetProfile.bPassPhrase && !passPhrase)) ||
-      (((passwordStoreEnabled && storeNeedsPassword) || !passwordStoreEnabled) &&
-        (targetProfile.bRemotePass && !remotePass))
-    ) {
+    const profile = this.state.targetProfile;
+    if (this.shouldShowPasswordDialog(profile, PasswordDialogTypes.SSH)) {
       this.setState({ isSshOpenWarningActive: true });
       Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeSshConnectionAlert);
       Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.openSshShell);

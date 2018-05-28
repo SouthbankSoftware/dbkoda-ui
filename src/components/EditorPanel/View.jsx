@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-24T14:46:20+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:45:23+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-28T09:41:33+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -80,7 +80,6 @@ import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 import { TranslatorPanel } from '../Translator';
 import { insertExplainOnCommand } from '../ExplainPanel/Utils';
-import { getSeparator } from '../common/Utils';
 
 const esprima = require('esprima');
 
@@ -482,12 +481,12 @@ class View extends React.Component {
               // Quick check if line is a full command:
               if (type !== 'os') {
                 const ignore = /^[^\S\x0a\x0d]*(?:use|show|help|it|exit[\s]).*/g;
-                const splitted = content.split(getSeparator());
+                const splitted = content.split(global.EOL);
                 let hasError = false;
                 let filteredCode = '';
                 splitted.forEach(str => {
                   const ignoredStr = str.replace(ignore, '');
-                  filteredCode += ignoredStr + getSeparator();
+                  filteredCode += ignoredStr + global.EOL;
                 });
                 try {
                   esprima.parseScript(filteredCode);

@@ -55,18 +55,17 @@ export default class Profiles {
     for (const profileIndex in profilesList) {
       if (Object.prototype.hasOwnProperty.call(profilesList, profileIndex)) {
         const profile = profilesList[profileIndex];
-        if (
-          typeof profile === 'object' &&
-          !profile.url &&
-          !profile.urlCluster &&
-          !profile.useClusterConfig
-        ) {
-          l.info(profile);
-          let connectionUrl = StaticApi.mongoProtocol + profile.host + ':' + profile.port;
-          const conDB = profile.authenticationDatabase;
-          connectionUrl += '/';
-          connectionUrl += conDB === '' ? 'test' : conDB;
-          profilesList[profileIndex].url = connectionUrl;
+        if (typeof profile === 'object') {
+          profile.sshPort = profile.sshPort || 22;
+          profile.bRemotePass = profile.bRemotePass || (!!profile.ssh && !profile.sshKeyFile);
+          if (!profile.url && !profile.urlCluster && !profile.useClusterConfig) {
+            l.info(profile);
+            let connectionUrl = StaticApi.mongoProtocol + profile.host + ':' + profile.port;
+            const conDB = profile.authenticationDatabase;
+            connectionUrl += '/';
+            connectionUrl += conDB === '' ? 'test' : conDB;
+            profilesList[profileIndex].url = connectionUrl;
+          }
         }
       }
     }
