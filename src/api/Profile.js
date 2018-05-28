@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-23T13:28:56+10:00
+ * @Last modified time: 2018-05-28T12:32:50+10:00
  */
 
 import _ from 'lodash';
@@ -299,7 +299,7 @@ export default class ProfileApi {
       if (passwordStoreEnabled && storeNeedsRemotePassword) {
         this.api.passwordApi.removeMissingStoreId(`${res.id}-s`);
       }
-      const profileData = _.omit(data, ['password', 'passPhrase', 'remotePass']);
+      const profileData = _.omit(data, ['password', 'passPhrase', 'remotePass', 'passwordCluster']);
       l.debug(profileData);
       const profile: Profile = {
         ...profileData,

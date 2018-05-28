@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-23T12:48:02+10:00
+ * @Last modified time: 2018-05-28T12:29:49+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -124,6 +124,9 @@ export class ConnectionForm extends JsonForm {
     if ((field.name === 'urlClusterRadio' || field.name === 'useClusterConfig') && field.value) {
       // update cluster fields from basic connection fields
       this.updateClusterFields(field);
+    } else if (field.name === 'useBasicConfig' && !field.value) {
+      const useClusterField = field.$('useClusterConfig', SubformCategory.CLUSTER);
+      this.updateClusterFields(useClusterField);
     }
     if (
       field.subForm.value === SubformCategory.CLUSTER &&
@@ -131,6 +134,16 @@ export class ConnectionForm extends JsonForm {
       field.name !== 'urlCluster'
     ) {
       this.updateClusterUrl(field);
+    }
+
+    if (field.name === 'useBasicConfig') {
+      const useClusterField = field.$('useClusterConfig', SubformCategory.CLUSTER);
+      useClusterField.value = !field.value;
+      this.updateReferencedFields(useClusterField);
+    } else if (field.name === 'useClusterConfig') {
+      const useBasicField = field.$('useBasicConfig', SubformCategory.BASIC);
+      useBasicField.value = !field.value;
+      this.updateReferencedFields(useBasicField);
     }
 
     if (field.subForm.value === SubformCategory.SSH && field.name === 'ssh') {
@@ -205,7 +218,10 @@ export class ConnectionForm extends JsonForm {
   updateAlias(field) {
     if (!this.isEditMode && !this.hasAliasChanged) {
       const aliasField = field.$('alias', SubformCategory.BASIC);
-      if (field.subForm.value == SubformCategory.BASIC) {
+      const useBasicField = field.$('useBasicConfig', SubformCategory.BASIC);
+      const useClusterField = field.$('useClusterConfig', SubformCategory.CLUSTER);
+      if (useBasicField.value) {
+        field = useBasicField;
         const isUrlMode = field.$('urlRadio').value;
         if (!isUrlMode) {
           if (
@@ -213,55 +229,59 @@ export class ConnectionForm extends JsonForm {
             field.$('username').value.length > 0
           ) {
             aliasField.value =
+              String(this.api.getProfiles().size + 1).padStart(2, '0') +
+              ' - ' +
               field.$('username').value +
               '@' +
               field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
               ':' +
-              field.$('port').value +
-              ' - ' +
-              (this.api.getProfiles().size + 1);
+              field.$('port').value;
           } else if (field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH) {
             aliasField.value =
+              String(this.api.getProfiles().size + 1).padStart(2, '0') +
+              ' - ' +
               field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
               ':' +
-              field.$('port').value +
-              ' - ' +
-              (this.api.getProfiles().size + 1);
+              field.$('port').value;
           } else if (field.$('username').value.length > 0) {
             aliasField.value =
+              String(this.api.getProfiles().size + 1).padStart(2, '0') +
+              ' - ' +
               field.$('username').value +
               '@' +
               field.$('host').value +
               ':' +
-              field.$('port').value +
-              ' - ' +
-              (this.api.getProfiles().size + 1);
+              field.$('port').value;
           } else {
             aliasField.value =
+              String(this.api.getProfiles().size + 1).padStart(2, '0') +
+              ' - ' +
               field.$('host').value +
               ':' +
-              field.$('port').value +
-              ' - ' +
-              (this.api.getProfiles().size + 1);
+              field.$('port').value;
           }
         } else {
           this.updateAliasViaUrlValue(aliasField, field.$('url').value);
         }
-      } else if (field.subForm.value == SubformCategory.CLUSTER) {
+      } else if (useClusterField.value) {
+        field = useClusterField;
         const isUrlMode = field.$('urlClusterRadio').value;
         if (!isUrlMode) {
           if (field.$('usernameCluster').value.length > 0) {
             aliasField.value =
+              String(this.api.getProfiles().size + 1).padStart(2, '0') +
+              ' - ' +
               field.$('usernameCluster').value +
               '@' +
-              field.$('replicaSetName').value +
-              ' - ' +
-              (this.api.getProfiles().size + 1);
+              field.$('replicaSetName').value;
           } else if (field.$('replicaSetName').value.length > 0) {
             aliasField.value =
-              field.$('replicaSetName').value + ' - ' + (this.api.getProfiles().size + 1);
+              String(this.api.getProfiles().size + 1).padStart(2, '0') +
+              ' - ' +
+              field.$('replicaSetName').value;
           } else {
-            aliasField.value = 'New Cluster Profile - ' + (this.api.getProfiles().size + 1);
+            aliasField.value =
+              String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - New Cluster Profile';
           }
         } else {
           let urlCluster = field.$('urlCluster').value;
@@ -286,21 +306,28 @@ export class ConnectionForm extends JsonForm {
       //eslint-disable-line
       if (urlValue.split('//').length > 1) {
         aliasField.value =
-          urlValue.split('//')[1].substring(0, MAX_URL_ALIAS_LENGTH) +
+          String(this.api.getProfiles().size + 1).padStart(2, '0') +
           ' - ' +
-          (this.api.getProfiles().size + 1);
+          urlValue.split('//')[1].substring(0, MAX_URL_ALIAS_LENGTH);
       } else {
         aliasField.value =
-          urlValue.substring(0, MAX_URL_ALIAS_LENGTH) + ' - ' + (this.api.getProfiles().size + 1);
+          String(this.api.getProfiles().size + 1).padStart(2, '0') +
+          ' - ' +
+          urlValue.substring(0, MAX_URL_ALIAS_LENGTH);
       }
     } else if (urlValue.split('//').length > 1) {
       if (urlValue.split('//')[1] === '') {
-        aliasField.value = 'New Profile - ' + (this.api.getProfiles().size + 1);
+        aliasField.value =
+          String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - New Profile';
       } else {
-        aliasField.value = urlValue.split('//')[1] + ' - ' + (this.api.getProfiles().size + 1); //eslint-disable-line
+        aliasField.value =
+          String(this.api.getProfiles().size + 1).padStart(2, '0') +
+          ' - ' +
+          urlValue.split('//')[1]; //eslint-disable-line
       }
     } else {
-      aliasField.value = urlValue + ' - ' + (this.api.getProfiles().size + 1);
+      aliasField.value =
+        String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - ' + urlValue;
     }
   }
 

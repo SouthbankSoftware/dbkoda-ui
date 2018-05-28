@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-23T12:26:49+10:00
+ * @Last modified time: 2018-05-28T12:45:01+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,6 +39,7 @@ import TextField from '#/common/FormFields/TextField';
 import InplaceTextField from '#/common/FormFields/InplaceTextField';
 import NumericField from '#/common/FormFields/NumericField';
 import BooleanField from '#/common/FormFields/BooleanField';
+import SwitchField from '#/common/FormFields/SwitchField';
 import FileField from '#/common/FormFields/FileField';
 import SelectField from '#/common/FormFields/SelectField';
 
@@ -55,7 +56,7 @@ type Props = {
 
 type State = {
   selectedSubform: string,
-  formTitle: string,
+  // formTitle: string,
   isConnecting: boolean
 };
 @inject(({ store, api }) => {
@@ -75,7 +76,7 @@ export default class ProfileManager extends React.Component<Props, State> {
 
   state = {
     selectedSubform: 'basic',
-    formTitle: globalString('connection/createHeading'),
+    // formTitle: globalString('connection/createHeading'),
     isConnecting: false
   };
 
@@ -85,8 +86,11 @@ export default class ProfileManager extends React.Component<Props, State> {
     const { store, api } = this.props;
     this.form = new ConnectionForm(api);
     if (store && store.profileList.selectedProfile) {
-      this.setState({ formTitle: globalString('connection/editHeading') });
+      // this.setState({ formTitle: globalString('connection/editHeading') });
       this.form.updateSchemaFromProfile(store.profileList.selectedProfile);
+      if (store.profileList.selectedProfile.useClusterConfig) {
+        this.state.selectedSubform = 'cluster';
+      }
     }
 
     this.submitDialog = this.submitDialog.bind(this);
@@ -135,6 +139,8 @@ export default class ProfileManager extends React.Component<Props, State> {
           uiField = <NumericField key={field.name} field={field} />;
         } else if (field.type == 'checkbox') {
           uiField = <BooleanField key={field.name} field={field} />;
+        } else if (field.type == 'switch') {
+          uiField = <SwitchField key={field.name} field={field} />;
         } else if (field.type == 'file') {
           uiField = <FileField key={field.name} field={field} />;
         } else if (field.type == 'select') {
