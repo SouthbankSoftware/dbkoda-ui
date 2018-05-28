@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-28T12:32:50+10:00
+ * @Last modified time: 2018-05-28T15:05:20+10:00
  */
 
 import _ from 'lodash';
@@ -312,11 +312,18 @@ export default class ProfileApi {
         mongoType: res.mongoType
       };
       l.debug('profile:', profile);
-      if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {
-        profile.bPassPhrase = true;
-      }
-      if ((data.remotePass && data.remotePass != '') || data.bRemotePass) {
-        profile.bRemotePass = true;
+      if (!data.bReconnect) {
+        if (data.passPhrase && data.passPhrase != '') {
+          profile.bPassPhrase = true;
+        } else {
+          profile.bPassPhrase = false;
+        }
+        if (data.remotePass && data.remotePass != '') {
+          // removed (|| data.bRemotePass) because if a user is editing the profile he can remove the password if the server configuration has changed.
+          profile.bRemotePass = true;
+        } else {
+          profile.bRemotePass = false;
+        }
       }
       profiles.set(res.id, profile);
       profileList.selectedProfile = profiles.get(res.id);

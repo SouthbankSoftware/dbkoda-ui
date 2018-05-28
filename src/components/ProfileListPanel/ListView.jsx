@@ -3,8 +3,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:50:42+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-28T16:01:17+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -82,7 +82,10 @@ export default class ListView extends React.Component {
       passwordText: null,
       lastSelectRegion: null,
       remotePass: null,
-      passPhrase: null
+      passPhrase: null,
+      needsPassword: false,
+      needsRemotePassword: false,
+      needsRemotePassphrase: false
     };
 
     this.api = this.props.api;
@@ -147,7 +150,12 @@ export default class ListView extends React.Component {
     this.props.store.layout.alertIsLoading = true;
     const selectedProfile = this.state.targetProfile;
     const profile = _.clone(selectedProfile);
-    profile.password = this.state.passwordText;
+    if (profile.useClusterConfig) {
+      profile.passwordCluster = this.state.passwordText;
+    } else {
+      profile.password = this.state.passwordText;
+    }
+
     profile.remotePass = this.state.remotePass;
     profile.passPhrase = this.state.passPhrase;
     profile.bReconnect = true;
@@ -355,32 +363,58 @@ export default class ListView extends React.Component {
 
   @autobind
   shouldShowPasswordDialog(profile, dialogType) {
-    console.log('shouldShowPasswordDialog');
-    console.log(profile);
+    l.log('shouldShowPasswordDialog');
+    l.log(profile);
     let showPasswordDialog = false;
     const { passwordStoreEnabled } = this.props.config.settings;
-    const { id, clusterConfig, shaCluster, sshCluster, sshKeyFile } = profile;
-    const sha = clusterConfig ? shaCluster : profile.sha;
-    const ssh = clusterConfig ? sshCluster && !sshKeyFile : profile.ssh && !sshKeyFile;
+    const { id, useClusterConfig, shaCluster, bRemotePass, bPassPhrase } = profile;
+    const sha = useClusterConfig ? shaCluster : profile.sha;
+    const ssh = profile.ssh && (bRemotePass || bPassPhrase);
 
     if (dialogType === PasswordDialogTypes.SHA) {
+      // this is the case of reconnect profile
       if (!passwordStoreEnabled) {
-        if (sha || profile.bRemotePass) {
+        if (sha || ssh) {
           showPasswordDialog = true;
+          this.setState({
+            needsPassword: sha,
+            needsRemotePassword: ssh && bRemotePass,
+            needsRemotePassphrase: ssh && bPassPhrase
+          });
         }
-      } else if (sha) {
-        const storeNeedsPassword = this.needPassword(id, false);
-        showPasswordDialog = storeNeedsPassword;
-      } else if (profile.bRemotePass) {
-        const storeNeedsRemotePassword = this.needPassword(id, true);
-        showPasswordDialog = storeNeedsRemotePassword;
+      } else {
+        l.log('password store is enabled');
+        let storeNeedsPassword = false;
+        let storeNeedsRemotePassword = false;
+        if (sha) {
+          storeNeedsPassword = this.needPassword(id, false);
+        }
+        if (ssh) {
+          storeNeedsRemotePassword = this.needPassword(id, true);
+        }
+        showPasswordDialog = storeNeedsPassword || storeNeedsRemotePassword;
+
+        this.setState({
+          needsPassword: sha && storeNeedsPassword,
+          needsRemotePassword: ssh && bRemotePass && storeNeedsRemotePassword,
+          needsRemotePassphrase: ssh && bPassPhrase && storeNeedsRemotePassword
+        });
       }
     } else if (dialogType === PasswordDialogTypes.SSH) {
+      // this is the case of SSH Terminal
       if (!passwordStoreEnabled && ssh) {
         showPasswordDialog = true;
+        this.setState({
+          needsRemotePassword: ssh && bRemotePass,
+          needsRemotePassphrase: ssh && bPassPhrase
+        });
       } else if (ssh) {
         const storeNeedsRemotePassword = this.needPassword(id, true);
         showPasswordDialog = storeNeedsRemotePassword;
+        this.setState({
+          needsRemotePassword: ssh && bRemotePass && storeNeedsRemotePassword,
+          needsRemotePassphrase: ssh && bPassPhrase && storeNeedsRemotePassword
+        });
       }
     }
     return showPasswordDialog;
@@ -816,71 +850,68 @@ export default class ListView extends React.Component {
           intent={Intent.PRIMARY}
           isOpen={this.state.isOpenWarningActive}
         >
-          {this.state.targetProfile &&
-            this.state.targetProfile.sha && (
-              <div className="dialogContent">
-                <p>{globalString('profile/openAlert/passwordPrompt')}</p>
-                <input
-                  autoFocus // eslint-disable-line jsx-a11y/no-autofocus
-                  className="pt-input passwordInput"
-                  placeholder={globalString('profile/openAlert/passwordPlaceholder')}
-                  type="password"
-                  dir="auto"
-                  onChange={this.setPWText}
-                />
-                {!this.props.config.settings.passwordStoreEnabled && (
-                  <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
-                )}
-                {this.props.config.settings.passwordStoreEnabled && (
-                  <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
-                )}
-              </div>
-            )}
-          {this.state.targetProfile &&
-            this.state.targetProfile.bRemotePass && (
-              <div className="dialogContent">
-                <p>{globalString('profile/openAlert/remotePassPrompt')}</p>
-                <input
-                  autoFocus={!this.state.targetProfile.sha} // eslint-disable-line jsx-a11y/no-autofocus
-                  className="pt-input remotePassInput"
-                  placeholder={globalString('profile/openAlert/remotePassPlaceholder')}
-                  type="password"
-                  dir="auto"
-                  onChange={event => {
-                    this.setState({ remotePass: event.target.value });
-                  }}
-                />
-                {!this.props.config.settings.passwordStoreEnabled && (
-                  <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
-                )}
-                {this.props.config.settings.passwordStoreEnabled && (
-                  <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
-                )}
-              </div>
-            )}
-          {this.state.targetProfile &&
-            this.state.targetProfile.bPassPhrase && (
-              <div className="dialogContent">
-                <p>{globalString('profile/openAlert/passPhrasePrompt')}</p>
-                <input
-                  // eslint-disable-next-line jsx-a11y/no-autofocus
-                  autoFocus={!this.state.targetProfile.sha && !this.state.targetProfile.bRemotePass}
-                  className="pt-input passPhraseInput"
-                  placeholder={globalString('profile/openAlert/passPhrasePlaceholder')}
-                  type="password"
-                  dir="auto"
-                  onChange={event => {
-                    this.setState({ passPhrase: event.target.value });
-                  }}
-                />
-                {!this.props.config.settings.passwordStoreEnabled && (
-                  <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
-                )}
-                {this.props.config.settings.passwordStoreEnabled && (
-                  <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
-                )}
-              </div>
-            )}
+          {this.state.needsPassword && (
+            <div className="dialogContent">
+              <p>{globalString('profile/openAlert/passwordPrompt')}</p>
+              <input
+                autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+                className="pt-input passwordInput"
+                placeholder={globalString('profile/openAlert/passwordPlaceholder')}
+                type="password"
+                dir="auto"
+                onChange={this.setPWText}
+              />
+              {!this.props.config.settings.passwordStoreEnabled && (
+                <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
+              )}
+              {this.props.config.settings.passwordStoreEnabled && (
+                <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
+              )}
+            </div>
+          )}
+          {this.state.needsRemotePassword && (
+            <div className="dialogContent">
+              <p>{globalString('profile/openAlert/remotePassPrompt')}</p>
+              <input
+                autoFocus={!this.state.targetProfile.sha} // eslint-disable-line jsx-a11y/no-autofocus
+                className="pt-input remotePassInput"
+                placeholder={globalString('profile/openAlert/remotePassPlaceholder')}
+                type="password"
+                dir="auto"
+                onChange={event => {
+                  this.setState({ remotePass: event.target.value });
+                }}
+              />
+              {!this.props.config.settings.passwordStoreEnabled && (
+                <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
+              )}
+              {this.props.config.settings.passwordStoreEnabled && (
+                <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
+              )}
+            </div>
+          )}
+          {this.state.needsRemotePassphrase && (
+            <div className="dialogContent">
+              <p>{globalString('profile/openAlert/passPhrasePrompt')}</p>
+              <input
+                // eslint-disable-next-line jsx-a11y/no-autofocus
+                autoFocus={!this.state.targetProfile.sha && !this.state.targetProfile.bRemotePass}
+                className="pt-input passPhraseInput"
+                placeholder={globalString('profile/openAlert/passPhrasePlaceholder')}
+                type="password"
+                dir="auto"
+                onChange={event => {
+                  this.setState({ passPhrase: event.target.value });
+                }}
+              />
+              {!this.props.config.settings.passwordStoreEnabled && (
+                <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
+              )}
+              {this.props.config.settings.passwordStoreEnabled && (
+                <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
+              )}
+            </div>
+          )}
           <div className="dialogButtons">
             <AnchorButton
               className="openButton"
