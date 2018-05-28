@@ -323,11 +323,6 @@ export default class FormBuilder {
    * @return {Promise}                        Promise which will be resolved once all the queries for prefetching are resolved.
    */
   createForm = (resolveArguments, updateDynamicFormCode, editorObject, formAction) => {
-    l.debug('Create Form: ');
-    l.debug(resolveArguments);
-    l.debug(updateDynamicFormCode);
-    l.debug(editorObject);
-    l.debug(formAction);
     try {
       let treeAction;
       let ddd;
@@ -438,6 +433,7 @@ export default class FormBuilder {
 
             // Update the form after prefetching the data from controller
             const updatePrefilledData = data => {
+              l.debug('update prefilled data: ', data);
               if (formDefs.multiCombo.length > 0) {
                 for (const fld of formDefs.multiCombo) {
                   if (fld.indexOf('.') > 0) {
