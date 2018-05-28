@@ -85,7 +85,15 @@ rules:
   no-mixed-operators: off
   no-return-assign: [error, except-parens]
   no-prototype-builtins: off
-  prefer-destructuring: warn
+  prefer-destructuring:
+    - warn
+    - VariableDeclarator:
+        array: true
+        object: true
+      AssignmentExpression:
+        array: true
+        object: true
+    - enforceForRenamedProperties: false
   prefer-promise-reject-errors: warn
   no-control-regex: off
   flowtype/no-types-missing-file-annotation: off

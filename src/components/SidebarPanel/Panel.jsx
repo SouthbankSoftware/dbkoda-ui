@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-21T09:24:34+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-01-29T11:41:37+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-28T23:52:17+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,9 +27,8 @@
 import React from 'react';
 import { inject, observer, Provider } from 'mobx-react';
 import { action, untracked } from 'mobx';
-import SplitPane from 'react-split-pane';
+import EnhancedSplitPane from '#/common/EnhancedSplitPane';
 import { Button } from '@blueprintjs/core';
-
 import { ProfileListPanel } from '#/ProfileListPanel';
 import { TreePanel } from '#/TreePanel';
 import TreeState from '#/TreePanel/model/TreeState.js';
@@ -63,6 +62,11 @@ export default class Panel extends React.Component {
   }
 
   @action.bound
+  updateLeftSplitResizerState(state) {
+    this.props.layout.leftSplitPos = state;
+  }
+
+  @action.bound
   updateAndRestart() {
     this.props.store.updateAndRestart();
   }
@@ -70,21 +74,24 @@ export default class Panel extends React.Component {
   treeState = new TreeState(this.props.store);
   render() {
     const { layout, drawer } = this.props;
-    let defaultLeftSplitPos;
+    let leftSplitPos;
+    let leftSplitResizerState;
 
     untracked(() => {
-      defaultLeftSplitPos = layout.leftSplitPos;
+      ({ leftSplitPos, leftSplitResizerState } = layout);
     });
 
     return (
       <div>
         <div className="leftPaneInnerWrapper">
           {drawer.drawerChild == DrawerPanes.DEFAULT && (
-            <SplitPane
+            <EnhancedSplitPane
               className="LeftSplitPane"
               split="horizontal"
-              defaultSize={defaultLeftSplitPos}
+              size={leftSplitPos}
               onDragFinished={this.updateLeftSplitPos}
+              resizerState={leftSplitResizerState}
+              onResizerStateChanged={this.updateLeftSplitResizerState}
               minSize={100}
               maxSize={1000}
               pane2Style={splitPane2Style}
@@ -93,7 +100,7 @@ export default class Panel extends React.Component {
               <Provider treeState={this.treeState}>
                 <TreePanel />
               </Provider>
-            </SplitPane>
+            </EnhancedSplitPane>
           )}
 
           {drawer.drawerChild == DrawerPanes.DYNAMIC && <TreeActionPanel />}

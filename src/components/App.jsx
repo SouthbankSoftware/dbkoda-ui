@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2018-05-16T16:32:20+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-28T23:41:37+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,7 @@ import React from 'react';
 import { Broker, EventType } from '~/helpers/broker';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import SplitPane from 'react-split-pane';
+import EnhancedSplitPane, { resizerStates } from '#/common/EnhancedSplitPane';
 import { action, untracked, runInAction } from 'mobx';
 import { inject, observer, PropTypes } from 'mobx-react';
 import { Position } from '@blueprintjs/core';
@@ -145,8 +145,18 @@ class App extends React.Component {
   }
 
   @action.bound
+  updateRightSplitResizerState(state) {
+    this.props.layout.rightSplitResizerState = state;
+  }
+
+  @action.bound
   updateOverallSplitPos(pos) {
     this.props.layout.overallSplitPos = pos;
+  }
+
+  @action.bound
+  updateOverallSplitResizerState(state) {
+    this.props.layout.overallSplitResizerState = state;
   }
 
   @action.bound
@@ -163,12 +173,18 @@ class App extends React.Component {
       display: 'flex',
       flexDirection: 'column'
     };
-    let defaultOverallSplitPos;
-    let defaultRightSplitPos;
+    let overallSplitPos;
+    let overallSplitResizerState;
+    let rightSplitPos;
+    let rightSplitResizerState;
 
     untracked(() => {
-      defaultOverallSplitPos = layout.overallSplitPos;
-      defaultRightSplitPos = layout.rightSplitPos;
+      ({
+        overallSplitPos,
+        overallSplitResizerState,
+        rightSplitPos,
+        rightSplitResizerState
+      } = layout);
     });
 
     return (
@@ -187,28 +203,33 @@ class App extends React.Component {
             {store.drawer && store.drawer.activeNavPane == NavPanes.PROFILE && <ProfileManager />}
             {!store.drawer ||
               (store.drawer.activeNavPane == NavPanes.EDITOR && (
-                <SplitPane
+                <EnhancedSplitPane
                   className="EditorSplitPane"
                   split="vertical"
-                  defaultSize={defaultOverallSplitPos}
+                  size={overallSplitPos}
                   onDragFinished={this.updateOverallSplitPos}
+                  resizerState={overallSplitResizerState}
+                  onResizerStateChanged={this.updateOverallSplitResizerState}
                   minSize={350}
                   maxSize={750}
+                  allowedResizerState={[resizerStates.P_HIDDEN]}
                 >
                   <SidebarPanel />
-                  <SplitPane
+                  <EnhancedSplitPane
                     className="RightSplitPane"
                     split="horizontal"
-                    defaultSize={defaultRightSplitPos}
+                    size={rightSplitPos}
                     onDragFinished={this.updateRightSplitPos}
+                    resizerState={rightSplitResizerState}
+                    onResizerStateChanged={this.updateRightSplitResizerState}
                     minSize={200}
                     maxSize={1000}
                     pane2Style={splitPane2Style}
                   >
                     <EditorPanel />
                     <OutputPanel />
-                  </SplitPane>
-                </SplitPane>
+                  </EnhancedSplitPane>
+                </EnhancedSplitPane>
               ))}
           </div>
         </div>
