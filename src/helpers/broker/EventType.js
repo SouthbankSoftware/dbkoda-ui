@@ -67,7 +67,9 @@ export default {
   createShellReconnectEvent: (id, shellId) => {
     return 'controller::shell::reconnect::' + id + '::' + shellId;
   },
-  AGGREGATE_UPDATE: 'aggregate-builder::update',
+  AGGREGATE_UPDATE: id => {
+    return 'aggregate-builder::update::' + id;
+  },
   APP_READY: 'appReady',
   SWAP_SHELL_CONNECTION: 'swap::shell::connection',
   APP_RENDERED: 'appRendered',

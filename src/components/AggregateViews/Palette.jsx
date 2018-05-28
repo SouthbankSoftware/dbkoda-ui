@@ -54,9 +54,9 @@ export default class Palette extends React.Component {
         groupAndJoin: false,
         transform: false,
         other: false,
-        all: false,
-        debug: false
-      }
+        all: false
+      },
+      debug: true
     };
     this.blockList = this.getBlockList();
     this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
@@ -475,7 +475,6 @@ export default class Palette extends React.Component {
       this.moveBlock(tmpArray, tmpArray.length - 1, position);
     }
     this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList = tmpArray;
-
     // Update block attributes
     editor.blockList[position].status = 'pending';
     editor.blockList[position].attributeList = attributeList;

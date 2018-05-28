@@ -52,7 +52,7 @@ export default class Details extends React.Component {
       form: null,
       previousActiveBlock: null,
       reproduceCode: false,
-      debug: false
+      debug: true
     };
     this.reactionToUpdateDetails = reaction(
       () => this.props.store.editorPanel.updateAggregateDetails,
@@ -136,7 +136,7 @@ export default class Details extends React.Component {
   // Triggered when a mobx field is changed, this will update the store to reflect the new values.
   @action.bound
   updateBlockFields(fields, editorObject) {
-    if (this.state.debug) l.debug('Update Block Fields');
+    l.debug('Fields: ', fields);
     const selectedBlock = editorObject.selectedBlock;
     editorObject.blockList[selectedBlock].modified = true;
     for (const key in fields) {
@@ -154,9 +154,11 @@ export default class Details extends React.Component {
         }
       }
     }
+
     // Update Editor Contents.
     this.props.store.treeActionPanel.formValues = this.props.store.api.generateCode(editorObject);
     this.props.store.treeActionPanel.isNewFormValues = true;
+    this.editor.isAggregateDetailsLoading = false;
   }
 
   formPromise;
@@ -197,7 +199,8 @@ export default class Details extends React.Component {
 
   @action.bound
   _onApplyBlock() {
-    Broker.emit(EventType.AGGREGATE_UPDATE, this.props.store.editorPanel.activeEditorId);
+    l.debug('clicked apply for editor: ', this.props.store.editorPanel.activeEditorId);
+    Broker.emit(EventType.AGGREGATE_UPDATE(this.props.store.editorPanel.activeEditorId));
   }
 
   render() {

@@ -13,6 +13,15 @@
         "column": 0
       },
       {
+        "name": "useBasicConfig",
+        "label": "Use Basic Configuration",
+        "value": true,
+        "type": "switch",
+        "column": 1,
+        "refFields": ["urlRadio", "database", "ssl", "sslAllowInvalidCertificates", "sha"],
+        "disabled": false
+      },
+      {
         "name": "host",
         "label": "Host(s)",
         "value": "localhost",
@@ -42,15 +51,19 @@
           "tooltip": "The database in which this connection will initially be established"
         },
         "type": "text",
-        "column": 1
+        "column": 1,
+        "disabled": false,
+        "checkbox": "enabled"
       },
       {
         "name": "urlRadio",
         "label": "Use URI instead",
         "value": false,
-        "type": "checkbox",
+        "type": "switch",
         "column": 1,
-        "refFields": ["url", "host", "port"]
+        "refFields": ["url", "host", "port"],
+        "disabled": false,
+        "checkbox": "enabled"
       },
       {
         "name": "url",
@@ -67,22 +80,28 @@
         "value": false,
         "label": "Use SSL for all connections",
         "type": "checkbox",
-        "column": 2
+        "column": 2,
+        "disabled": false,
+        "checkbox": "enabled"
       },
       {
         "name": "sslAllowInvalidCertificates",
         "value": false,
         "label": "Allow invalid certificates",
         "type": "checkbox",
-        "column": 2
+        "column": 2,
+        "disabled": false,
+        "checkbox": "enabled"
       },
       {
         "name": "sha",
         "value": false,
         "label": "SCRAM-SHA-1(username/password)",
-        "type": "checkbox",
+        "type": "switch",
         "column": 2,
-        "refFields": ["username", "password", "authenticationDatabase"]
+        "refFields": ["username", "password", "authenticationDatabase"],
+        "disabled": false,
+        "checkbox": "enabled"
       },
       {
         "name": "username",
@@ -130,7 +149,7 @@
         "name": "useClusterConfig",
         "label": "Use Cluster Configuration",
         "value": false,
-        "type": "checkbox",
+        "type": "switch",
         "column": 1,
         "refFields": [
           "urlClusterRadio",
@@ -223,7 +242,7 @@
         "name": "urlClusterRadio",
         "label": "Use Cluster URI instead",
         "value": false,
-        "type": "checkbox",
+        "type": "switch",
         "column": 2,
         "refFields": [
           "urlCluster",
@@ -282,7 +301,7 @@
         "name": "shaCluster",
         "value": false,
         "label": "SCRAM-SHA-1(username/password)",
-        "type": "checkbox",
+        "type": "switch",
         "column": 2,
         "refFields": ["usernameCluster", "passwordCluster", "authenticationDatabaseCluster"],
         "disabled": true,
@@ -335,7 +354,7 @@
         "name": "ssh",
         "value": false,
         "label": "Establish Direct OS Connection (for terminal and performance monitoring)",
-        "type": "checkbox",
+        "type": "switch",
         "column": 1,
         "refFields": ["remoteHost", "remoteUser", "sshPort", "sshTunnel", "keyRadio"]
       },
@@ -392,7 +411,7 @@
         "name": "keyRadio",
         "value": false,
         "label": "Use PEM Key File instead",
-        "type": "checkbox",
+        "type": "switch",
         "column": 2,
         "refFields": ["sshKeyFile", "passPhrase", "remotePass"],
         "disabled": true,

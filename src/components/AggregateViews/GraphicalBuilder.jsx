@@ -73,12 +73,13 @@ export default class GraphicalBuilder extends React.Component {
       colorMatching: [],
       collection: props.collection,
       failed: false,
-      failureReason: 'Unknown'
+      failureReason: 'Unknown',
+      firstTry: true
     };
 
     Broker.emit(EventType.FEATURE_USE, 'AggregateBuilder');
 
-    this.state.debug = false;
+    this.state.debug = true;
     // Set up the aggregate builder in the shell.
     this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     this.profileId = this.editor.profileId;
@@ -95,6 +96,7 @@ export default class GraphicalBuilder extends React.Component {
         commands: AggregateCommands.NEW_AGG_BUILDER(this.currentDB, this.currentCollection)
       })
       .then(res => {
+        if (this.state.debug) l.debug('new agg builder result line 98:', res);
         this.editor.aggregateID = JSON.parse(res).id;
         if (this.editor.blockList.length === 0) {
           this.addStartBlock();
@@ -115,12 +117,12 @@ export default class GraphicalBuilder extends React.Component {
       });
 
     // Set up broker events.
-    Broker.on(EventType.AGGREGATE_UPDATE, this._onAggregateUpdate);
+    Broker.on(EventType.AGGREGATE_UPDATE(this.editor.id), this._onAggregateUpdate);
   }
 
   componentWillUnmount() {
     // Turn off broker events.
-    Broker.off(EventType.AGGREGATE_UPDATE, this._onAggregateUpdate);
+    Broker.off(EventType.AGGREGATE_UPDATE(this.editor.id), this._onAggregateUpdate);
   }
 
   /**
@@ -162,6 +164,7 @@ export default class GraphicalBuilder extends React.Component {
       this.updateShellPipeline().then(() => {
         this.updateResultSet()
           .then(res => {
+            if (this.state.debug) l.debug('update result set result line 166:', res);
             res = JSON.parse(res);
             if (res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
@@ -378,8 +381,29 @@ export default class GraphicalBuilder extends React.Component {
         } else {
           // All steps validated, full update.
           this.updateResultSet().then(res => {
-            res = JSON.parse(res);
-            if (res.stepAttributes.constructor === Array) {
+            if (this.state.debug) {
+ l.debug(
+                'update result set result line 383:',
+                res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
+              );
+}
+            try {
+              // Regex work around.
+              res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+            } catch (e) {
+              l.error(e);
+              // If first error - Try again!
+              if (this.state.firstTry) {
+                this.setState({ firstTry: false });
+                this.selectBlock(index);
+                resolve();
+              } else {
+                this.setState({ failed: true });
+                this.setState({ failureReason: e });
+                return;
+              }
+            }
+            if (res && res.stepAttributes && res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
               res.stepAttributes.map((indexValue, index) => {
                 let attributeIndex = index;
@@ -486,7 +510,22 @@ export default class GraphicalBuilder extends React.Component {
           });
         } else {
           this.updateResultSet().then(res => {
-            res = JSON.parse(res);
+            if (this.state.debug) l.debug('update result set result line 493:', res);
+            try {
+              res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+            } catch (e) {
+              l.error(e);
+              // If first error - Try again!
+              if (this.state.firstTry) {
+                this.setState({ firstTry: false });
+                this.moveBlock(blockFrom, blockTo);
+                resolve();
+              } else {
+                this.setState({ failed: true });
+                this.setState({ failureReason: e });
+                return;
+              }
+            }
             if (res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
               res.stepAttributes.map((indexValue, index) => {
@@ -599,7 +638,22 @@ export default class GraphicalBuilder extends React.Component {
         });
       } else {
         this.updateResultSet().then(res => {
-          res = JSON.parse(res);
+          if (this.state.debug) l.debug('update result set result line 606:', res);
+          try {
+            res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+          } catch (e) {
+            l.error(e);
+            // If first error - Try again!
+            if (this.state.firstTry) {
+              this.setState({ firstTry: false });
+              this.removeBlock(blockPosition);
+              return;
+            }
+              // eslint-disable-line
+              this.setState({ failed: true });
+              this.setState({ failureReason: e });
+              return;
+          }
           if (res.stepAttributes.constructor === Array) {
             // 3. Update Valid for each block.
             res.stepAttributes.map((indexValue, index) => {
@@ -635,9 +689,13 @@ export default class GraphicalBuilder extends React.Component {
             // 4. Was the block removed the selected block?.
             if (blockPosition === editor.selectedBlock) {
               // 4.a Yes - Set selected block to current - 1.
-              editor.selectedBlock -= 1;
+              runInAction('Update Selected Block o N-1', () => {
+                editor.selectedBlock -= 1;
+              });
               if (editor.selectedBlock < 0) {
-                editor.selectedBlock = 0;
+                runInAction('Update Selected Block to 0', () => {
+                  editor.selectedBlock = 0;
+                });
               }
             }
 
@@ -659,6 +717,7 @@ export default class GraphicalBuilder extends React.Component {
             });
           } else {
             // Check for error.
+            if (this.state.debug) l.debug('update result set error 664:', res);
             l.error('updateResultSet: ', JSON.parse(res));
           }
         });
@@ -696,11 +755,20 @@ export default class GraphicalBuilder extends React.Component {
         })
         .then(res => {
           try {
-            res = JSON.parse(res);
+            res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
           } catch (e) {
-            l.error(res);
-            l.error('Error validating step: ', step);
-            resolve(false);
+            l.error('parsing: ', res);
+            l.error(e);
+            // If first error - Try again!
+            if (this.state.firstTry) {
+              this.setState({ firstTry: false });
+              this.validateBlock(step);
+              resolve();
+            } else {
+              this.setState({ failed: true });
+              this.setState({ failureReason: e });
+              return;
+            }
           }
           if (res.type === 'object') {
             resolve(true);
@@ -812,6 +880,7 @@ export default class GraphicalBuilder extends React.Component {
           });
           // Update only first N blocks.
           const validArray = stepArray.slice(0, res.firstInvalid);
+
           // Update steps in Shell:
           const service = featherClient().service('/mongo-sync-execution');
           service.timeout = 60000;
@@ -900,9 +969,27 @@ export default class GraphicalBuilder extends React.Component {
           if (!res || res.length === 0) {
             output.output = globalString('aggregate_builder/no_output');
           }
-          res = JSON.parse(res);
+          if (this.state.debug) l.debug('get result res  line 906:', res);
+          try {
+            res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+          } catch (e) {
+            l.error(e);
+            // If first error - Try again!
+            if (this.state.firstTry) {
+              this.setState({ firstTry: false });
+              this.updateResultsOutput(editor, stepId);
+              return;
+            }
+              // eslint-disable-line
+              this.setState({ failed: true });
+              this.setState({ failureReason: e });
+              return;
+          }
           res.map(indexValue => {
             output.append(JSON.stringify(indexValue) + '\n');
+          });
+          runInAction('Agg Builder no longer loading', () => {
+            this.editor.isAggregateDetailsLoading = false;
           });
         });
       })
@@ -919,12 +1006,28 @@ export default class GraphicalBuilder extends React.Component {
             })
             .then(res => {
               runInAction('Update Graphical Builder', () => {
-                res = JSON.parse(res);
+                if (this.state.debug) {
+l.debug(
+                    'get result res  line 926:',
+                    res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
+                  );
+}
+                try {
+                  res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+                } catch (e) {
+                  l.error(e);
+                  this.setState({ failed: true });
+                  this.setState({ failureReason: e });
+                  return;
+                }
                 if (res.length === 0) {
                   output.output = globalString('aggregate_builder/no_output');
                 }
                 res.map(indexValue => {
                   output.append(JSON.stringify(indexValue) + '\n');
+                });
+                runInAction('Agg Builder no longer loading', () => {
+                  this.editor.isAggregateDetailsLoading = false;
                 });
               });
             })
@@ -954,7 +1057,7 @@ export default class GraphicalBuilder extends React.Component {
    * @param {Object} editorId - The editor to update the output for.
    */
   @action.bound
-  setOutputBroken(editorId) {
+  setBroken(editorId) {
     const output = this.props.store.outputs.get(editorId);
     output.output = globalString('aggregate_builder/failed_output');
   }
@@ -999,7 +1102,7 @@ export default class GraphicalBuilder extends React.Component {
           _.forEach(fileNames, v => {
             this.props.store
               .openFile(v, ({ _id, content }) => {
-                runInAction('Agg Builder no longer loading', () => {
+                runInAction('Agg Builder loading', () => {
                   this.editor.isAggregateDetailsLoading = true;
                 });
                 const contentObject = JSON.parse(content);
@@ -1207,7 +1310,27 @@ export default class GraphicalBuilder extends React.Component {
           });
         } else {
           this.updateResultSet().then(res => {
-            res = JSON.parse(res);
+            if (this.state.debug) {
+ l.debug(
+                'update result set result line 1216:',
+                res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
+              );
+}
+            try {
+              res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+            } catch (e) {
+              l.error(e);
+              // If first error - Try again!
+              if (this.state.firstTry) {
+                this.setState({ firstTry: false });
+                this.removeAllBlocks();
+                resolve();
+              } else {
+                this.setState({ failed: true });
+                this.setState({ failureReason: e });
+                return;
+              }
+            }
             if (res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
               res.stepAttributes.map((indexValue, index) => {
@@ -1256,6 +1379,7 @@ export default class GraphicalBuilder extends React.Component {
               });
             } else {
               // Check for error.
+              if (this.state.debug) l.debug('update result set error line 1265:', res);
               l.error('updateResultSet: ', JSON.parse(res));
               reject();
             }
