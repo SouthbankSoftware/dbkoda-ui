@@ -1,11 +1,9 @@
 /**
- * @flow
- *
  * @Author: Guan Gui <guiguan>
- * @Date:   2018-05-23T11:55:14+10:00
+ * @Date:   2018-05-26T15:31:03+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-23T16:16:22+10:00
+ * @Last modified time: 2018-05-26T15:45:40+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,25 +24,4 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-import { storiesOf } from '@storybook/react';
-import { withKnobs, text, number } from '@storybook/addon-knobs';
-import '#/App.scss';
-import SplitPane from './';
-
-storiesOf('SplitPane', module)
-  .addDecorator(withKnobs)
-  .add(
-    'normal',
-    () => (
-      <SplitPane
-        split="vertical"
-        minSize={number('minSize', 50)}
-        defaultSize={number('defaultSize', 100)}
-      >
-        <div>{text('test1', 'test1')}</div>
-        <div>{text('test2', 'test2')}</div>
-      </SplitPane>
-    ),
-    { notes: 'As you can see this is just a boring split panel. No magic is happening yet.' }
-  );
+module.exports = require('./Panel');

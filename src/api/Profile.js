@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-28T12:32:50+10:00
+ * @Last modified time: 2018-05-28T16:24:47+10:00
  */
 
 import _ from 'lodash';
@@ -18,37 +18,63 @@ import { performancePanelStatuses } from './PerformancePanel';
 
 export type Profile = {
   id: string,
-  shellId: string,
-  password: string,
-  status: ProfileStatus,
-  database: string,
-  authenticationDatabase: string,
+  // basic Form Fields
   alias: string,
-  authorization: boolean,
+  useBasicConfig: boolean, // might need to sanitize
   host: string,
-  hostRadio: boolean,
   port: number,
+  database: string,
+  urlRadio: boolean, // true if connecting via URL
+  hostRadio: boolean, // depricated but should be equal to (!urlRadio)
+  url: string,
   ssl: boolean,
   sslAllowInvalidCertificates: boolean,
-  test: boolean,
-  url: string,
-  urlRadio: boolean,
-  username: string,
   sha: boolean,
+  username: string,
+  password: string,
+  authenticationDatabase: string,
+  // cluster Form Fields
+  useClusterConfig: boolen, // flag to use cluster config instead of basic config
+  hostsList: string,
+  replicaSetName: string,
+  w: string,
+  wtimeoutMS: number,
+  journal: boolen,
+  readPref: string,
+  urlClusterRadio: boolen, // true if connecting via Cluster URL
+  urlCluster: string,
+  databaseCluster: string,
+  sslCluster: boolean,
+  sslAllowInvalidCertificatesCluster: boolean,
+  shaCluster: boolean,
+  usernameCluster: string,
+  passwordCluster: string,
+  authenticationDatabaseCluster: string,
+  // SSH Form Fields
   ssh: boolean,
-  sshTunnel: boolean,
-  remoteHost: string,
-  remoteUser: string,
+  remoteHost: string, // host for ssh
   sshPort: number,
-  sshLocalPort: number,
-  passRadio: boolean,
+  remoteUser: string,
+  remotePass: string,
+  sshTunnel: boolean,
   keyRadio: boolean,
+  passRadio: boolean, // depricated but inverse of keyRadio
   sshKeyFile: string,
+  passPhrase: string,
+  // SSH other variables
+  sshLocalPort: number, // random local port for tunneling
+  // Other Variables
+  shellId: string,
+  status: ProfileStatus,
   dbVersion: string,
   shellVersion: string,
   initialMsg: string,
   mongoType: string,
+  authorization: boolean, // probably depricated variable
+  bPassPhrase: boolean, // true if user has entered a passPhrase for the SSH key
+  bRemotePass: boolen, // true if user has entered a remotePass for SSH
   bReconnect: boolean, // Boolean variable to be set when profile is reconnected from profileList
+  test: boolean,
   usePasswordStore: boolean
 };
 
@@ -312,11 +338,18 @@ export default class ProfileApi {
         mongoType: res.mongoType
       };
       l.debug('profile:', profile);
-      if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {
-        profile.bPassPhrase = true;
-      }
-      if ((data.remotePass && data.remotePass != '') || data.bRemotePass) {
-        profile.bRemotePass = true;
+      if (!data.bReconnect) {
+        if (data.passPhrase && data.passPhrase != '') {
+          profile.bPassPhrase = true;
+        } else {
+          profile.bPassPhrase = false;
+        }
+        if (data.remotePass && data.remotePass != '') {
+          // removed (|| data.bRemotePass) because if a user is editing the profile he can remove the password if the server configuration has changed.
+          profile.bRemotePass = true;
+        } else {
+          profile.bRemotePass = false;
+        }
       }
       profiles.set(res.id, profile);
       profileList.selectedProfile = profiles.get(res.id);

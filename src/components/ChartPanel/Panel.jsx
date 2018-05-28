@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T17:11:03+11:00
+ * @Last modified time: 2018-05-29T00:16:29+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,7 +30,7 @@ import SplitPane from 'react-split-pane';
 import ReactResizeDetector from 'react-resize-detector';
 import _ from 'lodash';
 import { action, computed, reaction } from 'mobx';
-import shallowEqualObjects from 'shallow-equal/objects';
+import shallowequal from 'shallowequal';
 import { inject, observer } from 'mobx-react';
 // $FlowIssue
 import ErrorView from '#/common/ErrorView';
@@ -220,7 +220,7 @@ export default class ChartPanel extends React.Component<Props, State> {
   }
 
   // $FlowIssue
-  @computed({ equals: shallowEqualObjects })
+  @computed({ equals: shallowequal })
   get selectedComponents(): SelectedComponents {
     const { chartComponentX, chartComponentY, chartComponentCenter } = this.props.store.chartPanel;
 
@@ -263,7 +263,7 @@ export default class ChartPanel extends React.Component<Props, State> {
       componentY,
       componentCenter: { name, valueSchemaPath, valueType, values }
     } = this._barChartData;
-    const categoricalComponent = this._getCategoricalNumericalComponents(componentX, componentY)[0];
+    const [categoricalComponent] = this._getCategoricalNumericalComponents(componentX, componentY);
     let resultData;
     let resultComponentCenter;
 

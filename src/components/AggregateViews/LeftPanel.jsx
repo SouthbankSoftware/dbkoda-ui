@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Michael Harrison
+ * @Date:   2017-07-19 11:17:46
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-28T23:55:23+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,17 +24,9 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Author: Michael Harrison
- * @Date:   2017-07-19 11:17:46
- * @Email:  mike@southbanksoftware.com
- * @Last modified by:   Mike
- * @Last modified time: 2017-07-19 11:17:49
- */
-
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import SplitPane from 'react-split-pane';
+import EnhancedSplitPane from '#/common/EnhancedSplitPane';
 import Palette from './Palette';
 import Details from './Details';
 import './style.scss';
@@ -51,7 +49,7 @@ export default class LeftPanel extends React.Component {
   render() {
     return (
       <div className="aggregateLeftPanel">
-        <SplitPane
+        <EnhancedSplitPane
           className="LeftSplitPane"
           split="horizontal"
           defaultSize={300}
@@ -61,7 +59,7 @@ export default class LeftPanel extends React.Component {
         >
           <Palette />
           <Details />
-        </SplitPane>
+        </EnhancedSplitPane>
       </div>
     );
   }

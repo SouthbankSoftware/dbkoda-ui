@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-05-23T12:05:29+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-28T22:48:35+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -35,6 +35,7 @@ import moment from 'moment';
 import Globalize from 'globalize';
 import DataCenter from '~/api/DataCenter';
 import { setUser, toggleRaygun } from '~/helpers/loggingApi';
+import { resizerStates } from '#/common/EnhancedSplitPane';
 import { Broker, EventType } from '../helpers/broker';
 import { ProfileStatus } from '../components/common/Constants';
 import Config from './config';
@@ -156,8 +157,11 @@ export default class Store {
     alertIsLoading: false,
     optInVisible: !global.UAT,
     overallSplitPos: '25%',
+    overallSplitResizerState: resizerStates.ALL_SHOWN,
     leftSplitPos: '50%',
-    rightSplitPos: '60%'
+    leftSplitResizerState: resizerStates.ALL_SHOWN,
+    rightSplitPos: '60%',
+    rightSplitResizerState: resizerStates.ALL_SHOWN
   };
 
   @observable
