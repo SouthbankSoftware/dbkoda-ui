@@ -3,7 +3,7 @@
  * @Date:   2018-01-10T09:56:16+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-22T11:58:03+10:00
+ * @Last modified time: 2018-05-28T11:24:31+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -323,6 +323,7 @@
     input[type='checkbox']:disabled {
       width: 20px;
       height: 20px;
+      opacity: 0;
     }
 
     :disabled {
@@ -413,6 +414,34 @@
         .pt-icon-chevron-down {
           background-color: $connectionActiveTextFieldBackgroundColour !important;
         }
+      }
+    }
+
+    .pt-control.pt-switch {
+      .pt-control-indicator {
+        background: rgba(167, 182, 194, 0.5);
+      }
+      .pt-control-indicator::before {
+        background: #ffffff;
+      }
+      input:disabled ~ .pt-control-indicator::before {
+        box-shadow: none;
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+      input:not(:disabled):active ~ .pt-control-indicator {
+        box-shadow: none;
+        background-color: rgba(92, 112, 128, 0.5);
+      }
+      input:checked ~ .pt-control-indicator {
+        background: rgba(167, 182, 194, 0.5);
+      }
+      input:disabled:checked ~ .pt-control-indicator {
+        background-color: rgba(167, 182, 194, 0.2);
+      }
+    }
+    .pt-control.pt-switch:hover {
+      input:not(:disabled) ~ .pt-control-indicator {
+        background-color: rgba(115, 134, 148, 0.5);
       }
     }
 
@@ -613,7 +642,11 @@
         border: 1px solid $connectionCheckboxColour;
       }
 
-      .pt-control-indicator:hover {
+      input:disabled ~ .pt-control-indicator {
+        border: 1px solid darken($connectionCheckboxColour, 20);
+      }
+
+      input:not(:disabled) ~ .pt-control-indicator:hover {
         background-color: $connectionCheckboxBackgroundColourHover;
       }
     }

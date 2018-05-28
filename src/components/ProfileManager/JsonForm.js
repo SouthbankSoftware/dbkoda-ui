@@ -3,7 +3,7 @@
  * @Date:   2018-01-24T09:50:36+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-23T12:24:21+10:00
+ * @Last modified time: 2018-05-28T10:18:43+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,6 +34,17 @@ export const FieldBindings = {
   password: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
   number: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onValueChange', 'onBlur'],
   checkbox: [
+    'name',
+    'value',
+    'type',
+    'id',
+    'placeholder',
+    'disabled',
+    'onClick',
+    'onChange',
+    'onBlur'
+  ],
+  switch: [
     'name',
     'value',
     'type',
@@ -137,7 +148,7 @@ export class JsonForm {
     };
     set(field, { error: '' });
     field.onChange = action(e => {
-      if (field.type === 'checkbox') {
+      if (field.type === 'checkbox' || field.type === 'switch') {
         return;
       } else if (field.type === 'inplacetext') {
         this.updateFieldValue(field, e);
@@ -148,7 +159,7 @@ export class JsonForm {
     field.onBlur = () => {
       this.validateForm();
     };
-    if (field.type == 'checkbox') {
+    if (field.type == 'checkbox' || field.type == 'switch') {
       field.onClick = action(e => {
         this.updateFieldValue(field, e.currentTarget.checked);
       });
@@ -195,7 +206,7 @@ export class JsonForm {
         const refField = _.find(subForm.fields, f => {
           return f.name === fld;
         });
-        if (field.type === 'checkbox') {
+        if (field.type === 'checkbox' || field.type === 'switch') {
           if (field.disabled) {
             refField.disabled = true;
           } else if (refField.checkbox === 'enabled') {
