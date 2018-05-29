@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-28T16:24:47+10:00
+ * @Last modified time: 2018-05-29T11:47:47+10:00
  */
 
 import _ from 'lodash';
@@ -227,7 +227,7 @@ export default class ProfileApi {
         query.passPhrase = data.passPhrase;
 
         terminalQuery.privateKey = data.sshKeyFile;
-        terminalQuery.passPhrase = data.passPhrase;
+        terminalQuery.passphrase = data.passPhrase;
       }
     }
 
