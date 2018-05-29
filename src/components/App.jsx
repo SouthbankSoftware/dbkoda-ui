@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T22:04:07+10:00
+ * @Last modified time: 2018-05-29T23:47:40+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,7 @@ import React from 'react';
 import { Broker, EventType } from '~/helpers/broker';
 import withDragDropContext from '#/hoc/withDragDropContext';
 import { action, runInAction } from 'mobx';
-import { inject, observer, PropTypes } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { Position } from '@blueprintjs/core';
 import DevTools from 'mobx-react-devtools';
 import { DBKodaToaster } from '#/common/Toaster';
@@ -61,10 +61,6 @@ import './App.scss';
 }))
 @observer
 class App extends React.Component {
-  static propTypes = {
-    layout: PropTypes.observableObject.isRequired
-  };
-
   componentWillMount() {
     runInAction(() => {
       if (!this.props.config.settings.showNewFeaturesDialogOnStart) {

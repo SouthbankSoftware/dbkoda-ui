@@ -3,7 +3,7 @@
  * @Date:   2017-07-19 11:17:46
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-28T23:55:23+10:00
+ * @Last modified time: 2018-05-30T00:22:23+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,20 +31,15 @@ import Palette from './Palette';
 import Details from './Details';
 import './style.scss';
 
-const splitPane2Style = {
-  display: 'flex',
-  flexDirection: 'column'
-};
-
 @inject(allStores => ({
   store: allStores.store
 }))
 @observer
 export default class LeftPanel extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+  splitPane2Style = {
+    display: 'flex',
+    flexDirection: 'column'
+  };
 
   render() {
     return (
@@ -55,7 +50,7 @@ export default class LeftPanel extends React.Component {
           defaultSize={300}
           minSize={250}
           maxSize={1000}
-          pane2Style={splitPane2Style}
+          pane2Style={this.splitPane2Style}
         >
           <Palette />
           <Details />

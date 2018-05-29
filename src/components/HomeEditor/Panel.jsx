@@ -1,9 +1,11 @@
 /**
+ * @flow
+ *
  * @Author: Guan Gui <guiguan>
  * @Date:   2018-05-29T21:57:08+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T22:01:56+10:00
+ * @Last modified time: 2018-05-29T23:55:07+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -37,7 +39,12 @@ import { OutputPanel } from '#/OutputPanel';
   layout: allStores.store.layout
 }))
 @observer
-export default class HomeEditor extends React.Component {
+class MailPanel extends React.Component<*, *> {
+  splitPane2Style = {
+    display: 'flex',
+    flexDirection: 'column'
+  };
+
   @action.bound
   updateRightSplitPos(pos) {
     this.props.layout.rightSplitPos = pos;
@@ -73,27 +80,46 @@ export default class HomeEditor extends React.Component {
     this.props.layout.rightSplitResizerState = state;
   }
 
+  render() {
+    const { rightSplitPos, rightSplitResizerState } = this.props.layout;
+
+    return (
+      <EnhancedSplitPane
+        className="RightSplitPane"
+        split="horizontal"
+        size={rightSplitPos}
+        onDragFinished={this.updateRightSplitPos}
+        resizerState={rightSplitResizerState}
+        onResizerStateChanged={this.updateRightSplitResizerState}
+        minSize={200}
+        maxSize={1000}
+        pane2Style={this.splitPane2Style}
+      >
+        <EditorPanel />
+        <OutputPanel />
+      </EnhancedSplitPane>
+    );
+  }
+}
+
+@inject(allStores => ({
+  store: allStores.store,
+  layout: allStores.store.layout
+}))
+@observer
+export default class HomeEditor extends React.Component<*, *> {
   @action.bound
-  updateOverallSplitPos(pos) {
+  updateOverallSplitPos(pos: *) {
     this.props.layout.overallSplitPos = pos;
   }
 
   @action.bound
-  updateOverallSplitResizerState(state) {
+  updateOverallSplitResizerState(state: *) {
     this.props.layout.overallSplitResizerState = state;
   }
 
   render() {
-    const splitPane2Style = {
-      display: 'flex',
-      flexDirection: 'column'
-    };
-    const {
-      overallSplitPos,
-      overallSplitResizerState,
-      rightSplitPos,
-      rightSplitResizerState
-    } = this.props.layout;
+    const { overallSplitPos, overallSplitResizerState } = this.props.layout;
 
     return (
       <EnhancedSplitPane
@@ -108,20 +134,7 @@ export default class HomeEditor extends React.Component {
         allowedResizerState={[resizerStates.P_HIDDEN]}
       >
         <SidebarPanel />
-        <EnhancedSplitPane
-          className="RightSplitPane"
-          split="horizontal"
-          size={rightSplitPos}
-          onDragFinished={this.updateRightSplitPos}
-          resizerState={rightSplitResizerState}
-          onResizerStateChanged={this.updateRightSplitResizerState}
-          minSize={200}
-          maxSize={1000}
-          pane2Style={splitPane2Style}
-        >
-          <EditorPanel />
-          <OutputPanel />
-        </EnhancedSplitPane>
+        <MailPanel />
       </EnhancedSplitPane>
     );
   }

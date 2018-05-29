@@ -5,7 +5,7 @@
  * @Date:   2018-05-22T15:10:52+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T20:39:58+10:00
+ * @Last modified time: 2018-05-30T00:17:09+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -63,12 +63,21 @@ export const resizerStates = {
 
 export type ResizerState = $Keys<typeof resizerStates>;
 
-const PROPS_FILTER = [
+const PANE_PROPS_FILTER = [
   'size',
   'defaultSize',
   'allowedResizerState',
   'resizerState',
   'onResizerStateChanged',
+  'onDragFinished',
+  'onDragStarted'
+];
+
+const SHALLOW_EQUAL_FILTER = [
+  'size',
+  'defaultSize',
+  'resizerState',
+  'children',
   'onDragFinished',
   'onDragStarted'
 ];
@@ -170,7 +179,7 @@ export default class EnhancedSplitPane extends React.Component<*, State> {
   };
 
   getPaneProps = () => {
-    const paneProps = _.omit(this.props, PROPS_FILTER);
+    const paneProps = _.omit(this.props, PANE_PROPS_FILTER);
     paneProps.defaultSize = this.state.size;
     paneProps.onDragFinished = this._onDragFinished;
     paneProps.onDragStarted = this._onDragStarted;
@@ -183,12 +192,9 @@ export default class EnhancedSplitPane extends React.Component<*, State> {
       this.setDraggedSize(nextState.size, nextProps);
     }
 
-    let shouldUpdate = false;
-
-    shouldUpdate =
-      shouldUpdate || !shallowequal(nextProps.allowedResizerState, this.props.allowedResizerState);
-    shouldUpdate =
-      shouldUpdate || !_.every(_.omit(nextProps, PROPS_FILTER), (v, k) => v === this.props[k]);
+    const shouldUpdate = !_.every(_.omit(nextProps, SHALLOW_EQUAL_FILTER), (v, k) =>
+      shallowequal(v, this.props[k])
+    );
 
     if (!shouldUpdate) {
       // update is not going to happen, but we need to manually update these
@@ -200,6 +206,12 @@ export default class EnhancedSplitPane extends React.Component<*, State> {
       ) {
         this.setSize(nextState.size, true);
       }
+    } else {
+      l.error(
+        new Error(
+          'EnhancedSplitPane rerendered and its performance is degraded. Please make sure props not in SHALLOW_EQUAL_FILTER are always the same.'
+        )
+      );
     }
 
     const { resizerState: prevResizerState } = this.state;
