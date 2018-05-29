@@ -3,7 +3,7 @@
  * @Date:   2017-04-21T09:24:34+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-28T23:52:17+10:00
+ * @Last modified time: 2018-05-29T18:16:32+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -63,7 +63,7 @@ export default class Panel extends React.Component {
 
   @action.bound
   updateLeftSplitResizerState(state) {
-    this.props.layout.leftSplitPos = state;
+    this.props.layout.leftSplitResizerState = state;
   }
 
   @action.bound
