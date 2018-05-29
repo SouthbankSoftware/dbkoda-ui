@@ -5,7 +5,7 @@
  * @Date:   2018-05-22T15:10:52+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-28T23:31:49+10:00
+ * @Last modified time: 2018-05-29T20:39:58+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -202,12 +202,14 @@ export default class EnhancedSplitPane extends React.Component<*, State> {
       }
     }
 
+    const { resizerState: prevResizerState } = this.state;
+
     if (nextState.resizerState !== this.state.resizerState) {
       setTimeout(() => {
         // now nextState becomes this.state. We can emit event now
         const { onResizerStateChanged } = this.props;
 
-        onResizerStateChanged && onResizerStateChanged(this.state.resizerState);
+        onResizerStateChanged && onResizerStateChanged(this.state.resizerState, prevResizerState);
       });
     }
 

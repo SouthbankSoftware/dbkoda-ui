@@ -5,7 +5,7 @@
  * @Date:   2018-05-20T17:32:14+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T10:32:16+10:00
+ * @Last modified time: 2018-05-29T20:18:15+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -80,7 +80,7 @@ export default class Output {
 
   scrollToButtom = (cm: *) => {
     const count = cm.lineCount();
-    cm.setCursor({ line: Math.max(0, count - 3) }, 0);
+    cm.setCursor(Math.max(0, count - 3), 0);
   };
 
   _removeNLines = (n: number, from: number) => {
