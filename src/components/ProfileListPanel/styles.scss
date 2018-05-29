@@ -3,7 +3,7 @@
  * @Date:   2018-03-26T15:12:11+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T12:26:15+10:00
+ * @Last modified time: 2018-05-29T11:56:14+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,6 +27,7 @@
 
 .profileListPanel {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: $panelLeftBackground !important;
@@ -38,6 +39,7 @@
 
   .profileListToolbar {
     background-color: $navbarLeftBackground !important;
+    flex: none;
 
     .pt-button {
       background: $buttonSecondaryBackground !important;
@@ -80,8 +82,7 @@
   }
 
   .profileList {
-    flex-grow: 1;
-    overflow-y: scroll;
+    flex: 1 1 0%;
 
     .pt-table-quadrant {
       background-color: $panelLeftBackground;
