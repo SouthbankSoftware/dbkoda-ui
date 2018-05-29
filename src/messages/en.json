@@ -149,7 +149,7 @@
       "block_not_yet_valid":
         "  Please fill in Stage details and click on the stage to see results.\n  ----------------------------------  ",
       "valid_output":
-        "  Example of Result at current Stage: \n  ----------------------------------  \n",
+        "  Example of Result at current Stage ({0}) \n  ----------------------------------  \n",
       "no_output":
         "  No results to display at current stage in pipeline.\n  Perhaps your pipeline returns no results, or is filtering out all results.\n  You can also increase your sample size in the 'Start' step to increase results of accuracy.\n  ----------------------------------  ",
       "loading_output": "  Loading results...\n  ----------------------------------  ",

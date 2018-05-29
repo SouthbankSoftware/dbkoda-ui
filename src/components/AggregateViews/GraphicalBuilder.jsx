@@ -151,7 +151,7 @@ export default class GraphicalBuilder extends React.Component {
   @action.bound
   _onAggregateUpdate() {
     const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-    l.debug('Selecting last block: ', editor.blockList.length - 1);
+    l.debug('Selecting Block: ', this.editor.selectedBlock);
     this.selectBlock(editor.blockList.length - 1);
   }
 
@@ -382,11 +382,11 @@ export default class GraphicalBuilder extends React.Component {
           // All steps validated, full update.
           this.updateResultSet().then(res => {
             if (this.state.debug) {
- l.debug(
+              l.debug(
                 'update result set result line 383:',
                 res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
               );
-}
+            }
             try {
               // Regex work around.
               res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
@@ -649,10 +649,10 @@ export default class GraphicalBuilder extends React.Component {
               this.removeBlock(blockPosition);
               return;
             }
-              // eslint-disable-line
-              this.setState({ failed: true });
-              this.setState({ failureReason: e });
-              return;
+            // eslint-disable-line
+            this.setState({ failed: true });
+            this.setState({ failureReason: e });
+            return;
           }
           if (res.stepAttributes.constructor === Array) {
             // 3. Update Valid for each block.
@@ -763,11 +763,12 @@ export default class GraphicalBuilder extends React.Component {
             if (this.state.firstTry) {
               this.setState({ firstTry: false });
               this.validateBlock(step);
-              resolve();
+              resolve(true);
             } else {
-              this.setState({ failed: true });
-              this.setState({ failureReason: e });
-              return;
+              // this.setState({ failed: true });
+              // this.setState({ failureReason: e });
+              l.error('Failed to validate block ', step, ' with error: ', res);
+              resolve(false);
             }
           }
           if (res.type === 'object') {
@@ -795,7 +796,7 @@ export default class GraphicalBuilder extends React.Component {
   }
 
   validateAllBlocks(stepArray) {
-    if (this.state.debug) l.debug('Add all Agg Block');
+    if (this.state.debug) l.debug('Validate all Agg Block');
     return new Promise(resolve => {
       const returnObject = {
         areAllValid: true,
@@ -808,6 +809,7 @@ export default class GraphicalBuilder extends React.Component {
         const newStep = step.replace(/,\s*$/, '');
         this.validateBlock(newStep).then(res => {
           if (res === false) {
+            if (this.state.debug) l.debug('Set first invalid to: ', stepIndex);
             resolve({
               areAllValid: false,
               firstInvalid: stepIndex
@@ -852,6 +854,7 @@ export default class GraphicalBuilder extends React.Component {
       // Before setting all steps, validate steps:
       this.validateAllBlocks(stepArray).then(res => {
         if (res.areAllValid === true) {
+          if (this.state.debug) l.debug('All blocks are valid.');
           // Update steps in Shell:
           const service = featherClient().service('/mongo-sync-execution');
           service.timeout = 60000;
@@ -867,9 +870,11 @@ export default class GraphicalBuilder extends React.Component {
               });
             })
             .catch(e => {
+              l.error(e);
               reject(e);
             });
         } else {
+          if (this.state.debug) l.debug('Not all blocks are valid.');
           // There is an invalid step, mark it and update each step.
           editor.blockList.map((block, blockIndex) => {
             if (blockIndex > res.firstInvalid) {
@@ -901,6 +906,7 @@ export default class GraphicalBuilder extends React.Component {
               });
             })
             .catch(e => {
+              l.error(e);
               reject(e);
             });
         }
@@ -942,7 +948,7 @@ export default class GraphicalBuilder extends React.Component {
   @action.bound
   clearResultsOutput(editor) {
     const output = this.props.store.outputs.get(editor.id);
-    output.output = globalString('aggregate_builder/no_valid_output');
+    output.output = globalString('aggregate_builder/no_valid_output', editor.selectedBlock);
   }
 
   /**
@@ -963,13 +969,12 @@ export default class GraphicalBuilder extends React.Component {
         commands: AggregateCommands.GET_RESULTS(editor.aggregateID, stepId, false)
       })
       .then(res => {
-        output.output = globalString('aggregate_builder/valid_output');
+        output.output = globalString('aggregate_builder/valid_output', editor.selectedBlock);
+        if (this.state.debug) l.debug('get result res  line 967:', res);
         runInAction('Update Graphical Builder', () => {
-          // if (this.state.debug) l.debug('Got Agg Results: ', res);
           if (!res || res.length === 0) {
             output.output = globalString('aggregate_builder/no_output');
           }
-          if (this.state.debug) l.debug('get result res  line 906:', res);
           try {
             res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
           } catch (e) {
@@ -980,10 +985,10 @@ export default class GraphicalBuilder extends React.Component {
               this.updateResultsOutput(editor, stepId);
               return;
             }
-              // eslint-disable-line
-              this.setState({ failed: true });
-              this.setState({ failureReason: e });
-              return;
+            // eslint-disable-line
+            this.setState({ failed: true });
+            this.setState({ failureReason: e });
+            return;
           }
           res.map(indexValue => {
             output.append(JSON.stringify(indexValue) + '\n');
@@ -995,48 +1000,46 @@ export default class GraphicalBuilder extends React.Component {
       })
       .catch(e => {
         l.error(e);
-        if (e.match('Timeout of 30000ms exceeded')) {
-          l.error('Retry aggregation once more with higher timeout...');
-          const service = featherClient().service('/mongo-sync-execution');
-          service.timeout = 60000;
-          service
-            .update(editor.profileId, {
-              shellId: editor.shellId, // eslint-disable-line
-              commands: AggregateCommands.GET_RESULTS(editor.aggregateID, stepId, false)
-            })
-            .then(res => {
-              runInAction('Update Graphical Builder', () => {
-                if (this.state.debug) {
-l.debug(
-                    'get result res  line 926:',
-                    res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
-                  );
-}
-                try {
-                  res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
-                } catch (e) {
-                  l.error(e);
-                  this.setState({ failed: true });
-                  this.setState({ failureReason: e });
-                  return;
-                }
-                if (res.length === 0) {
-                  output.output = globalString('aggregate_builder/no_output');
-                }
-                res.map(indexValue => {
-                  output.append(JSON.stringify(indexValue) + '\n');
-                });
-                runInAction('Agg Builder no longer loading', () => {
-                  this.editor.isAggregateDetailsLoading = false;
-                });
+        l.error('Retry aggregation once more with higher timeout...');
+        const service = featherClient().service('/mongo-sync-execution');
+        service.timeout = 60000;
+        service
+          .update(editor.profileId, {
+            shellId: editor.shellId, // eslint-disable-line
+            commands: AggregateCommands.GET_RESULTS(editor.aggregateID, stepId, false)
+          })
+          .then(res => {
+            runInAction('Update Graphical Builder', () => {
+              if (this.state.debug) {
+                l.debug(
+                  'get result res  line 926:',
+                  res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
+                );
+              }
+              try {
+                res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+              } catch (e) {
+                l.error(e);
+                this.setState({ failed: true });
+                this.setState({ failureReason: e });
+                return;
+              }
+              if (res.length === 0) {
+                output.output = globalString('aggregate_builder/no_output');
+              }
+              res.map(indexValue => {
+                output.append(JSON.stringify(indexValue) + '\n');
               });
-            })
-            .catch(e => {
-              l.error(e);
-              this.setState({ failed: true });
-              this.setState({ failureReason: e });
+              runInAction('Agg Builder no longer loading', () => {
+                this.editor.isAggregateDetailsLoading = false;
+              });
             });
-        }
+          })
+          .catch(e => {
+            l.error(e);
+            this.setState({ failed: true });
+            this.setState({ failureReason: e });
+          });
       });
   }
 
@@ -1311,11 +1314,11 @@ l.debug(
         } else {
           this.updateResultSet().then(res => {
             if (this.state.debug) {
- l.debug(
+              l.debug(
                 'update result set result line 1216:',
                 res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
               );
-}
+            }
             try {
               res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
             } catch (e) {
