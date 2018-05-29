@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-29T12:37:22+10:00
+ * @Last modified time: 2018-05-29T15:06:23+10:00
  */
 
 import _ from 'lodash';
@@ -339,16 +339,21 @@ export default class ProfileApi {
       };
       l.debug('profile:', profile);
       if (!data.bReconnect) {
-        if (data.passPhrase && data.passPhrase != '') {
-          profile.bPassPhrase = true;
-        } else {
-          profile.bPassPhrase = false;
-        }
-        if (data.remotePass && data.remotePass != '') {
-          // removed (|| data.bRemotePass) because if a user is editing the profile he can remove the password if the server configuration has changed.
-          profile.bRemotePass = true;
+        if (data.ssh) {
+          if (data.passPhrase && data.passPhrase != '') {
+            profile.bPassPhrase = true;
+          } else {
+            profile.bPassPhrase = false;
+          }
+          if (data.remotePass && data.remotePass != '') {
+            // removed (|| data.bRemotePass) because if a user is editing the profile he can remove the password if the server configuration has changed.
+            profile.bRemotePass = true;
+          } else {
+            profile.bRemotePass = false;
+          }
         } else {
           profile.bRemotePass = false;
+          profile.bPassPhrase = false;
         }
       }
       profiles.set(res.id, profile);
