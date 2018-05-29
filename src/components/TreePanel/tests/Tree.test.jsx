@@ -3,7 +3,7 @@
  * @Date:   2017-03-24T16:13:16+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T20:31:23+11:00
+ * @Last modified time: 2018-05-29T11:22:45+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,9 +29,8 @@ import '~/helpers/configEnzyme';
 import { mount } from 'enzyme';
 import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
-import { DragDropContext } from 'react-dnd';
 import Store from '~/stores/global';
-import HTML5Backend from 'react-dnd-html5-backend';
+import withDragDropContext from '#/hoc/withDragDropContext';
 import TempTopology from '~/stores/TempTopology.js';
 import TreeState from '#/TreePanel/model/TreeState';
 import globalizeInit from '#/tests/helpers/globalize.js';
@@ -51,7 +50,7 @@ describe('Tree View and Toolbar', () => {
     }
   }
 
-  const DDCTreeView = DragDropContext(HTML5Backend)(TreeViewTest);
+  const DDCTreeView = withDragDropContext(TreeViewTest);
   const topology = JSON.parse(TempTopology.data);
   const treeState = new TreeState();
   const store = new Store();
