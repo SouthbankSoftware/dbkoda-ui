@@ -5,7 +5,7 @@
  * @Date:   2018-05-20T17:32:14+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-21T15:19:26+10:00
+ * @Last modified time: 2018-05-29T10:32:16+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -63,7 +63,7 @@ export default class Output {
 
   _onChange = cm => {
     this._removeExpiredHistory(cm);
-    this._scrollToButtom(cm);
+    this.scrollToButtom(cm);
   };
 
   _removeExpiredHistory = cm => {
@@ -78,8 +78,9 @@ export default class Output {
     }
   };
 
-  _scrollToButtom = cm => {
-    cm.setCursor(cm.lineCount(), 0);
+  scrollToButtom = (cm: *) => {
+    const count = cm.lineCount();
+    cm.setCursor({ line: Math.max(0, count - 3) }, 0);
   };
 
   _removeNLines = (n: number, from: number) => {
