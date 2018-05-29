@@ -3,7 +3,7 @@
  * @Date:   2017-04-21T09:24:34+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-28T23:52:17+10:00
+ * @Last modified time: 2018-05-30T00:27:24+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,11 +39,6 @@ import { BackupRestore } from '../BackupRestore/index';
 
 import './Panel.scss';
 
-const splitPane2Style = {
-  display: 'flex',
-  flexDirection: 'column'
-};
-
 @inject(allStores => ({
   store: allStores.store,
   layout: allStores.store.layout,
@@ -51,10 +46,10 @@ const splitPane2Style = {
 }))
 @observer
 export default class Panel extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+  splitPane2Style = {
+    display: 'flex',
+    flexDirection: 'column'
+  };
 
   @action.bound
   updateLeftSplitPos(pos) {
@@ -63,7 +58,7 @@ export default class Panel extends React.Component {
 
   @action.bound
   updateLeftSplitResizerState(state) {
-    this.props.layout.leftSplitPos = state;
+    this.props.layout.leftSplitResizerState = state;
   }
 
   @action.bound
@@ -78,6 +73,9 @@ export default class Panel extends React.Component {
     let leftSplitResizerState;
 
     untracked(() => {
+      // EnhancedSplitPane here is used as uncontrolled components for performance reasons, which
+      // won't respond to these state changes. Please refer to example in HomeEditor for controlled
+      // components
       ({ leftSplitPos, leftSplitResizerState } = layout);
     });
 
@@ -88,13 +86,13 @@ export default class Panel extends React.Component {
             <EnhancedSplitPane
               className="LeftSplitPane"
               split="horizontal"
-              size={leftSplitPos}
+              defaultSize={leftSplitPos}
               onDragFinished={this.updateLeftSplitPos}
-              resizerState={leftSplitResizerState}
+              defaultResizerState={leftSplitResizerState}
               onResizerStateChanged={this.updateLeftSplitResizerState}
               minSize={100}
               maxSize={1000}
-              pane2Style={splitPane2Style}
+              pane2Style={this.splitPane2Style}
             >
               <ProfileListPanel />
               <Provider treeState={this.treeState}>

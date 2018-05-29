@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-28T22:48:35+10:00
+ * @Last modified time: 2018-05-29T21:43:10+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -256,6 +256,18 @@ export default class Store {
 
   @action.bound
   setActiveNavPane = value => {
+    if (this.drawer.activeNavPane === NavPanes.EDITOR && value === NavPanes.EDITOR) {
+      // toggle home button
+
+      if (this.layout.overallSplitResizerState === resizerStates.P_HIDDEN) {
+        this.layout.overallSplitResizerState = resizerStates.ALL_SHOWN;
+        this.layout.rightSplitResizerState = resizerStates.ALL_SHOWN;
+      } else {
+        this.layout.overallSplitResizerState = resizerStates.P_HIDDEN;
+        this.layout.rightSplitResizerState = resizerStates.P_HIDDEN;
+      }
+    }
+
     this.drawer.activeNavPane = value;
   };
 
@@ -463,8 +475,11 @@ export default class Store {
 
     newStore.layout.alertIsLoading = false;
 
-    // Version:
-    newStore.version = '0.11.0-beta';
+    // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
+    // DefinePlugin. The version is retrieved automatically from package.json at the building time of
+    // ui bundle
+    // eslint-disable-next-line no-undef
+    newStore.version = VERSION;
 
     // EditorPanel:
     newStore.editorPanel.activeDropdownId = 'Default';

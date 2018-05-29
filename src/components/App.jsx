@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T11:07:14+10:00
+ * @Last modified time: 2018-05-29T23:47:40+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,17 +26,14 @@
 import React from 'react';
 import { Broker, EventType } from '~/helpers/broker';
 import withDragDropContext from '#/hoc/withDragDropContext';
-import EnhancedSplitPane, { resizerStates } from '#/common/EnhancedSplitPane';
-import { action, untracked, runInAction } from 'mobx';
-import { inject, observer, PropTypes } from 'mobx-react';
+import { action, runInAction } from 'mobx';
+import { inject, observer } from 'mobx-react';
 import { Position } from '@blueprintjs/core';
 import DevTools from 'mobx-react-devtools';
 import { DBKodaToaster } from '#/common/Toaster';
-import { EditorPanel } from '#/EditorPanel';
-import { OutputPanel } from '#/OutputPanel';
-import { SidebarPanel } from '#/SidebarPanel';
 import { Analytics } from '#/Analytics';
 import { StatusPanel } from '#/StatusBar';
+import HomeEditor from '#/HomeEditor';
 import { PerformancePanel } from '#/PerformancePanel';
 import { ProfileManager } from '#/ProfileManager';
 import { SideNav } from '#/SideNav';
@@ -59,16 +56,11 @@ import './App.scss';
 
 @inject(allStores => ({
   store: allStores.store,
-  layout: allStores.store.layout,
   config: allStores.config,
   api: allStores.api
 }))
 @observer
 class App extends React.Component {
-  static propTypes = {
-    layout: PropTypes.observableObject.isRequired
-  };
-
   componentWillMount() {
     runInAction(() => {
       if (!this.props.config.settings.showNewFeaturesDialogOnStart) {
@@ -139,26 +131,6 @@ class App extends React.Component {
   }
 
   @action.bound
-  updateRightSplitPos(pos) {
-    this.props.layout.rightSplitPos = pos;
-  }
-
-  @action.bound
-  updateRightSplitResizerState(state) {
-    this.props.layout.rightSplitResizerState = state;
-  }
-
-  @action.bound
-  updateOverallSplitPos(pos) {
-    this.props.layout.overallSplitPos = pos;
-  }
-
-  @action.bound
-  updateOverallSplitResizerState(state) {
-    this.props.layout.overallSplitResizerState = state;
-  }
-
-  @action.bound
   closeOptIn(bool) {
     this.props.config.patch({
       telemetryEnabled: bool
@@ -167,24 +139,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { layout, store, api } = this.props;
-    const splitPane2Style = {
-      display: 'flex',
-      flexDirection: 'column'
-    };
-    let overallSplitPos;
-    let overallSplitResizerState;
-    let rightSplitPos;
-    let rightSplitResizerState;
-
-    untracked(() => {
-      ({
-        overallSplitPos,
-        overallSplitResizerState,
-        rightSplitPos,
-        rightSplitResizerState
-      } = layout);
-    });
+    const { store, api } = this.props;
 
     return (
       <div>
@@ -200,36 +155,7 @@ class App extends React.Component {
           <SideNav menuItems={[NavPanes.EDITOR, NavPanes.PROFILE]} />
           <div className="fullPanel hasStatusbar">
             {store.drawer && store.drawer.activeNavPane == NavPanes.PROFILE && <ProfileManager />}
-            {!store.drawer ||
-              (store.drawer.activeNavPane == NavPanes.EDITOR && (
-                <EnhancedSplitPane
-                  className="EditorSplitPane"
-                  split="vertical"
-                  size={overallSplitPos}
-                  onDragFinished={this.updateOverallSplitPos}
-                  resizerState={overallSplitResizerState}
-                  onResizerStateChanged={this.updateOverallSplitResizerState}
-                  minSize={350}
-                  maxSize={750}
-                  allowedResizerState={[resizerStates.P_HIDDEN]}
-                >
-                  <SidebarPanel />
-                  <EnhancedSplitPane
-                    className="RightSplitPane"
-                    split="horizontal"
-                    size={rightSplitPos}
-                    onDragFinished={this.updateRightSplitPos}
-                    resizerState={rightSplitResizerState}
-                    onResizerStateChanged={this.updateRightSplitResizerState}
-                    minSize={200}
-                    maxSize={1000}
-                    pane2Style={splitPane2Style}
-                  >
-                    <EditorPanel />
-                    <OutputPanel />
-                  </EnhancedSplitPane>
-                </EnhancedSplitPane>
-              ))}
+            {!store.drawer || (store.drawer.activeNavPane == NavPanes.EDITOR && <HomeEditor />)}
           </div>
         </div>
         <StatusPanel className="statusPanel" />
