@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:44:36+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-05-29T10:28:57+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -590,9 +590,8 @@ export default class Toolbar extends React.Component {
    * Render function for this component.
    */
   render() {
-    const profile = this.props.profileStore.profiles.get(
-      this.props.store.editorToolbar.currentProfile
-    );
+    const profile = this.props.store.profileList.selectedProfile;
+
     const profiles = [...this.props.profileStore.profiles.entries()];
     const { api } = this.props;
     let hasPerformancePanel = false;

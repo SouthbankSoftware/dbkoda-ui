@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-28T15:04:31+10:00
+ * @Last modified time: 2018-05-29T15:16:23+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -57,9 +57,6 @@ export default class Profiles {
         const profile = profilesList[profileIndex];
         if (typeof profile === 'object') {
           profile.sshPort = profile.sshPort || 22;
-          profile.bRemotePass = !!profile.bRemotePass; // just to make sure this is set on the profile
-          profile.bPassPhrase = !!profile.bPassPhrase;
-          // profile.bRemotePass = profile.bRemotePass || (!!profile.ssh && !profile.sshKeyFile); // we dont need to modify this variable as it is pretty old. Also if any case of getting it lost we will only update it if user edit the profile.
           if (!profile.url && !profile.urlCluster && !profile.useClusterConfig) {
             l.info(profile);
             let connectionUrl = StaticApi.mongoProtocol + profile.host + ':' + profile.port;

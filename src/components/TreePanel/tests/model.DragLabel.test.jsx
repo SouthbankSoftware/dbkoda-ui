@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-22T17:09:32+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-05-21T13:32:20+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-05-29T11:21:39+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,8 +28,7 @@ import React from 'react';
 import '~/helpers/configEnzyme';
 import { mount } from 'enzyme';
 import { configure } from 'mobx';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+import withDragDropContext from '#/hoc/withDragDropContext';
 import renderer from 'react-test-renderer';
 
 import DragLabel from '#/TreePanel/model/DragLabel';
@@ -66,7 +65,7 @@ describe('DragLabel', () => {
     }
   }
 
-  const DDCDragLabel = DragDropContext(HTML5Backend)(DragLabelTest);
+  const DDCDragLabel = withDragDropContext(DragLabelTest);
 
   beforeAll(() => {
     configure({ enforceActions: true });

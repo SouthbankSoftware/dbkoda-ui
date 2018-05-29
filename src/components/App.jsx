@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-28T23:41:37+10:00
+ * @Last modified time: 2018-05-29T11:07:14+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,8 +25,7 @@
 
 import React from 'react';
 import { Broker, EventType } from '~/helpers/broker';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+import withDragDropContext from '#/hoc/withDragDropContext';
 import EnhancedSplitPane, { resizerStates } from '#/common/EnhancedSplitPane';
 import { action, untracked, runInAction } from 'mobx';
 import { inject, observer, PropTypes } from 'mobx-react';
@@ -260,4 +259,4 @@ class App extends React.Component {
   }
 }
 
-export default DragDropContext(HTML5Backend)(App);
+export default withDragDropContext(App);

@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-28T21:47:49+10:00
+ * @Last modified time: 2018-05-29T13:22:58+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -902,7 +902,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
 }
 
 .Pane1 {
-  overflow-y: auto !important;
+  overflow-y: hidden !important;
 }
 
 label.pt-control {

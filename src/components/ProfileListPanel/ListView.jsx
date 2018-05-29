@@ -4,7 +4,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-28T16:01:17+10:00
+ * @Last modified time: 2018-05-29T15:23:28+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -423,6 +423,23 @@ export default class ListView extends React.Component {
   @autobind
   openOpenConnectionAlert() {
     const profile = this.state.targetProfile;
+    if (profile.ssh) {
+      const showEditProfile = () => {
+        NewToaster.show({
+          message: globalString('profile/maybeCorrupt'),
+          className: 'warning',
+          icon: 'warning-sign'
+        });
+        this.editProfile();
+      };
+      if (!profile.keyRadio && profile.bRemotePass == undefined) {
+        showEditProfile();
+        return;
+      } else if (profile.keyRadio && profile.bPassPhrase == undefined) {
+        showEditProfile();
+        return;
+      }
+    }
     if (this.shouldShowPasswordDialog(profile, PasswordDialogTypes.SHA)) {
       this.setState({ isOpenWarningActive: true });
       Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);

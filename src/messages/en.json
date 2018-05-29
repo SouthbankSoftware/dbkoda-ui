@@ -472,6 +472,8 @@
     "profile": {
       "noProfile": "No Profile Selected",
       "notClosed": "Connection is not closed, editing will reset the open connection.",
+      "maybeCorrupt":
+        "It seems you might have upgraded from previous version, please verify your configuration before connecting.",
       "removeSuccess": "Successfully Removed Connection",
       "connectionProfiles": "Connection Profiles",
       "menu": {

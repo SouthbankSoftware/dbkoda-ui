@@ -3,7 +3,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T00:41:55+10:00
+ * @Last modified time: 2018-05-29T11:09:22+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -43,7 +43,7 @@ import {
   AnchorButton
 } from '@blueprintjs/core';
 import _ from 'lodash';
-import addTooltip from '#/hoc/addTooltip';
+import withTooltip from '#/hoc/withTooltip';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList';
 import FilterList from '#/common/FilterList';
 import { EditorTypes, DrawerPanes } from '#/common/Constants';
@@ -805,7 +805,7 @@ export default class Panel extends React.Component {
   }
 
   TabHeader = observer(
-    addTooltip(({ editor }) => editor.path)(({ editor, editorTitle }) => (
+    withTooltip(({ editor }) => editor.path)(({ editor, editorTitle }) => (
       <div>
         {editorTitle}
         {this.renderUnsavedFileIndicator(editor.id)}

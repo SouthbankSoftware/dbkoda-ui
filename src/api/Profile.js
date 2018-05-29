@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-28T16:24:47+10:00
+ * @Last modified time: 2018-05-29T15:06:23+10:00
  */
 
 import _ from 'lodash';
@@ -227,7 +227,7 @@ export default class ProfileApi {
         query.passPhrase = data.passPhrase;
 
         terminalQuery.privateKey = data.sshKeyFile;
-        terminalQuery.passPhrase = data.passPhrase;
+        terminalQuery.passphrase = data.passPhrase;
       }
     }
 
@@ -339,16 +339,21 @@ export default class ProfileApi {
       };
       l.debug('profile:', profile);
       if (!data.bReconnect) {
-        if (data.passPhrase && data.passPhrase != '') {
-          profile.bPassPhrase = true;
-        } else {
-          profile.bPassPhrase = false;
-        }
-        if (data.remotePass && data.remotePass != '') {
-          // removed (|| data.bRemotePass) because if a user is editing the profile he can remove the password if the server configuration has changed.
-          profile.bRemotePass = true;
+        if (data.ssh) {
+          if (data.passPhrase && data.passPhrase != '') {
+            profile.bPassPhrase = true;
+          } else {
+            profile.bPassPhrase = false;
+          }
+          if (data.remotePass && data.remotePass != '') {
+            // removed (|| data.bRemotePass) because if a user is editing the profile he can remove the password if the server configuration has changed.
+            profile.bRemotePass = true;
+          } else {
+            profile.bRemotePass = false;
+          }
         } else {
           profile.bRemotePass = false;
+          profile.bPassPhrase = false;
         }
       }
       profiles.set(res.id, profile);
@@ -397,11 +402,30 @@ export default class ProfileApi {
     const { selectedProfile } = profileList;
     const edit = selectedProfile !== undefined && selectedProfile !== null;
 
-    const profile = { ...formData, status: ProfileStatus.CLOSED };
+    const profileData = _.omit(formData, [
+      'password',
+      'passPhrase',
+      'remotePass',
+      'passwordCluster'
+    ]);
+    const profile = { ...profileData, status: ProfileStatus.CLOSED };
     if (edit) {
       profile.id = selectedProfile.id;
       profile.shellId = selectedProfile.shellId;
+      profile.bPassPhrase = selectedProfile.bPassPhrase;
+      profile.bRemotePass = selectedProfile.bRemotePass;
       profiles.delete(profile.id);
+    } else {
+      if (formData.passPhrase && formData.passPhrase != '') {
+        profile.bPassPhrase = true;
+      } else {
+        profile.bPassPhrase = false;
+      }
+      if (formData.remotePass && formData.remotePass != '') {
+        profile.bRemotePass = true;
+      } else {
+        profile.bRemotePass = false;
+      }
     }
     if (!profile.id) {
       profile.id = uuidV1();
