@@ -3,7 +3,7 @@
  * @Date:   2018-05-15T16:12:25+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-25T14:10:42+10:00
+ * @Last modified time: 2018-05-30T08:38:52+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,6 +34,9 @@ import StorageDrilldownApi from '../../api/StorageDrilldown';
 
 export default class PerformanceWindowApi {
   store = null;
+  profileId = null;
+  lineSeperator = null;
+  @observable shellId;
   constructor(store) {
     this.store = store;
     Broker.on(EventType.FEATHER_CLIENT_LOADED, () => {
@@ -41,9 +44,6 @@ export default class PerformanceWindowApi {
       this.createNewShell(this.profileId);
     });
   }
-  profileId = null;
-  lineSeperator = null;
-  @observable shellId;
 
   setProfileId(id) {
     this.profileId = id;
@@ -54,7 +54,14 @@ export default class PerformanceWindowApi {
   }
 
   getLineSeperator() {
-    return this.lineSeperator || '\n';
+    return this.lineSeperator || (process.platform === 'win32' ? '\r\n' : '\n');
+  }
+
+  @action.bound
+  showToaster(toasterObj) {
+    if (this.store && this.store.toasterCallback) {
+      this.store.toasterCallback(toasterObj);
+    }
   }
 
   @action.bound
@@ -102,6 +109,10 @@ export default class PerformanceWindowApi {
     }
   };
 
+  /*
+   * Performance Panel API
+   */
+
   @action.bound
   resetHighWaterMark = () => {
     this.sendCommandToMainProcess('pw_resetHighWaterMark');
@@ -112,11 +123,33 @@ export default class PerformanceWindowApi {
     this.sendCommandToMainProcess('pw_resetPerformancePanel');
   };
 
+  /*
+   * Profiling Panel API
+   */
+
   @action.bound
-  openStorageDDView = () => {
-    // this.sendCommandToMainProcess('pw_openStorageDDView');
-    this.store.setActiveNavPane(NavPanes.STORAGE_PANEL);
+  getProfilingDataBases = () => {
+    l.info('getProfilingDataBases');
+    this.store.profilingPanel.enabledDatabases = [];
+    this.store.profilingPanel.selectedDatabase = null;
+    this.sendCommandToMainProcess('pw_getProfilingDataBases');
   };
+
+  @action.bound
+  getProfilingData = database => {
+    this.store.profilingPanel.payload = null;
+    this.sendCommandToMainProcess('pw_getProfilingData', { database });
+  };
+
+  @action.bound
+  setProfilingDatabaseConfiguration = configs => {
+    l.info('send profiling database configuration ', configs);
+    this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', { configs });
+  };
+
+  /*
+   * Top Connections Panel API
+   */
 
   @action.bound
   getTopConnections = () => {
@@ -134,20 +167,6 @@ export default class PerformanceWindowApi {
       selectedConnection.ops = ops;
       this.store.topConnectionsPanel.operations = ops;
     }
-  };
-
-  @action.bound
-  getProfilingDataBases = () => {
-    l.info('getProfilingDataBases');
-    this.store.profilingPanel.enabledDatabases = [];
-    this.store.profilingPanel.selectedDatabase = null;
-    this.sendCommandToMainProcess('pw_getProfilingDataBases');
-  };
-
-  @action.bound
-  getProfilingData = database => {
-    this.store.profilingPanel.payload = null;
-    this.sendCommandToMainProcess('pw_getProfilingData', { database });
   };
 
   @action.bound
@@ -338,17 +357,23 @@ export default class PerformanceWindowApi {
   };
 
   @action.bound
-  setProfilingDatabaseConfiguration = configs => {
-    l.info('send profiling database configuration ', configs);
-    this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', { configs });
+  openEditorWithAdvisorCode = suggestedCode => {
+    this.sendCommandToMainProcess('pw_indexAdvisorCode', { suggestedCode });
+    this.showToaster({
+      message: 'Suggestions code will open a new editor in main window.',
+      className: 'success',
+      iconName: 'pt-icon-thumbs-up'
+    });
+    this.sendCommandToMainProcess('pw_focusMainWindow');
   };
+  /*
+   * Database Storage API
+   */
 
   @action.bound
-  showToaster(toasterObj) {
-    if (this.store && this.store.toasterCallback) {
-      this.store.toasterCallback(toasterObj);
-    }
-  }
+  openStorageDDView = () => {
+    this.store.setActiveNavPane(NavPanes.STORAGE_PANEL);
+  };
 
   storageDrillApi = new StorageDrilldownApi();
 

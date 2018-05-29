@@ -3,7 +3,7 @@
  * @Date:   2018-04-12T16:16:27+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-17T12:48:08+10:00
+ * @Last modified time: 2018-05-30T08:44:14+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -152,6 +152,25 @@ export default class OperationDetails extends React.Component {
                 />
               </Tooltip>
             )}
+            {this.state.suggestionText &&
+              this.state.suggestionText.indexOf('Looks good') < 0 && (
+                <Tooltip
+                  className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
+                  content="Copy code to new Editor"
+                  hoverOpenDelay={1000}
+                  inline
+                  intent={Intent.PRIMARY}
+                  position={Position.BOTTOM}
+                >
+                  <Button
+                    className="reset-button pt-button pt-intent-primary"
+                    text="Use Suggestions"
+                    onClick={() =>
+                      this.props.api.openEditorWithAdvisorCode(this.state.suggestionText)
+                    }
+                  />
+                </Tooltip>
+              )}
           </div>
         </nav>
         <div className="explainBody explain-statistic-container-view">

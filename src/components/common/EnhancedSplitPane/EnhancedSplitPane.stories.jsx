@@ -5,7 +5,7 @@
  * @Date:   2018-05-23T11:55:14+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T00:07:19+10:00
+ * @Last modified time: 2018-05-29T20:41:35+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -57,8 +57,8 @@ const ControlledEsp = withStateHandlers(
       action('onDragFinished')(size);
       return { size };
     },
-    onResizerStateChanged: () => state => {
-      action('onResizerStateChanged')(state);
+    onResizerStateChanged: () => (state, prevState) => {
+      action('onResizerStateChanged')(state, prevState);
       return { resizerState: state };
     }
   }

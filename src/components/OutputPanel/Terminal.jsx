@@ -96,6 +96,7 @@ class Terminal extends React.Component {
     this.state = {
       command: '',
       historyCursor: this.props.store.outputs.get(this.props.id).commandHistory.length,
+      lastAutocomplete: '',
       terminalOptions: {
         mode: 'MongoScript',
         matchBrackets: true,
@@ -187,8 +188,10 @@ class Terminal extends React.Component {
           if (
             this.state.historyCursor >
               this.props.store.outputs.get(this.props.id).commandHistory.length - 1 &&
-            this.state.command
+            this.state.command &&
+            this.state.command !== this.state.lastAutocomplete
           ) {
+            this.setState({ lastAutocomplete: this.state.command });
             cm.execCommand('autocomplete');
           }
         }, 400)
