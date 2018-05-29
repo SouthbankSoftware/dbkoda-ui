@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-29T11:47:47+10:00
+ * @Last modified time: 2018-05-29T12:37:22+10:00
  */
 
 import _ from 'lodash';
@@ -397,11 +397,30 @@ export default class ProfileApi {
     const { selectedProfile } = profileList;
     const edit = selectedProfile !== undefined && selectedProfile !== null;
 
-    const profile = { ...formData, status: ProfileStatus.CLOSED };
+    const profileData = _.omit(formData, [
+      'password',
+      'passPhrase',
+      'remotePass',
+      'passwordCluster'
+    ]);
+    const profile = { ...profileData, status: ProfileStatus.CLOSED };
     if (edit) {
       profile.id = selectedProfile.id;
       profile.shellId = selectedProfile.shellId;
+      profile.bPassPhrase = selectedProfile.bPassPhrase;
+      profile.bRemotePass = selectedProfile.bRemotePass;
       profiles.delete(profile.id);
+    } else {
+      if (formData.passPhrase && formData.passPhrase != '') {
+        profile.bPassPhrase = true;
+      } else {
+        profile.bPassPhrase = false;
+      }
+      if (formData.remotePass && formData.remotePass != '') {
+        profile.bRemotePass = true;
+      } else {
+        profile.bRemotePass = false;
+      }
     }
     if (!profile.id) {
       profile.id = uuidV1();
