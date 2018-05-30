@@ -68,8 +68,7 @@ export default class GraphicalBuilder extends React.Component {
     super(props);
     this.state = {
       id: props.id,
-      activeBlockIndex: this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
-        .selectedBlock,
+      activeBlockIndex: this.props.store.editors.get(this.props.id).selectedBlock,
       colorMatching: [],
       collection: props.collection,
       failed: false,
@@ -81,7 +80,7 @@ export default class GraphicalBuilder extends React.Component {
 
     this.state.debug = true;
     // Set up the aggregate builder in the shell.
-    this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    this.editor = this.props.store.editors.get(this.props.id);
     this.profileId = this.editor.profileId;
     this.shell = this.editor.shellId;
     this.currentDB = this.editor.collection.refParent.text;
@@ -150,7 +149,7 @@ export default class GraphicalBuilder extends React.Component {
 
   @action.bound
   _onAggregateUpdate() {
-    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    const editor = this.props.store.editors.get(this.props.id);
     l.debug('Selecting Block: ', this.editor.selectedBlock);
     this.selectBlock(editor.blockList.length - 1);
   }
@@ -159,7 +158,7 @@ export default class GraphicalBuilder extends React.Component {
   addBlock(block, position) {
     if (this.state.debug) l.debug('Add new Agg Block');
     return new Promise((resolve, reject) => {
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
 
       this.updateShellPipeline().then(() => {
         this.updateResultSet()
@@ -236,11 +235,9 @@ export default class GraphicalBuilder extends React.Component {
     if (this.state.debug) l.debug('Add new Agg Block to Editor');
     return new Promise(resolve => {
       // Get relevant editor.
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       // Update block list for editor as required.
-      const tmpArray = this.props.store.editors
-        .get(this.props.store.editorPanel.activeEditorId)
-        .blockList.slice();
+      const tmpArray = this.props.store.editors.get(this.props.id).blockList.slice();
       if (tmpArray.length === 0) {
         tmpArray.push({
           type: blockType,
@@ -272,9 +269,7 @@ export default class GraphicalBuilder extends React.Component {
         }
       }
 
-      this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      ).blockList = tmpArray;
+      this.props.store.editors.get(this.props.id).blockList = tmpArray;
 
       // Update block attributes
       editor.blockList[position].status = 'pending';
@@ -316,7 +311,7 @@ export default class GraphicalBuilder extends React.Component {
     if (this.state.debug) l.debug('Get Block Attributes');
     return new Promise((resolve, reject) => {
       // Get the relevant editor object.
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       // Fetch response from shell object for all steps up to position - 1
       const service = featherClient().service('/mongo-sync-execution');
       service.timeout = 60000;
@@ -351,15 +346,11 @@ export default class GraphicalBuilder extends React.Component {
     });
     return new Promise(resolve => {
       // 1. Update Editor List.
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       this.setOutputLoading(editor.id);
       this.setState({ activeBlockIndex: index });
-      this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      ).selectedBlock = index;
-      this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList[
-        index
-      ].isSelected = true;
+      this.props.store.editors.get(this.props.id).selectedBlock = index;
+      this.props.store.editors.get(this.props.id).blockList[index].isSelected = true;
 
       // 2. Update Shell Steps.
       this.updateShellPipeline(true).then(res => {
@@ -452,10 +443,9 @@ export default class GraphicalBuilder extends React.Component {
 
   @action.bound
   moveBlockInEditor(blockFrom, blockTo) {
-    const tmpArray = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
-      .blockList;
+    const tmpArray = this.props.store.editors.get(this.props.id).blockList;
     this.moveBlockHelper(tmpArray, blockFrom, blockTo);
-    this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList = tmpArray;
+    this.props.store.editors.get(this.props.id).blockList = tmpArray;
     if (this.state.activeBlockIndex === blockFrom) {
       this.setState({ activeBlockIndex: blockTo });
     } else if (this.state.activeBlockIndex === blockTo && blockTo === 0) {
@@ -470,9 +460,7 @@ export default class GraphicalBuilder extends React.Component {
       }
     }
 
-    this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    ).selectedBlock = this.state.activeBlockIndex;
+    this.props.store.editors.get(this.props.id).selectedBlock = this.state.activeBlockIndex;
   }
 
   /**
@@ -485,7 +473,7 @@ export default class GraphicalBuilder extends React.Component {
   moveBlock(blockFrom, blockTo) {
     return new Promise(resolve => {
       // 1. Update Editor (moveBlock)
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       if (blockTo === 0) {
         blockTo = 1;
       } else if (!blockTo) {
@@ -604,7 +592,7 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   removeBlock(blockPosition) {
-    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    const editor = this.props.store.editors.get(this.props.id);
     // 1. Remove from Editor Structure.
     l.debug(editor.blockList.splice(blockPosition, 1));
     // 2. Update Shell Steps.
@@ -745,7 +733,7 @@ export default class GraphicalBuilder extends React.Component {
   validateBlock(step) {
     if (this.state.debug) l.debug('Validate Agg Block');
     return new Promise((resolve, reject) => {
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       const service = featherClient().service('/mongo-sync-execution');
       service.timeout = 60000;
       service
@@ -832,7 +820,7 @@ export default class GraphicalBuilder extends React.Component {
     if (this.state.debug) l.debug('Update Shell Pipeline');
     return new Promise((resolve, reject) => {
       // Assemble Step Array.
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       const stepArray = [];
       editor.blockList.map(block => {
         if (block.type !== 'Start') {
@@ -922,7 +910,7 @@ export default class GraphicalBuilder extends React.Component {
   updateResultSet() {
     if (this.state.debug) l.debug('Update Result Set');
     return new Promise(resolve => {
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       // Update steps in Shell:
       const service = featherClient().service('/mongo-sync-execution');
       service.timeout = 60000;
@@ -1132,9 +1120,7 @@ export default class GraphicalBuilder extends React.Component {
   onExportButtonClicked() {
     if (IS_ELECTRON) {
       // Get current editor.
-      const currentEditor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      );
+      const currentEditor = this.props.store.editors.get(this.props.id);
 
       // Make sure an editor exists (Sanity Check)
       if (!currentEditor) {
@@ -1210,7 +1196,7 @@ export default class GraphicalBuilder extends React.Component {
    */
   getFileContent() {
     return new Promise(resolve => {
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       const exportObject = {
         editorObject: {
           aggConfig: editor.aggConfig,
@@ -1232,7 +1218,7 @@ export default class GraphicalBuilder extends React.Component {
   @action.bound
   importFile(contentObject) {
     // const editor = this.props.store.editors.get(
-    //   this.props.store.editorPanel.activeEditorId,
+    //   this.props.id,
     // );
     // Validate File.
     let isValid;
@@ -1289,7 +1275,7 @@ export default class GraphicalBuilder extends React.Component {
    */
   removeAllBlocks() {
     return new Promise((resolve, reject) => {
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       // Splice list.
       editor.blockList.splice(1, editor.blockList.length - 1);
       // Update Agg Object
@@ -1580,10 +1566,7 @@ export default class GraphicalBuilder extends React.Component {
               }
 
               let isSelected = false;
-              if (
-                this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
-                  .selectedBlock === index
-              ) {
+              if (this.props.store.editors.get(this.props.id).selectedBlock === index) {
                 isSelected = true;
               }
               return (
