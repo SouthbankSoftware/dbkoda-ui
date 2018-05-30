@@ -278,6 +278,7 @@ export default class Store {
 
   @action.bound
   hideConnectionPane = () => {
+    this.setDrawerChild(DrawerPanes.DEFAULT);
     this.setActiveNavPane(NavPanes.EDITOR);
   };
 

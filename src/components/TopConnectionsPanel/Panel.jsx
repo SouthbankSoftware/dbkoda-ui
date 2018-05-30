@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-25T13:39:27+10:00
+ * @Last modified time: 2018-05-30T14:07:53+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -83,23 +83,26 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   onConnectionSelection(selectedConnection) {
     this.props.store.topConnectionsPanel.selectedConnection = selectedConnection;
     this.props.store.topConnectionsPanel.operations = selectedConnection.ops;
-    this.props.store.topConnectionsPanel.bShowExplain = false;
-    this.props.store.topConnectionsPanel.selectedOperation = null;
+    // this.props.store.topConnectionsPanel.bShowExplain = false;
+    // this.props.store.topConnectionsPanel.selectedOperation = null;
   }
 
   @action.bound
   onOperationSelection(selectedOperation) {
-    this.props.store.topConnectionsPanel.selectedOperation = selectedOperation;
-    if (
-      selectedOperation &&
-      selectedOperation.explainPlan &&
-      selectedOperation.explainPlan.queryPlanner &&
-      selectedOperation.explainPlan.queryPlanner.winningPlan
-    ) {
-      this.props.store.topConnectionsPanel.bShowExplain = true;
-    } else {
-      this.props.store.topConnectionsPanel.bShowExplain = false;
-      this.props.store.topConnectionsPanel.bLoadingExplain = false;
+    const { topConnectionsPanel } = this.props.store;
+    if (topConnectionsPanel.selectedOperation !== selectedOperation) {
+      topConnectionsPanel.selectedOperation = selectedOperation;
+      if (
+        selectedOperation &&
+        selectedOperation.explainPlan &&
+        selectedOperation.explainPlan.queryPlanner &&
+        selectedOperation.explainPlan.queryPlanner.winningPlan
+      ) {
+        topConnectionsPanel.bShowExplain = true;
+      } else {
+        topConnectionsPanel.bShowExplain = false;
+        topConnectionsPanel.bLoadingExplain = false;
+      }
     }
   }
 
