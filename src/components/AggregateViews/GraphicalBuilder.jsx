@@ -68,8 +68,7 @@ export default class GraphicalBuilder extends React.Component {
     super(props);
     this.state = {
       id: props.id,
-      activeBlockIndex: this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
-        .selectedBlock,
+      activeBlockIndex: this.props.store.editors.get(this.props.id).selectedBlock,
       colorMatching: [],
       collection: props.collection,
       failed: false,
@@ -81,7 +80,7 @@ export default class GraphicalBuilder extends React.Component {
 
     this.state.debug = true;
     // Set up the aggregate builder in the shell.
-    this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    this.editor = this.props.store.editors.get(this.props.id);
     this.profileId = this.editor.profileId;
     this.shell = this.editor.shellId;
     this.currentDB = this.editor.collection.refParent.text;
@@ -150,8 +149,8 @@ export default class GraphicalBuilder extends React.Component {
 
   @action.bound
   _onAggregateUpdate() {
-    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-    l.debug('Selecting last block: ', editor.blockList.length - 1);
+    const editor = this.props.store.editors.get(this.props.id);
+    l.debug('Selecting Block: ', this.editor.selectedBlock);
     this.selectBlock(editor.blockList.length - 1);
   }
 
@@ -159,7 +158,7 @@ export default class GraphicalBuilder extends React.Component {
   addBlock(block, position) {
     if (this.state.debug) l.debug('Add new Agg Block');
     return new Promise((resolve, reject) => {
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
 
       this.updateShellPipeline().then(() => {
         this.updateResultSet()
@@ -236,11 +235,9 @@ export default class GraphicalBuilder extends React.Component {
     if (this.state.debug) l.debug('Add new Agg Block to Editor');
     return new Promise(resolve => {
       // Get relevant editor.
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       // Update block list for editor as required.
-      const tmpArray = this.props.store.editors
-        .get(this.props.store.editorPanel.activeEditorId)
-        .blockList.slice();
+      const tmpArray = this.props.store.editors.get(this.props.id).blockList.slice();
       if (tmpArray.length === 0) {
         tmpArray.push({
           type: blockType,
@@ -272,9 +269,7 @@ export default class GraphicalBuilder extends React.Component {
         }
       }
 
-      this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      ).blockList = tmpArray;
+      this.props.store.editors.get(this.props.id).blockList = tmpArray;
 
       // Update block attributes
       editor.blockList[position].status = 'pending';
@@ -316,7 +311,7 @@ export default class GraphicalBuilder extends React.Component {
     if (this.state.debug) l.debug('Get Block Attributes');
     return new Promise((resolve, reject) => {
       // Get the relevant editor object.
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       // Fetch response from shell object for all steps up to position - 1
       const service = featherClient().service('/mongo-sync-execution');
       service.timeout = 60000;
@@ -351,15 +346,11 @@ export default class GraphicalBuilder extends React.Component {
     });
     return new Promise(resolve => {
       // 1. Update Editor List.
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       this.setOutputLoading(editor.id);
       this.setState({ activeBlockIndex: index });
-      this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      ).selectedBlock = index;
-      this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList[
-        index
-      ].isSelected = true;
+      this.props.store.editors.get(this.props.id).selectedBlock = index;
+      this.props.store.editors.get(this.props.id).blockList[index].isSelected = true;
 
       // 2. Update Shell Steps.
       this.updateShellPipeline(true).then(res => {
@@ -382,11 +373,11 @@ export default class GraphicalBuilder extends React.Component {
           // All steps validated, full update.
           this.updateResultSet().then(res => {
             if (this.state.debug) {
- l.debug(
+              l.debug(
                 'update result set result line 383:',
                 res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
               );
-}
+            }
             try {
               // Regex work around.
               res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
@@ -452,10 +443,9 @@ export default class GraphicalBuilder extends React.Component {
 
   @action.bound
   moveBlockInEditor(blockFrom, blockTo) {
-    const tmpArray = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
-      .blockList;
+    const tmpArray = this.props.store.editors.get(this.props.id).blockList;
     this.moveBlockHelper(tmpArray, blockFrom, blockTo);
-    this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList = tmpArray;
+    this.props.store.editors.get(this.props.id).blockList = tmpArray;
     if (this.state.activeBlockIndex === blockFrom) {
       this.setState({ activeBlockIndex: blockTo });
     } else if (this.state.activeBlockIndex === blockTo && blockTo === 0) {
@@ -470,9 +460,7 @@ export default class GraphicalBuilder extends React.Component {
       }
     }
 
-    this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    ).selectedBlock = this.state.activeBlockIndex;
+    this.props.store.editors.get(this.props.id).selectedBlock = this.state.activeBlockIndex;
   }
 
   /**
@@ -485,7 +473,7 @@ export default class GraphicalBuilder extends React.Component {
   moveBlock(blockFrom, blockTo) {
     return new Promise(resolve => {
       // 1. Update Editor (moveBlock)
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       if (blockTo === 0) {
         blockTo = 1;
       } else if (!blockTo) {
@@ -604,7 +592,7 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   removeBlock(blockPosition) {
-    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    const editor = this.props.store.editors.get(this.props.id);
     // 1. Remove from Editor Structure.
     l.debug(editor.blockList.splice(blockPosition, 1));
     // 2. Update Shell Steps.
@@ -649,10 +637,10 @@ export default class GraphicalBuilder extends React.Component {
               this.removeBlock(blockPosition);
               return;
             }
-              // eslint-disable-line
-              this.setState({ failed: true });
-              this.setState({ failureReason: e });
-              return;
+            // eslint-disable-line
+            this.setState({ failed: true });
+            this.setState({ failureReason: e });
+            return;
           }
           if (res.stepAttributes.constructor === Array) {
             // 3. Update Valid for each block.
@@ -745,7 +733,7 @@ export default class GraphicalBuilder extends React.Component {
   validateBlock(step) {
     if (this.state.debug) l.debug('Validate Agg Block');
     return new Promise((resolve, reject) => {
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       const service = featherClient().service('/mongo-sync-execution');
       service.timeout = 60000;
       service
@@ -763,11 +751,12 @@ export default class GraphicalBuilder extends React.Component {
             if (this.state.firstTry) {
               this.setState({ firstTry: false });
               this.validateBlock(step);
-              resolve();
+              resolve(true);
             } else {
-              this.setState({ failed: true });
-              this.setState({ failureReason: e });
-              return;
+              // this.setState({ failed: true });
+              // this.setState({ failureReason: e });
+              l.error('Failed to validate block ', step, ' with error: ', res);
+              resolve(false);
             }
           }
           if (res.type === 'object') {
@@ -795,7 +784,7 @@ export default class GraphicalBuilder extends React.Component {
   }
 
   validateAllBlocks(stepArray) {
-    if (this.state.debug) l.debug('Add all Agg Block');
+    if (this.state.debug) l.debug('Validate all Agg Block');
     return new Promise(resolve => {
       const returnObject = {
         areAllValid: true,
@@ -808,6 +797,7 @@ export default class GraphicalBuilder extends React.Component {
         const newStep = step.replace(/,\s*$/, '');
         this.validateBlock(newStep).then(res => {
           if (res === false) {
+            if (this.state.debug) l.debug('Set first invalid to: ', stepIndex);
             resolve({
               areAllValid: false,
               firstInvalid: stepIndex
@@ -830,7 +820,7 @@ export default class GraphicalBuilder extends React.Component {
     if (this.state.debug) l.debug('Update Shell Pipeline');
     return new Promise((resolve, reject) => {
       // Assemble Step Array.
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       const stepArray = [];
       editor.blockList.map(block => {
         if (block.type !== 'Start') {
@@ -852,6 +842,7 @@ export default class GraphicalBuilder extends React.Component {
       // Before setting all steps, validate steps:
       this.validateAllBlocks(stepArray).then(res => {
         if (res.areAllValid === true) {
+          if (this.state.debug) l.debug('All blocks are valid.');
           // Update steps in Shell:
           const service = featherClient().service('/mongo-sync-execution');
           service.timeout = 60000;
@@ -867,9 +858,11 @@ export default class GraphicalBuilder extends React.Component {
               });
             })
             .catch(e => {
+              l.error(e);
               reject(e);
             });
         } else {
+          if (this.state.debug) l.debug('Not all blocks are valid.');
           // There is an invalid step, mark it and update each step.
           editor.blockList.map((block, blockIndex) => {
             if (blockIndex > res.firstInvalid) {
@@ -901,6 +894,7 @@ export default class GraphicalBuilder extends React.Component {
               });
             })
             .catch(e => {
+              l.error(e);
               reject(e);
             });
         }
@@ -916,7 +910,7 @@ export default class GraphicalBuilder extends React.Component {
   updateResultSet() {
     if (this.state.debug) l.debug('Update Result Set');
     return new Promise(resolve => {
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       // Update steps in Shell:
       const service = featherClient().service('/mongo-sync-execution');
       service.timeout = 60000;
@@ -942,7 +936,7 @@ export default class GraphicalBuilder extends React.Component {
   @action.bound
   clearResultsOutput(editor) {
     const output = this.props.store.outputs.get(editor.id);
-    output.output = globalString('aggregate_builder/no_valid_output');
+    output.output = globalString('aggregate_builder/no_valid_output', editor.selectedBlock);
   }
 
   /**
@@ -963,13 +957,12 @@ export default class GraphicalBuilder extends React.Component {
         commands: AggregateCommands.GET_RESULTS(editor.aggregateID, stepId, false)
       })
       .then(res => {
-        output.output = globalString('aggregate_builder/valid_output');
+        output.output = globalString('aggregate_builder/valid_output', editor.selectedBlock);
+        if (this.state.debug) l.debug('get result res  line 967:', res);
         runInAction('Update Graphical Builder', () => {
-          // if (this.state.debug) l.debug('Got Agg Results: ', res);
           if (!res || res.length === 0) {
             output.output = globalString('aggregate_builder/no_output');
           }
-          if (this.state.debug) l.debug('get result res  line 906:', res);
           try {
             res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
           } catch (e) {
@@ -980,10 +973,10 @@ export default class GraphicalBuilder extends React.Component {
               this.updateResultsOutput(editor, stepId);
               return;
             }
-              // eslint-disable-line
-              this.setState({ failed: true });
-              this.setState({ failureReason: e });
-              return;
+            // eslint-disable-line
+            this.setState({ failed: true });
+            this.setState({ failureReason: e });
+            return;
           }
           res.map(indexValue => {
             output.append(JSON.stringify(indexValue) + '\n');
@@ -995,48 +988,46 @@ export default class GraphicalBuilder extends React.Component {
       })
       .catch(e => {
         l.error(e);
-        if (e.match('Timeout of 30000ms exceeded')) {
-          l.error('Retry aggregation once more with higher timeout...');
-          const service = featherClient().service('/mongo-sync-execution');
-          service.timeout = 60000;
-          service
-            .update(editor.profileId, {
-              shellId: editor.shellId, // eslint-disable-line
-              commands: AggregateCommands.GET_RESULTS(editor.aggregateID, stepId, false)
-            })
-            .then(res => {
-              runInAction('Update Graphical Builder', () => {
-                if (this.state.debug) {
-l.debug(
-                    'get result res  line 926:',
-                    res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
-                  );
-}
-                try {
-                  res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
-                } catch (e) {
-                  l.error(e);
-                  this.setState({ failed: true });
-                  this.setState({ failureReason: e });
-                  return;
-                }
-                if (res.length === 0) {
-                  output.output = globalString('aggregate_builder/no_output');
-                }
-                res.map(indexValue => {
-                  output.append(JSON.stringify(indexValue) + '\n');
-                });
-                runInAction('Agg Builder no longer loading', () => {
-                  this.editor.isAggregateDetailsLoading = false;
-                });
+        l.error('Retry aggregation once more with higher timeout...');
+        const service = featherClient().service('/mongo-sync-execution');
+        service.timeout = 60000;
+        service
+          .update(editor.profileId, {
+            shellId: editor.shellId, // eslint-disable-line
+            commands: AggregateCommands.GET_RESULTS(editor.aggregateID, stepId, false)
+          })
+          .then(res => {
+            runInAction('Update Graphical Builder', () => {
+              if (this.state.debug) {
+                l.debug(
+                  'get result res  line 926:',
+                  res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
+                );
+              }
+              try {
+                res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+              } catch (e) {
+                l.error(e);
+                this.setState({ failed: true });
+                this.setState({ failureReason: e });
+                return;
+              }
+              if (res.length === 0) {
+                output.output = globalString('aggregate_builder/no_output');
+              }
+              res.map(indexValue => {
+                output.append(JSON.stringify(indexValue) + '\n');
               });
-            })
-            .catch(e => {
-              l.error(e);
-              this.setState({ failed: true });
-              this.setState({ failureReason: e });
+              runInAction('Agg Builder no longer loading', () => {
+                this.editor.isAggregateDetailsLoading = false;
+              });
             });
-        }
+          })
+          .catch(e => {
+            l.error(e);
+            this.setState({ failed: true });
+            this.setState({ failureReason: e });
+          });
       });
   }
 
@@ -1129,9 +1120,7 @@ l.debug(
   onExportButtonClicked() {
     if (IS_ELECTRON) {
       // Get current editor.
-      const currentEditor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      );
+      const currentEditor = this.props.store.editors.get(this.props.id);
 
       // Make sure an editor exists (Sanity Check)
       if (!currentEditor) {
@@ -1207,7 +1196,7 @@ l.debug(
    */
   getFileContent() {
     return new Promise(resolve => {
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       const exportObject = {
         editorObject: {
           aggConfig: editor.aggConfig,
@@ -1229,7 +1218,7 @@ l.debug(
   @action.bound
   importFile(contentObject) {
     // const editor = this.props.store.editors.get(
-    //   this.props.store.editorPanel.activeEditorId,
+    //   this.props.id,
     // );
     // Validate File.
     let isValid;
@@ -1286,7 +1275,7 @@ l.debug(
    */
   removeAllBlocks() {
     return new Promise((resolve, reject) => {
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(this.props.id);
       // Splice list.
       editor.blockList.splice(1, editor.blockList.length - 1);
       // Update Agg Object
@@ -1311,11 +1300,11 @@ l.debug(
         } else {
           this.updateResultSet().then(res => {
             if (this.state.debug) {
- l.debug(
+              l.debug(
                 'update result set result line 1216:',
                 res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
               );
-}
+            }
             try {
               res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
             } catch (e) {
@@ -1577,10 +1566,7 @@ l.debug(
               }
 
               let isSelected = false;
-              if (
-                this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
-                  .selectedBlock === index
-              ) {
+              if (this.props.store.editors.get(this.props.id).selectedBlock === index) {
                 isSelected = true;
               }
               return (

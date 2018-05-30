@@ -130,7 +130,7 @@ export default class Palette extends React.Component {
               } else {
                 this.addBlockToEditor(blockType, position, null);
               }
-              this.clearResultsOutput(editor);
+              // this.clearResultsOutput(editor);
             } else {
               // Check for error.
               l.error('updateResultSet: ', res);
