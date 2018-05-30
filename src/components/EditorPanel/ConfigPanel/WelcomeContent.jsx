@@ -33,6 +33,7 @@ import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { AnchorButton } from '@blueprintjs/core';
 import moment from 'moment';
+import LoadingView from '#/common/LoadingView';
 import TwitterIcon from '~/styles/icons/twitter-icon.svg';
 import GithubIcon from '~/styles/icons/github-icon.svg';
 import DocumentIcon from '~/styles/icons/document-solid-icon.svg';
@@ -255,6 +256,7 @@ export default class WelcomeContent extends React.Component {
         </div>
         <div className="welcomePageContentRight">
           <h2>News</h2>
+          {!this.state.newsJSX && <LoadingView />}
           {this.state.newsJSX && (
             <div className="newsListWrapper">
               <div className="newsItemWrapper">

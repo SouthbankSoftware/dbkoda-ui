@@ -122,9 +122,7 @@ export default class Details extends React.Component {
     if (this.props.store.editorPanel.updateAggregateDetails) {
       this.props.store.editorPanel.updateAggregateDetails = false;
       this.state.reproduceCode = true;
-      this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
-      ).isAggregateDetailsLoading = false;
+      this.editor.isAggregateDetailsLoading = false;
       this.forceUpdate();
       // Current hack to handle the async nature of the mobx form builder.
       _.delay(() => {
@@ -136,7 +134,6 @@ export default class Details extends React.Component {
   // Triggered when a mobx field is changed, this will update the store to reflect the new values.
   @action.bound
   updateBlockFields(fields, editorObject) {
-    l.debug('Fields: ', fields);
     const selectedBlock = editorObject.selectedBlock;
     editorObject.blockList[selectedBlock].modified = true;
     for (const key in fields) {
@@ -158,7 +155,7 @@ export default class Details extends React.Component {
     // Update Editor Contents.
     this.props.store.treeActionPanel.formValues = this.props.store.api.generateCode(editorObject);
     this.props.store.treeActionPanel.isNewFormValues = true;
-    this.editor.isAggregateDetailsLoading = false;
+    // this.editor.isAggregateDetailsLoading = false;
   }
 
   formPromise;
@@ -284,7 +281,7 @@ export default class Details extends React.Component {
       this.formPromise = this.formBuilder.createForm(
         this.resolveArguments,
         this.updateBlockFields,
-        this.editor,
+        activeEditor,
         {
           action: activeBlock.type,
           aggregate: true
@@ -350,15 +347,16 @@ export default class Details extends React.Component {
               )}
           </div>
         </nav>
-        {!this.editor.isAggregateDetailsLoading ? (
-          <div className="aggregateDetailsContent">
-            {activeBlock && <h2 className="aggregateBlockType">{activeBlock.type}</h2>}
-            {activeBlock && (
+        {!this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
+          .isAggregateDetailsLoading ? (
+            <div className="aggregateDetailsContent">
+              {activeBlock && <h2 className="aggregateBlockType">{activeBlock.type}</h2>}
+              {activeBlock && (
               <p className="aggregateBlockDescription">
                 {BlockTypes[activeBlock.type.toUpperCase()].description}
               </p>
             )}
-            {activeBlock && (
+              {activeBlock && (
               <div className={'dynamic-form columns-' + maxColumns + '-max'}>
                 {this.state.form && <View mobxForm={this.state.form.mobxForm} isAggregate />}
                 {!this.bForm && (
@@ -385,12 +383,12 @@ export default class Details extends React.Component {
                 </Tooltip>
               </div>
             )}
-            {!activeBlock && (
+              {!activeBlock && (
               <div className="aggregateDetailsContent">
                 <p> {globalString('aggregate_builder/no_block_selected')}</p>
               </div>
             )}
-          </div>
+            </div>
         ) : (
           <div className="loaderWrapper">
             <div className="loader" />

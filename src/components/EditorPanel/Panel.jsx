@@ -52,7 +52,6 @@ import { AggregateGraphicalBuilder } from '../AggregateViews';
 import Toolbar from './Toolbar';
 import View from './View';
 import './Panel.scss';
-import WelcomeView from './WelcomePanel/WelcomeView';
 import { ConfigView } from './ConfigPanel';
 
 const splitPane2Style = {
@@ -464,32 +463,6 @@ export default class Panel extends React.Component {
         }
       );
     }
-  }
-
-  @action.bound
-  renderWelcomeOld() {
-    if (this.props.store.editors.size == 0) {
-      return (
-        <Tab
-          className="welcomeTab"
-          id="Default"
-          title={globalString('editor/home/title')}
-          panel={<WelcomeView />}
-        />
-      );
-    }
-    return (
-      <Tab
-        className={this.props.store.welcomePage.isOpen ? 'welcomeTab' : 'welcomeTab notVisible'}
-        id="Default"
-        title={globalString('editor/home/title')}
-        panel={<WelcomeView />}
-      >
-        <Button className="pt-minimal" onClick={this.closeWelcome}>
-          <span className="pt-icon-cross" />
-        </Button>
-      </Tab>
-    );
   }
 
   @action.bound

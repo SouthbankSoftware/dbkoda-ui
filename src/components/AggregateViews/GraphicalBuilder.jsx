@@ -48,6 +48,7 @@ import CreateViewButton from './CreateViewButton';
 import ShowIcon from '../../styles/icons/show-icon.svg';
 import ImportIcon from '../../styles/icons/export-icon.svg';
 import ExportIcon from '../../styles/icons/save-icon.svg';
+import RefreshIcon from '../../styles/icons/refresh-icon.svg';
 
 const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
@@ -132,18 +133,11 @@ export default class GraphicalBuilder extends React.Component {
   addStartBlock() {
     this.getBlockAttributes(0).then(res => {
       this.addBlockToEditor('Start', 0, res)
-        .then(() => {
-          runInAction('Aggregate builder is no longer loading', () => {
-            this.editor.isAggregateDetailsLoading = false;
-          });
-        })
+        .then(() => {})
         .catch(e => {
           l.error('Failed to add Start block to Agg Builder with error ' + e);
           this.setState({ failed: true });
           this.setState({ failureReason: e });
-          runInAction('Aggregate builder is no longer loading', () => {
-            this.editor.isAggregateDetailsLoading = false;
-          });
         });
     });
   }
@@ -961,6 +955,9 @@ export default class GraphicalBuilder extends React.Component {
     const output = this.props.store.outputs.get(editor.id);
 
     if (this.state.debug) l.debug('Get Agg Results');
+    runInAction('Agg Builder no longer loading', () => {
+      this.editor.isAggregateDetailsLoading = true;
+    });
     const service = featherClient().service('/mongo-sync-execution');
     service.timeout = 60000;
     service
@@ -1260,9 +1257,6 @@ export default class GraphicalBuilder extends React.Component {
             className: 'danger',
             icon: 'thumbs-down'
           });
-          runInAction('Agg Builder no longer loading', () => {
-            this.editor.isAggregateDetailsLoading = false;
-          });
           this.forceUpdate();
           this.setState({ failed: true });
           this.setState({ failureReason: err });
@@ -1323,7 +1317,6 @@ export default class GraphicalBuilder extends React.Component {
               res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
             } catch (e) {
               l.error(e);
-              // If first error - Try again!
               if (this.state.firstTry) {
                 this.setState({ firstTry: false });
                 this.removeAllBlocks();
@@ -1424,9 +1417,6 @@ export default class GraphicalBuilder extends React.Component {
             message: globalString('aggregate_builder/import_passed'),
             className: 'success',
             icon: 'pt-icon-thumbs-up'
-          });
-          runInAction('Agg Builder no longer loading', () => {
-            this.editor.isAggregateDetailsLoading = false;
           });
         });
       });
