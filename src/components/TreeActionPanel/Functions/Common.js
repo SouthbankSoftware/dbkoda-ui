@@ -211,7 +211,7 @@ export function dbkodaMatchOperators(params) {
 export function dbkodaMatchOperators_parse(res) {
   //eslint-disable-line
   if (debug) l.info(res);
-  return ['$eq', '$gt', '$gte', '$in', '$lt', '$lte', '$ne', '$nin', '$regex'];
+  return ['$eq', '$gt', '$gte', '$in', '$lt', '$lte', '$ne', '$nin', '$regex', '$exists'];
 }
 
 export function dbkoda_sortOptions(params) {

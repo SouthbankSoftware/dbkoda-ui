@@ -2,6 +2,7 @@
   "Database": "test",
   "CollectionName": "randomCollectionName",
   "UseOr": true,
+  "UseAnd": true,
   "FilterKeys": [
     {
       "AttributeName": "a",

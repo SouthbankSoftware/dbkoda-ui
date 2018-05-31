@@ -40,6 +40,7 @@ export const DeleteDocuments = {
     data.FilterKeys.push({ AttributeName: '_id', Operator: '$eq', Value: '"SomeValue"' });
     data.DeleteMany = false;
     data.UseOr = false;
+    data.UseAnd = true;
     // l.info('returns', data);
     return data;
   },
