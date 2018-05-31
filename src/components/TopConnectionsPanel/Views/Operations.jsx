@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T15:31:22+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-25T13:52:11+10:00
+ * @Last modified time: 2018-05-30T14:20:03+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -52,10 +52,15 @@ export default class OperationsView extends React.Component<Props> {
     super(props);
     const columnsWidths = columnsWidthsPercent.map(width => width * this.props.tableWidth / 100);
     this.state = {
-      lastSelectRegion: null,
+      lastSelectRegion: [
+        {
+          rows: [0, 0]
+        }
+      ],
       sortedIndexMap: [],
       lastSortedIndex: -1,
       data: null,
+      operations: null,
       columns: [
         new TextSortableColumn('OpId', 0),
         new TextSortableColumn('Namespace', 1),
@@ -69,7 +74,7 @@ export default class OperationsView extends React.Component<Props> {
     };
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.operations) {
+    if (nextProps && nextProps.operations && this.state.operations !== nextProps.operations) {
       const operations = [];
       for (const opId in nextProps.operations) {
         if (nextProps.operations.hasOwnProperty(opId)) {
@@ -77,7 +82,15 @@ export default class OperationsView extends React.Component<Props> {
           operations.push({ opId, ...opObj });
         }
       }
-      this.setState({ data: operations });
+      this.setState({
+        data: operations,
+        operations: nextProps.operations,
+        lastSelectRegion: [
+          {
+            rows: [0, 0]
+          }
+        ]
+      });
       if (this.state.lastSortedIndex >= 0 && this.state.columns) {
         const col = this.state.columns[this.state.lastSortedIndex];
         if (col && col.sortColumn) {
@@ -176,7 +189,7 @@ export default class OperationsView extends React.Component<Props> {
     if (region.length == 0) {
       return;
     }
-    let regionObj = region[0];
+    let [regionObj] = region;
     regionObj = _.pick(regionObj, 'rows');
 
     this.setState({ lastSelectRegion: [regionObj] });
@@ -187,7 +200,7 @@ export default class OperationsView extends React.Component<Props> {
   @autobind
   setSelection(regionObj) {
     if (regionObj && regionObj.rows) {
-      let rowIndex = regionObj.rows[0];
+      let [rowIndex] = regionObj.rows;
       const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
       if (sortedRowIndex != null) {
         rowIndex = sortedRowIndex;
