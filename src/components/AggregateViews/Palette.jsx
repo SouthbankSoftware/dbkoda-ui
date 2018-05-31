@@ -91,7 +91,17 @@ export default class Palette extends React.Component {
       this.updateShellPipeline().then(() => {
         this.updateResultSet()
           .then(res => {
-            res = JSON.parse(res);
+            l.debug('res: ', res);
+            try {
+              while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+                l.debug('Fixing regex before parsing.');
+                res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
+              }
+              res = JSON.parse(res);
+            } catch (e) {
+              l.error(e);
+            }
+
             if (res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
               res.stepAttributes.map((indexValue, index) => {
@@ -440,46 +450,52 @@ export default class Palette extends React.Component {
    */
   @action.bound
   addBlockToEditor(blockType, position, attributeList) {
-    if (this.state.debug) l.debug('Add new Agg Block to editor');
-    // Get relevant editor.
-    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    try {
+      if (this.state.debug) l.debug('Add new Agg Block to editor');
+      // Get relevant editor.
+      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
 
-    // Update block list for editor as required.
-    const tmpArray = this.props.store.editors
-      .get(this.props.store.editorPanel.activeEditorId)
-      .blockList.slice();
-    if (tmpArray.length === 0) {
-      tmpArray.push({
-        type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false
-      });
-    } else if (position === 'START') {
-      tmpArray.unshift({
-        type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false
-      });
-    } else if (position === 'END') {
-      tmpArray.push({
-        type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false
-      });
-    } else {
-      tmpArray.push({
-        type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false
-      });
-      this.moveBlock(tmpArray, tmpArray.length - 1, position);
+      // Update block list for editor as required.
+      const tmpArray = this.props.store.editors
+        .get(this.props.store.editorPanel.activeEditorId)
+        .blockList.slice();
+      if (tmpArray.length === 0) {
+        tmpArray.push({
+          type: blockType,
+          fields: BlockTypes[blockType.toUpperCase()].fields,
+          modified: false
+        });
+      } else if (position === 'START') {
+        tmpArray.unshift({
+          type: blockType,
+          fields: BlockTypes[blockType.toUpperCase()].fields,
+          modified: false
+        });
+      } else if (position === 'END') {
+        tmpArray.push({
+          type: blockType,
+          fields: BlockTypes[blockType.toUpperCase()].fields,
+          modified: false
+        });
+      } else {
+        tmpArray.push({
+          type: blockType,
+          fields: BlockTypes[blockType.toUpperCase()].fields,
+          modified: false
+        });
+        this.moveBlock(tmpArray, tmpArray.length - 1, position);
+      }
+      this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId
+      ).blockList = tmpArray;
+      // Update block attributes
+      editor.blockList[position].status = 'pending';
+      editor.blockList[position].attributeList = attributeList;
+      editor.selectedBlock = position;
+      this.props.store.editorPanel.updateAggregateDetails = true;
+    } catch (e) {
+      l.error(e);
     }
-    this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList = tmpArray;
-    // Update block attributes
-    editor.blockList[position].status = 'pending';
-    editor.blockList[position].attributeList = attributeList;
-    editor.selectedBlock = position;
-    this.props.store.editorPanel.updateAggregateDetails = true;
   }
 
   /**

@@ -48,7 +48,6 @@ import CreateViewButton from './CreateViewButton';
 import ShowIcon from '../../styles/icons/show-icon.svg';
 import ImportIcon from '../../styles/icons/export-icon.svg';
 import ExportIcon from '../../styles/icons/save-icon.svg';
-import RefreshIcon from '../../styles/icons/refresh-icon.svg';
 
 const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
@@ -130,22 +129,26 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   addStartBlock() {
-    this.getBlockAttributes(0).then(res => {
-      this.addBlockToEditor('Start', 0, res)
-        .then(() => {})
-        .catch(e => {
-          l.error('Failed to add Start block to Agg Builder with error ' + e);
-          this.setState({ failed: true });
-          this.setState({ failureReason: e });
-        });
+    return new Promise(resolve => {
+      this.getBlockAttributes(0).then(res => {
+        this.addBlockToEditor('Start', 0, res)
+          .then(() => {
+            resolve();
+          })
+          .catch(e => {
+            l.error('Failed to add Start block to Agg Builder with error ' + e);
+            this.setState({ failed: true });
+            this.setState({ failureReason: e });
+          });
+      });
     });
   }
 
   @action.bound
   _onAggregateUpdate() {
     const editor = this.props.store.editors.get(this.props.id);
-    l.debug('Selecting Block: ', this.editor.selectedBlock);
-    this.selectBlock(editor.blockList.length - 1);
+    l.debug('Selecting Block: ', editor.selectedBlock);
+    this.selectBlock(editor.selectedBlock);
   }
 
   @action.bound
@@ -158,6 +161,10 @@ export default class GraphicalBuilder extends React.Component {
         this.updateResultSet()
           .then(res => {
             if (this.state.debug) l.debug('update result set result line 166:', res);
+            while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+              l.debug('Fixing regex before parsing.');
+              res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
+            }
             res = JSON.parse(res);
             if (res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
@@ -374,9 +381,19 @@ export default class GraphicalBuilder extends React.Component {
             }
             try {
               // Regex work around.
-              res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+              while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+                l.debug('Fixing regex before parsing.');
+                res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
+              }
+              res = JSON.parse(res);
             } catch (e) {
-              l.error(e);
+              l.error(typeof e);
+              if (res.match(/agg is undefined/)) {
+                l.error('Agg is undefined, probably lost shell.');
+                this.setState({ failed: true });
+                this.setState({ failureReason: 'ConnectionDoesNotExist' });
+                return;
+              }
               // If first error - Try again!
               if (this.state.firstTry) {
                 this.setState({ firstTry: false });
@@ -494,7 +511,11 @@ export default class GraphicalBuilder extends React.Component {
           this.updateResultSet().then(res => {
             if (this.state.debug) l.debug('update result set result line 493:', res);
             try {
-              res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+              while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+                l.debug('Fixing regex before parsing.');
+                res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
+              }
+              res = JSON.parse(res);
             } catch (e) {
               l.error(e);
               // If first error - Try again!
@@ -622,7 +643,11 @@ export default class GraphicalBuilder extends React.Component {
         this.updateResultSet().then(res => {
           if (this.state.debug) l.debug('update result set result line 606:', res);
           try {
-            res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+            while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+              l.debug('Fixing regex before parsing.');
+              res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
+            }
+            res = JSON.parse(res);
           } catch (e) {
             l.error(e);
             // If first error - Try again!
@@ -737,7 +762,11 @@ export default class GraphicalBuilder extends React.Component {
         })
         .then(res => {
           try {
-            res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+            while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+              l.debug('Fixing regex before parsing.');
+              res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
+            }
+            res = JSON.parse(res);
           } catch (e) {
             l.error('parsing: ', res);
             l.error(e);
@@ -769,8 +798,7 @@ export default class GraphicalBuilder extends React.Component {
               icon: 'thumbs-down'
             });
             this.setState({ failed: true });
-            this.setState({ failureReason: e });
-            this.setOutputBroken();
+            this.setState({ failureReason: 'ConnectionDoesNotExist' });
           }
           reject(e);
         });
@@ -961,7 +989,11 @@ export default class GraphicalBuilder extends React.Component {
             output.output = globalString('aggregate_builder/no_output');
           }
           try {
-            res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+            while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+              l.debug('Fixing regex before parsing.');
+              res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
+            }
+            res = JSON.parse(res);
           } catch (e) {
             l.error(e);
             // If first error - Try again!
@@ -1002,7 +1034,11 @@ export default class GraphicalBuilder extends React.Component {
                 );
               }
               try {
-                res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+                while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+                  l.debug('Fixing regex before parsing.');
+                  res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
+                }
+                res = JSON.parse(res);
               } catch (e) {
                 l.error(e);
                 this.setState({ failed: true });
@@ -1300,7 +1336,11 @@ export default class GraphicalBuilder extends React.Component {
               );
             }
             try {
-              res = JSON.parse(res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"'));
+              while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+                l.debug('Fixing regex before parsing.');
+                res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
+              }
+              res = JSON.parse(res);
             } catch (e) {
               l.error(e);
               if (this.state.firstTry) {
@@ -1372,6 +1412,53 @@ export default class GraphicalBuilder extends React.Component {
   }
 
   /**
+   * Attempts to recreate a new agg builder and restore the existing steps.
+   */
+  @action.bound
+  _restart() {
+    return new Promise((resolve, reject) => {
+      // Create a new aggregate builder in the shell.
+      this.editor = this.props.store.editors.get(this.props.id);
+      this.profileId = this.editor.profileId;
+      this.shell = this.editor.shellId;
+      this.currentDB = this.editor.collection.refParent.text;
+      this.currentCollection = this.editor.collection.text;
+      const service = featherClient().service('/mongo-sync-execution');
+      service.timeout = 60000;
+      service
+        .update(this.profileId, {
+          shellId: this.shell, // eslint-disable-line
+          commands: AggregateCommands.NEW_AGG_BUILDER(this.currentDB, this.currentCollection)
+        })
+        .then(res => {
+          if (this.state.debug) l.debug('new agg builder result line 98:', res);
+          this.editor.aggregateID = JSON.parse(res).id;
+          if (this.editor.blockList.length === 0) {
+            this.addStartBlock().then(() => {
+              resolve();
+            });
+          } else {
+            this.selectBlock(0);
+          }
+        })
+        .catch(err => {
+          if (err.message.includes('Connection does not exist')) {
+            this.state.failureReason = 'ConnectionDoesNotExist';
+          } else {
+            this.state.failureReason = 'Unknown';
+          }
+          runInAction('Agg Builder no longer loading', () => {
+            this.editor.isAggregateDetailsLoading = false;
+          });
+          this.setState({ failed: true });
+          this.setState({ failureReason: err });
+          l.error(err);
+          reject();
+        });
+    });
+  }
+
+  /**
    * Adds new blocks from an imported file.
    */
   @action.bound
@@ -1418,6 +1505,27 @@ export default class GraphicalBuilder extends React.Component {
               title={globalString('aggregate_builder/alerts/failed_title')}
               error={globalString('aggregate_builder/alerts/failed_message')}
             />
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              inline
+              content={globalString('aggregate_builder/tooltips/restart')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+            >
+              <AnchorButton
+                className="retryButton"
+                intent={Intent.SUCCESS}
+                text={globalString('aggregate_builder/restart')}
+                onClick={() => {
+                  this.setState({ failed: false });
+                  this.setState({ failureReason: null });
+                  this._restart().then(res => {
+                    l.debug('FINISHED RESTART ', res);
+                  });
+                }}
+              />
+            </Tooltip>
           </div>
         );
       }
@@ -1427,6 +1535,27 @@ export default class GraphicalBuilder extends React.Component {
             title={globalString('aggregate_builder/alerts/failed_title')}
             error={globalString('aggregate_builder/alerts/failed_message_unknown')}
           />
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('aggregate_builder/tooltips/retry')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="retryButton"
+              intent={Intent.SUCCESS}
+              text={globalString('aggregate_builder/retry')}
+              onClick={() => {
+                this.setState({ failed: false });
+                this.setState({ failureReason: null });
+                this.selectBlock(0).then(res => {
+                  if (this.state.debug) l.debug('END OF REFRESH: ', res);
+                });
+              }}
+            />
+          </Tooltip>
         </div>
       );
     }

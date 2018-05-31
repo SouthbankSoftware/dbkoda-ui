@@ -77,6 +77,10 @@ div.aggregateGraphicalBuilderWrapper {
   text-align: center;
   height: 100%;
 
+  .retryButton {
+    top: -50px;
+  }
+
   div.topButtons {
     display: flex;
     flex-direction: row;

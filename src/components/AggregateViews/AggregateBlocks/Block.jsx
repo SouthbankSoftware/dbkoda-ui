@@ -54,10 +54,19 @@ const blockSource = {
   endDrag(props, monitor) {
     const item = monitor.getItem();
     const dropResult = monitor.getDropResult();
+    if (
+      !dropResult ||
+      (!item.concrete &&
+        !dropResult.concrete &&
+        (dropResult.type !== 'firstBlock' && dropResult.type !== 'lastBlock'))
+    ) {
+      l.debug('Invalid drag drop.');
+      return;
+    }
     if (item.concrete) {
       // Re-order
       props.moveBlock(item.position, dropResult.listPosition);
-    } else if (dropResult) {
+    } else if (dropResult.type) {
       // New Block
       if (dropResult.type === 'firstBlock') {
         props.addBlock(item.type, 'START');
