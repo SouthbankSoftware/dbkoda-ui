@@ -38,7 +38,14 @@
     {
       "name": "UseOr",
       "label": "Use Or?",
-      "tooltip": "If true, will OR across filter conditions",
+      "tooltip": "If true, will apply OR across filter conditions",
+      "type": "Boolean",
+      "readOnly": false
+    },
+    {
+      "name": "UseAnd",
+      "label": "Use And?",
+      "tooltip": "If true, will apply AND across filter conditions",
       "type": "Boolean",
       "readOnly": false
     },

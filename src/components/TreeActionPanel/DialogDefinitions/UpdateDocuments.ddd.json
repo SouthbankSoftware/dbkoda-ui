@@ -30,8 +30,15 @@
     },
     {
       "name": "UseOr",
-      "label": "Use Or?",
+      "label": "Use OR?",
       "tooltip": "use OR in filter conditions?",
+      "type": "Boolean",
+      "readOnly": false
+    },
+    {
+      "name": "UseAnd",
+      "label": "Use And?",
+      "tooltip": "use AND in filter conditions?",
       "type": "Boolean",
       "readOnly": false
     },
