@@ -206,13 +206,8 @@ export default class OutputApi {
     // Parse output for string 'Type "it" for more'
     const outputId = this.outputHash[output.id + '|' + output.shellId];
 
-    const totalOutput = this.store.outputs.get(outputId).output + output.output;
-    const profile: Profile = this.profileStore.profiles.get(output.id);
-    if (profile && profile.status !== ProfileStatus.OPEN) {
-      // the connection has been closed.
-      return;
-    }
-    this.store.outputs.get(outputId).output = totalOutput;
+    this.store.outputs.get(outputId).append(output.output);
+
     if (
       output &&
       output.output &&

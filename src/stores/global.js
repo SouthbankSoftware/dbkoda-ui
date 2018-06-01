@@ -264,7 +264,7 @@ export default class Store {
         this.layout.rightSplitResizerState = resizerStates.ALL_SHOWN;
       } else {
         this.layout.overallSplitResizerState = resizerStates.P_HIDDEN;
-        this.layout.rightSplitResizerState = resizerStates.P_HIDDEN;
+        this.layout.rightSplitResizerState = resizerStates.ALL_SHOWN;
       }
     }
 

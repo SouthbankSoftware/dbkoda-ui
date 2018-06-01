@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-30T08:24:23+10:00
+ * @Last modified time: 2018-06-01T14:22:16+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -336,7 +336,8 @@ export default class PerformancePanelApi {
           this.sendMsgToPerformanceWindow({
             command: 'mw_error',
             profileId,
-            err
+            err,
+            errorMessage
           });
         }
       } catch (err) {
