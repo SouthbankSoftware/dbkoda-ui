@@ -3,7 +3,7 @@
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-25T11:40:32+10:00
+ * @Last modified time: 2018-06-01T14:28:19+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -117,7 +117,7 @@ class PerformanceWindow extends React.Component {
   }
 
   @action.bound
-  _errorHandler(err) {
+  _errorHandler(err, errorMessage) {
     l.info('received an error', err);
     switch (err.code) {
       case 'SSH_NOT_ENABLED':
@@ -145,6 +145,11 @@ class PerformanceWindow extends React.Component {
         this.setState({ sshStatus: Status.UNSUPPORTED_STATS_OS });
         break;
       default:
+        NewToaster.show({
+          message: errorMessage || err,
+          className: 'danger',
+          iconName: 'pt-icon-thumbs-down'
+        });
         break;
     }
   }
