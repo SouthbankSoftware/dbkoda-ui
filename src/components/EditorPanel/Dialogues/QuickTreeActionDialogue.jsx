@@ -80,15 +80,18 @@ export default class QuickTreeActionDialogue extends React.Component {
         commands: `db.getSiblingDB("${database.name}").getCollectionNames();`
       })
       .then(res => {
-        let collectionArray = res.slice(1, -1);
-        collectionArray = collectionArray.split(',');
-        this.state.collectionList = [];
-        const arrayLength = collectionArray.length;
-        for (let i = 0; i < arrayLength; i += 1) {
+        // When a string was returned.
+        // let collectionArray = res.slice(1, -1);
+        // collectionArray = collectionArray.split(',');
+        // this.state.collectionList = [];
+        // const arrayLength = collectionArray.length;
+
+        res = JSON.parse(res);
+        for (let i = 0; i < res.length; i += 1) {
           this.state.collectionList.push({
-            name: collectionArray[i].replace(/['"]+/g, '').trim()
+            name: res[i].replace(/['"]+/g, '').trim()
           });
-          if (i === arrayLength - 1) {
+          if (i === res.length - 1) {
             this.forceUpdate();
           }
         }

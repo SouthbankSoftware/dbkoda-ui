@@ -776,8 +776,6 @@ export default class GraphicalBuilder extends React.Component {
               this.validateBlock(step);
               resolve(true);
             } else {
-              // this.setState({ failed: true });
-              // this.setState({ failureReason: e });
               l.error('Failed to validate block ', step, ' with error: ', res);
               resolve(false);
             }
@@ -797,9 +795,9 @@ export default class GraphicalBuilder extends React.Component {
               className: 'danger',
               icon: 'thumbs-down'
             });
-            this.setState({ failed: true });
-            this.setState({ failureReason: 'ConnectionDoesNotExist' });
           }
+          this.setState({ failed: true });
+          this.setState({ failureReason: 'ConnectionDoesNotExist' });
           reject(e);
         });
     });
@@ -1018,6 +1016,11 @@ export default class GraphicalBuilder extends React.Component {
       .catch(e => {
         l.error(e);
         l.error('Retry aggregation once more with higher timeout...');
+        NewToaster.show({
+          message: globalString('aggregate_builder/long_running'),
+          className: 'danger',
+          icon: 'thumbs-down'
+        });
         const service = featherClient().service('/mongo-sync-execution');
         service.timeout = 60000;
         service

@@ -131,6 +131,9 @@
         "retry": "dbKoda will try to recover from the error automatically.",
         "restart": "dbKoda will try to recover your connection."
       },
+      "errors": {
+        "long_running": "The aggregation is taking a long time to execute"
+      },
       "retry": "Retry",
       "restart": "Restart",
       "palette_title": "Pipeline Palette",
