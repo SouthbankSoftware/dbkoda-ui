@@ -3,7 +3,7 @@
  * @Date:   2018-04-12T16:16:27+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-30T08:44:14+10:00
+ * @Last modified time: 2018-06-01T13:57:01+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,6 +28,7 @@
 
 import { observer, inject } from 'mobx-react';
 import React from 'react';
+import { toJS } from 'mobx';
 import autobind from 'autobind-decorator';
 import { Tooltip, Intent, Position, Button } from '@blueprintjs/core';
 import CodeMirror from '#/common/LegacyCodeMirror'; // eslint-disable-line
@@ -122,7 +123,8 @@ export default class OperationDetails extends React.Component {
   }
 
   render() {
-    const executionStages = getExecutionStages(this.props.execStats);
+    const execStats = toJS(this.props.execStats);
+    const executionStages = getExecutionStages(execStats);
     return (
       <div className="explainView">
         {this.state.suggestionText && <QueryCommandView command={this.state.suggestionText} />}
