@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-28T12:45:01+10:00
+ * @Last modified time: 2018-06-01T10:34:20+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -272,6 +272,11 @@ export default class ProfileManager extends React.Component<Props, State> {
             <div className="pt-dark form-scrollable">
               <form className="formButtons">
                 <div className="profile-button-panel">
+                  <Button
+                    className="cancel-button pt-button pt-intent-primary"
+                    text={globalString('connection/form/closeButton')}
+                    onClick={this.closeDialog}
+                  />
                   <Button
                     className={
                       (this.form.isFormInvalid ? 'inactive' : 'active') +
