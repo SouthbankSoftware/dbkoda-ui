@@ -326,9 +326,11 @@ export default class Store {
     this.editorToolbar.newConnectionLoading = true;
   };
 
+  // TO DO
   @action.bound
   openNewAggregateBuilder(nodeRightClicked) {
-    if (this.editorPanel.activeDropdownId === 'Default') {
+    l.debug(this.profile);
+    if (!this.profileList.selectedProfile) {
       NewToaster.show({
         message: 'Error: Please select an open connection from the Profile Dropdown.',
         className: 'danger',
@@ -341,7 +343,7 @@ export default class Store {
     service.timeout = 15000;
     service
       .create({
-        id: this.profileStore.profiles.get(this.editorPanel.activeDropdownId).id
+        id: this.profileList.selectedProfile.id
       })
       .then(res => {
         l.debug('Created new editor for Aggregate Builder: ', res);
