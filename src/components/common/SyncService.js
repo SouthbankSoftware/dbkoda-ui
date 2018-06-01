@@ -41,14 +41,6 @@ export const SyncService = {
           })
           .then(res => {
             if (typeof res == 'string') {
-              res = res.replace(/[\r\n\t]*/g, '');
-              res = res.replace(/ObjectId\((\"\w*\")\)/g, '$1');
-              res = res.replace(/(BinData\(\d*?\W)(\")(.*?)(\")(\))/g, '"$1\\$2$3\\$4$5"');
-              res = res.replace(/NumberLong\(\"?(\d*)\"?\)/g, '$1');
-              res = res.replace(/NumberDecimal\(\"?(\d*)\"?\)/g, '$1');
-              res = res.replace(/Timestamp\((\d*)[\w|\W]*?\)/g, '$1');
-              res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
-              res = res.replace(/\bNaN\b/g, '"NaN"');
               try {
                 const ejson = JSON.parse(res);
                 l.debug('!!! - ', ejson);
