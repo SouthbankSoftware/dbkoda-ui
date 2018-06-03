@@ -1017,7 +1017,7 @@ export default class GraphicalBuilder extends React.Component {
         l.error(e);
         l.error('Retry aggregation once more with higher timeout...');
         NewToaster.show({
-          message: globalString('aggregate_builder/long_running'),
+          message: globalString('aggregate_builder/errors/long_running'),
           className: 'danger',
           icon: 'thumbs-down'
         });

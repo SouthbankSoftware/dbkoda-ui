@@ -87,6 +87,7 @@ export default class QuickTreeActionDialogue extends React.Component {
         // const arrayLength = collectionArray.length;
 
         res = JSON.parse(res);
+        this.state.collectionList = [];
         for (let i = 0; i < res.length; i += 1) {
           this.state.collectionList.push({
             name: res[i].replace(/['"]+/g, '').trim()
