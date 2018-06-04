@@ -51,6 +51,7 @@ import SaveFileIcon from '../../styles/icons/save-icon.svg';
 import PerfPanelIcon from '../../styles/icons/performance-view-icon-1.svg';
 import SearchIcon from '../../styles/icons/enhanced-json-icon.svg';
 import AggregateIcon from '../../styles/icons/aggregate-builder-icon.svg';
+import ChartIcon from '../../styles/icons/chart-icon.svg';
 
 const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
@@ -87,7 +88,8 @@ export default class Toolbar extends React.Component {
     this.state = {
       showLoadSQLWarning: false,
       isSimpleQueryDialogueOpen: false,
-      isAggregateQueryDialogueOpen: false
+      isAggregateQueryDialogueOpen: false,
+      isStorageDrilldownDialogueOpen: false
     };
     /**
      * @Mike TODO -> These can probably all be moved to using @action.bound instead of binding up the top, since it's a lot neater.
@@ -721,7 +723,7 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              disabled={this.props.store.editorToolbar.noActiveProfile}
+              disabled={this.props.store.profileList.selectedProfile.status === 'CLOSED'}
               className="pt-button pt-intent-primary simpleQuery"
               onClick={() => {
                 this.setState({ isSimpleQueryDialogueOpen: true });
@@ -739,7 +741,7 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              disabled={this.props.store.editorToolbar.noActiveProfile}
+              disabled={this.props.store.profileList.selectedProfile.status === 'CLOSED'}
               className="pt-button pt-intent-primary aggregateBuilder"
               onClick={() => {
                 this.setState({ isAggregateQueryDialogueOpen: true });
@@ -761,7 +763,7 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              disabled={this.props.store.editorToolbar.noActiveProfile}
+              disabled={this.props.store.profileList.selectedProfile.status === 'CLOSED'}
               className={`pt-button pt-intent-primary ${
                 !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
               }`}
@@ -777,6 +779,27 @@ export default class Toolbar extends React.Component {
               icon="pt-icon-heat-grid"
             >
               <PerfPanelIcon className="dbKodaSVG" width={20} height={20} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.DANGER}
+            hoverOpenDelay={1000}
+            content={globalString('profile/menu/storageDrilldown')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              disabled={this.props.store.profileList.selectedProfile.status === 'CLOSED'}
+              className="pt-button pt-intent-primary storageDrilldownView"
+              onClick={() => {
+                l.debug(this.props.store.profileList.selectedProfile);
+                this.props.api.showStorageStatsView(
+                  this.props.store.profileList.selectedProfile.id
+                );
+              }}
+              icon="pt-icon-heat-grid"
+            >
+              <ChartIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
         </div>

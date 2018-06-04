@@ -500,7 +500,8 @@
         "deleteProfile": "Delete Profile",
         "getTopConnections": "Get Top 10 Connections",
         "simpleQuery": "Create a Simple Query",
-        "aggregateBuilder": "Create an Aggregate Pipeline"
+        "aggregateBuilder": "Create an Aggregate Pipeline",
+        "storageDrilldown": "Interactive view of database storage."
       },
       "closeAlert": {
         "prompt": "Are you sure you want to close this connection?",
