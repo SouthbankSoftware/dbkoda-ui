@@ -301,23 +301,25 @@ class DragLabel extends React.Component {
           {this.FilteredTextLabel}
         </span>
         <span className="additionalActions">
-          <Popover
-            minimal
-            interactionKind={PopoverInteractionKind.CLICK}
-            position={Position.TOP}
-            popoverClassName="toolTip"
-            content={<Menu>{this.Menus}</Menu>}
-            target={
-              <AnchorButton
-                className="button"
-                onClick={() => {
-                  l.info('Open Context Menu');
-                }}
-              >
-                <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />
-              </AnchorButton>
-            }
-          />
+          {this.Menus.length !== 0 && (
+            <Popover
+              minimal
+              interactionKind={PopoverInteractionKind.CLICK}
+              position={Position.TOP}
+              popoverClassName="toolTip"
+              content={<Menu>{this.Menus}</Menu>}
+              target={
+                <AnchorButton
+                  className="button"
+                  onClick={() => {
+                    l.info(this.Menus);
+                  }}
+                >
+                  <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+                </AnchorButton>
+              }
+            />
+          )}
         </span>
       </div>
     );

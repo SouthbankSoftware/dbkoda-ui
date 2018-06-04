@@ -27,12 +27,12 @@
 
 .sideNav {
   height: 100%;
-  width: 60px;
+  width: 50px;
   background-color: $sideNavBackground;
 
   .menuItem {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
 
     .pt-popover-target,
     .pt-popover-wrapper {
@@ -48,6 +48,7 @@
       color: $brightFontColor;
       border-radius: 0;
       box-shadow: none !important;
+
       // opacity: 0.5;
     }
 
@@ -82,6 +83,7 @@
         background-color: $sideNavBackgroundPerformance;
       }
     }
+
     .menuItem.selected .pt-button {
       background-image: unset;
       background-color: $sideNavPerformanceButtonSelected;
