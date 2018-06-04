@@ -78,7 +78,7 @@ export default class GraphicalBuilder extends React.Component {
 
     Broker.emit(EventType.FEATURE_USE, 'AggregateBuilder');
 
-    this.state.debug = true;
+    this.state.debug = false;
     // Set up the aggregate builder in the shell.
     this.editor = this.props.store.editors.get(this.props.id);
     this.profileId = this.editor.profileId;
@@ -1467,6 +1467,9 @@ export default class GraphicalBuilder extends React.Component {
   @action.bound
   addNewBlocks(contentObject) {
     return new Promise(() => {
+      runInAction('Agg Builder is loading', () => {
+        this.editor.isAggregateDetailsLoading = true;
+      });
       const importBlockList = contentObject.editorObject.blockList;
       let count = 0;
 
@@ -1489,6 +1492,10 @@ export default class GraphicalBuilder extends React.Component {
       return importBlock(importBlockList).then(() => {
         // Select last block.
         this.selectBlock(count - 1).then(() => {
+          runInAction('Agg Builder no longer loading', () => {
+            this.editor.isAggregateDetailsLoading = false;
+          });
+          s;
           NewToaster.show({
             message: globalString('aggregate_builder/import_passed'),
             className: 'success',
@@ -1578,6 +1585,7 @@ export default class GraphicalBuilder extends React.Component {
                 className="showLeftPanelButton circleButton"
                 intent={Intent.SUCCESS}
                 onClick={this.props.store.api.onShowLeftPanelClicked}
+                disabled={this.editor.isAggregateDetailsLoading}
               >
                 <ShowIcon className="dbKodaSVG" width={20} height={20} />
               </AnchorButton>
@@ -1595,6 +1603,7 @@ export default class GraphicalBuilder extends React.Component {
               className="importButton circleButton"
               intent={Intent.SUCCESS}
               onClick={this.onImportButtonClickedFirst}
+              disabled={this.editor.isAggregateDetailsLoading}
             >
               <ImportIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
@@ -1611,14 +1620,16 @@ export default class GraphicalBuilder extends React.Component {
               className="exportButton circleButton"
               intent={Intent.SUCCESS}
               onClick={this.onExportButtonClicked}
+              disabled={this.editor.isAggregateDetailsLoading}
             >
               <ExportIcon className="dbKodaSVG export" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
-          <CreateViewButton />
+          <CreateViewButton disabled={this.editor.isAggregateDetailsLoading} />
           <GenerateChartButton
             connectionId={this.props.editor.currentProfile}
             editorId={this.props.editor.id}
+            disabled={this.editor.isAggregateDetailsLoading}
           />
         </div>
         <Alert

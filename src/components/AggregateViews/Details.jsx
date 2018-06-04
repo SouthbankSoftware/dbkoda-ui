@@ -52,7 +52,7 @@ export default class Details extends React.Component {
       form: null,
       previousActiveBlock: null,
       reproduceCode: false,
-      debug: true
+      debug: false
     };
     this.reactionToUpdateDetails = reaction(
       () => this.props.store.editorPanel.updateAggregateDetails,

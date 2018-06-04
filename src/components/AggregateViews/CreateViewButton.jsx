@@ -88,6 +88,7 @@ export default class CreateViewButton extends React.Component {
           <AnchorButton
             className={buttonClasses}
             intent={Intent.SUCCESS}
+            disabled={this.props.disabled}
             onClick={() => {
               runInAction(() => {
                 const { includeCreateView } = this.props.store.aggregateBuilder;

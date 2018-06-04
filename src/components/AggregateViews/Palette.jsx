@@ -56,7 +56,7 @@ export default class Palette extends React.Component {
         other: false,
         all: false
       },
-      debug: true
+      debug: false
     };
     this.blockList = this.getBlockList();
     this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);

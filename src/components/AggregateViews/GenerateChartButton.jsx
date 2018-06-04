@@ -48,7 +48,8 @@ type Props = {
   store: Store,
   api: {},
   connectionId: string,
-  editorId: string
+  editorId: string,
+  disabled: boolean
 };
 
 type State = {};
@@ -174,6 +175,7 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
         <AnchorButton
           className="GenerateChartButton"
           intent={Intent.SUCCESS}
+          disabled={this.props.disabled}
           onClick={this._generateChart}
         >
           <ChartIcon className="dbKodaSVG" width={20} height={20} />
