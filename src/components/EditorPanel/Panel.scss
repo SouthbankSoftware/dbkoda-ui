@@ -96,7 +96,8 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
 
           .editorContextDropdown {
             outline: unset;
-            background-color: $selectDarkPrimaryBackground;
+            background: unset !important;
+            background-color: #202020 !important;
             border-right: 1px solid $selectDarkBorderColor !important;
             padding-right: 24px !important;
             padding-left: 5px !important;
@@ -156,14 +157,35 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
       span {
         .pt-button {
           position: relative;
+          background: unset !important;
+          background-color: #202020 !important;
+          color: #bfbec0 !important;
+          margin-right: 0px !important;
+          border-right: 1px solid lighten(rgba(32, 32, 32, 0.5), 10);
 
           svg.dbKodaSVG {
             position: absolute;
+            width: 15px;
+            height: 15px;
             top: 50%;
             bottom: 50%;
             transform: translate(-50%, -50%);
-            fill: $buttonPrimaryIcon;
+            fill: #bfbec0;
           }
+        }
+
+        .pt-button:hover {
+          background-color: #303030 !important;
+        }
+
+        .simpleQuery {
+          border-bottom-left-radius: 0.65em;
+          border-top-left-radius: 0.65em;
+        }
+
+        .storageDrilldownView {
+          border-top-right-radius: 0.65em;
+          border-bottom-right-radius: 0.65em;
         }
 
         .destroyPerformancePanel svg.dbKodaSVG {
@@ -177,45 +199,57 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
     }
 
     .pt-align-right {
-      span {
-        a {
-          position: relative;
-          background-color: $buttonTertiaryBackground;
-          width: 30px;
-          height: 30px;
+      .rightHandGroup {
+        padding-left: 20px;
+        float: left;
 
-          svg.dbKodaSVG {
-            position: absolute;
-            top: 50%;
-            bottom: 50%;
-            transform: translate(-80%, -50%);
-            width: 40%;
-            height: 40%;
-            fill: $buttonTertiaryIcon;
+        span {
+          .pt-button {
+            position: relative;
+            background: unset !important;
+            background-color: #202020 !important;
+            color: #bfbec0 !important;
+            border-right: 1px solid lighten(rgba(32, 32, 32, 0.5), 10);
+            margin-right: 0px !important;
+
+            svg.dbKodaSVG {
+              position: absolute;
+              width: 15px;
+              height: 15px;
+              fill: #bfbec0;
+            }
+          }
+
+          .pt-button:hover {
+            background-color: #303030 !important;
+          }
+
+          .addEditorButton {
+            border-bottom-left-radius: 0.65em;
+            border-top-left-radius: 0.65em;
+          }
+
+          .saveFileButton {
+            border-top-right-radius: 0.65em;
+            border-bottom-right-radius: 0.65em;
+          }
+
+          .destroyPerformancePanel svg.dbKodaSVG {
+            fill: $buttonSecondaryIcon;
+          }
+
+          .executeLineButton svg.dbKodaSVG {
+            height: 45%;
           }
         }
+      }
 
-        a:focus {
-          box-shadow: none !important;
-        }
-
-        .saveFileButton svg.dbKodaSVG {
-          padding: 1px;
-          width: 60%;
-          height: 60%;
-        }
-
-        .addEditorButton svg.dbKodaSVG {
-          padding-left: 1px;
-          width: 60%;
-          height: 60%;
-        }
-
-        .openFileButton svg.dbKodaSVG {
-          padding-left: 5px;
-          width: 70%;
-          height: 70%;
-        }
+      .pt-button-group:not(.pt-minimal)
+        > .pt-popover-wrapper:not(:first-child)
+        .pt-popover-target
+        .pt-button,
+      .pt-button-group:not(.pt-minimal) > .pt-button:not(:first-child) {
+        box-shadow: none;
       }
     }
   }

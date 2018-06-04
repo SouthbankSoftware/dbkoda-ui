@@ -48,13 +48,13 @@ import RemoveUserIcon from '../../../styles/icons/users-icon-2.svg';
 import AddIcon from '../../../styles/icons/add-icon.svg';
 import CloseIcon from '../../../styles/icons/cross-icon.svg';
 
-import DatabaseIcon from '../../../styles/icons/database-icon-2.svg';
-import DatabasesIcon from '../../../styles/icons/database-icon-4.svg';
+import DatabaseIcon from '../../../styles/icons/database-icon.svg';
+import DatabasesIcon from '../../../styles/icons/database-icon.svg';
 import CollectionIcon from '../../../styles/icons/collection-icon.svg';
 import IndexIcon from '../../../styles/icons/index-icon.svg';
-import UsersIcon from '../../../styles/icons/users-icon-4.svg';
+import UsersIcon from '../../../styles/icons/users-icon-2.svg';
 import UserIcon from '../../../styles/icons/user-icon.svg';
-import RolesIcon from '../../../styles/icons/users-icon-4.svg';
+import RolesIcon from '../../../styles/icons/users-icon-2.svg';
 import RoleIcon from '../../../styles/icons/user-icon.svg';
 import RootShardsIcon from '../../../styles/icons/shards-icon-4.svg';
 import ShardsIcon from '../../../styles/icons/shards-icon-2.svg';

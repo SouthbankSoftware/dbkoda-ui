@@ -48,10 +48,10 @@ import StopExecutionIcon from '../../styles/icons/stop-execute-icon.svg';
 import AddIcon from '../../styles/icons/add-icon.svg';
 import OpenFileIcon from '../../styles/icons/open-icon.svg';
 import SaveFileIcon from '../../styles/icons/save-icon.svg';
-import PerfPanelIcon from '../../styles/icons/performance-view-icon-1.svg';
+import PerfPanelIcon from '../../styles/icons/performance-icon-bold.svg';
 import SearchIcon from '../../styles/icons/enhanced-json-icon.svg';
 import AggregateIcon from '../../styles/icons/aggregate-builder-icon.svg';
-import ChartIcon from '../../styles/icons/chart-icon.svg';
+import ChartIcon from '../../styles/icons/storage-icon-bold.svg';
 
 const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
@@ -804,52 +804,54 @@ export default class Toolbar extends React.Component {
           </Tooltip>
         </div>
         <div className="pt-navbar-group pt-align-right">
-          <Tooltip
-            intent={Intent.PRIMARY}
-            hoverOpenDelay={1000}
-            content={globalString('editor/toolbar/addEditorTooltip')}
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
-            <AnchorButton
-              className="pt-button circleButton addEditorButton"
-              loading={this.props.store.editorToolbar.newConnectionLoading}
-              disabled={this.props.store.editorToolbar.noActiveProfile}
-              onClick={this.props.api.addEditor}
+          <div className="pt-button-group pt-navbar-group pt-intent-primary rightHandGroup">
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              content={globalString('editor/toolbar/addEditorTooltip')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
             >
-              <AddIcon className="dbKodaSVG" width={20} height={20} />
-            </AnchorButton>
-          </Tooltip>
-          <Tooltip
-            intent={Intent.PRIMARY}
-            hoverOpenDelay={1000}
-            content={globalString('editor/toolbar/openFileTooltip')}
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
-            <AnchorButton
-              className="pt-button circleButton openFileButton"
-              onClick={this.openFile}
-              disabled={this.props.store.editorToolbar.noActiveProfile}
+              <AnchorButton
+                className="pt-button pt-intent-primary addEditorButton"
+                loading={this.props.store.editorToolbar.newConnectionLoading}
+                disabled={this.props.store.editorToolbar.noActiveProfile}
+                onClick={this.props.api.addEditor}
+              >
+                <AddIcon className="dbKodaSVG" width={20} height={20} />
+              </AnchorButton>
+            </Tooltip>
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              content={globalString('editor/toolbar/openFileTooltip')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
             >
-              <OpenFileIcon className="dbKodaSVG" width={20} height={20} />
-            </AnchorButton>
-          </Tooltip>
-          <Tooltip
-            intent={Intent.PRIMARY}
-            hoverOpenDelay={1000}
-            content={globalString('editor/toolbar/saveFileTooltip')}
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM_RIGHT}
-          >
-            <AnchorButton
-              className="pt-button circleButton saveFileButton"
-              onClick={this.saveFileHandleError}
-              disabled={this.props.store.editorPanel.activeEditorId === 'Default'}
+              <AnchorButton
+                className="pt-button pt-intent-primary openFileButton"
+                onClick={this.openFile}
+                disabled={this.props.store.editorToolbar.noActiveProfile}
+              >
+                <OpenFileIcon className="dbKodaSVG" width={20} height={20} />
+              </AnchorButton>
+            </Tooltip>
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              content={globalString('editor/toolbar/saveFileTooltip')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM_RIGHT}
             >
-              <SaveFileIcon className="dbKodaSVG" width={20} height={20} />
-            </AnchorButton>
-          </Tooltip>
+              <AnchorButton
+                className="pt-button pt-intent-primary saveFileButton"
+                onClick={this.saveFileHandleError}
+                disabled={this.props.store.editorPanel.activeEditorId === 'Default'}
+              >
+                <SaveFileIcon className="dbKodaSVG" width={20} height={20} />
+              </AnchorButton>
+            </Tooltip>
+          </div>
         </div>
       </nav>
     );

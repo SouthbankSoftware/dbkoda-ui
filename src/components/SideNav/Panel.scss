@@ -27,12 +27,14 @@
 
 .sideNav {
   height: 100%;
-  width: 50px;
+  width: 60px;
   background-color: $sideNavBackground;
 
   .menuItem {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    margin-top: 10px;
 
     .pt-popover-target,
     .pt-popover-wrapper {
@@ -46,15 +48,15 @@
       background-image: unset;
       background-color: $sideNavBackground;
       color: $brightFontColor;
-      border-radius: 0;
+      border-radius: 0.5em;
       box-shadow: none !important;
 
       // opacity: 0.5;
     }
 
     .dbKodaSVG {
-      width: 30px;
-      height: 30px;
+      width: 25px;
+      height: 25px;
       transform: translate(-50%, -50%);
       position: absolute;
       top: 50%;

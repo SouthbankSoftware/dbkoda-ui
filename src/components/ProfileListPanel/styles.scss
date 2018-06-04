@@ -53,8 +53,8 @@
         position: absolute;
         top: 50%;
         bottom: 50%;
-        width: 50%;
-        height: 50%;
+        width: 15px;
+        height: 15px;
         transform: translate(-80%, -50%);
         fill: $buttonSecondaryIcon;
       }
@@ -180,11 +180,10 @@
       svg.dbKodaSVG {
         stroke: $buttonSecondaryIcon;
         stroke-width: 4px;
-        width: 3.5em;
-        height: 3.5em;
+        width: 30px;
+        height: 30px;
         margin-top: 1em;
         margin-right: 1em;
-        border-radius: 50%;
         padding: 3px;
         fill: $buttonSecondaryIcon;
       }

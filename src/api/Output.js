@@ -559,9 +559,6 @@ export default class OutputApi {
   @action.bound
   // $FlowFixMe
   openView(context: OutputToolbarContext) {
-    if (IS_DEVELOPMENT) {
-      l.info('Opening Output View: ', context);
-    }
     // $FlowFixMe
     const { activeEditorId } = this.store.editorPanel;
     if (context == OutputToolbarContexts.RAW) {

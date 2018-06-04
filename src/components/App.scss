@@ -34,8 +34,8 @@ $resizerHoverColor: rgba($connectionButtonBackgroundColourHover, 0.7);
 
   .fullPanel {
     position: absolute;
-    left: 50px;
-    width: calc(100% - 50px);
+    left: 60px;
+    width: calc(100% - 60px);
     height: 100%;
   }
 
@@ -286,9 +286,9 @@ div.savingDialog {
       -webkit-appearance: unset;
 
       /* border-top-left-radius: 1em;
-                        border-bottom-left-radius: 1em;
-                        border-top-right-radius: 1em;
-                        border-bottom-right-radius: 1em; */
+                              border-bottom-left-radius: 1em;
+                              border-top-right-radius: 1em;
+                              border-bottom-right-radius: 1em; */
     }
 
     a.dontSaveButton:hover {
@@ -439,7 +439,7 @@ div.savingDialog {
   position: absolute;
   z-index: 100;
   bottom: 0;
-  background-color: $navbarLeftBackground;
+  background-color: $navbarRightBackground;
   color: $defaultFontColor;
 }
 

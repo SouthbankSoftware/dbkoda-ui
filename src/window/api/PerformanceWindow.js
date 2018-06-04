@@ -241,6 +241,7 @@ export default class PerformanceWindowApi {
               ',' +
               commandParamsStr.substr(1);
           } else {
+            l.debug(selectedOperation);
             reject(new Error('dbkoda: Command Not Supported for Explain.'));
           }
         } else if (selectedOperation.op === 'update') {
@@ -256,6 +257,7 @@ export default class PerformanceWindowApi {
           const commandStr = JSON.stringify(operationCommand);
           explainCmd = `{"delete": "${collection}", "deletes":[${commandStr}]}`;
         } else {
+          l.debug(selectedOperation);
           reject(new Error('dbkoda: Command Not Supported for Explain.'));
         }
 

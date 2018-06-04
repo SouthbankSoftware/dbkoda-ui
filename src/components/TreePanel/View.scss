@@ -110,6 +110,7 @@
                 outline: unset;
               }
             }
+
             span.nodeIcon {
               padding-top: 5px;
               line-height: unset;
@@ -181,6 +182,7 @@
                 box-shadow: unset;
               }
             }
+
             span.nodeIcon {
               padding-top: 0px;
               line-height: unset;
@@ -342,7 +344,7 @@ div.pt-navbar-heading {
     position: absolute;
     top: 50%;
     bottom: 50%;
-    transform: translate(-80%, -50%);
+    transform: translate(-70%, -50%);
     fill: $buttonPrimaryIcon;
   }
 }

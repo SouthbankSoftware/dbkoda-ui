@@ -50,7 +50,7 @@ import { OutputFileTypes } from '~/api/Output';
 import { OutputToolbarContexts } from '../common/Constants';
 import ClearOutputIcon from '../../styles/icons/clear-output-icon.svg';
 import ShowMoreIcon from '../../styles/icons/show-more-icon.svg';
-import SaveOutputIcon from '../../styles/icons/save-icon.svg';
+import SaveOutputIcon from '../../styles/icons/save-output-icon-bold.svg';
 import ExpandIcon from '../../styles/icons/code-folder-icon.svg';
 import CollapseIcon from '../../styles/icons/code-folder-right-icon.svg';
 import RefreshIcon from '../../styles/icons/refresh-icon.svg';
@@ -293,107 +293,107 @@ export default class Toolbar extends React.Component {
 
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
-        <div className="pt-navbar-group pt-align-left">
-          <div className="pt-navbar-heading">{globalString('output/headings/default')}</div>
-          {true && (
-            <div>
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/raw')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
+        <div className="pt-align-left">
+          <div className="pt-navbar-heading">
+            <span>{globalString('output/headings/default')} </span>
+          </div>
+          <div className="pt-button-group pt-navbar-group pt-intent-primary">
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              inline
+              content={globalString('output/toolbar/raw')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+            >
+              <AnchorButton
+                disabled={disabledButtons.raw || currentOutput.rawView}
+                className="pt-button pt-intent-primary jsonTreeViewButton"
+                onClick={() => {
+                  this.props.api.outputApi.openView(OutputToolbarContexts.RAW);
+                }}
               >
-                <AnchorButton
-                  disabled={disabledButtons.raw || currentOutput.rawView}
-                  className="pt-intent-danger circleButton jsonTreeViewButton"
-                  onClick={() => {
-                    this.props.api.outputApi.openView(OutputToolbarContexts.RAW);
-                  }}
-                >
-                  <EnhanceJSONIcon className="dbKodaSVG" width={30} height={30} />
-                </AnchorButton>
-              </Tooltip>
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/jsonTree')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
-              >
-                <AnchorButton
-                  className="pt-intent-danger circleButton jsonTreeViewButton"
-                  onClick={() => {
-                    if (existingOutputs.enhancedJson && !currentOutput.rawView) {
-                      this.props.api.outputApi.openView(OutputToolbarContexts.ENHANCED_VIEW);
-                    } else {
-                      this.openJsonTreeView();
-                    }
-                  }}
-                  disabled={
-                    (disabledButtons.jsonView && !existingOutputs.enhancedJson) ||
-                    currentOutput.enhancedView
+                <EnhanceJSONIcon className="dbKodaSVG" width={30} height={30} />
+              </AnchorButton>
+            </Tooltip>
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              inline
+              content={globalString('output/toolbar/jsonTree')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+            >
+              <AnchorButton
+                className="pt-button pt-intent-primary jsonTreeViewButton"
+                onClick={() => {
+                  if (existingOutputs.enhancedJson && !currentOutput.rawView) {
+                    this.props.api.outputApi.openView(OutputToolbarContexts.ENHANCED_VIEW);
+                  } else {
+                    this.openJsonTreeView();
                   }
-                >
-                  <EnhanceJSONIcon className="dbKodaSVG" width={30} height={30} />
-                </AnchorButton>
-              </Tooltip>
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/table')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
+                }}
+                disabled={
+                  (disabledButtons.jsonView && !existingOutputs.enhancedJson) ||
+                  currentOutput.enhancedView
+                }
               >
-                <AnchorButton
-                  className="pt-intent-danger circleButton tableViewButton"
-                  onClick={() => {
-                    if (currentOutput.chartView) {
-                      this.openTableView(true, false);
-                    } else if (existingOutputs.tableJson && !currentOutput.rawView) {
-                      this.props.api.outputApi.openView(OutputToolbarContexts.TABLE_VIEW);
-                    } else {
-                      this.openTableView(false, false);
-                    }
-                  }}
-                  disabled={
-                    (disabledButtons.tableView && !existingOutputs.tableJson) ||
-                    currentOutput.tableView
+                <EnhanceJSONIcon className="dbKodaSVG" width={30} height={30} />
+              </AnchorButton>
+            </Tooltip>
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              inline
+              content={globalString('output/toolbar/table')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+            >
+              <AnchorButton
+                className="pt-button pt-intent-primary tableViewButton"
+                onClick={() => {
+                  if (currentOutput.chartView) {
+                    this.openTableView(true, false);
+                  } else if (existingOutputs.tableJson && !currentOutput.rawView) {
+                    this.props.api.outputApi.openView(OutputToolbarContexts.TABLE_VIEW);
+                  } else {
+                    this.openTableView(false, false);
                   }
-                >
-                  <TableIcon className="dbKodaSVG" width={30} height={30} />
-                </AnchorButton>
-              </Tooltip>
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/chart')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
+                }}
+                disabled={
+                  (disabledButtons.tableView && !existingOutputs.tableJson) ||
+                  currentOutput.tableView
+                }
               >
-                <AnchorButton
-                  className="pt-intent-danger circleButton chartViewButton"
-                  onClick={() => {
-                    if (existingOutputs.chartPanel && !currentOutput.rawView) {
-                      this.props.api.outputApi.openView(OutputToolbarContexts.CHART_VIEW);
-                    } else {
-                      this.openChartView();
-                    }
-                  }}
-                  disabled={
-                    (disabledButtons.chartView && !existingOutputs.chartPanel) ||
-                    currentOutput.chartView
+                <TableIcon className="dbKodaSVG" width={30} height={30} />
+              </AnchorButton>
+            </Tooltip>
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              inline
+              content={globalString('output/toolbar/chart')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+            >
+              <AnchorButton
+                className="pt-button pt-intent-primary chartViewButton"
+                onClick={() => {
+                  if (existingOutputs.chartPanel && !currentOutput.rawView) {
+                    this.props.api.outputApi.openView(OutputToolbarContexts.CHART_VIEW);
+                  } else {
+                    this.openChartView();
                   }
-                >
-                  <ChartIcon className="dbKodaSVG" width={30} height={30} />
-                </AnchorButton>
-              </Tooltip>
-            </div>
-          )}
+                }}
+                disabled={
+                  (disabledButtons.chartView && !existingOutputs.chartPanel) ||
+                  currentOutput.chartView
+                }
+              >
+                <ChartIcon className="dbKodaSVG" width={30} height={30} />
+              </AnchorButton>
+            </Tooltip>
+          </div>
         </div>
         <div className="pt-navbar-group pt-align-right">
           <Tooltip
@@ -405,7 +405,7 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              className="pt-intent-danger circleButton clearOutputBtn"
+              className="pt-button pt-intent-primary clearOutputBtn"
               onClick={this.clearOutput}
             >
               <ClearOutputIcon className="dbKodaSVG" width={30} height={30} />
@@ -420,7 +420,7 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              className="showMoreBtn circleButton"
+              className="showMoreBtn pt-button pt-intent-primary"
               onClick={this.showMore}
               disabled={
                 this.props.store.outputPanel.currentTab == 'Default' ||
@@ -442,7 +442,10 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}
           >
-            <AnchorButton className="saveOutputBtn circleButton" onClick={this.downloadOutput}>
+            <AnchorButton
+              className="saveOutputBtn pt-button pt-intent-primary"
+              onClick={this.downloadOutput}
+            >
               <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>
@@ -462,76 +465,77 @@ export default class Toolbar extends React.Component {
 
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
-        <div className="pt-navbar-group pt-align-left">
-          <div className="pt-navbar-heading">{globalString('output/headings/table')}</div>
-          {IS_DEVELOPMENT && (
-            <div>
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/raw')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
+        <div className="pt-align-left">
+          <div className="pt-navbar-heading">
+            {' '}
+            <span>{globalString('output/headings/table')} </span>{' '}
+          </div>
+          <div className="pt-button-group pt-navbar-group pt-intent-primary">
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              inline
+              content={globalString('output/toolbar/raw')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+            >
+              <AnchorButton
+                className=" pt-button pt-intent-primary rawButton"
+                onClick={() => {
+                  this.props.api.outputApi.openView(OutputToolbarContexts.RAW);
+                }}
               >
-                <AnchorButton
-                  className="pt-intent-danger circleButton rawButton"
-                  onClick={() => {
-                    this.props.api.outputApi.openView(OutputToolbarContexts.RAW);
-                  }}
-                >
-                  <EnhanceJSONIcon className="dbKodaSVG" width={30} height={30} />
-                </AnchorButton>
-              </Tooltip>
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/jsonTree')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
+                <EnhanceJSONIcon className="dbKodaSVG" width={30} height={30} />
+              </AnchorButton>
+            </Tooltip>
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              inline
+              content={globalString('output/toolbar/jsonTree')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+            >
+              <AnchorButton
+                className="pt-button pt-intent-primary jsonTreeViewButton"
+                onClick={() => {
+                  this.props.api.outputApi.openView(OutputToolbarContexts.ENHANCED_VIEW);
+                }}
+                disabled={!existingOutputs.enhancedJson}
               >
-                <AnchorButton
-                  className="pt-intent-danger circleButton jsonTreeViewButton"
-                  onClick={() => {
-                    this.props.api.outputApi.openView(OutputToolbarContexts.ENHANCED_VIEW);
-                  }}
-                  disabled={!existingOutputs.enhancedJson}
-                >
-                  <EnhanceJSONIcon className="dbKodaSVG" width={30} height={30} />
-                </AnchorButton>
-              </Tooltip>
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/table')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
+                <EnhanceJSONIcon className="dbKodaSVG" width={30} height={30} />
+              </AnchorButton>
+            </Tooltip>
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              inline
+              content={globalString('output/toolbar/table')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+            >
+              <AnchorButton className="pt-button pt-intent-primary tableViewButton" disabled>
+                <TableIcon className="dbKodaSVG" width={30} height={30} />
+              </AnchorButton>
+            </Tooltip>
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              inline
+              content={globalString('output/toolbar/chart')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+            >
+              <AnchorButton
+                className="pt-button pt-intent-primary chartViewButton"
+                onClick={() => {
+                  this.openChartView(true);
+                }}
               >
-                <AnchorButton className="pt-intent-danger circleButton tableViewButton" disabled>
-                  <TableIcon className="dbKodaSVG" width={30} height={30} />
-                </AnchorButton>
-              </Tooltip>
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/chart')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
-              >
-                <AnchorButton
-                  className="pt-intent-danger circleButton chartViewButton"
-                  onClick={() => {
-                    this.openChartView(true);
-                  }}
-                >
-                  <ChartIcon className="dbKodaSVG" width={30} height={30} />
-                </AnchorButton>
-              </Tooltip>
-            </div>
-          )}
+                <ChartIcon className="dbKodaSVG" width={30} height={30} />
+              </AnchorButton>
+            </Tooltip>
+          </div>
         </div>
         <div className="pt-navbar-group pt-align-right">
           {this.props.store.outputs.get(editor.id).tableJson &&
@@ -558,7 +562,7 @@ export default class Toolbar extends React.Component {
             )}
           {this.props.store.outputs.get(editor.id).tableJson &&
             this.props.store.outputs.get(editor.id).tableJson.database && (
-              <div>
+              <div className="pt-button-group pt-navbar-group pt-intent-primary">
                 <Tooltip
                   intent={Intent.PRIMARY}
                   hoverOpenDelay={1000}
@@ -638,7 +642,10 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}
             >
-              <AnchorButton className="saveOutputBtn circleButton" onClick={this.showDownloadMenu}>
+              <AnchorButton
+                className="saveOutputBtn pt-button pt-intent-primary"
+                onClick={this.showDownloadMenu}
+              >
                 <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
               </AnchorButton>
             </Tooltip>
@@ -890,7 +897,9 @@ export default class Toolbar extends React.Component {
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">
-          <div className="pt-navbar-heading">{globalString('output/headings/default')}</div>
+          <div className="pt-navbar-heading">
+            <span>{globalString('output/headings/default')}</span>
+          </div>
         </div>
         <div className="pt-navbar-group pt-align-right">
           <Tooltip
@@ -902,7 +911,7 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              className="pt-intent-danger circleButton clearOutputBtn"
+              className="pt-button pt-intent-primary clearOutputBtn"
               onClick={this.clearOutput}
             >
               <ClearOutputIcon className="dbKodaSVG" width={30} height={30} />
@@ -917,7 +926,7 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              className="showMoreBtn circleButton"
+              className="showMoreBtn pt-button pt-intent-primary"
               onClick={this.showMore}
               disabled={
                 this.props.store.outputPanel.currentTab == 'Default' ||
@@ -939,7 +948,10 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}
           >
-            <AnchorButton className="saveOutputBtn circleButton" onClick={this.downloadOutput}>
+            <AnchorButton
+              className="saveOutputBtn pt-button pt-intent-primary"
+              onClick={this.downloadOutput}
+            >
               <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>

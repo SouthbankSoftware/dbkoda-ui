@@ -39,7 +39,7 @@ div.statusPanel {
       color: $defaultFontColor;
       border: none;
       border-radius: 0px;
-      background-color: $navbarLeftBackground;
+      background-color: $navbarRightBackground;
       width: 30px;
       padding-left: 7px;
     }
@@ -122,9 +122,8 @@ div.statusPanel {
 
     div {
       background: unset;
-      color: $defaultFontColor;
-      border-left: 1px solid $welcomeViewDividerTransparent;
-      background-color: $navbarLeftBackground;
+      color: #bfbec0;
+      background-color: #494849;
       width: 30px;
       padding-left: 7px;
 
@@ -142,7 +141,7 @@ div.statusPanel {
     }
 
     div:hover {
-      background-color: $navbarLeftBackgroundSecondary;
+      background-color: $terminalButtonIcon;
 
       svg {
         path.p1 {

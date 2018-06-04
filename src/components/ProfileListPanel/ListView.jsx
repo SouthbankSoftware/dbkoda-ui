@@ -49,7 +49,7 @@ import { performancePanelStatuses } from '~/api/PerformancePanel';
 import { ProfileStatus } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
 import { Broker, EventType } from '../../helpers/broker';
-import ConnectionIcon from '../../styles/icons/connection-icon-2.svg';
+import ConnectionIcon from '../../styles/icons/connection-icon.svg';
 import DropdownIcon from '../../styles/icons/dropdown-menu-icon.svg';
 
 import './styles.scss';
