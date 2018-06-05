@@ -33,10 +33,10 @@ import { NavPanes } from '#/common/Constants';
 import MenuItem from '#/common/MenuItem.jsx';
 import EditorIcon from '~/styles/icons/home-icon.svg';
 import ProfileIcon from '~/styles/icons/connection-icon.svg';
-import PerformanceIcon from '~/styles/icons/performance-icon-2.svg';
-import ProfilingIcon from '~/styles/icons/profiling-icon-2.svg';
-import TopCommandsIcon from '~/styles/icons/top-commands-icon.svg';
-import StorageIcon from '~/styles/icons/databases-icon.svg';
+import PerformanceIcon from '~/styles/icons/performance-icon.svg';
+import ProfilingIcon from '~/styles/icons/full-screen-profiling-icon.svg';
+import TopCommandsIcon from '~/styles/icons/full-screen-top-connections-icon.svg';
+import StorageIcon from '~/styles/icons/full-screen-storage-icon.svg';
 
 import './Panel.scss';
 

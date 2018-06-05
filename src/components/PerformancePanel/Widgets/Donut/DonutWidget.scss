@@ -28,6 +28,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding-right: 15px;
 
   .donut-main {
     width: 50%;
@@ -36,8 +37,10 @@
   .storageList {
     div {
     }
+
     .leftWrapper {
       display: flex;
+
       span {
         div {
         }

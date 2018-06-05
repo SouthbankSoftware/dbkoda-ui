@@ -25,6 +25,7 @@
  */
 
 @import '../../../../styles/_defaultTheme.scss';
+
 $container-padding: 5px;
 $background-colour: #202020;
 
@@ -36,6 +37,7 @@ $background-colour: #202020;
     }
   }
 }
+
 .Widget {
   height: 100%;
   width: 100%;
@@ -94,6 +96,7 @@ $background-colour: #202020;
     }
 
     div.rowText {
+      font-size: 14px;
       opacity: 0.5;
       position: absolute;
       left: calc(100% + 250px);
@@ -112,19 +115,14 @@ $background-colour: #202020;
         position: absolute;
         -webkit-transform: rotate(-90deg);
         color: #bfbec0;
-        font-size: 30px;
+        font-size: 16px;
         position: absolute;
-        left: -60px;
+        left: -50px;
+        top: 0%;
       }
-      div.Server {
-        top: 55%;
-      }
-      div.Cache {
-        top: 60%;
-      }
+
       div.Disk {
-        left: -48px;
-        top: 80%;
+        top: 50%;
       }
     }
 
@@ -134,11 +132,12 @@ $background-colour: #202020;
       position: absolute;
       margin: 0;
       width: calc(100% - 20px);
-      top: 3px;
+      top: 16px;
+      padding-left: 14px;
 
       b.title {
-        font-size: 16px;
-        color: #bfbec0;
+        font-size: 14px;
+        color: white;
         text-shadow: 0 -1px 0 $panelLeftBackground;
         white-space: nowrap;
         opacity: 1;
@@ -159,6 +158,7 @@ $background-colour: #202020;
         right: 16px;
         background-color: none;
       }
+
       span.toolTip {
         z-index: 100;
         opacity: 0.6;
@@ -186,6 +186,7 @@ $background-colour: #202020;
           fill: #202020;
         }
       }
+
       .detail-action {
         color: #bfbec0;
         align-self: center;
@@ -197,6 +198,7 @@ $background-colour: #202020;
         background-color: transparent !important;
         border: solid;
         border-width: thin;
+
         span {
           width: 50px;
           color: #bfbec0;
