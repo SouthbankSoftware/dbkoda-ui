@@ -348,7 +348,7 @@ export default class Details extends React.Component {
           </div>
         </nav>
         {!this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
-          .isAggregateDetailsLoading ? (
+          .isAggregateDetailsLoading && !this.props.store.editorToolbar.isActiveExecuting ? (
             <div className="aggregateDetailsContent">
               {activeBlock && <h2 className="aggregateBlockType">{activeBlock.type}</h2>}
               {activeBlock && (

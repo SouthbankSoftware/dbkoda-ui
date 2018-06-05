@@ -1495,7 +1495,6 @@ export default class GraphicalBuilder extends React.Component {
           runInAction('Agg Builder no longer loading', () => {
             this.editor.isAggregateDetailsLoading = false;
           });
-          s;
           NewToaster.show({
             message: globalString('aggregate_builder/import_passed'),
             className: 'success',
@@ -1585,7 +1584,10 @@ export default class GraphicalBuilder extends React.Component {
                 className="showLeftPanelButton circleButton"
                 intent={Intent.SUCCESS}
                 onClick={this.props.store.api.onShowLeftPanelClicked}
-                disabled={this.editor.isAggregateDetailsLoading}
+                disabled={
+                  this.editor.isAggregateDetailsLoading ||
+                  this.props.store.editorToolbar.isActiveExecuting
+                }
               >
                 <ShowIcon className="dbKodaSVG" width={20} height={20} />
               </AnchorButton>
@@ -1603,7 +1605,10 @@ export default class GraphicalBuilder extends React.Component {
               className="importButton circleButton"
               intent={Intent.SUCCESS}
               onClick={this.onImportButtonClickedFirst}
-              disabled={this.editor.isAggregateDetailsLoading}
+              disabled={
+                this.editor.isAggregateDetailsLoading ||
+                this.props.store.editorToolbar.isActiveExecuting
+              }
             >
               <ImportIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
@@ -1620,16 +1625,27 @@ export default class GraphicalBuilder extends React.Component {
               className="exportButton circleButton"
               intent={Intent.SUCCESS}
               onClick={this.onExportButtonClicked}
-              disabled={this.editor.isAggregateDetailsLoading}
+              disabled={
+                this.editor.isAggregateDetailsLoading ||
+                this.props.store.editorToolbar.isActiveExecuting
+              }
             >
               <ExportIcon className="dbKodaSVG export" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
-          <CreateViewButton disabled={this.editor.isAggregateDetailsLoading} />
+          <CreateViewButton
+            disabled={
+              this.editor.isAggregateDetailsLoading ||
+              this.props.store.editorToolbar.isActiveExecuting
+            }
+          />
           <GenerateChartButton
             connectionId={this.props.editor.currentProfile}
             editorId={this.props.editor.id}
-            disabled={this.editor.isAggregateDetailsLoading}
+            disabled={
+              this.editor.isAggregateDetailsLoading ||
+              this.props.store.editorToolbar.isActiveExecuting
+            }
           />
         </div>
         <Alert
@@ -1642,7 +1658,8 @@ export default class GraphicalBuilder extends React.Component {
         >
           <p>{globalString('aggregate_builder/alerts/importWarningText')}</p>
         </Alert>
-        {!this.editor.isAggregateDetailsLoading ? (
+        {!this.editor.isAggregateDetailsLoading &&
+        !this.props.store.editorToolbar.isActiveExecuting ? (
           <ul className="graphicalBuilderBlockList">
             <FirstBlockTarget />
             {this.props.store.editors.get(this.state.id).blockList.map((indexValue, index) => {

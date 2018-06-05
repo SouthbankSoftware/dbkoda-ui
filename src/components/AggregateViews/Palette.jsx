@@ -553,7 +553,7 @@ export default class Palette extends React.Component {
             <h2 className="paletteHeader">{globalString('aggregate_builder/palette_title')}</h2>
           </nav>
           {!this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
-            .isAggregateDetailsLoading ? (
+            .isAggregateDetailsLoading && !this.props.store.editorToolbar.isActiveExecuting ? (
               <Tree
                 contents={this.blockList}
                 onNodeClick={this.handleNodeClick}
