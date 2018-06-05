@@ -286,9 +286,9 @@ div.savingDialog {
       -webkit-appearance: unset;
 
       /* border-top-left-radius: 1em;
-                              border-bottom-left-radius: 1em;
-                              border-top-right-radius: 1em;
-                              border-bottom-right-radius: 1em; */
+                                    border-bottom-left-radius: 1em;
+                                    border-top-right-radius: 1em;
+                                    border-bottom-right-radius: 1em; */
     }
 
     a.dontSaveButton:hover {
@@ -439,7 +439,7 @@ div.savingDialog {
   position: absolute;
   z-index: 100;
   bottom: 0;
-  background-color: $navbarRightBackground;
+  background-color: #323232;
   color: $defaultFontColor;
 }
 

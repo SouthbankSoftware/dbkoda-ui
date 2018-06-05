@@ -165,8 +165,8 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
 
           svg.dbKodaSVG {
             position: absolute;
-            width: 15px;
-            height: 15px;
+            width: 16px;
+            height: 16px;
             top: 50%;
             bottom: 50%;
             transform: translate(-50%, -50%);
@@ -214,8 +214,9 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
 
             svg.dbKodaSVG {
               position: absolute;
-              width: 15px;
-              height: 15px;
+              width: 16px;
+              height: 16px;
+              transform: translate(-75%, -50%);
               fill: #bfbec0;
             }
           }

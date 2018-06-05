@@ -35,6 +35,7 @@
   input[type='number'],
   input[type='password'],
   input[type='text'] {
+    border-radius: 0.5em;
     background: unset;
     color: $connectionActiveTextFieldTextColour !important;
   }
@@ -192,11 +193,11 @@
                 stroke: $profileListFontColor;
                 stroke-width: 6px;
                 margin-right: 10px;
-                margin-top: 12px;
+                margin-top: 14px;
                 margin-bottom: 13px;
                 fill: $profileListFontColor;
-                width: 2.5em;
-                height: 2.5em;
+                width: 25px;
+                height: 25px;
               }
 
               svg.configServersIcon {

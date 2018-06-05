@@ -282,55 +282,6 @@ export default class Toolbar extends React.Component {
               <AddIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
-          <Tooltip
-            intent={Intent.PRIMARY}
-            hoverOpenDelay={1000}
-            content={globalString('profile/toolbar/editProfileTooltip')}
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
-            <AnchorButton
-              className="editProfileButton"
-              onClick={this.editProfile}
-              disabled={!selectedProfile}
-            >
-              <EditProfileIcon className="dbKodaSVG" width={20} height={20} />
-            </AnchorButton>
-          </Tooltip>
-          <Tooltip
-            intent={Intent.PRIMARY}
-            hoverOpenDelay={1000}
-            content={globalString('profile/toolbar/closeProfileTooltip')}
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
-            <AnchorButton
-              className=" dangerButton closeProfileButton"
-              loading={this.state.closingProfile}
-              disabled={!selectedProfile || selectedProfile.status === ProfileStatus.CLOSED}
-              onClick={this.showCloseConnectionAlert}
-            >
-              <CloseProfileIcon className="dbKodaSVG" width={20} height={20} />
-            </AnchorButton>
-          </Tooltip>
-          <Tooltip
-            intent={Intent.PRIMARY}
-            hoverOpenDelay={1000}
-            content={globalString('profile/toolbar/removeProfileTooltip')}
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
-            <AnchorButton
-              className="dangerButton removeProfileButton"
-              onClick={this.showRemoveConnectionAlert}
-              disabled={
-                !this.props.store.profileList.selectedProfile ||
-                this.props.store.profileList.selectedProfile.status === ProfileStatus.OPEN
-              }
-            >
-              <RemoveProfileIcon className="dbKodaSVG" width={20} height={20} />
-            </AnchorButton>
-          </Tooltip>
         </div>
       </nav>
     );

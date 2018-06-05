@@ -723,7 +723,10 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              disabled={this.props.store.profileList.selectedProfile.status === 'CLOSED'}
+              disabled={
+                this.props.store.profileList.selectedProfile &&
+                this.props.store.profileList.selectedProfile.status === 'CLOSED'
+              }
               className="pt-button pt-intent-primary simpleQuery"
               onClick={() => {
                 this.setState({ isSimpleQueryDialogueOpen: true });
@@ -741,7 +744,10 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              disabled={this.props.store.profileList.selectedProfile.status === 'CLOSED'}
+              disabled={
+                this.props.store.profileList.selectedProfile &&
+                this.props.store.profileList.selectedProfile.status === 'CLOSED'
+              }
               className="pt-button pt-intent-primary aggregateBuilder"
               onClick={() => {
                 this.setState({ isAggregateQueryDialogueOpen: true });
@@ -763,7 +769,10 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              disabled={this.props.store.profileList.selectedProfile.status === 'CLOSED'}
+              disabled={
+                this.props.store.profileList.selectedProfile &&
+                this.props.store.profileList.selectedProfile.status === 'CLOSED'
+              }
               className={`pt-button pt-intent-primary ${
                 !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
               }`}
@@ -789,7 +798,10 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              disabled={this.props.store.profileList.selectedProfile.status === 'CLOSED'}
+              disabled={
+                this.props.store.profileList.selectedProfile &&
+                this.props.store.profileList.selectedProfile.status === 'CLOSED'
+              }
               className="pt-button pt-intent-primary storageDrilldownView"
               onClick={() => {
                 l.debug(this.props.store.profileList.selectedProfile);

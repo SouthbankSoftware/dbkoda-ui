@@ -26,6 +26,7 @@
 @import '../../styles/_defaultTheme.scss';
 
 .sideNav {
+  padding-top: 12px;
   height: 100%;
   width: 60px;
   background-color: $sideNavBackground;
@@ -34,7 +35,7 @@
     width: 40px;
     height: 40px;
     margin-left: 10px;
-    margin-top: 10px;
+    margin-top: 14px;
 
     .pt-popover-target,
     .pt-popover-wrapper {
