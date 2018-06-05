@@ -31,6 +31,7 @@ import { observer } from 'mobx-react';
 
 import { Intent, Position, Tooltip } from '@blueprintjs/core';
 import { EditableText } from '@blueprintjs/core';
+import EditIcon from '~/styles/icons/edit-icon.svg';
 
 export default observer(({ field, showLabel = true, formGroup = false }) => {
   let fldClassName = formGroup ? 'pt-form-group form-group-inline' : 'pt-form-group pt-top-level';
@@ -71,6 +72,7 @@ export default observer(({ field, showLabel = true, formGroup = false }) => {
               position={Position.TOP}
             >
               <EditableText className={inputClassName} {...field.bind()} />
+              <EditIcon className=" editIcon dbKodaSVG" height={50} width={50} />
             </Tooltip>
           )}
         {(!field.options || !field.options.tooltip) && (

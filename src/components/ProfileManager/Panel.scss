@@ -42,6 +42,7 @@
       position: relative;
       top: 38%;
       transform: translateY(-50%);
+
       // Button Menu styling
       .menu-btns.pt-button-group {
         margin: 30px;
@@ -52,7 +53,7 @@
         }
 
         .pt-button {
-          border-radius: 7px !important;
+          border-radius: 2em !important;
           margin: 10px 5px 10px 5px !important;
           color: #eee;
           background-image: unset;
@@ -89,6 +90,7 @@
           border-color: #a3c084;
         }
       }
+
       @media (max-width: 1140px) {
         .menu-btns.pt-button-group {
           margin: 20px;
@@ -110,6 +112,7 @@
       border-radius: 0;
       height: 300px;
     }
+
     @media (max-height: 730px) {
       div.pt-card {
         height: 250px;
@@ -124,10 +127,9 @@
       .pt-button {
         width: 50px !important;
         height: 50px !important;
-        margin: 7px;
         border-style: none;
         border-radius: 0;
-        background-color: darken($connectionButtonBackgroundColour, 2);
+        background-color: rgba(0, 0, 0, 0);
 
         &:before {
           font-size: 30px;
@@ -230,10 +232,12 @@
       height: 80px;
     }
   }
+
   // Dynamic Form styling
   .formFields {
     margin: 90px 30px 30px;
   }
+
   @media (max-width: 1140px) {
     .formFields {
       margin: 90px 20px 30px;
@@ -338,22 +342,27 @@
       border-radius: 0;
       border-style: none;
       box-shadow: none;
+
       // background-color: $fieldBrightBackgroundColor !important;
       // color: $fieldBrightFontColor !important;
     }
 
     .pt-editable-text {
       width: 100%;
+
       .pt-editable-input {
         width: 100%;
       }
+
       .pt-editable-content {
         width: 100%;
       }
     }
+
     .pt-editable-text::before {
       background: #363951;
     }
+
     .pt-editable-text.pt-editable-editing::before {
       background: #fff !important;
     }
@@ -421,24 +430,30 @@
       .pt-control-indicator {
         background: rgba(167, 182, 194, 0.5);
       }
+
       .pt-control-indicator::before {
         background: #ffffff;
       }
+
       input:disabled ~ .pt-control-indicator::before {
         box-shadow: none;
         background-color: rgba(255, 255, 255, 0.8);
       }
+
       input:not(:disabled):active ~ .pt-control-indicator {
         box-shadow: none;
         background-color: rgba(92, 112, 128, 0.5);
       }
+
       input:checked ~ .pt-control-indicator {
         background: rgba(167, 182, 194, 0.5);
       }
+
       input:disabled:checked ~ .pt-control-indicator {
         background-color: rgba(167, 182, 194, 0.2);
       }
     }
+
     .pt-control.pt-switch:hover {
       input:not(:disabled) ~ .pt-control-indicator {
         background-color: rgba(115, 134, 148, 0.5);
@@ -602,6 +617,7 @@
 
   .pt-select {
     background-color: unset !important;
+
     select {
       height: 30px;
       width: 100%;
@@ -610,10 +626,12 @@
       background-color: $searchPrimaryBackground !important;
       color: $connectionActiveTextFieldTextColour !important;
     }
+
     select:disabled {
       background-color: $searchPrimaryBackground !important;
     }
   }
+
   .pt-select::after {
     color: #5c7080 !important;
   }
@@ -699,6 +717,7 @@
   .pt-form-content-reverse {
     display: flex;
     width: 100%;
+
     /*flex-direction: row-reverse;*/
   }
 
@@ -768,7 +787,7 @@
       border: 1px solid $connectionButtonBorderColour;
       box-shadow: unset;
       margin: 0 10px;
-      border-radius: 7px;
+      border-radius: 2em;
       font-size: small;
     }
 
@@ -777,17 +796,17 @@
       color: $connectionButtonFontColourHover;
     }
 
-    button.reset-button {
+    button.cancel-button {
       width: 7em !important;
       border-radius: 0;
       background-image: unset;
       background-color: $connectionButtonBackgroundColourReset;
       border: unset;
       box-shadow: unset;
-      border-radius: 7px;
+      border-radius: 2em;
     }
 
-    button.reset-button:hover {
+    button.cancel-button:hover {
       background-color: $connectionButtonBackgroundColourResetHover;
       color: $connectionButtonFontColourHover;
     }
@@ -801,7 +820,7 @@
       background-color: $connectionButtonBackgroundColourConnect;
       border: unset;
       box-shadow: unset;
-      border-radius: 7px;
+      border-radius: 2em;
     }
 
     button.connectButton:hover {

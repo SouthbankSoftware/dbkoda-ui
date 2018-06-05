@@ -42,7 +42,6 @@ import BooleanField from '#/common/FormFields/BooleanField';
 import SwitchField from '#/common/FormFields/SwitchField';
 import FileField from '#/common/FormFields/FileField';
 import SelectField from '#/common/FormFields/SelectField';
-
 import TipsField from './TipsField';
 import { ConnectionForm, SubformCategory } from './ConnectionForm';
 import './Panel.scss';
@@ -273,23 +272,6 @@ export default class ProfileManager extends React.Component<Props, State> {
               <form className="formButtons">
                 <div className="profile-button-panel">
                   <Button
-                    className="cancel-button pt-button pt-intent-primary"
-                    text={globalString('connection/form/closeButton')}
-                    onClick={this.closeDialog}
-                  />
-                  <Button
-                    className={
-                      (this.form.isFormInvalid ? 'inactive' : 'active') +
-                      ' connectButton pt-button pt-intent-success'
-                    }
-                    onClick={this.submitDialog}
-                    text={globalString('connection/form/connectButton')}
-                    disabled={this.form.isFormInvalid}
-                    loading={this.state.isConnecting}
-                  />
-                </div>
-                <div className="profile-button-panel">
-                  <Button
                     className="save-button pt-button pt-intent-primary"
                     text={globalString('connection/form/saveButton')}
                     onClick={() => this.form.onSave()}
@@ -305,12 +287,29 @@ export default class ProfileManager extends React.Component<Props, State> {
                     loading={this.state.testing}
                   />
                   <Button
-                    className="reset-button pt-button pt-intent-warning"
+                    className="reset-button pt-button"
                     onClick={() => {
                       this.form.onReset();
                       this.forceUpdate();
                     }}
                     text={globalString('connection/form/resetButton')}
+                  />
+                </div>
+                <div className="profile-button-panel">
+                  <Button
+                    className="cancel-button pt-button  pt-intent-warning"
+                    text={globalString('connection/form/closeButton')}
+                    onClick={this.closeDialog}
+                  />
+                  <Button
+                    className={
+                      (this.form.isFormInvalid ? 'inactive' : 'active') +
+                      ' connectButton pt-button pt-intent-success'
+                    }
+                    onClick={this.submitDialog}
+                    text={globalString('connection/form/connectButton')}
+                    disabled={this.form.isFormInvalid}
+                    loading={this.state.isConnecting}
                   />
                 </div>
               </form>
