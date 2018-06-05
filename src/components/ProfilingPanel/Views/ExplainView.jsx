@@ -3,7 +3,7 @@
  * @Date:   2018-04-12T16:16:27+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-06-01T13:57:01+10:00
+ * @Last modified time: 2018-06-05T10:26:47+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -91,22 +91,9 @@ export default class OperationDetails extends React.Component {
   getIndexAdvisorForSelectedOp() {
     const { api, operation } = this.props;
     const getSuggestionText = operation => {
-      api
-        .getIndexAdvisorForSelectedOp(operation)
-        .then(suggestionText => {
-          this.setState({ suggestionText });
-        })
-        .catch(error => {
-          api.showToaster({
-            message: error.message,
-            className: 'danger',
-            iconName: 'pt-icon-thumbs-down'
-          });
-        });
+      this.setState({ suggestionText: operation.suggestionText });
     };
-    if (operation.explainPlan) {
-      getSuggestionText(operation);
-    } else {
+    if (!operation.explainPlan) {
       api
         .getExplainForOperation(operation)
         .then(resOperation => {
@@ -138,22 +125,23 @@ export default class OperationDetails extends React.Component {
             </div>
           </div>
           <div className="pt-navbar-group pt-align-right">
-            {this.props.operation && (
-              <Tooltip
-                className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
-                content="Index Advisor"
-                hoverOpenDelay={1000}
-                inline
-                intent={Intent.PRIMARY}
-                position={Position.BOTTOM}
-              >
-                <Button
-                  className="reset-button pt-button pt-intent-primary"
-                  text="Index Advisor"
-                  onClick={this.getIndexAdvisorForSelectedOp}
-                />
-              </Tooltip>
-            )}
+            {this.props.operation &&
+              !this.props.operation.suggestionText && (
+                <Tooltip
+                  className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
+                  content="Index Advisor"
+                  hoverOpenDelay={1000}
+                  inline
+                  intent={Intent.PRIMARY}
+                  position={Position.BOTTOM}
+                >
+                  <Button
+                    className="reset-button pt-button pt-intent-primary"
+                    text="Index Advisor"
+                    onClick={this.getIndexAdvisorForSelectedOp}
+                  />
+                </Tooltip>
+              )}
             {this.state.suggestionText &&
               this.state.suggestionText.indexOf('Looks good') < 0 && (
                 <Tooltip

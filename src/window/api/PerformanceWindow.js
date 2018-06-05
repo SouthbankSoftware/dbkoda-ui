@@ -3,7 +3,7 @@
  * @Date:   2018-05-15T16:12:25+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-30T08:38:52+10:00
+ * @Last modified time: 2018-06-05T10:34:36+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -223,12 +223,11 @@ export default class PerformanceWindowApi {
 
         if (
           (selectedOperation.op === 'command' || selectedOperation.op === 'query') &&
-          operationCommand &&
-          operationCommand.$db
+          operationCommand
         ) {
           const cmdForExplain = operationCommand;
-          const databaseObj = _.pick(cmdForExplain, '$db');
-          database = databaseObj.$db;
+          const nsParams = selectedOperation.ns.split('.');
+          [database] = nsParams;
           let commandParams = _.omit(cmdForExplain, '$db');
           const command = _.pickBy(commandParams, filterCommand);
           if (Object.keys(command).length > 0) {
@@ -261,97 +260,75 @@ export default class PerformanceWindowApi {
 
         if (explainCmd.length > 0 && database.length > 0) {
           l.info('ExplainCommand: ', explainCmd);
-          const driverService = featherClient().service('drivercommands');
-          driverService.timeout = 30000;
-          return driverService
-            .patch(this.profileId, {
-              database,
-              command: {
-                explain: JSON.parse(explainCmd),
-                verbosity: 'queryPlanner'
-              }
+          const service = featherClient().service('/mongo-sync-execution');
+          service.timeout = 30000;
+          const strCommands =
+            'var expRes = db.getSiblingDB("' +
+            database +
+            '").runCommand({explain: ' +
+            explainCmd +
+            ', verbosity: "queryPlanner"});\nvar idxRes = dbkInx.suggestIndexesAndRedundants(expRes);\nprintjson({"explain":expRes, "idx":idxRes})';
+          service
+            .update(this.profileId, {
+              shellId: this.shellId,
+              commands: strCommands
             })
-            .then(res => {
-              l.info(res);
-              if (res && res.queryPlanner && res.queryPlanner.winningPlan) {
-                if (selectedOperation.explainPlan) {
-                  selectedOperation.explainPlan = res;
-                } else {
-                  extendObservable(selectedOperation, {
-                    explainPlan: res
-                  });
+            .then(
+              action(res => {
+                l.log(res);
+                try {
+                  const jsonRes = JSON.parse(res);
+                  if (jsonRes) {
+                    if (
+                      jsonRes.explain &&
+                      jsonRes.explain.queryPlanner &&
+                      jsonRes.explain.queryPlanner.winningPlan
+                    ) {
+                      if (selectedOperation.explainPlan) {
+                        selectedOperation.explainPlan = jsonRes.explain;
+                      } else {
+                        extendObservable(selectedOperation, {
+                          explainPlan: jsonRes.explain
+                        });
+                      }
+                    }
+                    if (jsonRes.idx) {
+                      l.info('Index Advisor Result: ', jsonRes.idx);
+                      const lineSep = this.getLineSeperator();
+                      const suggestionText = getIdxSuggestionCode(
+                        jsonRes.idx,
+                        selectedOperation.explainPlan,
+                        lineSep
+                      );
+                      l.info('suggestionText:: ', suggestionText);
+                      if (selectedOperation.suggestionText) {
+                        selectedOperation.suggestionText = suggestionText;
+                      } else {
+                        extendObservable(selectedOperation, {
+                          suggestionText
+                        });
+                      }
+                    }
+                  }
+                  resolve(selectedOperation);
+                } catch (err) {
+                  l.error(res);
+                  l.info(err);
+                  reject(new Error('Unable to get the explain plan for selected operation.'));
                 }
-              }
-              resolve(selectedOperation);
-            })
+              })
+            )
             .catch(err => {
-              l.info(err);
+              l.error(err);
               reject(
                 new Error(
-                  'dbkoda: Timeout exceeded while trying to execute explain for selected command.'
+                  'dbkoda: Timeout exceeded while trying to execute explain plan for selected operation.'
                 )
               );
             });
         }
       } else {
         reject(new Error('dbkoda: Operation doesnot have required information for explain.'));
-      }
-    });
-  };
-
-  @action.bound
-  getIndexAdvisorForSelectedOp = selectedOperation => {
-    return new Promise((resolve, reject) => {
-      if (selectedOperation && selectedOperation.explainPlan) {
-        const queryPlaner = _.pick(selectedOperation.explainPlan, ['queryPlanner']);
-        const service = featherClient().service('/mongo-sync-execution');
-        const explainOutput = "JSON.parse('" + JSON.stringify(queryPlaner) + "')";
-        l.info('Explain Output for Idx Advisor: ', explainOutput);
-        service.timeout = 30000;
-        service
-          .update(this.profileId, {
-            shellId: this.shellId,
-            commands: 'dbkInx.suggestIndexesAndRedundants(' + explainOutput + ');'
-          })
-          .then(
-            action(res => {
-              let suggestionResult = null;
-              try {
-                suggestionResult = JSON.parse(res);
-              } catch (err) {
-                l.error(res);
-                l.info(err);
-                reject(new Error('Unable to get the index suggestion for selected Explain.'));
-              }
-              l.info('Index Advisor Result: ', suggestionResult);
-
-              const lineSep = this.getLineSeperator();
-              const suggestionText = getIdxSuggestionCode(
-                suggestionResult,
-                selectedOperation.explainPlan,
-                lineSep
-              );
-              l.info('suggestionText:: ', suggestionText);
-              if (selectedOperation.suggestionText) {
-                selectedOperation.suggestionText = suggestionText;
-              } else {
-                extendObservable(selectedOperation, {
-                  suggestionText
-                });
-              }
-              resolve(suggestionText);
-            })
-          )
-          .catch(err => {
-            l.error(err);
-            reject(
-              new Error(
-                'dbkoda: Timeout exceeded while trying to execute Index Advisor for selected explain.'
-              )
-            );
-          });
-      } else {
-        reject(new Error('dbkoda: Operation doesnot have required information for Index Advisor.'));
       }
     });
   };
