@@ -44,6 +44,10 @@ export default class QuickTreeActionDialogue extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({ isOpen: nextProps.isOpen });
     if (nextProps.profile && nextProps.profile.status === ProfileStatus.OPEN) {
+      this.state.databaseList = [];
+      this.state.collectionList = [];
+      this.state.selectedDatabase = null;
+      this.state.selectedCollection = null;
       this.state.profileId = nextProps.profile.id;
       const service = featherClient().service('profile');
       service.timeout = 30000;
@@ -80,12 +84,6 @@ export default class QuickTreeActionDialogue extends React.Component {
         commands: `db.getSiblingDB("${database.name}").getCollectionNames();`
       })
       .then(res => {
-        // When a string was returned.
-        // let collectionArray = res.slice(1, -1);
-        // collectionArray = collectionArray.split(',');
-        // this.state.collectionList = [];
-        // const arrayLength = collectionArray.length;
-
         res = JSON.parse(res);
         this.state.collectionList = [];
         for (let i = 0; i < res.length; i += 1) {
@@ -193,7 +191,9 @@ export default class QuickTreeActionDialogue extends React.Component {
             className="closeButton"
             intent={Intent.DANGER}
             text={globalString('general/close')}
-            onClick={this.props.closeCallBack}
+            onClick={() => {
+              this.props.closeCallBack();
+            }}
           />
         </div>
       </Dialog>
