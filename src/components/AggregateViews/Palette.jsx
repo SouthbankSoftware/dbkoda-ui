@@ -552,14 +552,16 @@ export default class Palette extends React.Component {
           <nav className="aggregatePaletteToolbar pt-navbar pt-dark">
             <h2 className="paletteHeader">{globalString('aggregate_builder/palette_title')}</h2>
           </nav>
-          {!this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
-            .isAggregateDetailsLoading && !this.props.store.editorToolbar.isActiveExecuting ? (
-              <Tree
-                contents={this.blockList}
-                onNodeClick={this.handleNodeClick}
-                onNodeCollapse={this.handleNodeCollapse}
-                onNodeExpand={this.handleNodeExpand}
-                className="palletteTree"
+          {this.props.store.editors.get(this.props.store.editorPanel.activeEditorId) &&
+          !this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
+            .isAggregateDetailsLoading &&
+          !this.props.store.editorToolbar.isActiveExecuting ? (
+            <Tree
+              contents={this.blockList}
+              onNodeClick={this.handleNodeClick}
+              onNodeCollapse={this.handleNodeCollapse}
+              onNodeExpand={this.handleNodeExpand}
+              className="palletteTree"
             />
           ) : (
             <div className="loaderWrapper">

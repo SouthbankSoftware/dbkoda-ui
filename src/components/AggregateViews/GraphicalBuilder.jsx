@@ -157,71 +157,76 @@ export default class GraphicalBuilder extends React.Component {
     return new Promise((resolve, reject) => {
       const editor = this.props.store.editors.get(this.props.id);
 
-      this.updateShellPipeline().then(() => {
-        this.updateResultSet()
-          .then(res => {
-            if (this.state.debug) l.debug('update result set result line 166:', res);
-            while (res.match(/\"\$regex\" : \/(.+?)\//)) {
-              l.debug('Fixing regex before parsing.');
-              res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
-            }
-            res = JSON.parse(res);
-            if (res.stepAttributes.constructor === Array) {
-              // 3. Update Valid for each block.
-              res.stepAttributes.map((indexValue, index) => {
-                let attributeIndex = index;
-                if (index > 0) {
-                  attributeIndex = index - 1;
-                }
-                if (indexValue.constructor === Array) {
-                  // Check for error result.
-                  if (res.stepCodes[index] === 0) {
-                    if (!(typeof indexValue === 'string')) {
-                      indexValue = '[ "' + indexValue.join('", "') + '"]';
-                    }
-                    runInAction('Update Graphical Builder', () => {
-                      l.debug('OLD: ', editor.blockList[index].attributeList);
-                      l.debug('NEW: ', res.stepAttributes[attributeIndex]);
-                      editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
-                      editor.blockList[index].status = 'valid';
-                    });
-                  } else {
-                    if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
-                    if (!(typeof indexValue === 'string')) {
-                      indexValue = '[ "' + indexValue.join('", "') + '"]';
-                    }
-                    runInAction('Update Graphical Builder', () => {
-                      editor.blockList[index].status = 'pending';
-                    });
+      this.updateShellPipeline()
+        .then(() => {
+          this.updateResultSet()
+            .then(res => {
+              if (this.state.debug) l.debug('update result set result line 166:', res);
+              while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+                l.debug('Fixing regex before parsing.');
+                res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
+              }
+              res = JSON.parse(res);
+              if (res.stepAttributes.constructor === Array) {
+                // 3. Update Valid for each block.
+                res.stepAttributes.map((indexValue, index) => {
+                  let attributeIndex = index;
+                  if (index > 0) {
+                    attributeIndex = index - 1;
                   }
-                }
-              });
+                  if (indexValue.constructor === Array) {
+                    // Check for error result.
+                    if (res.stepCodes[index] === 0) {
+                      if (!(typeof indexValue === 'string')) {
+                        indexValue = '[ "' + indexValue.join('", "') + '"]';
+                      }
+                      runInAction('Update Graphical Builder', () => {
+                        l.debug('OLD: ', editor.blockList[index].attributeList);
+                        l.debug('NEW: ', res.stepAttributes[attributeIndex]);
+                        editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
+                        editor.blockList[index].status = 'valid';
+                      });
+                    } else {
+                      if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
+                      if (!(typeof indexValue === 'string')) {
+                        indexValue = '[ "' + indexValue.join('", "') + '"]';
+                      }
+                      runInAction('Update Graphical Builder', () => {
+                        editor.blockList[index].status = 'pending';
+                      });
+                    }
+                  }
+                });
 
-              // 4.b Is the current latest step valid?
-              if (editor.blockList[editor.blockList.length - 1].status === 'valid') {
-                this.getBlockAttributes(position - 1).then(res => {
-                  // 3.a Add to Editor
-                  this.addBlockToEditor(block.type, position, res, true, block).then(() => {
+                // 4.b Is the current latest step valid?
+                if (editor.blockList[editor.blockList.length - 1].status === 'valid') {
+                  this.getBlockAttributes(position - 1).then(res => {
+                    // 3.a Add to Editor
+                    this.addBlockToEditor(block.type, position, res, true, block).then(() => {
+                      resolve();
+                    });
+                  });
+                } else {
+                  this.addBlockToEditor(block.type, position, null, true, block).then(() => {
                     resolve();
                   });
-                });
+                }
+                this.clearResultsOutput(editor);
               } else {
-                this.addBlockToEditor(block.type, position, null, true, block).then(() => {
-                  resolve();
-                });
+                // Check for error.
+                l.error('updateResultSet: ', res);
+                reject();
               }
-              this.clearResultsOutput(editor);
-            } else {
-              // Check for error.
-              l.error('updateResultSet: ', res);
+            })
+            .catch(e => {
+              l.error(e);
               reject();
-            }
-          })
-          .catch(e => {
-            l.error(e);
-            reject();
-          });
-      });
+            });
+        })
+        .catch(err => {
+          l.error(err);
+          reject(err);
+        });
     });
   }
 
@@ -345,7 +350,7 @@ export default class GraphicalBuilder extends React.Component {
     runInAction('Agg Builder details is loading', () => {
       this.editor.isAggregateDetailsLoading = true;
     });
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       // 1. Update Editor List.
       const editor = this.props.store.editors.get(this.props.id);
       this.setOutputLoading(editor.id);
@@ -354,101 +359,112 @@ export default class GraphicalBuilder extends React.Component {
       this.props.store.editors.get(this.props.id).blockList[index].isSelected = true;
 
       // 2. Update Shell Steps.
-      this.updateShellPipeline(true).then(res => {
-        if (res && res.unableToUpdateSteps) {
-          // Partial update
-          l.error('[SELECT] - Unable to fully update steps: ', res);
-          // 4. Is the current block valid?.
-          if (editor.blockList[editor.selectedBlock].status === 'valid') {
-            // 4.a Yes - Update Results.
-            this.updateResultsOutput(editor, editor.selectedBlock);
-          } else {
-            // 4.b No - Clear Results.
-            this.clearResultsOutput(editor);
-          }
+      this.updateShellPipeline(true)
+        .then(res => {
+          if (res && res.unableToUpdateSteps) {
+            // Partial update
+            l.error('[SELECT] - Unable to fully update steps: ', res);
+            // 4. Is the current block valid?.
+            if (editor.blockList[editor.selectedBlock].status === 'valid') {
+              // 4.a Yes - Update Results.
+              this.updateResultsOutput(editor, editor.selectedBlock);
+            } else {
+              // 4.b No - Clear Results.
+              this.clearResultsOutput(editor);
+            }
 
-          runInAction('Update Details', () => {
-            this.props.store.editorPanel.updateAggregateDetails = true;
-          });
-        } else {
-          // All steps validated, full update.
-          this.updateResultSet().then(res => {
-            if (this.state.debug) {
-              l.debug(
-                'update result set result line 383:',
-                res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
-              );
-            }
-            try {
-              // Regex work around.
-              while (res.match(/\"\$regex\" : \/(.+?)\//)) {
-                l.debug('Fixing regex before parsing.');
-                res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
+            runInAction('Update Details', () => {
+              this.props.store.editorPanel.updateAggregateDetails = true;
+            });
+          } else {
+            // All steps validated, full update.
+            this.updateResultSet().then(res => {
+              if (this.state.debug) {
+                l.debug(
+                  'update result set result line 383:',
+                  res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
+                );
               }
-              res = JSON.parse(res);
-            } catch (e) {
-              l.error(typeof e);
-              if (res.match(/agg is undefined/)) {
-                l.error('Agg is undefined, probably lost shell.');
-                this.setState({ failed: true });
-                this.setState({ failureReason: 'ConnectionDoesNotExist' });
-                return;
-              }
-              // If first error - Try again!
-              if (this.state.firstTry) {
-                this.setState({ firstTry: false });
-                this.selectBlock(index);
-                resolve();
-              } else {
-                this.setState({ failed: true });
-                this.setState({ failureReason: e });
-                return;
-              }
-            }
-            if (res && res.stepAttributes && res.stepAttributes.constructor === Array) {
-              // 3. Update Valid for each block.
-              res.stepAttributes.map((indexValue, index) => {
-                let attributeIndex = index;
-                if (index > 0) {
-                  attributeIndex = index - 1;
+              try {
+                // Regex work around.
+                while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+                  l.debug('Fixing regex before parsing.');
+                  res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
                 }
-                if (indexValue.constructor === Array) {
-                  // Check for error result.
-                  if (res.stepCodes[index] === 0) {
-                    if (!(typeof indexValue === 'string')) {
-                      indexValue = '[ "' + indexValue.join('", "') + '"]';
-                    }
-                    runInAction('Update Graphical Builder', () => {
-                      editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
-                      editor.blockList[index].status = 'valid';
-                    });
-                  } else {
-                    if (!(typeof indexValue === 'string')) {
-                      if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
-                      indexValue = '[ "' + indexValue.join('", "') + '"]';
-                    }
-                    runInAction('Update Graphical Builder', () => {
-                      editor.blockList[index].status = 'pending';
-                    });
+                res = JSON.parse(res);
+              } catch (e) {
+                l.error(typeof e);
+                if (res.match(/agg is undefined/)) {
+                  l.error('Agg is undefined, probably lost shell.');
+                  this.setState({ failed: true });
+                  this.setState({ failureReason: 'ConnectionDoesNotExist' });
+                  return;
+                }
+                // If first error - Try again!
+                if (this.state.firstTry) {
+                  this.setState({ firstTry: false });
+                  this.selectBlock(index);
+                  resolve();
+                } else {
+                  this.setState({ failed: true });
+                  this.setState({ failureReason: e });
+                  return;
+                }
+              }
+              if (res && res.stepAttributes && res.stepAttributes.constructor === Array) {
+                // 3. Update Valid for each block.
+                res.stepAttributes.map((indexValue, index) => {
+                  let attributeIndex = index;
+                  if (index > 0) {
+                    attributeIndex = index - 1;
                   }
+                  if (indexValue.constructor === Array) {
+                    // Check for error result.
+                    if (res.stepCodes[index] === 0) {
+                      if (!(typeof indexValue === 'string')) {
+                        indexValue = '[ "' + indexValue.join('", "') + '"]';
+                      }
+                      runInAction('Update Graphical Builder', () => {
+                        editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
+                        editor.blockList[index].status = 'valid';
+                      });
+                    } else {
+                      if (!(typeof indexValue === 'string')) {
+                        if (this.state.debug) { l.error('Result[', index, '] is invalid: ', indexValue); }
+                        indexValue = '[ "' + indexValue.join('", "') + '"]';
+                      }
+                      runInAction('Update Graphical Builder', () => {
+                        editor.blockList[index].status = 'pending';
+                      });
+                    }
+                  }
+                });
+                runInAction('Update Graphical Builder Details', () => {
+                  this.props.store.editorPanel.updateAggregateDetails = true;
+                  resolve();
+                });
+                // 4. Is the current block valid?.
+                if (editor.blockList[editor.selectedBlock].status === 'valid') {
+                  // 4.a Yes - Update Results.
+                  this.updateResultsOutput(editor, editor.selectedBlock);
+                } else {
+                  // 4.b No - Clear Results.
+                  this.clearResultsOutput(editor);
                 }
-              });
-              runInAction('Update Graphical Builder Details', () => {
-                this.props.store.editorPanel.updateAggregateDetails = true;
-                resolve();
-              });
-              // 4. Is the current block valid?.
-              if (editor.blockList[editor.selectedBlock].status === 'valid') {
-                // 4.a Yes - Update Results.
-                this.updateResultsOutput(editor, editor.selectedBlock);
-              } else {
-                // 4.b No - Clear Results.
-                this.clearResultsOutput(editor);
               }
-            }
-          });
-        }
-      });
+            });
+          }
+        })
+        .catch(error => {
+          l.error(error.message);
+          this.setState({ failed: true });
+          if (error.message.match(/doesn't exist/)) {
+            this.setState({ failureReason: 'ConnectionDoesNotExist' });
+          } else {
+            this.setState({ failureReason: error });
+          }
+          reject(error);
+        });
     });
   }
 
@@ -482,7 +498,7 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   moveBlock(blockFrom, blockTo) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       // 1. Update Editor (moveBlock)
       const editor = this.props.store.editors.get(this.props.id);
       if (blockTo === 0) {
@@ -492,97 +508,102 @@ export default class GraphicalBuilder extends React.Component {
       }
       this.moveBlockInEditor(blockFrom, blockTo);
       // 2. Update Shell Steps
-      this.updateShellPipeline(true).then(res => {
-        if (res && res.unableToUpdateSteps) {
-          // 4. Is the current block valid?.
-          if (editor.blockList[editor.selectedBlock].status === 'valid') {
-            // 4.a Yes - Update Results.
-            this.updateResultsOutput(editor, editor.selectedBlock);
+      this.updateShellPipeline(true)
+        .then(res => {
+          if (res && res.unableToUpdateSteps) {
+            // 4. Is the current block valid?.
+            if (editor.blockList[editor.selectedBlock].status === 'valid') {
+              // 4.a Yes - Update Results.
+              this.updateResultsOutput(editor, editor.selectedBlock);
+            } else {
+              // 4.b No - Clear Results.
+              this.clearResultsOutput(editor);
+            }
+
+            runInAction('Update Graphical Builder', () => {
+              this.props.store.editorPanel.updateAggregateDetails = true;
+              this.forceUpdate();
+            });
           } else {
-            // 4.b No - Clear Results.
-            this.clearResultsOutput(editor);
-          }
-
-          runInAction('Update Graphical Builder', () => {
-            this.props.store.editorPanel.updateAggregateDetails = true;
-            this.forceUpdate();
-          });
-        } else {
-          this.updateResultSet().then(res => {
-            if (this.state.debug) l.debug('update result set result line 493:', res);
-            try {
-              while (res.match(/\"\$regex\" : \/(.+?)\//)) {
-                l.debug('Fixing regex before parsing.');
-                res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
-              }
-              res = JSON.parse(res);
-            } catch (e) {
-              l.error(e);
-              // If first error - Try again!
-              if (this.state.firstTry) {
-                this.setState({ firstTry: false });
-                this.moveBlock(blockFrom, blockTo);
-                resolve();
-              } else {
-                this.setState({ failed: true });
-                this.setState({ failureReason: e });
-                return;
-              }
-            }
-            if (res.stepAttributes.constructor === Array) {
-              // 3. Update Valid for each block.
-              res.stepAttributes.map((indexValue, index) => {
-                let attributeIndex = index;
-                if (index > 0) {
-                  attributeIndex = index - 1;
+            this.updateResultSet().then(res => {
+              if (this.state.debug) l.debug('update result set result line 493:', res);
+              try {
+                while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+                  l.debug('Fixing regex before parsing.');
+                  res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
                 }
-                if (index === res.stepAttributes.length - 1) {
-                  // Not empty now.
-                } else if (indexValue.constructor === Array) {
-                  // Check for error result.
-                  if (res.stepCodes[index] === 0) {
-                    if (!(typeof indexValue === 'string')) {
-                      indexValue = '[ "' + indexValue.join('", "') + '"]';
-                    }
-                    runInAction('Update Block Status - Valid', () => {
-                      l.debug('OLD: ', editor.blockList[index].attributeList);
-                      l.debug('NEW: ', res.stepAttributes[attributeIndex]);
-                      editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
-                      editor.blockList[index].status = 'valid';
-                    });
-                  } else {
-                    if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
-                    if (!(typeof indexValue === 'string')) {
-                      indexValue = '[ "' + indexValue.join('", "') + '"]';
-                    }
-                    runInAction('Update Block Status - Invalid', () => {
-                      l.debug('OLD: ', editor.blockList[index].attributeList);
-                      l.debug('NEW: ', res.stepAttributes[attributeIndex]);
-                      editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
-                      editor.blockList[index].status = 'pending';
-                    });
+                res = JSON.parse(res);
+              } catch (e) {
+                l.error(e);
+                // If first error - Try again!
+                if (this.state.firstTry) {
+                  this.setState({ firstTry: false });
+                  this.moveBlock(blockFrom, blockTo);
+                  resolve();
+                } else {
+                  this.setState({ failed: true });
+                  this.setState({ failureReason: e });
+                  return;
+                }
+              }
+              if (res.stepAttributes.constructor === Array) {
+                // 3. Update Valid for each block.
+                res.stepAttributes.map((indexValue, index) => {
+                  let attributeIndex = index;
+                  if (index > 0) {
+                    attributeIndex = index - 1;
                   }
+                  if (index === res.stepAttributes.length - 1) {
+                    // Not empty now.
+                  } else if (indexValue.constructor === Array) {
+                    // Check for error result.
+                    if (res.stepCodes[index] === 0) {
+                      if (!(typeof indexValue === 'string')) {
+                        indexValue = '[ "' + indexValue.join('", "') + '"]';
+                      }
+                      runInAction('Update Block Status - Valid', () => {
+                        l.debug('OLD: ', editor.blockList[index].attributeList);
+                        l.debug('NEW: ', res.stepAttributes[attributeIndex]);
+                        editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
+                        editor.blockList[index].status = 'valid';
+                      });
+                    } else {
+                      if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
+                      if (!(typeof indexValue === 'string')) {
+                        indexValue = '[ "' + indexValue.join('", "') + '"]';
+                      }
+                      runInAction('Update Block Status - Invalid', () => {
+                        l.debug('OLD: ', editor.blockList[index].attributeList);
+                        l.debug('NEW: ', res.stepAttributes[attributeIndex]);
+                        editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
+                        editor.blockList[index].status = 'pending';
+                      });
+                    }
+                  }
+                });
+
+                // 4. Is the current block valid?.
+                if (editor.blockList[editor.selectedBlock].status === 'valid') {
+                  // 4.a Yes - Update Results.
+                  this.updateResultsOutput(editor, editor.selectedBlock);
+                } else {
+                  // 4.b No - Clear Results.
+                  this.clearResultsOutput(editor);
                 }
-              });
 
-              // 4. Is the current block valid?.
-              if (editor.blockList[editor.selectedBlock].status === 'valid') {
-                // 4.a Yes - Update Results.
-                this.updateResultsOutput(editor, editor.selectedBlock);
-              } else {
-                // 4.b No - Clear Results.
-                this.clearResultsOutput(editor);
+                runInAction('Update Graphical Builder', () => {
+                  this.props.store.editorPanel.updateAggregateDetails = true;
+                  this.forceUpdate();
+                  resolve();
+                });
               }
-
-              runInAction('Update Graphical Builder', () => {
-                this.props.store.editorPanel.updateAggregateDetails = true;
-                this.forceUpdate();
-                resolve();
-              });
-            }
-          });
-        }
-      });
+            });
+          }
+        })
+        .then(err => {
+          l.error(err);
+          reject(err);
+        });
     });
   }
 
@@ -611,125 +632,131 @@ export default class GraphicalBuilder extends React.Component {
     // 1. Remove from Editor Structure.
     l.debug(editor.blockList.splice(blockPosition, 1));
     // 2. Update Shell Steps.
-    this.updateShellPipeline(false).then(res => {
-      if (res && res.unableToUpdateSteps) {
-        // Partial update
-        l.error('Unable to complete full update!');
+    this.updateShellPipeline(false)
+      .then(res => {
+        if (res && res.unableToUpdateSteps) {
+          // Partial update
+          l.error('Unable to complete full update!');
 
-        // 4. Was the block removed the selected block?.
-        if (blockPosition === editor.selectedBlock) {
-          // 4.a Yes - Set selected block to current - 1.
-          runInAction('Select previous block', () => {
-            editor.selectedBlock -= 1;
-            if (editor.selectedBlock < 0) {
-              editor.selectedBlock = 0;
-            }
+          // 4. Was the block removed the selected block?.
+          if (blockPosition === editor.selectedBlock) {
+            // 4.a Yes - Set selected block to current - 1.
+            runInAction('Select previous block', () => {
+              editor.selectedBlock -= 1;
+              if (editor.selectedBlock < 0) {
+                editor.selectedBlock = 0;
+              }
+            });
+          }
+          // 4. Is the current block valid?.
+          if (editor.blockList[editor.selectedBlock].status === 'valid') {
+            // 4.a Yes - Update Results.
+            this.updateResultsOutput(editor, editor.selectedBlock);
+          } else {
+            // 4.b No - Clear Results.
+            this.clearResultsOutput(editor);
+          }
+
+          runInAction('Update Details', () => {
+            this.props.store.editorPanel.updateAggregateDetails = true;
+            this.forceUpdate();
           });
-        }
-        // 4. Is the current block valid?.
-        if (editor.blockList[editor.selectedBlock].status === 'valid') {
-          // 4.a Yes - Update Results.
-          this.updateResultsOutput(editor, editor.selectedBlock);
         } else {
-          // 4.b No - Clear Results.
-          this.clearResultsOutput(editor);
-        }
-
-        runInAction('Update Details', () => {
-          this.props.store.editorPanel.updateAggregateDetails = true;
-          this.forceUpdate();
-        });
-      } else {
-        this.updateResultSet().then(res => {
-          if (this.state.debug) l.debug('update result set result line 606:', res);
-          try {
-            while (res.match(/\"\$regex\" : \/(.+?)\//)) {
-              l.debug('Fixing regex before parsing.');
-              res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
-            }
-            res = JSON.parse(res);
-          } catch (e) {
-            l.error(e);
-            // If first error - Try again!
-            if (this.state.firstTry) {
-              this.setState({ firstTry: false });
-              this.removeBlock(blockPosition);
+          this.updateResultSet().then(res => {
+            if (this.state.debug) l.debug('update result set result line 606:', res);
+            try {
+              while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+                l.debug('Fixing regex before parsing.');
+                res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
+              }
+              res = JSON.parse(res);
+            } catch (e) {
+              l.error(e);
+              // If first error - Try again!
+              if (this.state.firstTry) {
+                this.setState({ firstTry: false });
+                this.removeBlock(blockPosition);
+                return;
+              }
+              // eslint-disable-line
+              this.setState({ failed: true });
+              this.setState({ failureReason: e });
               return;
             }
-            // eslint-disable-line
-            this.setState({ failed: true });
-            this.setState({ failureReason: e });
-            return;
-          }
-          if (res.stepAttributes.constructor === Array) {
-            // 3. Update Valid for each block.
-            res.stepAttributes.map((indexValue, index) => {
-              let attributeIndex = index;
-              if (index > 0) {
-                attributeIndex = index - 1;
-              }
-              if (index === res.stepAttributes.length - 1) {
-                // Not empty now.
-              } else if (indexValue.constructor === Array) {
-                // Check for error result.
-                if (res.stepCodes[index] === 0) {
-                  if (!(typeof indexValue === 'string')) {
-                    indexValue = '[ "' + indexValue.join('", "') + '"]';
+            if (res.stepAttributes.constructor === Array) {
+              // 3. Update Valid for each block.
+              res.stepAttributes.map((indexValue, index) => {
+                let attributeIndex = index;
+                if (index > 0) {
+                  attributeIndex = index - 1;
+                }
+                if (index === res.stepAttributes.length - 1) {
+                  // Not empty now.
+                } else if (indexValue.constructor === Array) {
+                  // Check for error result.
+                  if (res.stepCodes[index] === 0) {
+                    if (!(typeof indexValue === 'string')) {
+                      indexValue = '[ "' + indexValue.join('", "') + '"]';
+                    }
+                    runInAction('Update Graphical Builder', () => {
+                      editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
+                      editor.blockList[index].status = 'valid';
+                    });
+                  } else {
+                    if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
+                    if (!(typeof indexValue === 'string')) {
+                      indexValue = '[ "' + indexValue.join('", "') + '"]';
+                    }
+                    runInAction('Update Graphical Builder', () => {
+                      editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
+                      editor.blockList[index].status = 'pending';
+                    });
                   }
-                  runInAction('Update Graphical Builder', () => {
-                    editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
-                    editor.blockList[index].status = 'valid';
-                  });
-                } else {
-                  if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
-                  if (!(typeof indexValue === 'string')) {
-                    indexValue = '[ "' + indexValue.join('", "') + '"]';
-                  }
-                  runInAction('Update Graphical Builder', () => {
-                    editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
-                    editor.blockList[index].status = 'pending';
+                }
+              });
+
+              // 4. Was the block removed the selected block?.
+              if (blockPosition === editor.selectedBlock) {
+                // 4.a Yes - Set selected block to current - 1.
+                runInAction('Update Selected Block o N-1', () => {
+                  editor.selectedBlock -= 1;
+                });
+                if (editor.selectedBlock < 0) {
+                  runInAction('Update Selected Block to 0', () => {
+                    editor.selectedBlock = 0;
                   });
                 }
               }
-            });
 
-            // 4. Was the block removed the selected block?.
-            if (blockPosition === editor.selectedBlock) {
-              // 4.a Yes - Set selected block to current - 1.
-              runInAction('Update Selected Block o N-1', () => {
-                editor.selectedBlock -= 1;
-              });
-              if (editor.selectedBlock < 0) {
-                runInAction('Update Selected Block to 0', () => {
-                  editor.selectedBlock = 0;
-                });
+              // 4. Is the current block valid?.
+              if (
+                editor.blockList[editor.selectedBlock] &&
+                editor.blockList[editor.selectedBlock].status === 'valid'
+              ) {
+                // 4.a Yes - Update Results.
+                this.updateResultsOutput(editor, editor.selectedBlock);
+              } else {
+                // 4.b No - Clear Results.
+                this.clearResultsOutput(editor);
               }
-            }
 
-            // 4. Is the current block valid?.
-            if (
-              editor.blockList[editor.selectedBlock] &&
-              editor.blockList[editor.selectedBlock].status === 'valid'
-            ) {
-              // 4.a Yes - Update Results.
-              this.updateResultsOutput(editor, editor.selectedBlock);
+              runInAction('Update Details', () => {
+                this.props.store.editorPanel.updateAggregateDetails = true;
+                this.forceUpdate();
+              });
             } else {
-              // 4.b No - Clear Results.
-              this.clearResultsOutput(editor);
+              // Check for error.
+              if (this.state.debug) l.debug('update result set error 664:', res);
+              l.error('updateResultSet: ', JSON.parse(res));
             }
-
-            runInAction('Update Details', () => {
-              this.props.store.editorPanel.updateAggregateDetails = true;
-              this.forceUpdate();
-            });
-          } else {
-            // Check for error.
-            if (this.state.debug) l.debug('update result set error 664:', res);
-            l.error('updateResultSet: ', JSON.parse(res));
-          }
-        });
-      }
-    });
+          });
+        }
+      })
+      .catch(err => {
+        l.error(err);
+        this.setState({ failed: true });
+        this.setState({ failureReason: 'ConnectionDoesNotExist' });
+      });
   }
 
   moveBlockHelper(array, oldIndex, newIndex) {
@@ -1312,105 +1339,110 @@ export default class GraphicalBuilder extends React.Component {
       // Splice list.
       editor.blockList.splice(1, editor.blockList.length - 1);
       // Update Agg Object
-      this.updateShellPipeline(false).then(res => {
-        if (res && res.unableToUpdateSteps) {
-          // Partial update
-          if (this.state.debug) l.error('Unable to complete full update!');
-          editor.selectedBlock = 0;
-          // 4. Is the current block valid?.
-          if (editor.blockList[editor.selectedBlock].status === 'valid') {
-            // 4.a Yes - Update Results.
-            this.updateResultsOutput(editor, editor.selectedBlock);
-          } else {
-            // 4.b No - Clear Results.
-            this.clearResultsOutput(editor);
-          }
-          runInAction('Update Graphical Builder', () => {
-            this.props.store.editorPanel.updateAggregateDetails = true;
-            this.forceUpdate();
-            reject();
-          });
-        } else {
-          this.updateResultSet().then(res => {
-            if (this.state.debug) {
-              l.debug(
-                'update result set result line 1216:',
-                res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
-              );
-            }
-            try {
-              while (res.match(/\"\$regex\" : \/(.+?)\//)) {
-                l.debug('Fixing regex before parsing.');
-                res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
-              }
-              res = JSON.parse(res);
-            } catch (e) {
-              l.error(e);
-              if (this.state.firstTry) {
-                this.setState({ firstTry: false });
-                this.removeAllBlocks();
-                resolve();
-              } else {
-                this.setState({ failed: true });
-                this.setState({ failureReason: e });
-                return;
-              }
-            }
-            if (res.stepAttributes.constructor === Array) {
-              // 3. Update Valid for each block.
-              res.stepAttributes.map((indexValue, index) => {
-                let attributeIndex = index;
-                if (index > 0) {
-                  attributeIndex = index - 1;
-                }
-                if (index === res.stepAttributes.length - 1) {
-                  // Not empty now.
-                } else if (indexValue.constructor === Array) {
-                  // Check for error result.
-                  if (res.stepCodes[index] === 0) {
-                    if (!(typeof indexValue === 'string')) {
-                      indexValue = '[ "' + indexValue.join('", "') + '"]';
-                    }
-                    runInAction('Update Graphical Builder', () => {
-                      editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
-                      editor.blockList[index].status = 'valid';
-                    });
-                  } else {
-                    if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
-                    if (!(typeof indexValue === 'string')) {
-                      indexValue = '[ "' + indexValue.join('", "') + '"]';
-                    }
-                    runInAction('Update Graphical Builder', () => {
-                      editor.blockList[index].status = 'pending';
-                    });
-                  }
-                }
-              });
-              runInAction('Set Selected Aggregate Block to 0', () => {
-                editor.selectedBlock = 0;
-              });
-              // 4. Is the current block valid?.
-              if (editor.blockList[editor.selectedBlock].status === 'valid') {
-                // 4.a Yes - Update Results.
-                this.updateResultsOutput(editor, editor.selectedBlock);
-              } else {
-                // 4.b No - Clear Results.
-                this.clearResultsOutput(editor);
-              }
-              runInAction('Update Details', () => {
-                this.props.store.editorPanel.updateAggregateDetails = true;
-                this.forceUpdate();
-                resolve();
-              });
+      this.updateShellPipeline(false)
+        .then(res => {
+          if (res && res.unableToUpdateSteps) {
+            // Partial update
+            if (this.state.debug) l.error('Unable to complete full update!');
+            editor.selectedBlock = 0;
+            // 4. Is the current block valid?.
+            if (editor.blockList[editor.selectedBlock].status === 'valid') {
+              // 4.a Yes - Update Results.
+              this.updateResultsOutput(editor, editor.selectedBlock);
             } else {
-              // Check for error.
-              if (this.state.debug) l.debug('update result set error line 1265:', res);
-              l.error('updateResultSet: ', JSON.parse(res));
-              reject();
+              // 4.b No - Clear Results.
+              this.clearResultsOutput(editor);
             }
-          });
-        }
-      });
+            runInAction('Update Graphical Builder', () => {
+              this.props.store.editorPanel.updateAggregateDetails = true;
+              this.forceUpdate();
+              reject();
+            });
+          } else {
+            this.updateResultSet().then(res => {
+              if (this.state.debug) {
+                l.debug(
+                  'update result set result line 1216:',
+                  res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"')
+                );
+              }
+              try {
+                while (res.match(/\"\$regex\" : \/(.+?)\//)) {
+                  l.debug('Fixing regex before parsing.');
+                  res = res.replace(/\"\$regex\" : \/(.+?)\//, '"$regex" : "/$1/"');
+                }
+                res = JSON.parse(res);
+              } catch (e) {
+                l.error(e);
+                if (this.state.firstTry) {
+                  this.setState({ firstTry: false });
+                  this.removeAllBlocks();
+                  resolve();
+                } else {
+                  this.setState({ failed: true });
+                  this.setState({ failureReason: e });
+                  return;
+                }
+              }
+              if (res.stepAttributes.constructor === Array) {
+                // 3. Update Valid for each block.
+                res.stepAttributes.map((indexValue, index) => {
+                  let attributeIndex = index;
+                  if (index > 0) {
+                    attributeIndex = index - 1;
+                  }
+                  if (index === res.stepAttributes.length - 1) {
+                    // Not empty now.
+                  } else if (indexValue.constructor === Array) {
+                    // Check for error result.
+                    if (res.stepCodes[index] === 0) {
+                      if (!(typeof indexValue === 'string')) {
+                        indexValue = '[ "' + indexValue.join('", "') + '"]';
+                      }
+                      runInAction('Update Graphical Builder', () => {
+                        editor.blockList[index].attributeList = res.stepAttributes[attributeIndex];
+                        editor.blockList[index].status = 'valid';
+                      });
+                    } else {
+                      if (this.state.debug) l.error('Result[', index, '] is invalid: ', indexValue);
+                      if (!(typeof indexValue === 'string')) {
+                        indexValue = '[ "' + indexValue.join('", "') + '"]';
+                      }
+                      runInAction('Update Graphical Builder', () => {
+                        editor.blockList[index].status = 'pending';
+                      });
+                    }
+                  }
+                });
+                runInAction('Set Selected Aggregate Block to 0', () => {
+                  editor.selectedBlock = 0;
+                });
+                // 4. Is the current block valid?.
+                if (editor.blockList[editor.selectedBlock].status === 'valid') {
+                  // 4.a Yes - Update Results.
+                  this.updateResultsOutput(editor, editor.selectedBlock);
+                } else {
+                  // 4.b No - Clear Results.
+                  this.clearResultsOutput(editor);
+                }
+                runInAction('Update Details', () => {
+                  this.props.store.editorPanel.updateAggregateDetails = true;
+                  this.forceUpdate();
+                  resolve();
+                });
+              } else {
+                // Check for error.
+                if (this.state.debug) l.debug('update result set error line 1265:', res);
+                l.error('updateResultSet: ', JSON.parse(res));
+                reject();
+              }
+            });
+          }
+        })
+        .catch(err => {
+          l.error(err);
+          reject(err);
+        });
     });
   }
 
