@@ -10,6 +10,13 @@
       "default": 100
     },
     {
+      "name": "useLimitSample",
+      "label": "Use $limit (faster) instead of $sample?",
+      "tooltip": "Sample using $limit (first N docs) rather than true (but slower) $sample",
+      "type": "Boolean",
+      "default": true
+    },
+    {
       "name": "DiskUsage",
       "label": "Disk Usage",
       "tooltip": "Overflow to disk if neccessary?",
