@@ -349,6 +349,7 @@ export default class GraphicalBuilder extends React.Component {
     if (this.state.debug) l.debug('Select Block: ', index);
     runInAction('Agg Builder details is loading', () => {
       this.editor.isAggregateDetailsLoading = true;
+      this.props.store.outputPanel.currentTab = this.props.store.editorPanel.activeEditorId;
     });
     return new Promise((resolve, reject) => {
       // 1. Update Editor List.
@@ -430,7 +431,9 @@ export default class GraphicalBuilder extends React.Component {
                       });
                     } else {
                       if (!(typeof indexValue === 'string')) {
-                        if (this.state.debug) { l.error('Result[', index, '] is invalid: ', indexValue); }
+                        if (this.state.debug) {
+                          l.error('Result[', index, '] is invalid: ', indexValue);
+                        }
                         indexValue = '[ "' + indexValue.join('", "') + '"]';
                       }
                       runInAction('Update Graphical Builder', () => {

@@ -196,7 +196,7 @@ export default class Details extends React.Component {
 
   @action.bound
   _onApplyBlock() {
-    l.debug('clicked apply for editor: ', this.props.store.editorPanel.activeEditorId);
+    this.props.store.outputPanel.currentTab = this.props.store.editorPanel.activeEditorId;
     Broker.emit(EventType.AGGREGATE_UPDATE(this.props.store.editorPanel.activeEditorId));
   }
 
