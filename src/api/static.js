@@ -97,7 +97,6 @@ export default class StaticApi {
         currentLine = lineCheck;
         doc = cm.getLine(lineCheck).trim(); // this.getDocumentAtLine(outputId, lineCheck, 1, lines, cm);
       }
-
       while (currentLine < resultSet.end && lines.status !== 'Invalid') {
         try {
           const doc = this.getDocumentAtLine(outputId, currentLine, 1, lines, cm);
@@ -105,21 +104,28 @@ export default class StaticApi {
             documents.push(doc);
           }
         } catch (ex) {
+          l.debug(ex);
           reject(ex.message);
         }
         currentLine = lines.end + 1;
       }
+      l.debug('4');
+      l.debug(documents);
       if (documents.length > 0) {
         const ParseWorker = require('worker-loader!./workers/jsonParse.js'); // eslint-disable-line
         const parseWorker = new ParseWorker();
         parseWorker.postMessage({ cmd: 'start', jsonStr: `[ ${documents.join(',')} ]` });
         parseWorker.addEventListener('message', e => {
           if (e.data[1]) {
+            l.debug(e.data[1]);
             reject(e.data[1]);
           } else {
+            l.debug(e.data[0]);
             resolve(e.data[0]);
           }
         });
+      } else {
+        reject(documents);
       }
     });
   }

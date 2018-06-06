@@ -395,27 +395,32 @@ export default class OutputApi {
     defaultOutput: ?boolean
   ) {
     if (defaultOutput) {
+      l.debug('1');
       lines.start = this.store.outputs.get(outputId).currentExecStartLine;
       // $FlowFixMe
       lines.end = cm.lineCount();
-      StaticApi.parseDefaultTableJson(jsonStr, lines, cm, outputId).then(
-        result => {
-          l.info(result);
-          runInAction(() => {
-            this.store.outputs.get(outputId)[displayType] = {
-              json: result,
-              firstLine: lines.start,
-              lastLine: lines.end
-            };
-          });
-        },
-        () => {
-          runInAction(() => {
-            // Revert to raw view if table view JSON can't be parsed
-            this.openView(OutputToolbarContexts.RAW);
-          });
-        }
-      );
+      StaticApi.parseDefaultTableJson(jsonStr, lines, cm, outputId)
+        .then(
+          result => {
+            l.debug('Default Table Result: ', result);
+            runInAction(() => {
+              this.store.outputs.get(outputId)[displayType] = {
+                json: result,
+                firstLine: lines.start,
+                lastLine: lines.end
+              };
+            });
+          },
+          () => {
+            runInAction(() => {
+              // Revert to raw view if table view JSON can't be parsed
+              this.openView(OutputToolbarContexts.RAW);
+            });
+          }
+        )
+        .catch(err => {
+          l.error(err);
+        });
     } else if (singleLine) {
       // Single line implemention
       StaticApi.parseShellJson(jsonStr).then(

@@ -744,7 +744,6 @@ export default class Toolbar extends React.Component {
         0,
         lines
       );
-
       this.props.api.initJsonView(
         currentJson,
         this.props.store.editorPanel.activeEditorId,
