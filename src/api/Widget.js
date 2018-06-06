@@ -79,7 +79,8 @@ export type WidgetState = {
   alarms?: IObservableArray<Alarm>,
   infoWidget?: boolean,
   colorList?: *,
-  detailAction?: Object
+  detailAction?: Object,
+  chartAlign?: string
 };
 
 export default class WidgetApi {

@@ -203,6 +203,7 @@
         "description": "Current number of read operations and queued read operations.",
         "infoWidget": true,
         "chartTitle": "Reads",
+        "chartAlign": "bottom",
         "waterMarkGroup": ["queue_writersActive", "queue_writersQueued"],
         "maintainOrder": true,
         "showAlarms": "mongo",
@@ -223,6 +224,7 @@
       "extraState": {
         "name": "Writes",
         "chartTitle": "Writes",
+        "chartAlign": "top",
         "colorList": ["#7040A3", "#AC8BC0"],
         "showHorizontalRule": true,
         "waterMarkGroup": ["queue_readersActive", "queue_readersQueued"],
@@ -245,6 +247,7 @@
       "extraState": {
         "name": "Op Times",
         "title": "Op Times",
+        "chartAlign": "bottom",
         "colorList": ["#BA5A3F", "#01969E", "#42BB6D"],
         "infoWidget": true,
         "description": "Time spent for different ops.",
@@ -453,6 +456,7 @@
         "title": "Average Latency",
         "infoWidget": true,
         "chartTitle": "Reads",
+        "chartAlign": "bottom",
         "colorList": ["#913856"],
         "description": "Average time for a WiredTiger disk read",
         "unit": "μs",
@@ -493,6 +497,7 @@
       "extraState": {
         "name": "Log Sync",
         "chartTitle": "Log Sync",
+        "chartAlign": "top",
         "colorList": ["#A5A11B"],
         "description": "Average time for a WiredTiger log sync",
         "unit": "μs",

@@ -56,7 +56,8 @@ type Props = {
     firstValueIsHighWaterMark: boolean,
     waterMarkGroup: any,
     colorList: any,
-    maintainOrder: boolean
+    maintainOrder: boolean,
+    chartAlign: any
   },
   widgetStyle: *,
   rotate?: number
@@ -81,7 +82,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
   toolTipLegend: *;
   colors: *;
 
-  _createD3View = (bVertical: boolean) => {
+  _createD3View = (bVertical: boolean, align: any) => {
     if (bVertical) {
       // $FlowFixMe
       this._bVertical = bVertical;
@@ -116,7 +117,13 @@ export default class ProgressBarWidget extends React.Component<Props> {
         y: 1
       });
 
-    const posTransY = vbHeight / 2 - barHeight / 2;
+    let posTransY = vbHeight / 2 - barHeight / 2;
+    // $FlowFixMe
+    if (align === 'bottom') {
+      posTransY = vbHeight - 5 - barHeight / 2;
+    } else if (align === 'top') {
+      posTransY = 5 - barHeight / 2;
+    }
     // chart background
     // $FlowFixMe
     const chartBG = this._chart.append('g').attr('transform', `translate(30, ${posTransY})`);
@@ -157,8 +164,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
   _recreateD3View = () => {
     const bVertical = this.props.widget.showVertical === true;
+    const chartAlign = this.props.widget.chartAlign ? this.props.widget.chartAlign : 'center';
     this._removeD3View();
-    this._createD3View(bVertical);
+    this._createD3View(bVertical, chartAlign);
   };
 
   _updateD3ViewData = (data: Object) => {
@@ -334,8 +342,10 @@ export default class ProgressBarWidget extends React.Component<Props> {
   componentDidMount() {
     // this is a problem to receive _chartEl and _textEl unless we wrap in setTimeout. An react bug?
     setTimeout(() => {
+      const chartAlign = this.props.widget.chartAlign ? this.props.widget.chartAlign : 'center';
+
       const bVertical = this.props.widget.showVertical === true;
-      this._createD3View(bVertical);
+      this._createD3View(bVertical, chartAlign);
 
       this._autorunDisposer = autorun(() => {
         const { values, unit } = this.props.widget;
@@ -372,11 +382,26 @@ export default class ProgressBarWidget extends React.Component<Props> {
     if (this.props.widget.colorList) {
       colors = this.props.widget.colorList;
     }
+    const chartPosStyle = { 'justify-content': 'center' };
+    const chartLabelStyle = {
+      'flex-basis': '0%'
+    };
     const { performancePanel, widget, widgetStyle } = this.props;
-    const { chartTitle, showVertical } = widget;
-    const chartTotalStyle = { top: '40%' };
+    const { chartTitle, showVertical, chartAlign } = widget;
+    const chartTotalStyle = { top: 'unset', 'flex-basis': '0%' };
     if (showVertical) {
       chartTotalStyle.top = '50%';
+    }
+    if (chartAlign) {
+      if (chartAlign === 'bottom') {
+        chartLabelStyle['flex-basis'] = '35%';
+        chartTotalStyle['flex-basis'] = '35%';
+        chartPosStyle['justify-content'] = 'flex-end';
+      } else if (chartAlign === 'top') {
+        chartLabelStyle['flex-basis'] = '75%';
+        chartTotalStyle['flex-basis'] = '75%';
+        // chartPosStyle['justify-content'] = 'flex-start';
+      }
     }
     setTimeout(() => {
       this.hasRendered = true;
@@ -411,9 +436,11 @@ export default class ProgressBarWidget extends React.Component<Props> {
             }
             target={
               <div className="container">
-                <div className="chart-label">{chartTitle && <strong>{chartTitle}</strong>}</div>
+                <div className="chart-label" style={chartPosStyle}>
+                  {chartTitle && <strong style={chartLabelStyle}>{chartTitle}</strong>}
+                </div>
                 <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
-                <div className="chart-total">
+                <div className="chart-total" style={chartPosStyle}>
                   <span
                     ref={_chartTotalEl => (this._chartTotalEl = _chartTotalEl)}
                     style={chartTotalStyle}
