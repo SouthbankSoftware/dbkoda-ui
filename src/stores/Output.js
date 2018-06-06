@@ -93,7 +93,7 @@ export default class Output {
   });
 
   @observable shouldScrollToBottom: boolean = false;
-  @observable lastScrollPos: object;
+  @observable lastScrollPos: * = null;
   @observable cannotShowMore: boolean = true;
   @observable showingMore: boolean = false;
   @observable commandHistory: *[] = [];
