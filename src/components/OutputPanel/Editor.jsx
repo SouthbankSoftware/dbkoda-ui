@@ -114,18 +114,34 @@ export default class Editor extends React.Component {
 
   componentDidMount() {
     this.props.setEditorRef(this.props.id, this.editor);
+    requestAnimationFrame(() => {
+      this.refresh();
+    });
   }
 
   componentWillUnmount() {
+    const cm = this.editor.getCodeMirror();
+    const scrollInfo = cm.getScrollInfo();
+    runInAction(() => {
+      this.outputObj.lastScrollPos = { left: scrollInfo.left, top: scrollInfo.top };
+    });
+
     _.forEach(this.reactions, r => r());
   }
 
+  @action
   refresh = () => {
     if (this.editor) {
       const cm = this.editor.getCodeMirror();
       cm.refresh();
       cm.focus();
-      this.outputObj.scrollToButtom(cm);
+      if (this.outputObj.shouldScrollToBottom) {
+        this.outputObj.scrollToButtom(cm);
+        this.outputObj.shouldScrollToBottom = false;
+      } else if (this.outputObj.lastScrollPos) {
+        const { lastScrollPos } = this.outputObj;
+        cm.scrollTo(lastScrollPos.left, lastScrollPos.top);
+      }
     }
   };
 

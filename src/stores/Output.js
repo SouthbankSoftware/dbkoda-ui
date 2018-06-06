@@ -28,7 +28,7 @@
 
 import _ from 'lodash';
 import { Doc } from 'codemirror';
-import { observe, observable } from 'mobx';
+import { observe, observable, action } from 'mobx';
 
 /**
  * Represents a Output object stored in state store
@@ -87,10 +87,13 @@ export default class Output {
     this.doc.replaceRange('', { line: from, ch: 0 }, { line: from + n, ch: 0 });
   };
 
-  append = (value: string) => {
+  append = action((value: string) => {
     this.doc.replaceRange(`${value}`, { line: Infinity });
-  };
+    this.shouldScrollToBottom = true;
+  });
 
+  @observable shouldScrollToBottom: boolean = false;
+  @observable lastScrollPos: * = null;
   @observable cannotShowMore: boolean = true;
   @observable showingMore: boolean = false;
   @observable commandHistory: *[] = [];
