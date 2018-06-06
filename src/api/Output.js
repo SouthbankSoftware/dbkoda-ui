@@ -395,7 +395,6 @@ export default class OutputApi {
     defaultOutput: ?boolean
   ) {
     if (defaultOutput) {
-      l.debug('1');
       lines.start = this.store.outputs.get(outputId).currentExecStartLine;
       // $FlowFixMe
       lines.end = cm.lineCount();

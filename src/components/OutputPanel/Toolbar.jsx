@@ -728,13 +728,16 @@ export default class Toolbar extends React.Component {
     const lineNumber = this.getLastLine(cm);
     if (!lineNumber) {
       // Throw error.
-      runInAction(() => {
-        NewToaster.show({
-          message: globalString('output/editor/tabularError'),
-          className: 'warning',
-          icon: ''
-        });
-      });
+      l.debug('No json output');
+      // This occurs more often than not when there is no table to be generated.
+      // @TODO -> Add more advanced handling to check if this is a real error or not.
+      // runInAction(() => {
+      //   NewToaster.show({
+      //     message: globalString('output/editor/tabularError'),
+      //     className: 'warning',
+      //     icon: ''
+      //   });
+      // });
     } else {
       const lines = { start: 0, end: 0, status: '' };
 
@@ -770,6 +773,7 @@ export default class Toolbar extends React.Component {
     if (!lineNumber) {
       // Throw error.
       runInAction(() => {
+        l.debug('No json output');
         NewToaster.show({
           message: globalString('output/editor/tabularError'),
           className: 'warning',
@@ -823,6 +827,7 @@ export default class Toolbar extends React.Component {
     if (!lineNumber) {
       // Throw error.
       runInAction(() => {
+        l.debug('No json output');
         NewToaster.show({
           message: globalString('output/editor/tabularError'),
           className: 'warning',
