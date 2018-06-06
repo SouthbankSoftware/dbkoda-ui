@@ -138,7 +138,11 @@ export default class WelcomeContent extends React.Component {
   @action.bound
   onClickGettingStarted() {
     if (IS_ELECTRON) {
-      window.require('electron').shell.openExternal('https://dbkoda.useresponse.com/topic/add');
+      window
+        .require('electron')
+        .shell.openExternal(
+          'https://medium.com/dbkoda/getting-started-with-mongodb-and-dbkoda-816da494005'
+        );
     }
   }
 

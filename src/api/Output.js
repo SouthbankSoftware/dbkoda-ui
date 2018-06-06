@@ -328,11 +328,10 @@ export default class OutputApi {
       tabPrefix = 'TableView-';
     }
 
-    if (!this.outputPanel.currentTab.startsWith(tabPrefix)) {
-      this.outputPanel.currentTab = `${tabPrefix}${outputId}`;
-    }
-
     if (displayType === 'tableJson') {
+      if (!this.outputPanel.currentTab.startsWith(tabPrefix)) {
+        this.outputPanel.currentTab = `${tabPrefix}${outputId}`;
+      }
       return this.initJsonTableView(
         jsonStr,
         outputId,
@@ -348,6 +347,10 @@ export default class OutputApi {
     StaticApi.parseShellJson(jsonStr).then(
       result => {
         runInAction(() => {
+          if (!this.outputPanel.currentTab.startsWith(tabPrefix)) {
+            this.outputPanel.currentTab = `${tabPrefix}${outputId}`;
+          }
+
           if (lines.type === 'SINGLE') {
             this.store.outputs.get(outputId)[displayType] = {
               json: result,
@@ -401,7 +404,6 @@ export default class OutputApi {
       StaticApi.parseDefaultTableJson(jsonStr, lines, cm, outputId)
         .then(
           result => {
-            l.debug('Default Table Result: ', result);
             runInAction(() => {
               this.store.outputs.get(outputId)[displayType] = {
                 json: result,

@@ -726,18 +726,18 @@ export default class Toolbar extends React.Component {
 
     // Get the last line that we think is valid:
     const lineNumber = this.getLastLine(cm);
-    if (!lineNumber) {
+    if (!lineNumber && !defaultView) {
       // Throw error.
       l.debug('No json output');
       // This occurs more often than not when there is no table to be generated.
       // @TODO -> Add more advanced handling to check if this is a real error or not.
-      // runInAction(() => {
-      //   NewToaster.show({
-      //     message: globalString('output/editor/tabularError'),
-      //     className: 'warning',
-      //     icon: ''
-      //   });
-      // });
+      runInAction(() => {
+        NewToaster.show({
+          message: globalString('output/editor/tabularError'),
+          className: 'warning',
+          icon: ''
+        });
+      });
     } else {
       const lines = { start: 0, end: 0, status: '' };
 

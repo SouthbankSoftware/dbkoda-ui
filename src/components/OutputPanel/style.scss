@@ -278,6 +278,11 @@
           border: $buttonDangerBackground;
         }
 
+        .expandAllButton {
+          border-bottom-left-radius: 0.65em;
+          border-top-left-radius: 0.65em;
+        }
+
         .clearOutputBtn:hover {
           background: $buttonDangerBackgroundHover !important;
           color: $buttonDangerIcon !important;
@@ -329,6 +334,11 @@
         }
 
         .jsonTreeViewButton {
+          border-bottom-left-radius: 0.65em;
+          border-top-left-radius: 0.65em;
+        }
+
+        .rawButton {
           border-bottom-left-radius: 0.65em;
           border-top-left-radius: 0.65em;
         }
