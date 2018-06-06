@@ -34,6 +34,7 @@ import { Button, AnchorButton, Intent, Tooltip, Position } from '@blueprintjs/co
 import { Broker, EventType } from '~/helpers/broker';
 import FormBuilder from '#/TreeActionPanel/FormBuilder';
 import View from '#/TreeActionPanel/View';
+import LoadingView from '#/common/LoadingView';
 import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
 import BYOBlock from './AggregateBlocks/BYOBlock.jsx';
 import CodeIcon from '../../styles/icons/code-icon.svg';
@@ -368,7 +369,8 @@ export default class Details extends React.Component {
                 {!this.bForm && (
                   <div>
                     <div className="tree-msg-div">
-                      <span>{this.msg}</span>
+                      {this.msg && <span>{this.msg}</span>}
+                      {!this.msg && <LoadingView />}
                     </div>
                   </div>
                 )}
