@@ -73,7 +73,7 @@ export default class Store {
       selectedConnection: null,
       operations: null,
       selectedOperation: null,
-      highWaterMarkConnection: null,
+      highWaterMark: 0,
       bLoadingExplain: false,
       bShowExplain: false
     },
@@ -163,12 +163,12 @@ export default class Store {
           this.topConnectionsPanel.operations = null;
           this.topConnectionsPanel.selectedOperation = null;
           this.topConnectionsPanel.payload = args.payload;
-          this.topConnectionsPanel.highWaterMarkConnection = _.maxBy(
-            this.topConnectionsPanel.payload,
-            con => {
-              return con.us;
-            }
-          );
+          const HWMConnection = _.maxBy(this.topConnectionsPanel.payload, con => {
+            return con.us;
+          });
+          if (this.topConnectionsPanel.highWaterMark < HWMConnection.us) {
+            this.topConnectionsPanel.highWaterMark = HWMConnection.us;
+          }
         } else if (args.command === 'mw_profilingDatabaseData') {
           // Transform payload into a list of databases.
           const dbList = [];
