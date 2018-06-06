@@ -129,7 +129,8 @@
     "aggregate_builder": {
       "tooltips": {
         "retry": "dbKoda will try to recover from the error automatically.",
-        "restart": "dbKoda will try to recover your connection."
+        "restart": "dbKoda will try to recover your connection.",
+        "run_all": "Run a full aggregation pipeline without sampling."
       },
       "errors": {
         "long_running": "The aggregation is taking a long time to execute"

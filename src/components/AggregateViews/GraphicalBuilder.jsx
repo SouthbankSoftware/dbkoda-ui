@@ -48,6 +48,7 @@ import CreateViewButton from './CreateViewButton';
 import ShowIcon from '../../styles/icons/show-icon.svg';
 import ImportIcon from '../../styles/icons/export-icon.svg';
 import ExportIcon from '../../styles/icons/save-icon.svg';
+import RunAllIcon from '../../styles/icons/execute-all-icon.svg';
 
 const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
@@ -1540,6 +1541,11 @@ export default class GraphicalBuilder extends React.Component {
     });
   }
 
+  @action.bound
+  _onRunAllClicked() {
+    this.props.store.editorPanel.executingEditorAll = true;
+  }
+
   render() {
     if (this.state.failed) {
       if (this.state.failureReason === 'ConnectionDoesNotExist') {
@@ -1773,6 +1779,28 @@ export default class GraphicalBuilder extends React.Component {
               );
             })}
             <LastBlockTarget />
+            <div className="executeAllButton">
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('aggregate_builder/tooltips/run_all')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  className="executeAllButton circleButton"
+                  intent={Intent.SUCCESS}
+                  onClick={this._onRunAllClicked}
+                  disabled={
+                    this.editor.isAggregateDetailsLoading ||
+                    this.props.store.editorToolbar.isActiveExecuting
+                  }
+                >
+                  <RunAllIcon className="dbKodaSVG runAll" width={20} height={20} />
+                </AnchorButton>
+              </Tooltip>
+            </div>
           </ul>
         ) : (
           <div className="loaderWrapper">

@@ -152,6 +152,32 @@ div.aggregateGraphicalBuilderWrapper {
       height: 100%;
     }
 
+    div.executeAllButton {
+      order: 4;
+      align-self: flex-end;
+      margin-right: 10px;
+      margin-bottom: 5px;
+
+      a {
+        color: $defaultFontColor;
+        border: 1px solid $welcomeViewButtonHoverColor !important;
+        border-radius: 1em;
+        background-image: unset;
+        background-color: $aggregateBlockBackgroundInvalid !important;
+        border: unset;
+        box-shadow: unset;
+
+        svg {
+          fill: $defaultFontColor !important;
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      a:hover {
+        background-color: $fieldGroupHeaderIconHover !important;
+      }
+    }
+
     div.aggregateBlock {
       order: 2;
       height: 50px;
