@@ -45,7 +45,7 @@ const columnsWidthsPercent = [10, 15, 15, 10, 10, 15, 10, 15];
   return {
     api: store.api,
     connections: topConnectionsPanel.payload,
-    highWaterMark: topConnectionsPanel.highWaterMarkConnection,
+    highWaterMark: topConnectionsPanel.highWaterMark,
     bLoading: topConnectionsPanel.bLoading
   };
 })
@@ -149,7 +149,7 @@ export default class ConnectionsView extends React.Component<Props> {
           case 7:
             cellValue = rowData.hasOwnProperty('us') ? _.pick(rowData, 'us') : { us: 0 };
             if (this.state.highWaterMark) {
-              cellValue.highWaterMark = this.state.highWaterMark.us;
+              cellValue.highWaterMark = this.state.highWaterMark;
             }
             break;
           default:
