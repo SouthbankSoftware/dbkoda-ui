@@ -488,6 +488,12 @@ export default class Store {
     // eslint-disable-next-line no-undef
     newStore.version = VERSION;
 
+    if (newStore.drawer && !newStore.drawer.activeNavPane) {
+        newStore.drawer.activeNavPane = NavPanes.EDITOR;
+        newStore.drawer.drawerChild = DrawerPanes.DEFAULT;
+    }
+
+
     // Do not open initial view to an aggregate editor.
     if (
       newStore.editors.get(newStore.editorPanel.activeEditorId) &&

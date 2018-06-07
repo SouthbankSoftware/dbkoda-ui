@@ -63,7 +63,7 @@ import './App.scss';
 class App extends React.Component {
   componentWillMount() {
     runInAction(() => {
-      if (!this.props.config.settings.showNewFeaturesDialogOnStart) {
+      if (this.props.config.settings.showNewFeaturesDialogOnStart === false) {
         this.props.store.editorPanel.showNewFeaturesDialog = false;
       } else {
         this.props.store.editorPanel.showNewFeaturesDialog = true;
