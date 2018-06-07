@@ -306,17 +306,20 @@ export default class EditorApi {
     // Check if the editor closing is the currently active editor.
     if (currEditor.id == this.store.editorPanel.activeEditorId) {
       this.store.editorPanel.isRemovingCurrentTab = true;
+
       // Check if this is the last tab:
       if (this.store.editors.size == 1) {
         // Show and select welcome tab
         this.store.welcomePage.isOpen = true;
         this.store.editorPanel.activeEditorId = 'Default';
+        this.store.editorToolbar.isActiveExecuting = false;
       } else {
         // Show and select first entry in map.
         this.api.removeOutput(currEditor);
         this.store.editors.delete(currEditor.id);
         const editors = [...this.store.editors.entries()];
         this.store.editorPanel.activeEditorId = editors[0][1].id;
+        this.store.editorToolbar.isActiveExecuting = editors[0][1].executing;
 
         const treeEditor = this.store.treeActionPanel.editors.get(currEditor.id);
         if (treeEditor) {

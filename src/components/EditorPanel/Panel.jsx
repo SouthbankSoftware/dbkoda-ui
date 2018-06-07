@@ -212,9 +212,8 @@ export default class Panel extends React.Component {
   @action
   closeActiveTab() {
     const deletedEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-
+    this.props.store.editorToolbar.isActiveExecuting = false;
     this.props.api.removeEditor(deletedEditor);
-
     this.forceUpdate();
   }
 
