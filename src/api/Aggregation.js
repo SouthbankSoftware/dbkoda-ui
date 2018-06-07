@@ -4,8 +4,8 @@
  * @Author: Michael <Mike>
  * @Date:   2018-05-09T10:39:44+11:00
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   Mike
- * @Last modified time: 2018-05-09T10:56:32+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-06-08T03:12:08+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -163,7 +163,7 @@ export default class AggregationApi {
             .update(editor.profileId, {
               shellId: editor.shellId, // eslint-disable-line
               commands: startCommands,
-              responseType: 'text'
+              responseType: 'RAW'
             })
             .then(res => {
               resolve(res);
