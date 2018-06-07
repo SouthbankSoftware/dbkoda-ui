@@ -382,25 +382,25 @@ export default class ProgressBarWidget extends React.Component<Props> {
     if (this.props.widget.colorList) {
       colors = this.props.widget.colorList;
     }
-    const chartPosStyle = { 'justify-content': 'center' };
+    const chartPosStyle = { justifyContent: 'center' };
     const chartLabelStyle = {
-      'flex-basis': '0%'
+      flexBasis: '0%'
     };
     const { performancePanel, widget, widgetStyle } = this.props;
     const { chartTitle, showVertical, chartAlign } = widget;
-    const chartTotalStyle = { top: 'unset', 'flex-basis': '0%' };
+    const chartTotalStyle = { top: 'unset', flexBasis: '0%' };
     if (showVertical) {
       chartTotalStyle.top = '50%';
     }
     if (chartAlign) {
       if (chartAlign === 'bottom') {
-        chartLabelStyle['flex-basis'] = '35%';
-        chartTotalStyle['flex-basis'] = '35%';
-        chartPosStyle['justify-content'] = 'flex-end';
+        chartLabelStyle.flexBasis = '35%';
+        chartTotalStyle.flexBasis = '35%';
+        chartPosStyle.justifyContent = 'flex-end';
       } else if (chartAlign === 'top') {
-        chartLabelStyle['flex-basis'] = '75%';
-        chartTotalStyle['flex-basis'] = '75%';
-        // chartPosStyle['justify-content'] = 'flex-start';
+        chartLabelStyle.flexBasis = '75%';
+        chartTotalStyle.flexBasis = '75%';
+        // chartPosStyle.justifyContent = 'flex-start';
       }
     }
     setTimeout(() => {

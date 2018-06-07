@@ -340,11 +340,10 @@
       font-weight: lighter;
       font-size: small;
       color: $connectionButtonFontColour;
-
-      // width: 8em !important;
-      border-radius: 5px;
+      width: 8em !important;
+      border-radius: 2em;
       background-image: unset;
-      background-color: #313131 !important;
+      background-color: #474747;
       border: 1px solid $connectionButtonBorderColour;
       box-shadow: unset;
       height: 22px;

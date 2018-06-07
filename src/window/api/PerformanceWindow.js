@@ -158,6 +158,12 @@ export default class PerformanceWindowApi {
   };
 
   @action.bound
+  resetTopConnectionsHWM = () => {
+    this.store.topConnectionsPanel.highWaterMark = 0;
+    this.getTopConnections();
+  };
+
+  @action.bound
   killSelectedOperation = () => {
     const { selectedConnection, selectedOperation } = this.store.topConnectionsPanel;
     if (selectedOperation) {
