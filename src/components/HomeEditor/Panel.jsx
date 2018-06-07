@@ -92,7 +92,7 @@ class MailPanel extends React.Component<*, *> {
         resizerState={rightSplitResizerState}
         onResizerStateChanged={this.updateRightSplitResizerState}
         minSize={200}
-        maxSize={1000}
+        maxSize={600}
         pane2Style={this.splitPane2Style}
       >
         <EditorPanel />

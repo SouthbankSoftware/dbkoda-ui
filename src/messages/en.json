@@ -33,7 +33,7 @@
       "Profile": "Profile Manager"
     },
     "performance": {
-      "title": "Performance Panel",
+      "title": "Performance Lab",
       "unresponsive":
         "Woops! Looks like we lost the connection. Is your Mongo server running? Please close and reopen your profile.",
       "section_headers": {
@@ -41,11 +41,11 @@
         "mongo": "Mongo"
       },
       "errors": {
-        "failover": "Unable to fetch metrics from server, try restarting performance panel.",
+        "failover": "Unable to fetch metrics from server, try restarting performance lab.",
         "mongos_error":
-          "Creating Performance Panel on mongos and only minimal statistics is available",
+          "Creating Performance lab on mongos and only minimal statistics is available",
         "not_supported_storage_engine":
-          "Creating Performance Panel on storage engine `{0}`. At the moment, only diagnostics on `wiredTiger` is supported",
+          "Creating Performance lab on storage engine `{0}`. At the moment, only diagnostics on `wiredTiger` is supported",
         "driver_connection_closed": "MongoDB Connection closed",
         "mongo_reconnecting": "Reconnecting to MongoDB instance",
         "ssh_connection_closed": "SSH Connection Closed",
@@ -372,7 +372,7 @@
       "config": {
         "sections": {
           "paths": "Paths",
-          "performance": "Performance Panel",
+          "performance": "Performance Lab",
           "application": "Application",
           "passwords": "Password Store",
           "User Guide": "User Guide"
@@ -493,9 +493,9 @@
         "newWindow": "New Editor",
         "newSshTerminal": "New SSH Terminal",
         "newLocalTerminal": "New Local Terminal",
-        "createPerformancePanel": "Create Performance Panel",
-        "openPerformancePanel": "Open Performance Panel",
-        "destroyPerformancePanel": "Destroy Performance Panel",
+        "createPerformancePanel": "Create Performance Lab",
+        "openPerformancePanel": "Open Performance Lab",
+        "destroyPerformancePanel": "Destroy Performance Lab",
         "resetHWM": "Reset High Water Mark",
         "deleteProfile": "Delete Profile",
         "getTopConnections": "Get Top 10 Connections",
