@@ -10,23 +10,22 @@
       "close": "Close",
       "send": "Send",
       "newFeaturesDialog": {
-        "numberOfNewFeatures": "4",
+        "numberOfNewFeatures": "5",
         "openAtStart": "Show on App Start",
         "title": "New Features",
         "subTitle": "Here are some of our latest features!",
-        "release": "0.11.",
+        "release": "1.0",
         "newFeature1Title": "Top Connections View",
-        "newFeature1Body":
-          "Find out who is hogging all the resources on your server and why! (Placeholder Text)",
+        "newFeature1Body": "Find out who is hogging all the resources on your server and why!",
         "newFeature2Title": "Cluster Connection Wizard",
-        "newFeature2Body":
-          "Improved support for connecting to your MongoDB Cluster. (Placeholder Text)",
+        "newFeature2Body": "Improved support for connecting to your MongoDB Cluster.",
         "newFeature3Title": "Query Profiling",
-        "newFeature3Body":
-          "Learn your queries inside and out to get your data as quick as possible. (Placeholder Text)",
+        "newFeature3Body": "Operations that are using the most resources and tune them.",
         "newFeature4Title": "Open Queries in Table by Default",
-        "newFeature4Body":
-          "Sometimes JSON can be hard to read, enable this option in the preferances panel to always open your data in an easy to read table view. (Placeholder Text"
+        "newFeature4Body": "Output from queries can be shown as a table, instead of JSON",
+        "newFeature5Title": "User interface enhancements",
+        "newFeature5Body":
+          "You can now hide the side panel and maximize any subpanel.  Toolbar and sidebar icons give quick access to common features.  And more!."
       }
     },
     "sideNav": {
