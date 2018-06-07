@@ -1101,6 +1101,8 @@ class View extends React.Component {
         this.props.store.editorToolbar.isActiveExecuting = false;
         this.props.store.editorPanel.stoppingExecution = false;
       });
+      const cm = this.editor.getCodeMirror();
+      cm.focus();
     }
   }
 
