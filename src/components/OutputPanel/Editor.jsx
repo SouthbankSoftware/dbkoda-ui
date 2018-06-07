@@ -120,11 +120,13 @@ export default class Editor extends React.Component {
   }
 
   componentWillUnmount() {
-    const cm = this.editor.getCodeMirror();
-    const scrollInfo = cm.getScrollInfo();
-    runInAction(() => {
-      this.outputObj.lastScrollPos = { left: scrollInfo.left, top: scrollInfo.top };
-    });
+    if (this.editor) {
+      const cm = this.editor.getCodeMirror();
+      const scrollInfo = cm.getScrollInfo();
+      runInAction(() => {
+        this.outputObj.lastScrollPos = { left: scrollInfo.left, top: scrollInfo.top };
+      });
+    }
 
     _.forEach(this.reactions, r => r());
   }
