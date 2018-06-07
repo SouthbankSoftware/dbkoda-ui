@@ -87,6 +87,10 @@ export default class DatabaseExport extends React.Component {
       editor: treeEditor,
       ssl: profile.ssl
     });
+    if (profile.url.match(/ssl/)) {
+      l.debug('SSL IS TRUE!');
+      this.state.ssl = true;
+    }
     if (
       treeAction === BackupRestoreActions.EXPORT_COLLECTION ||
       treeAction === BackupRestoreActions.DUMP_COLLECTION ||

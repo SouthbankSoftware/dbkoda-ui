@@ -31,6 +31,7 @@ import React from 'react';
 import { action, observable, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { DrawerPanes } from '#/common/Constants';
+import LoadingView from '#/common/LoadingView';
 import View from './View';
 import FormBuilder from './FormBuilder';
 
@@ -132,7 +133,8 @@ export default class TreeActionPanel extends React.Component {
         {!this.bForm && (
           <div>
             <div className="tree-msg-div">
-              <span>{this.msg}</span>
+              {this.msg && <span>{this.msg}</span>}
+              {!this.msg && <LoadingView />}
             </div>
             <button className="pt-button pt-intent-primary right-button" onClick={this.close}>
               {globalString('tree/closeButton')}
