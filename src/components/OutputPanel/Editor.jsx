@@ -104,7 +104,7 @@ export default class Editor extends React.Component {
         currentTab => {
           if (currentTab === this.props.id) {
             requestAnimationFrame(() => {
-              this.refresh();
+              this.refresh(true);
             });
           }
         }
@@ -130,11 +130,13 @@ export default class Editor extends React.Component {
   }
 
   @action
-  refresh = () => {
+  refresh = (bFocus = false) => {
     if (this.editor) {
       const cm = this.editor.getCodeMirror();
       cm.refresh();
-      cm.focus();
+      if (bFocus) {
+        cm.focus();
+      }
       if (this.outputObj.shouldScrollToBottom) {
         this.outputObj.scrollToButtom(cm);
         this.outputObj.shouldScrollToBottom = false;

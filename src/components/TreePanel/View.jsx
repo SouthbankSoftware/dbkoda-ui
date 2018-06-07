@@ -390,7 +390,8 @@ export default class TreeView extends React.Component {
     for (const editor of treeEditors) {
       if (
         editor[1].currentProfile == this.props.store.profileList.selectedProfile.id &&
-        editor[1].type == editorType
+        editor[1].type == editorType &&
+        editor[1].executing === false
       ) {
         bExistingEditor = true;
         runInAction('update state var', () => {
@@ -417,8 +418,8 @@ export default class TreeView extends React.Component {
       this.props.store.treeActionPanel.treeNode = treeNode;
       this.props.store.treeActionPanel.treeAction = action;
       const editorId = this.props.store.editorPanel.activeEditorId;
-      if (editorId && editorId !== 'Default') {
-        const editor = this.props.store.editors.get(editorId);
+      const editor = this.props.store.editors.get(editorId);
+      if (editorId && editorId !== 'Default' && editor && !editor.executing) {
         this.props.store.editors.set(
           editorId,
           observable({
