@@ -267,6 +267,10 @@ export default class Store {
         this.layout.rightSplitResizerState = resizerStates.ALL_SHOWN;
       }
     }
+    if (value === NavPanes.PERFORMANCE_LINK) {
+      l.debug('Open Perf Panel');
+      return;
+    }
 
     this.drawer.activeNavPane = value;
   };

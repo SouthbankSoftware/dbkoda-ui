@@ -49,6 +49,7 @@ export const NavPanes = {
   EDITOR: 'Editor',
   PROFILE: 'Profile',
   PERFORMANCE: 'Performance',
+  PERFORMANCE_LINK: 'Open Performance Lab',
   TOP_CONNECTIONS: 'Top Connections',
   PROFILING: 'Profiling',
   STORAGE_PANEL: 'Database Storage'
