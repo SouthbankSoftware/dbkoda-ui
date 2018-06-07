@@ -3,7 +3,7 @@
  * @Date:   2017-07-19 11:17:46
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-21T13:34:24+10:00
+ * @Last modified time: 2018-06-08T03:12:19+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -901,7 +901,7 @@ export default class GraphicalBuilder extends React.Component {
             .update(editor.profileId, {
               shellId: editor.shellId, // eslint-disable-line
               commands: AggregateCommands.SET_ALL_STEPS(editor.aggregateID, stepArray, preserve),
-              responseType: 'text'
+              responseType: 'RAW'
             })
             .then(() => {
               this.props.store.api.updateAggregateConfig().then(res => {
@@ -932,7 +932,7 @@ export default class GraphicalBuilder extends React.Component {
             .update(editor.profileId, {
               shellId: editor.shellId, // eslint-disable-line
               commands: AggregateCommands.SET_ALL_STEPS(editor.aggregateID, validArray, true),
-              responseType: 'text'
+              responseType: 'RAW'
             })
             .then(() => {
               this.props.store.api.updateAggregateConfig().then(res => {

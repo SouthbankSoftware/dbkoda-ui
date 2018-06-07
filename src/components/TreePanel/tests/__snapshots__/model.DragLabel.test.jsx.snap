@@ -27,36 +27,6 @@ exports[`DragLabel matches snapshot 1`] = `
   </span>
   <span
     className="additionalActions"
-  >
-    <span
-      className="pt-popover-wrapper"
-    >
-      <div
-        className="pt-popover-target"
-        onClick={[Function]}
-      >
-        <a
-          className="pt-button button"
-          disabled={undefined}
-          href={undefined}
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          onKeyUp={[Function]}
-          role="button"
-          tabIndex={0}
-        >
-          <span
-            className="pt-button-text"
-          >
-            <test-file-stub
-              className="pt-icon dbKodaSVG"
-              height={16}
-              width={16}
-            />
-          </span>
-        </a>
-      </div>
-    </span>
-  </span>
+  />
 </div>
 `;

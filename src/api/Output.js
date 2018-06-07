@@ -230,9 +230,8 @@ export default class OutputApi {
   @action.bound
   onReconnect(output: *) {
     const outputId = this.outputHash[output.id + '|' + output.shellId];
-    const combineOutput = output.output.join('\r');
-    const totalOutput = this.store.outputs.get(outputId).output + combineOutput;
-    this.store.outputs.get(outputId).output = totalOutput;
+
+    this.store.outputs.get(outputId).append(output.output.join(''));
   }
 
   /**

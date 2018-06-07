@@ -115,6 +115,7 @@ export default class NewFeaturesDialog extends React.Component<Props, State> {
             onClick={() => {
               runInAction(() => {
                 this.props.store.editorPanel.showNewFeaturesDialog = false;
+                this.forceUpdate();
               });
             }}
           />

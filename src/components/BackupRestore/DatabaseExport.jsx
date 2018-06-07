@@ -64,7 +64,8 @@ export default class DatabaseExport extends React.Component {
       parseGrace: {
         selected: 'stop',
         options: ['autoCast', 'skipField', 'skipRow', 'stop']
-      }
+      },
+      formStyle: { height: window.innerHeight - 165 }
     };
   }
 
@@ -80,6 +81,7 @@ export default class DatabaseExport extends React.Component {
 
   componentDidMount() {
     const { treeAction, db, collection, treeEditor, treeNode, profile } = this.props;
+    window.addEventListener('resize', this.onResize.bind(this));
     this.setState({
       db,
       collection,
@@ -107,6 +109,14 @@ export default class DatabaseExport extends React.Component {
     ) {
       this.setState({ collection: treeNode.text });
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize.bind(this));
+  }
+
+  onResize(e) {
+    this.setState({ formStyle: { height: e.target.innerHeight - 210 } });
   }
 
   updateEditorCode() {
@@ -497,85 +507,87 @@ export default class DatabaseExport extends React.Component {
     return (
       <div className="database-export-panel">
         <h3 className="form-title">{this.getComponentTitle()}</h3>
-        <div className="pt-form-group">
-          {this.getDatabaseFieldComponent()}
-          {(treeAction === BackupRestoreActions.RESTORE_COLLECTION ||
-            treeAction === BackupRestoreActions.IMPORT_COLLECTION ||
-            treeAction === BackupRestoreActions.IMPORT_DATABASE) && (
-            <div style={{ marginBottom: 20 }}>
-              <label className="pt-label database" htmlFor="database">
-                {globalString('backuprestore/collection')}
-              </label>
-              <div className="pt-form-content">
-                <input
-                  className="pt-input db-backup-collection-input"
-                  type="text"
-                  dir="auto"
-                  readOnly={treeAction === BackupRestoreActions.RESTORE_COLLECTION}
-                  value={this.state.collection}
-                  onChange={e => this.setState({ collection: e.target.value })}
-                />
+        <form className="form-scrollable" style={this.state.formStyle}>
+          <div className="pt-form-group">
+            {this.getDatabaseFieldComponent()}
+            {(treeAction === BackupRestoreActions.RESTORE_COLLECTION ||
+              treeAction === BackupRestoreActions.IMPORT_COLLECTION ||
+              treeAction === BackupRestoreActions.IMPORT_DATABASE) && (
+              <div style={{ marginBottom: 20 }}>
+                <label className="pt-label database" htmlFor="database">
+                  {globalString('backuprestore/collection')}
+                </label>
+                <div className="pt-form-content">
+                  <input
+                    className="pt-input db-backup-collection-input"
+                    type="text"
+                    dir="auto"
+                    readOnly={treeAction === BackupRestoreActions.RESTORE_COLLECTION}
+                    value={this.state.collection}
+                    onChange={e => this.setState({ collection: e.target.value })}
+                  />
+                </div>
               </div>
-            </div>
-          )}
-          <label className="pt-label database" htmlFor="database">
-            {this.getFilePathLabel(treeAction)}
-          </label>
-          <div className="pt-form-content">
-            <input
-              className="pt-input path-input db-backup-path-input"
-              type="text"
-              onChange={e => this.setState({ directoryPath: e.target.value })}
-              value={this.state.directoryPath}
-            />
-            <Button className="browse-directory" onClick={() => this.openFile(treeAction)}>
-              {globalString('backuprestore/chooseDirectory')}
-            </Button>
-          </div>
-          <label className={this.state.directoryPath ? 'hide' : 'warning'} htmlFor="database">
-            {globalString('backuprestore/requiredWarning')}
-          </label>
-        </div>
-        <div style={{ overflowY: 'auto' }}>
-          {treeAction !== BackupRestoreActions.EXPORT_COLLECTION &&
-            treeAction !== BackupRestoreActions.DUMP_COLLECTION &&
-            treeAction !== BackupRestoreActions.RESTORE_COLLECTION &&
-            treeAction !== BackupRestoreActions.RESTORE_DATABASE &&
-            treeAction !== BackupRestoreActions.RESTORE_SERVER &&
-            treeAction !== BackupRestoreActions.IMPORT_DATABASE &&
-            treeAction !== BackupRestoreActions.IMPORT_COLLECTION && (
-              <AllCollectionOption
-                allCollections={this.state.allCollections}
-                action={treeAction}
-                changeAllCollections={() => {
-                  if (!this.state.allCollections) {
-                    // when turn on all collections, unselect viewsAsCollections
-                    this.setState({ dumpDbUsersAndRoles: false });
-                  }
-                  this.setState({ allCollections: !this.state.allCollections });
-                }}
-              />
             )}
-          {!this.state.allCollections &&
-          !this.state.dumpDbUsersAndRoles &&
-          treeAction !== BackupRestoreActions.IMPORT_COLLECTION &&
-          treeAction !== BackupRestoreActions.IMPORT_DATABASE ? (
-            <CollectionList
-              collections={this.state.collections}
-              readOnly={
-                treeAction === BackupRestoreActions.EXPORT_COLLECTION ||
-                treeAction === BackupRestoreActions.DUMP_COLLECTION ||
-                treeAction === BackupRestoreActions.IMPORT_COLLECTION ||
-                treeAction === BackupRestoreActions.IMPORT_DATABASE
-              }
-              target={treeAction === BackupRestoreActions.DUMP_SERVER ? 'server' : 'database'}
-              selectCollection={this.selectCollection}
-              unSelectCollection={this.unSelectCollection}
-              selectedCollections={this.state.selectedCollections}
-            />
-          ) : null}
-          {this.getOptions()}
-        </div>
+            <label className="pt-label database" htmlFor="database">
+              {this.getFilePathLabel(treeAction)}
+            </label>
+            <div className="pt-form-content">
+              <input
+                className="pt-input path-input db-backup-path-input"
+                type="text"
+                onChange={e => this.setState({ directoryPath: e.target.value })}
+                value={this.state.directoryPath}
+              />
+              <Button className="browse-directory" onClick={() => this.openFile(treeAction)}>
+                {globalString('backuprestore/chooseDirectory')}
+              </Button>
+            </div>
+            <label className={this.state.directoryPath ? 'hide' : 'warning'} htmlFor="database">
+              {globalString('backuprestore/requiredWarning')}
+            </label>
+          </div>
+          <div style={{ overflowY: 'auto' }}>
+            {treeAction !== BackupRestoreActions.EXPORT_COLLECTION &&
+              treeAction !== BackupRestoreActions.DUMP_COLLECTION &&
+              treeAction !== BackupRestoreActions.RESTORE_COLLECTION &&
+              treeAction !== BackupRestoreActions.RESTORE_DATABASE &&
+              treeAction !== BackupRestoreActions.RESTORE_SERVER &&
+              treeAction !== BackupRestoreActions.IMPORT_DATABASE &&
+              treeAction !== BackupRestoreActions.IMPORT_COLLECTION && (
+                <AllCollectionOption
+                  allCollections={this.state.allCollections}
+                  action={treeAction}
+                  changeAllCollections={() => {
+                    if (!this.state.allCollections) {
+                      // when turn on all collections, unselect viewsAsCollections
+                      this.setState({ dumpDbUsersAndRoles: false });
+                    }
+                    this.setState({ allCollections: !this.state.allCollections });
+                  }}
+                />
+              )}
+            {!this.state.allCollections &&
+            !this.state.dumpDbUsersAndRoles &&
+            treeAction !== BackupRestoreActions.IMPORT_COLLECTION &&
+            treeAction !== BackupRestoreActions.IMPORT_DATABASE ? (
+              <CollectionList
+                collections={this.state.collections}
+                readOnly={
+                  treeAction === BackupRestoreActions.EXPORT_COLLECTION ||
+                  treeAction === BackupRestoreActions.DUMP_COLLECTION ||
+                  treeAction === BackupRestoreActions.IMPORT_COLLECTION ||
+                  treeAction === BackupRestoreActions.IMPORT_DATABASE
+                }
+                target={treeAction === BackupRestoreActions.DUMP_SERVER ? 'server' : 'database'}
+                selectCollection={this.selectCollection}
+                unSelectCollection={this.unSelectCollection}
+                selectedCollections={this.state.selectedCollections}
+              />
+            ) : null}
+            {this.getOptions()}
+          </div>
+        </form>
         <ButtonPanel
           close={this.props.close}
           enableConfirm={this.isExecutable()}

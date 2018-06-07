@@ -28,7 +28,7 @@ import _ from 'lodash';
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
-import { Tooltip, Intent, Position, AnchorButton } from '@blueprintjs/core';
+import { Tooltip, Intent, Position, AnchorButton, Button } from '@blueprintjs/core';
 import { SelectionModes, Table, Utils, TableLoadingOption } from '@blueprintjs/table';
 import { Switch, NumericInput } from '@blueprintjs/core';
 import autobind from 'autobind-decorator';
@@ -226,6 +226,20 @@ export default class ConnectionsView extends React.Component<Props> {
             <div className="pt-navbar-heading">Top Connections</div>
           </div>
           <div className="pt-navbar-group pt-align-right">
+            <Tooltip
+              className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
+              content="Reset High Water Mark"
+              hoverOpenDelay={1000}
+              inline
+              intent={Intent.PRIMARY}
+              position={Position.BOTTOM}
+            >
+              <Button
+                className="reset-button pt-button pt-intent-primary"
+                text="Reset HWM"
+                onClick={this.props.api.resetTopConnectionsHWM}
+              />
+            </Tooltip>
             <Tooltip
               className="btnTooltip pt-tooltip-indicator pt-tooltip-indicator-form"
               content="Refresh Top Connections"
