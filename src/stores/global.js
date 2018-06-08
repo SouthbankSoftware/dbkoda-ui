@@ -481,6 +481,9 @@ export default class Store {
     Globalize.locale(newStore.locale || 'en');
 
     newStore.layout.alertIsLoading = false;
+    newStore.layout.overallSplitResizerState = resizerStates.ALL_SHOWN;
+    newStore.layout.leftSplitResizerState = resizerStates.ALL_SHOWN;
+    newStore.layout.rightSplitResizerState = resizerStates.ALL_SHOWN;
 
     // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
     // DefinePlugin. The version is retrieved automatically from package.json at the building time of
@@ -489,10 +492,11 @@ export default class Store {
     newStore.version = VERSION;
 
     if (newStore.drawer && !newStore.drawer.activeNavPane) {
-        newStore.drawer.activeNavPane = NavPanes.EDITOR;
-        newStore.drawer.drawerChild = DrawerPanes.DEFAULT;
+      newStore.drawer = observable({
+        drawerChild: DrawerPanes.DEFAULT,
+        activeNavPane: NavPanes.EDITOR
+      });
     }
-
 
     // Do not open initial view to an aggregate editor.
     if (
