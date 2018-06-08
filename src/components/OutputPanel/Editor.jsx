@@ -128,7 +128,7 @@ export default class Editor extends React.Component {
       });
     }
 
-    _.forEach(this.reactions, r => r());
+    _.forEach(this._reactions, r => r());
   }
 
   @action
