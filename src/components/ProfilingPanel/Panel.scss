@@ -59,6 +59,10 @@
       background-color: $performanceButtonHover;
       color: $connectionButtonFontColourHover;
     }
+
+    button.use-suggestions-button {
+      width: 10em !important;
+    }
   }
 
   .pt-button-text {

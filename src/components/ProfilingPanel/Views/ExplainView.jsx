@@ -114,7 +114,6 @@ export default class OperationDetails extends React.Component {
     const executionStages = getExecutionStages(execStats);
     return (
       <div className="explainView">
-        {this.state.suggestionText && <QueryCommandView command={this.state.suggestionText} />}
         <nav className="pt-navbar explainToolbar">
           <div className="pt-navbar-group exampleGroup pt-align-left">
             <div className="pt-navbar-heading">
@@ -153,7 +152,7 @@ export default class OperationDetails extends React.Component {
                   position={Position.BOTTOM}
                 >
                   <Button
-                    className="reset-button pt-button pt-intent-primary"
+                    className="reset-button use-suggestions-button pt-button pt-intent-primary"
                     text="Use Suggestions"
                     onClick={() =>
                       this.props.api.openEditorWithAdvisorCode(this.state.suggestionText)
@@ -179,6 +178,7 @@ export default class OperationDetails extends React.Component {
             />
           )}
         </div>
+        {this.state.suggestionText && <QueryCommandView command={this.state.suggestionText} />}
       </div>
     );
   }
