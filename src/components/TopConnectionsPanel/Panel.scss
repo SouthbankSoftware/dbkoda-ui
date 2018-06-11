@@ -356,6 +356,10 @@
       background-color: $performanceButtonHover !important;
       color: $connectionButtonFontColourHover;
     }
+
+    button.use-suggestions-button {
+      width: 10em !important;
+    }
   }
 
   .Switch {
