@@ -41,7 +41,7 @@ export const SimpleQuery = {
     data.Database = params.Database;
     data.CollectionName = params.CollectionName;
     data.UseOr = false;
-    data.UseAnd = true;
+    data.UseAnd = false;
     data.IncludeProjection = true;
     data.Projections = [];
     // data.Projections.push({});
