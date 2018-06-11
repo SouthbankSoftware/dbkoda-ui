@@ -24,11 +24,33 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@import '../../../../styles/_defaultTheme.scss';
+
 .donut-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   padding-right: 15px;
+
+  button {
+    font-weight: lighter;
+    font-size: small;
+    color: $connectionButtonFontColour;
+    width: 8em !important;
+    border-radius: 2em;
+    background-image: unset;
+    background-color: #474747;
+    border: 1px solid $connectionButtonBorderColour;
+    box-shadow: unset;
+    height: 22px;
+    line-height: 10px;
+    min-height: 22px;
+  }
+
+  button:hover {
+    background-color: $performanceButtonHover;
+    color: $connectionButtonFontColourHover;
+  }
 
   .donut-main {
     width: 50%;

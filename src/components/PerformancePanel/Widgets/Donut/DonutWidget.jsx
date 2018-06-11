@@ -301,7 +301,7 @@ export default class DonutWidget extends React.Component<Props, State> {
 
   render() {
     const { performancePanel, widget, widgetStyle, getContextMenu } = this.props;
-    const myWidget = { ...widget };
+    const myWidget = { ...widget, detailAction: { text: 'Storage', action: this.showDetail } };
     return (
       <Widget
         performancePanel={performancePanel}

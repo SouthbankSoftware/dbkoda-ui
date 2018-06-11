@@ -187,24 +187,30 @@ $background-colour: #202020;
         }
       }
 
-      .detail-action {
-        color: #bfbec0;
-        align-self: center;
-        margin-left: auto;
-        cursor: pointer;
-        width: 80px;
-        height: 20px;
-        background-image: none !important;
-        background-color: transparent !important;
-        border: solid;
-        border-width: thin;
+      button {
+        font-weight: lighter;
+        font-size: small;
+        color: $connectionButtonFontColour;
+        width: 6em !important;
+        border-radius: 2em;
+        background-image: unset;
+        background-color: #474747;
+        border: 1px solid $connectionButtonBorderColour;
+        box-shadow: unset;
+        margin-left: 10px;
+        height: 22px;
+        line-height: 10px;
+        min-height: 22px;
 
         span {
-          width: 50px;
-          color: #bfbec0;
-          padding: 0;
-          margin: 0px;
+          width: 100%;
+          margin-left: 5px;
         }
+      }
+
+      button:hover {
+        background-color: $performanceButtonHover;
+        color: $connectionButtonFontColourHover;
       }
     }
   }
