@@ -234,7 +234,7 @@
         }
       },
       "editor": {
-        "restoreSession": "** Session Restored **\r",
+        "restoreSession": "### session restored\r",
         "contextJson": "Enhanced JSON View",
         "contextTable": "JSON Table View",
         "contextTableSingle": "Single Document",

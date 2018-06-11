@@ -50,7 +50,7 @@ export const UpdateDocuments = {
       UpValue: 'SomeValue'
     });
     data.UseOr = false;
-    data.UseAnd = true;
+    data.UseAnd = false;
     data.UpdateMany = false;
     data.Upsert = false;
     data.Replace = false;

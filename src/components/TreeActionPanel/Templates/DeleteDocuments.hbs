@@ -8,25 +8,24 @@ delResult=db.getSiblingDB("{{{Database}}}").getCollection("{{{CollectionName}}}"
       { "{{{AttributeName}}}":{ {{{Operator}}}:{{{Value}}} } }
               {{~#unless last}},{{/unless}}
                {{/each}}
+             {{/if}}
     ]
-             {{/if~}}
        {{else if UseAnd}} "$and":[
           {{#if FilterKeys}}
                {{#each FilterKeys}}
       { "{{{AttributeName}}}":{ {{{Operator}}}:{{{Value}}} } }
               {{~#unless last}},{{/unless}}
                {{/each}}
+        {{/if}} 
     ]
-        {{/if~}} 
         {{else}}   
           {{#if FilterKeys}}
-
             {{#each FilterKeys}}
       "{{{AttributeName}}}":{ {{{Operator}}}:{{{Value}}} }
               {{~#unless last}},{{/unless}}
             {{/each~}}
           {{/if~}}
-       {{/if}}
+       {{/if~}}
   });
 
 printjson(delResult);
