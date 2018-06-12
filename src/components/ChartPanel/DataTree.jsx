@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T13:23:27+11:00
+ * @Last modified time: 2018-06-12T10:56:30+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -181,8 +181,8 @@ export default class DataTree extends React.Component<Props, State> {
       schema = nextSchema;
       loadOnly = true;
     } else {
-      nodes = this.state.nodes;
-      schema = prevSchemaRef.schema;
+      ({ nodes } = this.state);
+      ({ schema } = prevSchemaRef);
     }
 
     this._checkAndUpdateTreeForChartComponent(
@@ -303,7 +303,7 @@ export default class DataTree extends React.Component<Props, State> {
 
         const nodes = this._buildTreeFromSchema(childSchema, `${newPrefix}.childNodes`);
         node = {
-          icon: `pt-icon-folder-${isExpanded ? 'open' : 'close'}`,
+          icon: `folder-${isExpanded ? 'open' : 'close'}`,
           isExpanded,
           childNodes: nodes,
           type,
@@ -328,17 +328,17 @@ export default class DataTree extends React.Component<Props, State> {
 
         if (type === 'string') {
           _.assign(node, {
-            icon: 'pt-icon-font',
+            icon: 'font',
             type: 'string'
           });
         } else if (type === 'number') {
           _.assign(node, {
-            icon: 'pt-icon-numerical',
+            icon: 'numerical',
             type: 'number'
           });
         } else {
           _.assign(node, {
-            icon: 'pt-icon-error',
+            icon: 'error',
             type
           });
           l.error(`Unsupported data tree node type: ${v}`);
@@ -370,7 +370,7 @@ export default class DataTree extends React.Component<Props, State> {
       l.error('Missing schema node');
     }
 
-    node.icon = 'pt-icon-folder-close';
+    node.icon = 'folder-close';
     node.isExpanded = false;
     this.setState(this.state);
   };
@@ -388,7 +388,7 @@ export default class DataTree extends React.Component<Props, State> {
       l.error('Missing schema node');
     }
 
-    node.icon = 'pt-icon-folder-open';
+    node.icon = 'folder-open';
     node.isExpanded = true;
     this.setState(this.state);
   };
