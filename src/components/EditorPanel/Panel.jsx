@@ -3,7 +3,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T11:09:22+10:00
+ * @Last modified time: 2018-06-12T11:24:44+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -361,7 +361,7 @@ export default class Panel extends React.Component {
    */
   @action.bound
   closeTabs(tabIdToKeep) {
-    for (const [id, editor] of this.props.store.editors.entries()) {
+    for (const [id, editor] of [...this.props.store.editors.entries()]) {
       if (id !== tabIdToKeep) {
         this.closeTab(editor);
       }
@@ -373,7 +373,7 @@ export default class Panel extends React.Component {
    *  @param {String} currentTabId - The id of the leftmost tab that will stay open
    */
   closeLeft(currentTabId) {
-    for (const [id, editor] of this.props.store.editors.entries()) {
+    for (const [id, editor] of [...this.props.store.editors.entries()]) {
       if (id !== currentTabId) {
         this.closeTab(editor);
       } else {
@@ -388,7 +388,7 @@ export default class Panel extends React.Component {
    */
   closeRight(currentTabId) {
     let startClosing = false;
-    for (const [id, editor] of this.props.store.editors.entries()) {
+    for (const [id, editor] of [...this.props.store.editors.entries()]) {
       if (id !== currentTabId) {
         if (startClosing) this.closeTab(editor);
       } else {
