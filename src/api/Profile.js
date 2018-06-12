@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-05-29T15:06:23+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-06-12T10:01:17+10:00
  */
 
 import _ from 'lodash';
@@ -247,7 +247,7 @@ export default class ProfileApi {
 
     profileList.creatingNewProfile = true;
     const service = featherClient().service('/mongo-connection');
-    service.timeout = 30000;
+    service.timeout = 60000;
     // Mark profile status as connecting
     if (selectedProfile) {
       runInAction('Mark profile status to connecting', () => {
