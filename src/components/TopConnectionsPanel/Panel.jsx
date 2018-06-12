@@ -44,6 +44,10 @@ import './Panel.scss';
 @observer
 export default class TopConnectionsPanel extends React.Component<Props> {
   timeoutUpdateId = null;
+
+  lastSelectedConID = '';
+  defaultOperationPaneSize = '100%';
+  defaultConnectionPaneSize = '35%';
   constructor(props) {
     super(props);
     this.state = {
@@ -153,10 +157,22 @@ export default class TopConnectionsPanel extends React.Component<Props> {
       width: this.state.topSplitPos - this.state.bottomSplitPos + 'px'
     };
     const { topConnectionsPanel } = this.props.store;
-    const { selectedOperation } = topConnectionsPanel;
-    let defaultOperationPaneSize = '100%';
+    const { selectedOperation, selectedConnection } = topConnectionsPanel;
+
     if (topConnectionsPanel.bShowExplain) {
-      defaultOperationPaneSize = '50%';
+      this.defaultOperationPaneSize = '50%';
+      if (selectedOperation.suggestionText) {
+        this.defaultConnectionPaneSize = '25%';
+        this.defaultOperationPaneSize = '25%';
+      }
+    } else if (selectedConnection && this.lastSelectedConID !== selectedConnection.connectionId) {
+      this.defaultConnectionPaneSize = '35%';
+      this.defaultOperationPaneSize = '100%';
+    } else {
+      this.defaultOperationPaneSize = '100%';
+    }
+    if (selectedConnection) {
+      this.lastSelectedConID = selectedConnection.connectionId;
     }
 
     return (
@@ -164,7 +180,8 @@ export default class TopConnectionsPanel extends React.Component<Props> {
         <SplitPane
           className="MainSplitPane"
           split="horizontal"
-          defaultSize="35%"
+          defaultSize={this.defaultConnectionPaneSize}
+          size={this.defaultConnectionPaneSize}
           minSize={200}
           maxSize={1000}
           pane2Style={splitPane2Style}
@@ -181,8 +198,8 @@ export default class TopConnectionsPanel extends React.Component<Props> {
           <SplitPane
             className="DetailsSplitPane"
             split="horizontal"
-            defaultSize={defaultOperationPaneSize}
-            size={defaultOperationPaneSize}
+            defaultSize={this.defaultOperationPaneSize}
+            size={this.defaultOperationPaneSize}
             minSize={200}
             maxSize={1000}
             pane2Style={splitPane2Style}

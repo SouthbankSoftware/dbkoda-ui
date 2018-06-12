@@ -92,6 +92,12 @@ export default class OperationDetails extends React.Component {
     const { api, operation } = this.props;
     const getSuggestionText = operation => {
       this.setState({ suggestionText: operation.suggestionText });
+      setTimeout(() => {
+        const suggestionsPanel = document.getElementsByClassName('explain-command-panel');
+        if (suggestionsPanel && suggestionsPanel.length >= 1) {
+          suggestionsPanel[0].scrollIntoView();
+        }
+      }, 500);
     };
     if (!operation.explainPlan) {
       api
