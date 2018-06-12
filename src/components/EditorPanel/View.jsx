@@ -745,6 +745,7 @@ class View extends React.Component {
   setupAutoCompletion() {
     CodeMirror.commands.autocomplete = cm => {
       if (
+        this.doc.isClean() ||
         this.props.store.editorToolbar.isActiveExecuting ||
         this.props.store.editorPanel.activeEditorId !== this.id
       ) {
