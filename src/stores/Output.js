@@ -78,10 +78,11 @@ export default class Output {
     }
   };
 
-  scrollToButtom = (cm: *) => {
+  scrollToButtom = action((cm: *) => {
     const count = cm.lineCount();
     cm.setCursor(Math.max(0, count - 3), 0);
-  };
+    this.lastScrollPos = null;
+  });
 
   _removeNLines = (n: number, from: number) => {
     this.doc.replaceRange('', { line: from, ch: 0 }, { line: from + n, ch: 0 });
