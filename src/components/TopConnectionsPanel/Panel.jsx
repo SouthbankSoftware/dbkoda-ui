@@ -161,7 +161,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
 
     if (topConnectionsPanel.bShowExplain) {
       this.defaultOperationPaneSize = '50%';
-      if (selectedOperation.suggestionText) {
+      if (selectedOperation && selectedOperation.suggestionText) {
         this.defaultConnectionPaneSize = '25%';
         this.defaultOperationPaneSize = '25%';
       }
