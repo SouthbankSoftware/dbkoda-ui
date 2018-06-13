@@ -119,7 +119,7 @@ export default class Details extends React.Component {
     this.reactionToUpdateDetails();
   }
   updateDetails() {
-    if (this.state.debug) l.debug('Update Details');
+    if (this.state.debug) l.debug('Update Details for: ', this.editor.id);
     if (this.props.store.editorPanel.updateAggregateDetails) {
       this.props.store.editorPanel.updateAggregateDetails = false;
       this.state.reproduceCode = true;
@@ -203,6 +203,7 @@ export default class Details extends React.Component {
 
   render() {
     const activeEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     let activeBlock;
     let blockIndex;
     if (this.editor && this.editor.collection) {

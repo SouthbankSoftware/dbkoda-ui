@@ -2,6 +2,7 @@
  * Defines the Dialogue for the quick simple query action.
  */
 
+import _ from 'lodash';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 // $FlowFixMe
@@ -72,32 +73,58 @@ export default class QuickTreeActionDialogue extends React.Component {
 
   @autobind
   _onDBSelect(database) {
-    this.setState({ selectedDatabase: database.name });
-    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-
-    // Fetch collections for DB.
-    const service = featherClient().service('mongo-sync-execution');
-    service.timeout = 30000;
-    service
-      .update(this.state.profileId, {
-        shellId: editor.shellId,
-        commands: `db.getSiblingDB("${database.name}").getCollectionNames();`
+    l.debug(database.name);
+    featherClient()
+      .service('drivercommands')
+      .patch(this.state.profileId, {
+        database: database.name,
+        command: {
+          listCollections: 1
+        }
       })
       .then(res => {
-        res = JSON.parse(res);
+        l.info(res);
+        res = res.cursor.firstBatch;
         this.state.collectionList = [];
         for (let i = 0; i < res.length; i += 1) {
           this.state.collectionList.push({
-            name: res[i].replace(/['"]+/g, '').trim()
+            name: res[i].name.replace(/['"]+/g, '').trim()
           });
           if (i === res.length - 1) {
+            this.state.collectionList = _.orderBy(this.state.collectionList, ['name'], ['asc']);
             this.forceUpdate();
+            this.setState({ selectedDatabase: database.name });
           }
         }
       })
       .catch(err => {
-        l.error(err);
+        l.error('err: ', err);
       });
+    // const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+
+    // // Fetch collections for DB.
+    // const service = featherClient().service('mongo-sync-execution');
+    // service.timeout = 30000;
+    // service
+    //   .update(this.state.profileId, {
+    //     shellId: editor.shellId,
+    //     commands: `db.getSiblingDB("${database.name}").getCollectionNames();`
+    //   })
+    //   .then(res => {
+    //     res = JSON.parse(res);
+    //     this.state.collectionList = [];
+    //     for (let i = 0; i < res.length; i += 1) {
+    //       this.state.collectionList.push({
+    //         name: res[i].replace(/['"]+/g, '').trim()
+    //       });
+    //       if (i === res.length - 1) {
+    //         this.forceUpdate();
+    //       }
+    //     }
+    //   })
+    //   .catch(err => {
+    //     l.error(err);
+    //   });
   }
 
   @autobind
