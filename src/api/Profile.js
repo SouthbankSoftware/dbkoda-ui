@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-06-12T10:01:17+10:00
+ * @Last modified time: 2018-06-15T09:45:40+10:00
  */
 
 import _ from 'lodash';
@@ -277,7 +277,7 @@ export default class ProfileApi {
             selectedProfile.status = ProfileStatus.CLOSED;
           }
         });
-        l.error('Failed to add SSH Terminal:', err);
+        l.error('Profile connection failed:', err);
         this.onFail();
         this.toasterCallback && this.toasterCallback('connectionFail', err);
       });
