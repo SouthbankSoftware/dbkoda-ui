@@ -181,34 +181,23 @@ class Terminal extends React.Component {
   componentDidMount() {
     const cm = this.terminal.getCodeMirror();
     const editorType = this.props.store.editors.get(this.props.id).type;
-    if (this.props.config.settings.automaticAutoComplete && editorType !== EditorTypes.DRILL) {
-      cm.on(
-        'change',
-        _.debounce(() => {
-          if (
-            this.state.historyCursor >
-              this.props.store.outputs.get(this.props.id).commandHistory.length - 1 &&
-            this.state.command &&
-            this.state.command !== this.state.lastAutocomplete
-          ) {
-            this.setState({ lastAutocomplete: this.state.command });
-            cm.execCommand('autocomplete');
-          }
-        }, 400)
-      );
-    }
-    cm.on('keydown', (cm, keyEvent) => {
-      if (cm.state.completionActive == null) {
-        if (keyEvent.keyCode == 38) {
-          // Up
-          this.showPreviousCommand();
-        } else if (keyEvent.keyCode == 40) {
-          // Down
-          this.showNextCommand();
-        }
+
+    this.automaticAutocomplete = _.debounce(() => {
+      if (
+        this.state.historyCursor >
+          this.props.store.outputs.get(this.props.id).commandHistory.length - 1 &&
+        this.state.command &&
+        this.state.command !== this.state.lastAutocomplete
+      ) {
+        this.setState({ lastAutocomplete: this.state.command });
+        cm.execCommand('autocomplete');
       }
-    });
-    cm.on('beforeChange', (cm, changeObj) => {
+    }, 400);
+    if (this.props.config.settings.automaticAutoComplete && editorType !== EditorTypes.DRILL) {
+      cm.on('change', this.automaticAutocomplete);
+    }
+
+    this.cmBeforeChange = (cm, changeObj) => {
       // If typed new line, attempt submit
       const typedNewLine =
         changeObj.origin == '+input' &&
@@ -232,7 +221,33 @@ class Terminal extends React.Component {
       }
       // Otherwise allow input untouched
       return null;
-    });
+    };
+    cm.on('beforeChange', this.cmBeforeChange);
+
+    this.cmKeydown = (cm, keyEvent) => {
+      if (cm.state.completionActive == null) {
+        if (keyEvent.keyCode == 38) {
+          // Up
+          this.showPreviousCommand();
+        } else if (keyEvent.keyCode == 40) {
+          // Down
+          this.showNextCommand();
+        }
+      }
+    };
+    cm.on('keydown', this.cmKeydown);
+
+    this.cleanUp = () => {
+      if (this.props.config.settings.automaticAutoComplete && editorType !== EditorTypes.DRILL) {
+        cm.off('change', this.automaticAutocomplete);
+      }
+      cm.off('keydown', this.cmKeydown);
+      cm.off('beforeChange', this.cmBeforeChange);
+    };
+  }
+
+  componentWillUnmount() {
+    this.cleanUp();
   }
 
   /**
