@@ -39,6 +39,7 @@ import SplitPane from 'react-split-pane';
 import Prettier from 'prettier-standalone';
 import sqlFormatter from 'sql-formatter';
 import React from 'react';
+import autobind from 'autobind-decorator';
 import CodeMirrorEditor from '#/common/CodeMirror';
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/javascript/javascript';
@@ -701,8 +702,8 @@ class View extends React.Component {
       });
     }
 
-    Broker.on(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain.bind(this));
-    Broker.on(EventType.SWAP_SHELL_CONNECTION, this.swapShellConnection.bind(this));
+    Broker.on(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain);
+    Broker.on(EventType.SWAP_SHELL_CONNECTION, this.swapShellConnection);
     if (this.props.editor) {
       const { profileId, shellId } = this.props.editor;
       Broker.on(
@@ -710,27 +711,30 @@ class View extends React.Component {
         this.finishedExecution
       );
     }
+
+    this._cleanup = () => {
+      const cm = this.editor.getCodeMirror();
+
+      cm.off('change', this._updateUnsavedFileIndicator);
+      !this._debouncedAutocomplete && cm.off('change', this._debouncedAutocomplete);
+      this._updateUnsavedFileIndicator = null;
+
+      Broker.removeListener(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain);
+      Broker.removeListener(EventType.SWAP_SHELL_CONNECTION, this.swapShellConnection);
+      if (this.props.editor) {
+        const { profileId, shellId } = this.props.editor;
+        Broker.removeListener(
+          EventType.createShellExecutionFinishEvent(profileId, shellId),
+          this.finishedExecution
+        );
+      }
+    };
   }
 
   componentWillUnmount() {
     _.forEach(this.reactions, r => r());
-
     this._updateUnsavedFileIndicator.cancel();
-
-    const cm = this.editor.getCodeMirror();
-
-    cm.off('change', this._updateUnsavedFileIndicator);
-    !this._debouncedAutocomplete && cm.off('change', this._debouncedAutocomplete);
-    this._updateUnsavedFileIndicator = null;
-
-    Broker.removeListener(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain);
-    if (this.props.editor) {
-      const { profileId, shellId } = this.props.editor;
-      Broker.removeListener(
-        EventType.createShellExecutionFinishEvent(profileId, shellId),
-        this.finishedExecution
-      );
-    }
+    this._cleanup();
   }
 
   clearAutoCompletion(cm) {
@@ -830,6 +834,7 @@ class View extends React.Component {
     cm.scrollTo(scrollInfo.left, scrollInfo.top);
   }
 
+  @autobind
   swapShellConnection(event) {
     const { oldId, oldShellId, id, shellId } = event;
     if (
@@ -853,6 +858,7 @@ class View extends React.Component {
    * executing explain parameters
    * @param explainParam  explain parameter, it could be queryPlanner, executionStats, allPlansExecution
    */
+  @autobind
   executingExplain(explainParam) {
     if (
       this.editor &&
