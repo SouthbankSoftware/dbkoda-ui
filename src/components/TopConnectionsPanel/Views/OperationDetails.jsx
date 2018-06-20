@@ -1,4 +1,6 @@
 /**
+ * @flow
+ *
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-04-12T16:16:27+10:00
  * @Email:  wahaj@southbanksoftware.com
@@ -28,31 +30,35 @@
 
 import { Tooltip, Intent, Position, Button } from '@blueprintjs/core';
 import { action } from 'mobx';
+import { observer, inject } from 'mobx-react';
+import React from 'react';
+import CodeMirror from '#/common/LegacyCodeMirror';
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
-import { observer, inject } from 'mobx-react';
-import React from 'react';
-import CodeMirror from '#/common/LegacyCodeMirror';
+
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/selection/active-line.js';
 import 'codemirror/addon/display/autorefresh.js';
 import 'codemirror/addon/edit/matchbrackets.js';
 // Patched for codemirror@5.28.0. Need to check this file when upgrade codemirror
 import '#/common/closebrackets.js';
-import 'codemirror/addon/fold/foldcode.js';
-import 'codemirror/addon/fold/foldgutter.js';
-import 'codemirror/addon/fold/brace-fold.js';
-import 'codemirror/addon/fold/comment-fold.js';
-import 'codemirror/addon/fold/xml-fold.js';
-import 'codemirror/addon/hint/show-hint.js';
-import 'codemirror/addon/hint/javascript-hint.js';
 import 'codemirror/keymap/sublime.js';
 import 'codemirror-formatting';
 import '#/common/MongoScript.js';
 import 'codemirror/theme/material.css';
+
+type Props = {
+  operation: Object,
+  topConnectionsPanel: Object,
+  api: *
+};
+
+type State = {
+  code: string
+};
 
 @inject(({ store }) => {
   const { topConnectionsPanel } = store;
@@ -64,31 +70,23 @@ import 'codemirror/theme/material.css';
   };
 })
 @observer
-export default class OperationDetails extends React.Component {
+export default class OperationDetails extends React.Component<Props, State> {
   static propTypes = {};
-  constructor(props) {
+  cmOptions: Object = {};
+  codeMirror: any;
+  constructor(props: Props) {
     super(props);
 
     this.cmOptions = {
       value: '',
       theme: 'material',
-      // lineNumbers: 'false',
       indentUnit: 2,
       styleActiveLine: 'true',
-      // scrollbarStyle: null,
       smartIndent: true,
       styleSelectedText: false,
       tabSize: 2,
       matchBrackets: true,
       autoCloseBrackets: true,
-      // foldOptions: {
-      //   widget: '...',
-      // },
-      // foldGutter: false,
-      // gutters: [
-      //   'CodeMirror-linenumbers',
-      //   'CodeMirror-foldgutter', // , 'CodeMirror-lint-markers'
-      // ],
       keyMap: 'sublime',
       mode: 'MongoScript'
     };
@@ -99,7 +97,7 @@ export default class OperationDetails extends React.Component {
     this.codeMirror = null;
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (nextProps && nextProps.operation) {
       this.setState({ code: JSON.stringify(nextProps.operation, null, 2) });
     } else {
