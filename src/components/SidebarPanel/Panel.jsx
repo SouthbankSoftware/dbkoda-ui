@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-21T09:24:34+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-05-30T00:27:24+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-06-22T12:02:05+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -51,6 +51,12 @@ export default class Panel extends React.Component {
     flexDirection: 'column'
   };
 
+  constructor(props) {
+    super(props);
+
+    this.props.store.treePanel.loadTopologyCallback = this.loadTopology;
+  }
+
   @action.bound
   updateLeftSplitPos(pos) {
     this.props.layout.leftSplitPos = pos;
@@ -67,6 +73,13 @@ export default class Panel extends React.Component {
   }
 
   treeState = new TreeState(this.props.store);
+  @action.bound
+  loadTopology() {
+    if (this.props.store.topology.json !== null) {
+      this.treeState.parseJson(this.props.store.topology.json, this.props.store.topology.profileId);
+    }
+  }
+
   render() {
     const { layout, drawer } = this.props;
     let leftSplitPos;

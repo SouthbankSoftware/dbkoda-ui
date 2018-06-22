@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T21:43:10+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-06-22T12:04:03+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -80,7 +80,7 @@ export default class Store {
   @observable.shallow outputs = observable.map(null, { deep: false });
   @observable.shallow terminals = observable.map(null, { deep: false });
   @observable.shallow performancePanels = observable.map(null, { deep: false });
-
+  @observable.shallow trees = observable.map(null, { deep: false }); // will use profileId as key to store tree JSON
   @observable.shallow performancePanel = null;
 
   @observable
@@ -210,7 +210,8 @@ export default class Store {
     showDrillStatus: false,
     drillDownloadProgress: null,
     drillStatusMsg: '',
-    action: null
+    action: null,
+    loadTopologyCallback: null
   };
 
   @observable
@@ -247,7 +248,7 @@ export default class Store {
     repeatPassword: ''
   };
 
-  @observable topology = observable({ isChanged: false, json: {}, profileId: '' });
+  @observable topology = observable({ json: {}, profileId: '' });
 
   @action.bound
   setDrawerChild = value => {
@@ -309,10 +310,15 @@ export default class Store {
   };
 
   @action.bound
-  updateTopology = res => {
+  updateTopology = (res, bStore = true) => {
+    if (bStore) {
+      this.trees.set(res.profileId, res);
+    }
     this.topology.profileId = res.profileId;
     this.topology.json = res.result;
-    this.topology.isChanged = true;
+    if (this.treePanel.loadTopologyCallback) {
+      this.treePanel.loadTopologyCallback();
+    }
   };
 
   @action.bound
