@@ -3,7 +3,7 @@
  * @Date:   2018-04-12T16:16:27+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-06-05T10:26:47+10:00
+ * @Last modified time: 2018-06-22T16:16:36+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,7 +30,7 @@ import { observer, inject } from 'mobx-react';
 import React from 'react';
 import { toJS } from 'mobx';
 import autobind from 'autobind-decorator';
-import { Tooltip, Intent, Position, Button } from '@blueprintjs/core';
+import { Tooltip, Intent, Position, Button, Tab, Tabs } from '@blueprintjs/core';
 import CodeMirror from '#/common/LegacyCodeMirror'; // eslint-disable-line
 import StageProgress from '#/ExplainPanel/StageProgress';
 import { StageStepsTable } from '#/ExplainPanel/StageStepsTable';
@@ -76,6 +76,7 @@ export default class OperationDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentTab: 'explain',
       suggestionText:
         props.operation && props.operation.suggestionText ? props.operation.suggestionText : null
     };
@@ -88,16 +89,24 @@ export default class OperationDetails extends React.Component {
   }
 
   @autobind
+  changeTab(newTab: string) {
+    if (IS_DEVELOPMENT) {
+      l.info(`changeTab(${newTab})`);
+    }
+    this.setState({ currentTab: newTab });
+  }
+
+  @autobind
   getIndexAdvisorForSelectedOp() {
     const { api, operation } = this.props;
     const getSuggestionText = operation => {
-      this.setState({ suggestionText: operation.suggestionText });
-      setTimeout(() => {
-        const suggestionsPanel = document.getElementsByClassName('explain-command-panel');
-        if (suggestionsPanel && suggestionsPanel.length >= 1) {
-          suggestionsPanel[0].scrollIntoView();
-        }
-      }, 500);
+      this.setState({ suggestionText: operation.suggestionText, currentTab: 'indexAdvice' });
+      // setTimeout(() => {
+      //   const suggestionsPanel = document.getElementsByClassName('explain-command-panel');
+      //   if (suggestionsPanel && suggestionsPanel.length >= 1) {
+      //     suggestionsPanel[0].scrollIntoView();
+      //   }
+      // }, 500);
     };
     if (!operation.explainPlan) {
       api
@@ -122,12 +131,12 @@ export default class OperationDetails extends React.Component {
       <div className="explainView">
         <nav className="pt-navbar explainToolbar">
           <div className="pt-navbar-group exampleGroup pt-align-left">
-            <div className="pt-navbar-heading">
+            {/* <div className="pt-navbar-heading">
               <span className="explainTitle">
                 {' '}
                 {globalString('performance/profiling/results/explainTitle')}
               </span>
-            </div>
+            </div> */}
           </div>
           <div className="pt-navbar-group pt-align-right">
             {this.props.operation &&
@@ -160,31 +169,56 @@ export default class OperationDetails extends React.Component {
                   <Button
                     className="reset-button use-suggestions-button pt-button pt-intent-primary"
                     text="Use Suggestions"
-                    onClick={() =>
-                      this.props.api.openEditorWithAdvisorCode(this.state.suggestionText)
-                    }
+                    onClick={() => {
+                      this.setState({ currentTab: 'indexAdvice' });
+                      this.props.api.openEditorWithAdvisorCode(this.state.suggestionText);
+                    }}
                   />
                 </Tooltip>
               )}
           </div>
         </nav>
-        <div className="explainBody explain-statistic-container-view">
-          {executionStages && <StageProgress stages={executionStages} />}
-          {executionStages && (
-            <StageStepsTable
-              stages={executionStages}
-              shardMergeStage={executionStages}
-              shard={executionStages.shards !== undefined}
+        <Tabs
+          id="explainViewTabs"
+          className="explainViewTabs"
+          animate={false}
+          onChange={this.changeTab}
+          selectedTabId={this.state.currentTab}
+        >
+          <Tab
+            key={0}
+            className="explain-plan-tab"
+            id="explain"
+            panel={
+              <div className="explainBody explain-statistic-container-view">
+                {executionStages && <StageProgress stages={executionStages} />}
+                {executionStages && (
+                  <StageStepsTable
+                    stages={executionStages}
+                    shardMergeStage={executionStages}
+                    shard={executionStages.shards !== undefined}
+                  />
+                )}
+                {!executionStages && (
+                  <ErrorView
+                    title={globalString('performance/profiling/results/noExplainTitle')}
+                    error={globalString('performance/profiling/results/noExplainBody')}
+                  />
+                )}
+              </div>
+            }
+            title="Explain Plan"
+          />
+          {this.state.suggestionText && (
+            <Tab
+              key={1}
+              className="index-advice-tab"
+              id="indexAdvice"
+              panel={<QueryCommandView command={this.state.suggestionText} />}
+              title="Index Advice"
             />
           )}
-          {!executionStages && (
-            <ErrorView
-              title={globalString('performance/profiling/results/noExplainTitle')}
-              error={globalString('performance/profiling/results/noExplainBody')}
-            />
-          )}
-        </div>
-        {this.state.suggestionText && <QueryCommandView command={this.state.suggestionText} />}
+        </Tabs>
       </div>
     );
   }
