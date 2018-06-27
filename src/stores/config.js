@@ -1,11 +1,11 @@
 /**
  * @flow
  *
- * @Author: Chris Trott <christrott>
+ * @Author: Chris Trott <christrott>, Guan Gui <guiguan>
  * @Date:   2017-07-21T09:27:03+10:00
- * @Email:  chris@southbanksoftware.com
+ * @Email:  chris@southbanksoftware.com, root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:54:31+10:00
+ * @Last modified time: 2018-06-25T19:40:43+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,6 +30,7 @@ import _ from 'lodash';
 import { action, observable } from 'mobx';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
+import util from 'util';
 
 export default class Config {
   path: string;
@@ -40,8 +41,15 @@ export default class Config {
 
     l.info(`config path: ${this.path}`);
 
+    this._watchConfigErrors();
     this._watchConfigChanges();
   }
+
+  _watchConfigErrors = () => {
+    featherClient().configService.on('error', ({ payload: { error, level } }) => {
+      this._handleError(error, level, false);
+    });
+  };
 
   _watchConfigChanges = () => {
     featherClient().configService.on(
@@ -51,21 +59,44 @@ export default class Config {
           _.set(this.settings, k, v.new);
         });
 
-        sendToMain('configChanged', changed);
-
-        l.debug('config changed');
+        l.debug('Config has been changed', changed);
+        this._showToaster('Config has been successfully updated', 'info');
       })
     );
   };
 
-  _handleError = (message: string) => {
-    l.error(message);
+  _showToaster = (message: string, level: 'error' | 'warn' | 'info' = 'error') => {
+    let className;
+    let icon;
+
+    if (level === 'error') {
+      className = 'danger';
+      icon = 'thumbs-down';
+    } else if (level === 'warn') {
+      className = 'warning';
+      icon = 'thumbs-down';
+    } else {
+      className = 'success';
+      icon = 'thumbs-up';
+    }
 
     NewToaster.show({
       message,
-      className: 'danger',
-      icon: 'thumbs-down'
+      className,
+      icon
     });
+  };
+
+  _handleError = (
+    error: FeathersError,
+    level: 'error' | 'warn' = 'error',
+    logError: boolean = true
+  ) => {
+    if (logError) {
+      l[level](error);
+    }
+
+    this._showToaster(util.format(error.message, error.errors || ''), level);
   };
 
   /**
@@ -85,7 +116,8 @@ export default class Config {
         })
       )
       .catch(err => {
-        this._handleError(`Failed to load initial config: ${err.message}`);
+        err.message = `Failed to load initial config: ${err.message}`;
+        this._handleError(err);
       });
   };
 
@@ -99,17 +131,8 @@ export default class Config {
         config: settings
       })
       .catch(err => {
-        let message;
-
-        if (err.errors) {
-          message = JSON.stringify(err.errors);
-        } else if (err.message) {
-          message = err.message; // eslint-disable-line prefer-destructuring
-        } else {
-          message = String(err);
-        }
-
-        this._handleError(`Failed to update config: ${message}`);
+        err.message = `Failed to patch config: ${err.message}`;
+        this._handleError(err);
       });
   };
 }

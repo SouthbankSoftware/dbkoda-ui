@@ -650,7 +650,7 @@ export default class TreeView extends React.Component {
       NewToaster.show({
         message: globalString('drill/drill_editor_open_success'),
         className: 'success',
-        icon: 'pt-icon-thumbs-up'
+        icon: 'thumbs-up'
       });
     }
   };

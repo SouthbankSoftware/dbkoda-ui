@@ -416,7 +416,7 @@ SHOW TABLES
 
     NewToaster.show({
       message: globalString('editor/toolbar/connectionSuccess'),
-      icon: 'pt-icon-thumbs-up',
+      icon: 'thumbs-up',
       className: 'success'
     });
     return editorId;
