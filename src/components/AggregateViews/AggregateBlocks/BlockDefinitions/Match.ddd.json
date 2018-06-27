@@ -3,18 +3,25 @@
   "DefaultValues": {},
   "Fields": [
     {
-      "name": "UseOr",
-      "label": "Use Or?",
-      "tooltip": "If true, will us OR across filter conditions",
-      "type": "Boolean",
-      "default": false
-    },
-    {
-      "name": "UseAnd",
-      "label": "Use And?",
-      "tooltip": "If true, will apply AND across filter conditions",
-      "type": "Boolean",
-      "default": false
+      "name": "filter",
+      "label": "Filter Operator",
+      "tooltip": "Apply filter operator across filter conditions",
+      "type": "Radio",
+      "defaultValue": "none",
+      "radios": [
+        {
+          "label": "none",
+          "value": "none"
+        },
+        {
+          "label": "Use Or?",
+          "value": "UseOr"
+        },
+        {
+          "label": "Use And?",
+          "value": "UseAnd"
+        }
+      ]
     },
     {
       "name": "FilterKeys",

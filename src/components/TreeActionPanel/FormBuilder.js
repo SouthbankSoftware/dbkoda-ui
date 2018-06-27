@@ -23,7 +23,7 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-25T12:22:04+10:00
+ * @Last modified time: 2018-06-27T12:52:38+10:00
  */
 
 /* eslint import/no-dynamic-require: warn */
@@ -105,6 +105,12 @@ export default class FormBuilder {
         res.maxColumns = defField.maxColumns;
       }
     }
+    if (defField.type == 'Radio') {
+      res.fieldBinding = 'RadioField';
+      if (Object.prototype.hasOwnProperty.call(defField, 'radios')) {
+        res.fieldRadios = defField.radios;
+      }
+    }
     return res;
   };
   /**
@@ -168,6 +174,7 @@ export default class FormBuilder {
       result.bindings = {};
       result.arrayLast = []; // an object to keep reference of array fields to add last element later before sending to the template.
       result.multiCombo = []; // an object to keep reference of fields which are multi value combo fields
+      result.radios = []; // an object to keep reference of Radio Fields to spread then to boolean values with their values
       result.options = {};
       result.values = {};
 
@@ -226,6 +233,15 @@ export default class FormBuilder {
           } else {
             result.options[fldName] = { maxColumns: fld.maxColumns };
           }
+        }
+
+        if (Object.prototype.hasOwnProperty.call(fld, 'fieldRadios')) {
+          if (result.options[fldName]) {
+            result.options[fldName].radios = fld.fieldRadios;
+          } else {
+            result.options[fldName] = { radios: fld.fieldRadios };
+          }
+          result.radios.push(fldName);
         }
 
         if (fld.fieldQuery) {
@@ -410,6 +426,24 @@ export default class FormBuilder {
                     traverseMultiCombo(arrCFlds, values, false);
                   } else {
                     traverseMultiCombo([fld], values, false);
+                  }
+                }
+              }
+              if (formDefs.radios.length > 0) {
+                for (const fld of formDefs.radios) {
+                  if (
+                    values[fld].length > 0 &&
+                    formDefs.options[fld] &&
+                    formDefs.options[fld].radios
+                  ) {
+                    const radioVals = formDefs.options[fld].radios;
+                    for (const radio of radioVals) {
+                      if (radio.value === values[fld]) {
+                        values[radio.value] = true;
+                      } else {
+                        values[radio.value] = false;
+                      }
+                    }
                   }
                 }
               }
