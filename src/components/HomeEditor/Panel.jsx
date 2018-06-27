@@ -5,7 +5,7 @@
  * @Date:   2018-05-29T21:57:08+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T23:55:07+10:00
+ * @Last modified time: 2018-06-27T11:26:30+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,7 +39,7 @@ import { OutputPanel } from '#/OutputPanel';
   layout: allStores.store.layout
 }))
 @observer
-class MailPanel extends React.Component<*, *> {
+class MainPanel extends React.Component<*, *> {
   splitPane2Style = {
     display: 'flex',
     flexDirection: 'column'
@@ -91,8 +91,8 @@ class MailPanel extends React.Component<*, *> {
         onDragFinished={this.updateRightSplitPos}
         resizerState={rightSplitResizerState}
         onResizerStateChanged={this.updateRightSplitResizerState}
+        primary="second"
         minSize={200}
-        maxSize={600}
         pane2Style={this.splitPane2Style}
       >
         <EditorPanel />
@@ -134,7 +134,7 @@ export default class HomeEditor extends React.Component<*, *> {
         allowedResizerState={[resizerStates.P_HIDDEN]}
       >
         <SidebarPanel />
-        <MailPanel />
+        <MainPanel />
       </EnhancedSplitPane>
     );
   }
