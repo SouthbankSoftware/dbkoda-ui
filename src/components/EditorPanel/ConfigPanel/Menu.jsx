@@ -34,6 +34,7 @@ import PathsSectionIcon from '~/styles/icons/color/folder-icon.svg';
 import ApplicationSectionIcon from '~/styles/icons/color/settings-icon.svg';
 import ShortcutsSectionIcon from '~/styles/icons/color/keys-icon.svg';
 import PerformanceSectionIcon from '~/styles/icons/color/performance-icon.svg';
+import EditorSectionIcon from '~/styles/icons/color/editor-icon.svg';
 // import FeaturesSectionIcon from '~/styles/icons/color/new-icon.svg';
 
 @inject(allStores => ({
@@ -91,6 +92,13 @@ export default class Menu extends React.Component {
           changeMenu={this.changeMenuSelected}
         >
           <ShortcutsSectionIcon className="dbKodaSVG" width={20} height={20} />
+        </MenuItem>
+        <MenuItem
+          name="Editor"
+          isSelected={this.isItemSelected}
+          changeMenu={this.changeMenuSelected}
+        >
+          <EditorSectionIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
         {/* @TODO -> Re add this section once we have appropriate content.
         <MenuItem
