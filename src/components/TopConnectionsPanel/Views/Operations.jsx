@@ -1,4 +1,6 @@
 /**
+ * @flow
+ *
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-04-11T15:31:22+10:00
  * @Email:  wahaj@southbanksoftware.com
@@ -35,7 +37,25 @@ import autobind from 'autobind-decorator';
 import TextSortableColumn from '../Components/TextSortableColumn';
 import ActionsColumn from '../Components/ActionsColumn';
 
-const columnsWidthsPercent = [15, 20, 20, 15, 20, 10];
+const columnsWidthsPercent: Array<number> = [15, 20, 20, 15, 20, 10];
+
+type Props = {
+  tableWidth: number,
+  onSelect: Function,
+  operations: Object,
+  api: *
+};
+
+type State = {
+  data: Array<Object>,
+  lastSelectRegion: Array<Object>,
+  lastSortedIndex: number,
+  sortedIndexMap: Array<number>,
+  operations: Object,
+  columns: Array<Object>,
+  columnsWidths: Array<number>,
+  removeOperationAlert: boolean
+};
 
 @inject(({ store }) => {
   const {
@@ -47,8 +67,8 @@ const columnsWidthsPercent = [15, 20, 20, 15, 20, 10];
   };
 })
 @observer
-export default class OperationsView extends React.Component<Props> {
-  constructor(props) {
+export default class OperationsView extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     const columnsWidths = columnsWidthsPercent.map(width => width * this.props.tableWidth / 100);
     this.state = {
@@ -59,8 +79,8 @@ export default class OperationsView extends React.Component<Props> {
       ],
       sortedIndexMap: [],
       lastSortedIndex: -1,
-      data: null,
-      operations: null,
+      data: [],
+      operations: {},
       columns: [
         new TextSortableColumn('OpId', 0),
         new TextSortableColumn('Namespace', 1),
@@ -73,7 +93,7 @@ export default class OperationsView extends React.Component<Props> {
       removeOperationAlert: false
     };
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (nextProps && nextProps.operations && this.state.operations !== nextProps.operations) {
       const operations = [];
       for (const opId in nextProps.operations) {
@@ -98,7 +118,7 @@ export default class OperationsView extends React.Component<Props> {
         }
       }
     } else {
-      this.setState({ data: null });
+      this.setState({ data: [] });
     }
     if (nextProps && nextProps.tableWidth) {
       const columnsWidths = columnsWidthsPercent.map(width => width * nextProps.tableWidth / 100);
@@ -117,7 +137,7 @@ export default class OperationsView extends React.Component<Props> {
   getCellData = (
     ogRowIndex: number,
     columnIndex: number,
-    bUseIndex: boolen = true,
+    bUseIndex: boolean = true,
     dataToSort: any = null
   ) => {
     const data = dataToSort == null ? this.state.data : dataToSort;
@@ -185,7 +205,7 @@ export default class OperationsView extends React.Component<Props> {
   };
 
   @action
-  onSelection(region) {
+  onSelection(region: Array<Object>) {
     if (region.length == 0) {
       return;
     }
@@ -198,7 +218,7 @@ export default class OperationsView extends React.Component<Props> {
   }
 
   @autobind
-  setSelection(regionObj) {
+  setSelection(regionObj: Object) {
     if (regionObj && regionObj.rows) {
       let [rowIndex] = regionObj.rows;
       const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
@@ -249,7 +269,6 @@ export default class OperationsView extends React.Component<Props> {
             loadingOptions={loadingOptions}
             enableRowHeader={false}
             selectionModes={SelectionModes.FULL_ROWS}
-            bodyContextMenuRenderer={this.renderBodyContextMenu}
             enableRowResizing={false}
             enableColumnResizing={false}
             defaultRowHeight={30}

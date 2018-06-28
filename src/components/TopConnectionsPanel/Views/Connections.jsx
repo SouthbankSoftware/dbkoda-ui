@@ -1,4 +1,6 @@
 /**
+ * @flow
+ *
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  wahaj@southbanksoftware.com
@@ -37,7 +39,29 @@ import RefreshIcon from '~/styles/icons/refresh-icon.svg';
 import TextSortableColumn from '../Components/TextSortableColumn';
 import ProgressBarColumn from '../Components/ProgressBarColumn';
 
-const columnsWidthsPercent = [10, 15, 15, 10, 10, 15, 10, 15];
+const columnsWidthsPercent: Array<number> = [10, 15, 15, 10, 10, 15, 10, 15];
+
+type Props = {
+  tableWidth: number,
+  onSelect: Function,
+  connections: Array<Object>,
+  highWaterMark: number,
+  bLoading: boolean,
+  autoRefreshTimeout: number,
+  onAutoRefreshTimeoutChange: Function,
+  onAutoRefreshCheckboxToggle: Function,
+  api: *
+};
+
+type State = {
+  data: Array<Object>,
+  lastSelectRegion: Array<Object>,
+  lastSortedIndex: number,
+  sortedIndexMap: Array<number>,
+  highWaterMark: number,
+  columns: Array<Object>,
+  columnsWidths: Array<number>
+};
 
 @inject(({ store }) => {
   const { topConnectionsPanel } = store;
@@ -50,8 +74,8 @@ const columnsWidthsPercent = [10, 15, 15, 10, 10, 15, 10, 15];
   };
 })
 @observer
-export default class ConnectionsView extends React.Component<Props> {
-  constructor(props) {
+export default class ConnectionsView extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     const columnsWidths = columnsWidthsPercent.map(width => width * this.props.tableWidth / 100);
     this.state = {
@@ -62,8 +86,8 @@ export default class ConnectionsView extends React.Component<Props> {
       ],
       sortedIndexMap: [],
       lastSortedIndex: -1,
-      data: null,
-      highWaterMark: null,
+      data: [],
+      highWaterMark: 1,
       columns: [
         new TextSortableColumn('Connection Id', 0),
         new TextSortableColumn('appName', 1),
@@ -77,7 +101,7 @@ export default class ConnectionsView extends React.Component<Props> {
       columnsWidths
     };
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (nextProps && nextProps.connections && this.state.data !== nextProps.connections) {
       this.setState({
         data: nextProps.connections,
@@ -110,7 +134,7 @@ export default class ConnectionsView extends React.Component<Props> {
   getCellData = (
     rowIndex: number,
     columnIndex: number,
-    bUseIndex: boolen = true,
+    bUseIndex: boolean = true,
     dataToSort: any = null
   ) => {
     const data = dataToSort == null ? this.state.data : dataToSort;
@@ -120,7 +144,7 @@ export default class ConnectionsView extends React.Component<Props> {
         rowIndex = sortedRowIndex;
       }
     }
-    let cellValue = '';
+    let cellValue: any;
     if (data && data.length > 0) {
       const rowData = data[rowIndex];
       if (rowData) {
@@ -147,7 +171,9 @@ export default class ConnectionsView extends React.Component<Props> {
             cellValue = rowData.hasOwnProperty('us') ? rowData.us : '';
             break;
           case 7:
-            cellValue = rowData.hasOwnProperty('us') ? _.pick(rowData, 'us') : { us: 0 };
+            cellValue = rowData.hasOwnProperty('us')
+              ? _.pick(rowData, 'us')
+              : { us: 0, highWaterMark: 1 };
             if (this.state.highWaterMark) {
               cellValue.highWaterMark = this.state.highWaterMark;
             }
@@ -178,7 +204,7 @@ export default class ConnectionsView extends React.Component<Props> {
   }
 
   @action
-  onSelection(region) {
+  onSelection(region: Array<Object>) {
     if (region.length == 0) {
       return;
     }
@@ -190,7 +216,7 @@ export default class ConnectionsView extends React.Component<Props> {
   }
 
   @autobind
-  setSelection(regionObj) {
+  setSelection(regionObj: Object) {
     if (regionObj && regionObj.rows) {
       let [rowIndex] = regionObj.rows;
       const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
@@ -289,7 +315,6 @@ export default class ConnectionsView extends React.Component<Props> {
             loadingOptions={loadingOptions}
             enableRowHeader={false}
             selectionModes={SelectionModes.FULL_ROWS}
-            bodyContextMenuRenderer={this.renderBodyContextMenu}
             enableRowResizing={false}
             enableColumnResizing={false}
             defaultRowHeight={30}

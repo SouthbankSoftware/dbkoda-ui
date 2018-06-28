@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T10:33:36+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-25T15:16:13+10:00
+ * @Last modified time: 2018-06-22T16:15:07+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -63,16 +63,25 @@
 
   .explainView {
     flex-grow: 1;
+    margin-top: 10px;
 
     .explainToolbar {
-      height: 40px;
+      right: 0px;
+      position: absolute;
+      background-color: $tabBackground !important;
+      border: none;
+      box-shadow: unset;
 
       .explainTitle {
       }
     }
+    .explain-command-panel {
+      width: 100%;
+    }
 
     .explainBody {
       color: #bfbec0;
+      width: 100%;
 
       .explain-stage-progress {
         display: flex;
@@ -134,7 +143,7 @@
           height: 0;
           border-top: 18px solid transparent;
           border-bottom: 18px solid transparent;
-          border-left: 17px solid $explainStageTailBkColor;
+          border-left: 17px solid $tabBackground; //$explainStageTailBkColor;
           z-index: 2;
           transition: border-color 0.2s ease;
         }
@@ -142,7 +151,7 @@
         .explain-stage:before {
           right: auto;
           left: 0;
-          border-left: 17px solid $explainPanelBKColor;
+          border-left: 17px solid $tabBackground; //$explainPanelBKColor;
           z-index: 0;
         }
 
@@ -536,6 +545,51 @@
 
     .pt-button.pt-disabled.deleteButton:hover {
       background: $buttonDangerBackground !important;
+    }
+  }
+  .explainViewTabs {
+    // order: 2;
+    // flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: $tabBackground;
+
+    .pt-tab-list {
+      margin-left: 0px;
+
+      .pt-tab {
+        margin-right: unset;
+        flex-grow: 0;
+        color: $tabFontColor;
+        background-color: $tabBackground;
+        outline: unset;
+        box-shadow: unset;
+
+        button {
+          float: right;
+        }
+
+        button:hover {
+          color: $tabButtonHover !important;
+        }
+        margin: 5px;
+      }
+
+      .pt-tab[aria-selected='true'] {
+        box-shadow: unset;
+        background-color: $tabBackgroundSelected;
+        color: #bfbec0;
+      }
+
+      .pt-tab:hover {
+        background-color: $tabBackgroundHover;
+        color: $tabFontColor !important;
+      }
+    }
+
+    .pt-tab-panel {
+      margin: 10px;
+      flex-grow: 1;
     }
   }
 }

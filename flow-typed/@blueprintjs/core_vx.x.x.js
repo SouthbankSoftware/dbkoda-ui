@@ -83,6 +83,7 @@ declare module '@blueprintjs/core' {
   declare export var MenuItem;
   declare export var Checkbox;
   declare export var AnchorButton;
+  declare export var Button;
   declare export var Intent;
   declare export var Position;
   declare export var Tooltip;
@@ -90,6 +91,7 @@ declare module '@blueprintjs/core' {
   declare export var Dialog;
   declare export var PopoverInteractionKind;
   declare export var Icon;
-
+  declare export var Switch;
+  declare export var NumericInput;
   declare export default any;
 }

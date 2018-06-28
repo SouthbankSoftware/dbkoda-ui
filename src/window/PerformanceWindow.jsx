@@ -47,7 +47,6 @@ import '~/styles/fonts/index.css';
 import '#/App.scss';
 
 import { StoragePanel } from '../components/StoragePanel';
-import ProfileConfiguration from '../components/ProfileConfiguration';
 import Status from '../components/PerformancePanel/Status';
 import './PerformanceWindow.scss';
 
@@ -58,9 +57,7 @@ class PerformanceWindow extends React.Component {
     super();
     this.state = {
       sshStatus: Status.NORMAL,
-      mongoStatus: Status.NORMAL,
-      bProfileConfiguration: false,
-      bProfiling: true
+      mongoStatus: Status.NORMAL
     };
 
     window.onbeforeunload = this._handleNavigatingAway;
@@ -154,22 +151,6 @@ class PerformanceWindow extends React.Component {
     }
   }
 
-  @action.bound
-  showProfileConfiguration = show => {
-    if (show) {
-      const { store } = this.props;
-      this.setState({ bProfileConfiguration: true, bProfiling: false });
-      store.api.getProfilingDataBases();
-    }
-  };
-
-  @action.bound
-  showProfiling = show => {
-    if (show) {
-      this.setState({ bProfileConfiguration: false, bProfiling: true });
-    }
-  };
-
   render() {
     const { store } = this.props;
 
@@ -211,24 +192,7 @@ class PerformanceWindow extends React.Component {
             )}
           {store.drawer &&
             store.drawer.activeNavPane == NavPanes.TOP_CONNECTIONS && <TopConnectionsPanel />}
-          {store.drawer &&
-            store.drawer.activeNavPane == NavPanes.PROFILING &&
-            this.state.bProfiling && (
-              <ProfilingPanel
-                showProfileConfiguration={() => {
-                  this.showProfileConfiguration(true);
-                }}
-              />
-            )}
-          {store.drawer &&
-            store.drawer.activeNavPane == NavPanes.PROFILING &&
-            this.state.bProfileConfiguration && (
-              <ProfileConfiguration
-                showProfiling={() => {
-                  this.showProfiling(true);
-                }}
-              />
-            )}
+          {store.drawer && store.drawer.activeNavPane == NavPanes.PROFILING && <ProfilingPanel />}
           {store.drawer &&
             store.drawer.activeNavPane == NavPanes.STORAGE_PANEL &&
             store.api.shellId && (
