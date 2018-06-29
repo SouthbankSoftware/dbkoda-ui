@@ -1,9 +1,11 @@
 /**
+ * @flow
+ *
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-28T12:29:49+10:00
+ * @Last modified time: 2018-06-29T15:28:24+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,9 +27,11 @@
  */
 
 import { action } from 'mobx';
+import { parse } from 'mongodb-uri';
 import StaticApi from '~/api/static';
 import { Profile } from '~/api/Profile';
 import { JsonForm } from './JsonForm';
+import type { Field, SubForm, Form } from './JsonForm';
 
 const MAX_URL_ALIAS_LENGTH = 25;
 const MAX_HOSTNAME_ALIAS_LENGTH = 20;
@@ -39,13 +43,15 @@ export const SubformCategory = {
 };
 
 export class ConnectionForm extends JsonForm {
-  constructor(api) {
+  hasAliasChanged: boolean;
+  isEditMode: boolean;
+  constructor(api: *) {
     super(api);
 
     this.loadDefaultSchema();
   }
   loadDefaultSchema() {
-    const formSchema = require('./Forms/ConnectionForm.json');
+    const formSchema: Form = require('./Forms/ConnectionForm.json');
     this.loadFormSchema(formSchema);
     const validationSchema = require('./Forms/ConnectionFormValidation.json');
     this.loadValidationSchema(validationSchema);
@@ -56,9 +62,9 @@ export class ConnectionForm extends JsonForm {
   /**
    * Overrided function from JsonForm to update the alias
    */
-  getSubformFields(selectedSubform, column) {
+  getSubformFields(selectedSubform: string, column: number): Array<Field> {
     const fieldsCol = [];
-    const subForm = this.formSchema[selectedSubform];
+    const subForm: SubForm = this.formSchema[selectedSubform];
     if (subForm.fields) {
       subForm.fields.forEach(field => {
         // Update fields on load
@@ -84,10 +90,10 @@ export class ConnectionForm extends JsonForm {
     return fieldsCol;
   }
   /**
-   * Overrided function from JsonForm to update the alias on certain fields
+   * Overrided function from JsonForm to update the some fieds based on change in certain fields
    */
   @action
-  updateFieldValue(field, newValue) {
+  updateFieldValue(field: Field, newValue: any) {
     if (field.name === 'alias' && field.value !== newValue) {
       this.hasAliasChanged = true;
     }
@@ -113,12 +119,16 @@ export class ConnectionForm extends JsonForm {
       this.updateAlias(field);
     }
 
-    if (
-      field.subForm.value === SubformCategory.BASIC &&
-      field.name !== 'urlRadio' &&
-      field.name !== 'url'
-    ) {
+    if (field.subForm.value === SubformCategory.BASIC && field.name !== 'urlRadio' && field.name !== 'url') {
       this.updateUrl(field);
+    }
+
+    if (field.subForm.value === SubformCategory.BASIC && field.name === 'url') {
+      const urlRadioField = field.$('urlRadio');
+      const isUrlMode = urlRadioField && urlRadioField.value;
+      if (isUrlMode) {
+        this.updateFormViaURL(field);
+      }
     }
 
     if ((field.name === 'urlClusterRadio' || field.name === 'useClusterConfig') && field.value) {
@@ -126,7 +136,9 @@ export class ConnectionForm extends JsonForm {
       this.updateClusterFields(field);
     } else if (field.name === 'useBasicConfig' && !field.value) {
       const useClusterField = field.$('useClusterConfig', SubformCategory.CLUSTER);
-      this.updateClusterFields(useClusterField);
+      if (useClusterField) {
+        this.updateClusterFields(useClusterField);
+      }
     }
     if (
       field.subForm.value === SubformCategory.CLUSTER &&
@@ -138,12 +150,16 @@ export class ConnectionForm extends JsonForm {
 
     if (field.name === 'useBasicConfig') {
       const useClusterField = field.$('useClusterConfig', SubformCategory.CLUSTER);
-      useClusterField.value = !field.value;
-      this.updateReferencedFields(useClusterField);
+      if (useClusterField) {
+        useClusterField.value = !field.value;
+        this.updateReferencedFields(useClusterField);
+      }
     } else if (field.name === 'useClusterConfig') {
       const useBasicField = field.$('useBasicConfig', SubformCategory.BASIC);
-      useBasicField.value = !field.value;
-      this.updateReferencedFields(useBasicField);
+      if (useBasicField) {
+        useBasicField.value = !field.value;
+        this.updateReferencedFields(useBasicField);
+      }
     }
 
     if (field.subForm.value === SubformCategory.SSH && field.name === 'ssh') {
@@ -153,21 +169,66 @@ export class ConnectionForm extends JsonForm {
     this.validateForm();
   }
   @action
-  updateUrl(field) {
+  updateUrl(field: Field) {
     const urlField = field.$('url');
-    const isUrlMode = field.$('urlRadio').value;
-    if (!isUrlMode) {
-      let connectionUrl =
-        StaticApi.mongoProtocol + field.$('host').value + ':' + field.$('port').value;
-      const conDB = field.$('database').value;
-      connectionUrl += '/';
-      connectionUrl += conDB === '' ? 'test' : conDB;
-      urlField.value = connectionUrl;
+    const urlRadioField = field.$('urlRadio');
+    const isUrlMode = urlRadioField && urlRadioField.value;
+    if (!isUrlMode && urlField) {
+      const hostField = field.$('host');
+      const portField = field.$('port');
+      const databaseField = field.$('database');
+      if (hostField && portField && databaseField) {
+        let connectionUrl = StaticApi.mongoProtocol + String(hostField.value) + ':' + String(portField.value);
+        const conDB: string = String(databaseField.value);
+        connectionUrl += '/';
+        connectionUrl += conDB === '' ? 'test' : conDB;
+        urlField.value = connectionUrl;
+      }
     }
   }
 
   @action
-  updateClusterUrl(field) {
+  updateFormViaURL(urlField: Field) {
+    const urlParams = parse(urlField.value);
+    console.log(urlParams);
+    if (urlParams.hosts.length === 1) {
+      const [{ host, port }] = urlParams.hosts; // urlParams.hosts.map((host) => { return host.host + ':' + host.port; }).join(',');
+      const hostField = urlField.$('host');
+      if (hostField) {
+        hostField.value = host;
+      }
+      const portField = urlField.$('port');
+      if (portField && !isNaN(port)) {
+        portField.value = port;
+      }
+    }
+    if (urlParams.database) {
+      const databaseField = urlField.$('database');
+      if (databaseField) {
+        databaseField.value = urlParams.database;
+      }
+    }
+    if (urlParams.username) {
+      const shaField = urlField.$('sha');
+      if (shaField && shaField.value === false) {
+        shaField.value = true;
+        this.updateReferencedFields(shaField);
+      }
+      const usernameField = urlField.$('username');
+      if (usernameField) {
+        usernameField.value = urlParams.username;
+      }
+      if (urlParams.password) {
+        const passwordField = urlField.$('password');
+        if (passwordField) {
+          passwordField.value = urlParams.password;
+        }
+      }
+    }
+  }
+
+  @action
+  updateClusterUrl(field: Object) {
     const urlField = field.$('urlCluster');
     const isUrlMode = field.$('urlClusterRadio').value;
     if (!isUrlMode) {
@@ -215,7 +276,7 @@ export class ConnectionForm extends JsonForm {
    * Function to update the alias field on certain other fields
    */
   @action
-  updateAlias(field) {
+  updateAlias(field: Object) {
     if (!this.isEditMode && !this.hasAliasChanged) {
       const aliasField = field.$('alias', SubformCategory.BASIC);
       const useBasicField = field.$('useBasicConfig', SubformCategory.BASIC);
@@ -224,10 +285,7 @@ export class ConnectionForm extends JsonForm {
         field = useBasicField;
         const isUrlMode = field.$('urlRadio').value;
         if (!isUrlMode) {
-          if (
-            field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH &&
-            field.$('username').value.length > 0
-          ) {
+          if (field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH && field.$('username').value.length > 0) {
             aliasField.value =
               String(this.api.getProfiles().size + 1).padStart(2, '0') +
               ' - ' +
@@ -276,12 +334,9 @@ export class ConnectionForm extends JsonForm {
               field.$('replicaSetName').value;
           } else if (field.$('replicaSetName').value.length > 0) {
             aliasField.value =
-              String(this.api.getProfiles().size + 1).padStart(2, '0') +
-              ' - ' +
-              field.$('replicaSetName').value;
+              String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - ' + field.$('replicaSetName').value;
           } else {
-            aliasField.value =
-              String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - New Cluster Profile';
+            aliasField.value = String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - New Cluster Profile';
           }
         } else {
           let urlCluster = field.$('urlCluster').value;
@@ -301,7 +356,7 @@ export class ConnectionForm extends JsonForm {
       }
     }
   }
-  updateAliasViaUrlValue(aliasField, urlValue) {
+  updateAliasViaUrlValue(aliasField: Object, urlValue: string) {
     if (urlValue.length > MAX_URL_ALIAS_LENGTH) {
       //eslint-disable-line
       if (urlValue.split('//').length > 1) {
@@ -317,21 +372,16 @@ export class ConnectionForm extends JsonForm {
       }
     } else if (urlValue.split('//').length > 1) {
       if (urlValue.split('//')[1] === '') {
-        aliasField.value =
-          String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - New Profile';
+        aliasField.value = String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - New Profile';
       } else {
-        aliasField.value =
-          String(this.api.getProfiles().size + 1).padStart(2, '0') +
-          ' - ' +
-          urlValue.split('//')[1]; //eslint-disable-line
+        aliasField.value = String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - ' + urlValue.split('//')[1]; //eslint-disable-line
       }
     } else {
-      aliasField.value =
-        String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - ' + urlValue;
+      aliasField.value = String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - ' + urlValue;
     }
   }
 
-  updateClusterFields(field) {
+  updateClusterFields(field: Object) {
     const hostListField = field.$('hostsList');
     const hostField = field.$('host', SubformCategory.BASIC);
     const portField = field.$('port', SubformCategory.BASIC);
@@ -346,10 +396,7 @@ export class ConnectionForm extends JsonForm {
     if (sslField.value && sslField.value !== field.$('sslCluster').value) {
       field.$('sslCluster').value = sslField.value;
     }
-    const sslAllowInvalidCertificatesField = field.$(
-      'sslAllowInvalidCertificates',
-      SubformCategory.BASIC
-    );
+    const sslAllowInvalidCertificatesField = field.$('sslAllowInvalidCertificates', SubformCategory.BASIC);
     if (
       sslAllowInvalidCertificatesField.value &&
       sslAllowInvalidCertificatesField.value !== field.$('sslAllowInvalidCertificatesCluster').value
@@ -379,7 +426,7 @@ export class ConnectionForm extends JsonForm {
       field.$('authenticationDatabaseCluster').value = authenticationDatabaseField.value;
     }
   }
-  updateRemoteHost(field) {
+  updateRemoteHost(field: Object) {
     if (field.value) {
       const remoteHostField = field.$('remoteHost');
       remoteHostField.value = field.$('host', SubformCategory.BASIC).value;
@@ -404,7 +451,7 @@ export class ConnectionForm extends JsonForm {
   /**
    * Function to get connection profile from schema
    */
-  getProfileFromSchema(formData): Profile {
+  getProfileFromSchema(formData: Form): Profile {
     const profile = {};
     l.info('getProfileFromInstance:', formData);
     for (const subform in formData) {

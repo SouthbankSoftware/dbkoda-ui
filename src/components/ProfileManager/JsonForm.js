@@ -1,9 +1,11 @@
 /**
+ * @flow
+ *
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-01-24T09:50:36+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-28T10:18:43+10:00
+ * @Last modified time: 2018-06-29T10:53:09+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,59 +27,67 @@
  */
 
 import _ from 'lodash';
+import autobind from 'autobind-decorator';
 import { observable, toJS, runInAction, action, set } from 'mobx';
 import Ajv from 'ajv';
 
+// FieldBindings are required in the UI components of Fields to bind to specified properties
 export const FieldBindings = {
   text: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
   inplacetext: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onConfirm'],
   password: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
   number: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onValueChange', 'onBlur'],
-  checkbox: [
-    'name',
-    'value',
-    'type',
-    'id',
-    'placeholder',
-    'disabled',
-    'onClick',
-    'onChange',
-    'onBlur'
-  ],
-  switch: [
-    'name',
-    'value',
-    'type',
-    'id',
-    'placeholder',
-    'disabled',
-    'onClick',
-    'onChange',
-    'onBlur'
-  ],
+  checkbox: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onClick', 'onChange', 'onBlur'],
+  switch: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onClick', 'onChange', 'onBlur'],
   file: ['name', 'value', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
   select: ['name', 'value', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur']
 };
+export type Field = {
+  name: string,
+  label: string,
+  value: string | number | boolean,
+  type: string,
+  column: number,
+  placeholder?: string,
+  refFields?: Array<string>,
+  disabled?: boolean,
+  checkbox?: string,
+  options?: {},
+  id?: string,
+  subForm: SubForm, // eslint-disable-line
+  $: (siblingFieldName: string, siblingSubform?: string) => Field | null | void,
+  bind?: () => {},
+  onConfirm?: () => void,
+  onValueChange?: (e: any) => void,
+  onClick?: (e: any) => void,
+  onBlur?: () => void,
+  onChange?: (e: any) => void
+};
+export type SubForm = {
+  name: string,
+  value: string,
+  tips: Array<string>,
+  fields: Array<Field>
+};
+export type Form = { [string]: SubForm };
 
 export class JsonForm {
-  api: null;
-  formSchema: null;
-  validationSchema: null;
+  api: *;
+  formSchema: Form;
+  validationSchema: {};
   formErrors: [];
-  validateErrors: null;
-  @observable isFormInvalid: false;
+  validateErrors: (formData: {}) => boolean;
+  @observable isFormInvalid: boolean = false;
 
-  constructor(api) {
+  constructor(api: *) {
     this.api = api;
     this.formErrors = [];
-
-    this.getSubForms = this.getSubForms.bind(this);
   }
   /**
    * Function to load schema to create form fields
    */
-  loadFormSchema(jsonSchema) {
-    this.formSchema = observable(jsonSchema);
+  loadFormSchema(jsonSchema: Form) {
+    this.formSchema = observable.object(jsonSchema);
 
     // This loop will add the additional required properties which are required by renderer UI fields
     for (const subform in this.formSchema) {
@@ -91,21 +101,22 @@ export class JsonForm {
   /**
    * Function to load validation schema to validate form fields
    */
-  loadValidationSchema(jsonSchema) {
+  loadValidationSchema(jsonSchema: {}) {
     this.validationSchema = jsonSchema;
   }
   /**
    * Function to get the subform keys to get subform fields
    */
-  getSubForms() {
+  @autobind
+  getSubForms(): Array<string> {
     return Object.keys(this.formSchema);
   }
   /**
    * Function to get subform fields
    */
-  getSubformFields(selectedSubform, column) {
+  getSubformFields(selectedSubform: string, column: number): Array<Field> {
     const fieldsCol = [];
-    const subForm = this.formSchema[selectedSubform];
+    const subForm: SubForm = this.formSchema[selectedSubform];
     if (subForm.fields) {
       subForm.fields.forEach(field => {
         if (field.column === column) {
@@ -118,8 +129,8 @@ export class JsonForm {
   /**
    * Function to get the subform Tips if there are any
    */
-  getSubformTips(selectedSubform) {
-    const subForm = this.formSchema[selectedSubform];
+  getSubformTips(selectedSubform: string): Array<string> {
+    const subForm: SubForm = this.formSchema[selectedSubform];
     if (subForm && subForm.tips) {
       return subForm.tips;
     }
@@ -129,17 +140,19 @@ export class JsonForm {
    * Private function to add additional Props to a form field which are used in UI renderer of fields
    */
   @action
-  addAdditionalFieldProps(field, subForm) {
+  addAdditionalFieldProps(field: Field, subForm: SubForm) {
     field.id = field.name; // fix to add id as required by UI fields
     field.subForm = subForm;
     field.$ = (siblingFieldName, siblingSubform = '') => {
       // get Sibling field of the sub form
-      let refField = null;
+      let refField: Field;
       if (siblingSubform !== '') {
+        // $FlowFixMe
         refField = _.find(this.formSchema[siblingSubform].fields, f => {
           return f.name === siblingFieldName;
         });
       } else {
+        // $FlowFixMe
         refField = _.find(field.subForm.fields, f => {
           return f.name === siblingFieldName;
         });
@@ -187,7 +200,7 @@ export class JsonForm {
    * Function to update field value and also update values of referenced fields if defined in the schema
    */
   @action
-  updateFieldValue(field, newValue) {
+  updateFieldValue(field: Field, newValue: *) {
     field.value = newValue;
     if (field.refFields) {
       this.updateReferencedFields(field);
@@ -199,23 +212,26 @@ export class JsonForm {
    * Function to update referenced fields values defined in the schema
    */
   @action
-  updateReferencedFields(field) {
+  updateReferencedFields(field: Field) {
     const { subForm } = field;
-    if (subForm.fields) {
-      for (const fld of field.refFields) {
-        const refField = _.find(subForm.fields, f => {
-          return f.name === fld;
-        });
-        if (field.type === 'checkbox' || field.type === 'switch') {
-          if (field.disabled) {
-            refField.disabled = true;
-          } else if (refField.checkbox === 'enabled') {
-            refField.disabled = !field.value;
-          } else if (refField.checkbox === 'disabled') {
-            refField.disabled = field.value;
-          }
-          if (refField.refFields) {
-            this.updateReferencedFields(refField);
+    if (subForm && subForm.fields) {
+      if (field.refFields) {
+        for (const fld of field.refFields) {
+          // $FlowFixMe
+          const refField: Field = _.find(subForm.fields, f => {
+            return f.name === fld;
+          });
+          if (field.type === 'checkbox' || field.type === 'switch') {
+            if (field.disabled) {
+              refField.disabled = true;
+            } else if (refField.checkbox === 'enabled' && typeof field.value === 'boolean') {
+              refField.disabled = !field.value;
+            } else if (refField.checkbox === 'disabled' && typeof field.value === 'boolean') {
+              refField.disabled = field.value;
+            }
+            if (refField.refFields) {
+              this.updateReferencedFields(refField);
+            }
           }
         }
       }
