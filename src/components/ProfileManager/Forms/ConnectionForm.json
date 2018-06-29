@@ -18,7 +18,7 @@
         "value": true,
         "type": "switch",
         "column": 1,
-        "refFields": ["urlRadio", "database", "ssl", "sslAllowInvalidCertificates", "sha"],
+        "refFields": ["urlRadio", "ssl", "sslAllowInvalidCertificates", "sha"],
         "disabled": false
       },
       {
@@ -53,7 +53,7 @@
         "type": "text",
         "column": 1,
         "disabled": false,
-        "checkbox": "enabled"
+        "checkbox": "disabled"
       },
       {
         "name": "urlRadio",
@@ -61,7 +61,7 @@
         "value": false,
         "type": "switch",
         "column": 1,
-        "refFields": ["url", "host", "port"],
+        "refFields": ["url", "host", "port", "database"],
         "disabled": false,
         "checkbox": "enabled"
       },
@@ -165,8 +165,7 @@
         "label": "List of hosts:ports",
         "placeholder": "e.g. localhost:27017, localhost:27016",
         "options": {
-          "tooltip":
-            "If you specify only one host, we'll connect to nominated host and deduce the host list"
+          "tooltip": "If you specify only one host, we'll connect to nominated host and deduce the host list"
         },
         "value": "",
         "type": "text",
@@ -224,14 +223,7 @@
         "label": "Read Preference",
         "value": "",
         "options": {
-          "dropdown": [
-            "",
-            "primary",
-            "primaryPreferred",
-            "secondary",
-            "secondaryPreferred",
-            "nearest"
-          ]
+          "dropdown": ["", "primary", "primaryPreferred", "secondary", "secondaryPreferred", "nearest"]
         },
         "type": "select",
         "column": 1,
@@ -244,15 +236,7 @@
         "value": false,
         "type": "switch",
         "column": 2,
-        "refFields": [
-          "urlCluster",
-          "hostsList",
-          "replicaSetName",
-          "w",
-          "wtimeoutMS",
-          "journal",
-          "readPref"
-        ],
+        "refFields": ["urlCluster", "hostsList", "replicaSetName", "w", "wtimeoutMS", "journal", "readPref"],
         "disabled": true,
         "checkbox": "enabled"
       },
@@ -421,8 +405,7 @@
         "name": "sshKeyFile",
         "label": "PEM Certificate Key File",
         "options": {
-          "tooltip":
-            "This is the same file as you would use to establish an ssh command line to your host"
+          "tooltip": "This is the same file as you would use to establish an ssh command line to your host"
         },
         "type": "file",
         "value": "",
