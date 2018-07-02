@@ -5,21 +5,22 @@
     {
       "name": "filter",
       "label": "Filter Operator",
-      "tooltip": "Apply filter operator across filter conditions",
       "type": "Radio",
-      "defaultValue": "none",
+      "defaultValue": "default",
       "radios": [
         {
-          "label": "none",
-          "value": "none"
+          "label": "Default",
+          "value": "default"
         },
         {
-          "label": "Use Or?",
-          "value": "UseOr"
+          "label": "Use $or",
+          "value": "UseOr",
+          "tooltip": "If selected, will apply OR across filter conditions"
         },
         {
-          "label": "Use And?",
-          "value": "UseAnd"
+          "label": "Use $and",
+          "value": "UseAnd",
+          "tooltip": "If selected, will apply AND across filter conditions"
         }
       ]
     },

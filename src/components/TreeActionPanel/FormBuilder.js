@@ -77,35 +77,35 @@ export default class FormBuilder {
       }
       res.fieldParseFn = defField.lookup + '_parse';
     }
-    if (defField.type == 'Text') {
+    if (defField.type === 'Text') {
       res.fieldBinding = 'TextField';
     }
-    if (defField.type == 'CodeMirror') {
+    if (defField.type === 'CodeMirror') {
       res.fieldBinding = 'CodeMirrorField';
     }
-    if (defField.type == 'Select') {
+    if (defField.type === 'Select') {
       res.fieldBinding = 'SelectField';
     }
-    if (defField.type == 'Boolean') {
+    if (defField.type === 'Boolean') {
       res.fieldBinding = 'BooleanField';
     }
-    if (defField.type == 'Numeric') {
+    if (defField.type === 'Numeric') {
       res.fieldBinding = 'NumericField';
       res.fieldMin = Object.prototype.hasOwnProperty.call(defField, 'min') ? defField.min : null;
       res.fieldMax = Object.prototype.hasOwnProperty.call(defField, 'max') ? defField.max : null;
     }
-    if (defField.type == 'Combo') {
+    if (defField.type === 'Combo') {
       res.fieldBinding = 'ComboField';
       if (Object.prototype.hasOwnProperty.call(defField, 'multi')) {
         res.multi = defField.multi;
       }
     }
-    if (defField.type == 'Table') {
+    if (defField.type === 'Table') {
       if (Object.prototype.hasOwnProperty.call(defField, 'maxColumns')) {
         res.maxColumns = defField.maxColumns;
       }
     }
-    if (defField.type == 'Radio') {
+    if (defField.type === 'Radio') {
       res.fieldBinding = 'RadioField';
       if (Object.prototype.hasOwnProperty.call(defField, 'radios')) {
         res.fieldRadios = defField.radios;
@@ -260,20 +260,20 @@ export default class FormBuilder {
         const resField = this.getField(defField, formFunctions);
         setFormOptions(resField, resField.fieldName);
 
-        if (defField.type == 'Table') {
+        if (defField.type === 'Table') {
           for (const col of defField.columns) {
             const colField = this.getField(col, formFunctions);
             const colFieldName = resField.fieldName + '[].' + colField.fieldName;
             setFormOptions(colField, colFieldName);
           }
           result.arrayLast.push(resField.fieldName); // this is utilized after the form has returned the input document for the template
-        } else if (defField.type == 'Group') {
+        } else if (defField.type === 'Group') {
           for (const member of defField.members) {
             const memField = this.getField(member, formFunctions);
             const memFieldName = resField.fieldName + '.' + memField.fieldName;
             setFormOptions(memField, memFieldName);
           }
-          if (!defField.label || defField.label == '') {
+          if (!defField.label || defField.label === '') {
             result.labels[resField.fieldName] = '--nolabel--';
           }
         }

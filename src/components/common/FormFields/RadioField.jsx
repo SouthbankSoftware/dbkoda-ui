@@ -26,7 +26,7 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Intent, Position, Tooltip, RadioGroup, Radio } from '@blueprintjs/core';
+import { Intent, Position, Tooltip, RadioGroup, Radio, Label } from '@blueprintjs/core';
 
 @inject(allStores => ({
   store: allStores.store
@@ -73,9 +73,37 @@ export default class RadioField extends React.Component {
           >
             {field.options &&
               field.options.radios &&
-              field.options.radios.map(radio => (
-                <Radio key={radio.value} label={radio.label} value={radio.value} />
-              ))}
+              field.options.radios.map(radio => {
+                if (radio.tooltip) {
+                  const radioItemClassName = 'radio-' + radio.value;
+                  const tooltipLabel = (
+                    <Tooltip
+                      className={tooltipClassName}
+                      content={radio.tooltip}
+                      hoverOpenDelay={1000}
+                      inline
+                      intent={Intent.PRIMARY}
+                      position={Position.TOP}
+                    >
+                      <Label
+                        text={radio.label}
+                        onClick={() => {
+                          document.getElementsByClassName(radioItemClassName)[0].click();
+                        }}
+                      />
+                    </Tooltip>
+                  );
+                  return (
+                    <Radio
+                      key={radio.value}
+                      value={radio.value}
+                      labelElement={tooltipLabel}
+                      className={radioItemClassName}
+                    />
+                  );
+                }
+                return <Radio key={radio.value} label={radio.label} value={radio.value} />;
+              })}
           </RadioGroup>
         </div>
       );
