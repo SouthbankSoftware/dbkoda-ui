@@ -22,19 +22,34 @@
 
 import React from 'react';
 import { observer } from 'mobx-react';
+import _ from 'lodash';
 
 @observer
 export default class Editor extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onStringInputChange = this.onStringInputChange.bind(this);
-  }
-
-  onStringInputChange(e) {
+  onStringInputChange = e => {
     const fieldName = e.target.id;
     const fieldValue = e.target.value;
+    l.debug(`updateValue(${fieldName}, ${fieldValue})`);
     this.props.updateValue(fieldName, fieldValue || null);
-  }
+  };
+
+  onNumericalInputChange = e => {
+    const fieldName = e.target.id;
+    const rawValue = e.target.value;
+    let fieldValue;
+
+    if (rawValue === '') {
+      fieldValue = rawValue;
+    } else {
+      fieldValue = Number(rawValue);
+
+      if (_.isNaN(fieldValue)) {
+        fieldValue = rawValue;
+      }
+    }
+
+    this.props.updateValue(fieldName, fieldValue);
+  };
 
   render() {
     return (
@@ -64,7 +79,7 @@ export default class Editor extends React.Component {
             type="text"
             id="editor.fontWeight"
             value={this.props.settings.editor.fontWeight}
-            onChange={this.onStringInputChange}
+            onChange={this.onNumericalInputChange}
           />
         </div>
         <div className="form-row">
@@ -82,7 +97,7 @@ export default class Editor extends React.Component {
             type="text"
             id="editor.lineHeight"
             value={this.props.settings.editor.lineHeight}
-            onChange={this.onStringInputChange}
+            onChange={this.onNumericalInputChange}
           />
         </div>
       </div>
