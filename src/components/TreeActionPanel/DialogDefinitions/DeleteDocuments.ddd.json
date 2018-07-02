@@ -36,18 +36,26 @@
       "readOnly": false
     },
     {
-      "name": "UseOr",
-      "label": "Use Or?",
-      "tooltip": "If true, will apply OR across filter conditions",
-      "type": "Boolean",
-      "readOnly": false
-    },
-    {
-      "name": "UseAnd",
-      "label": "Use And?",
-      "tooltip": "If true, will apply AND across filter conditions",
-      "type": "Boolean",
-      "readOnly": false
+      "name": "filter",
+      "label": "Filter Operator",
+      "type": "Radio",
+      "defaultValue": "default",
+      "radios": [
+        {
+          "label": "Default",
+          "value": "default"
+        },
+        {
+          "label": "Use $or",
+          "value": "UseOr",
+          "tooltip": "If selected, will apply OR across filter conditions"
+        },
+        {
+          "label": "Use $and",
+          "value": "UseAnd",
+          "tooltip": "If selected, will apply AND across filter conditions"
+        }
+      ]
     },
     {
       "name": "FilterKeys",
