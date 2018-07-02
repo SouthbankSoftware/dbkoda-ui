@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T23:47:40+10:00
+ * @Last modified time: 2018-07-02T11:18:18+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -104,13 +104,15 @@ class App extends React.Component {
           icon: 'thumbs-down'
         });
         break;
-      case 'connectionFail':
+      case 'connectionFail': {
+        const errMsg = err.message.substring(0, 1000);
+
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: (
             <span
               // eslint-disable-next-line react/no-danger
               dangerouslySetInnerHTML={{
-                __html: 'Error: ' + err.message.substring(0, 256) + '...'
+                __html: `Error: ${errMsg}${errMsg.length < err.message.length ? '...' : ''}`
               }}
             />
           ),
@@ -118,6 +120,7 @@ class App extends React.Component {
           icon: 'thumbs-down'
         });
         break;
+      }
       case 'connectionSuccess':
         DBKodaToaster(Position.RIGHT_TOP).show({
           message: globalString('connection/success'),
