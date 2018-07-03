@@ -23,7 +23,7 @@
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-04T10:50:56+10:00
+ * @Last modified time: 2018-06-27T09:54:15+10:00
  */
 
 import _ from 'lodash';
@@ -87,6 +87,10 @@ export class DynamicForm extends MobxReactForm {
     field.state.form.submit();
   };
   onComboValueChange = field => (event, { newValue }) => {
+    field.value = newValue;
+    field.state.form.submit();
+  };
+  onRadioValueChange = field => (event, { newValue }) => {
     field.value = newValue;
     field.state.form.submit();
   };
@@ -171,6 +175,19 @@ export class DynamicForm extends MobxReactForm {
         onFocus: $try(props.onFocus, field.onFocus),
         autoFocus: $try(props.autoFocus, field.autoFocus),
         onValueChange: $try(props.onValueChange, this.onNumericValueChange(field))
+      }),
+      RadioField: ({ $try, field, props }) => ({
+        type: $try(props.type, field.type),
+        id: $try(props.id, field.id),
+        name: $try(props.name, field.name),
+        value: $try(props.value, field.value),
+        label: $try(props.label, field.label),
+        placeholder: $try(props.placeholder, field.placeholder),
+        disabled: $try(props.disabled, field.disabled),
+        onChange: $try(props.onChange, this.onRadioValueChange(field)),
+        onBlur: $try(props.onBlur, field.onBlur),
+        onFocus: $try(props.onFocus, field.onFocus),
+        autoFocus: $try(props.autoFocus, field.autoFocus)
       })
     };
   }

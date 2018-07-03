@@ -23,7 +23,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-09T12:50:07+10:00
+ * @Last modified time: 2018-06-27T11:45:15+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -40,6 +40,7 @@ import SelectField from '#/common/FormFields/SelectField';
 import BooleanField from '#/common/FormFields/BooleanField';
 import NumericField from '#/common/FormFields/NumericField';
 import ComboField from '#/common/FormFields/ComboField';
+import RadioField from '#/common/FormFields/RadioField';
 import FormGroup from '#/common/FormFields/FormGroup';
 
 import './View.scss';
@@ -114,6 +115,8 @@ export default class TreeActionView extends React.Component {
           formFields.push(<NumericField key={key} field={mobxForm.$(key)} />);
         } else if (mobxForm.fields.get(key).type == 'Combo') {
           formFields.push(<ComboField key={key} field={mobxForm.$(key)} />);
+        } else if (mobxForm.fields.get(key).type == 'Radio') {
+          formFields.push(<RadioField key={key} field={mobxForm.$(key)} />);
         } else if (mobxForm.fields.get(key).type == 'Group') {
           formFields.push(<FormGroup key={key} field={mobxForm.$(key)} />);
         }

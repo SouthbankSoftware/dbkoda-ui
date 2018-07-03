@@ -162,6 +162,19 @@
     .pt-popover-target {
       width: 100%;
     }
+    .pt-radio {
+      .pt-popover-wrapper {
+        height: 16px;
+        cursor: pointer;
+        .pt-popover-target {
+          cursor: pointer;
+          .pt-label {
+            color: #bfbec0;
+            cursor: pointer;
+          }
+        }
+      }
+    }
   }
 
   .groupFieldSet {
