@@ -5,7 +5,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-06-29T15:28:24+10:00
+ * @Last modified time: 2018-07-03T16:36:31+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,8 +26,9 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
 import { action } from 'mobx';
-import { parse } from 'mongodb-uri';
+import mongodbUri from 'mongodb-uri';
 import StaticApi from '~/api/static';
 import { Profile } from '~/api/Profile';
 import { JsonForm } from './JsonForm';
@@ -119,7 +120,11 @@ export class ConnectionForm extends JsonForm {
       this.updateAlias(field);
     }
 
-    if (field.subForm.value === SubformCategory.BASIC && field.name !== 'urlRadio' && field.name !== 'url') {
+    if (
+      field.subForm.value === SubformCategory.BASIC &&
+      field.name !== 'urlRadio' &&
+      field.name !== 'url'
+    ) {
       this.updateUrl(field);
     }
 
@@ -133,11 +138,11 @@ export class ConnectionForm extends JsonForm {
 
     if ((field.name === 'urlClusterRadio' || field.name === 'useClusterConfig') && field.value) {
       // update cluster fields from basic connection fields
-      this.updateClusterFields(field);
+      this.updateClusterFieldsFromBasic(field);
     } else if (field.name === 'useBasicConfig' && !field.value) {
       const useClusterField = field.$('useClusterConfig', SubformCategory.CLUSTER);
       if (useClusterField) {
-        this.updateClusterFields(useClusterField);
+        this.updateClusterFieldsFromBasic(useClusterField);
       }
     }
     if (
@@ -177,19 +182,35 @@ export class ConnectionForm extends JsonForm {
       const hostField = field.$('host');
       const portField = field.$('port');
       const databaseField = field.$('database');
+      let connectionUrl = '';
       if (hostField && portField && databaseField) {
-        let connectionUrl = StaticApi.mongoProtocol + String(hostField.value) + ':' + String(portField.value);
+        connectionUrl =
+          StaticApi.mongoProtocol + String(hostField.value) + ':' + String(portField.value);
         const conDB: string = String(databaseField.value);
         connectionUrl += '/';
         connectionUrl += conDB === '' ? 'test' : conDB;
-        urlField.value = connectionUrl;
       }
+
+      const sslField = field.$('ssl');
+      if (sslField && sslField.value === true) {
+        connectionUrl.indexOf('?') > 0
+          ? (connectionUrl += '&ssl=true')
+          : (connectionUrl += '?ssl=true');
+      }
+
+      urlField.value = connectionUrl;
     }
   }
 
   @action
   updateFormViaURL(urlField: Field) {
-    const urlParams = parse(urlField.value);
+    let urlParams = {};
+    try {
+      urlParams = mongodbUri.parse(urlField.value);
+    } catch (err) {
+      l.error('updateFormViaURL:: failed to parse url ::', urlField.value);
+      return;
+    }
     console.log(urlParams);
     if (urlParams.hosts.length === 1) {
       const [{ host, port }] = urlParams.hosts; // urlParams.hosts.map((host) => { return host.host + ':' + host.port; }).join(',');
@@ -198,8 +219,8 @@ export class ConnectionForm extends JsonForm {
         hostField.value = host;
       }
       const portField = urlField.$('port');
-      if (portField && !isNaN(port)) {
-        portField.value = port;
+      if (portField) {
+        portField.value = !isNaN(port) ? port : 27017;
       }
     }
     if (urlParams.database) {
@@ -222,6 +243,18 @@ export class ConnectionForm extends JsonForm {
         const passwordField = urlField.$('password');
         if (passwordField) {
           passwordField.value = urlParams.password;
+        }
+      }
+    }
+    if (urlParams.options) {
+      const { options } = urlParams;
+
+      const sslField = urlField.$('ssl');
+      if (sslField) {
+        if (options.ssl && (options.ssl === 'true' || options.ssl === true)) {
+          sslField.value = true;
+        } else {
+          sslField.value = false;
         }
       }
     }
@@ -281,42 +314,19 @@ export class ConnectionForm extends JsonForm {
       const aliasField = field.$('alias', SubformCategory.BASIC);
       const useBasicField = field.$('useBasicConfig', SubformCategory.BASIC);
       const useClusterField = field.$('useClusterConfig', SubformCategory.CLUSTER);
+      const profileNo = String(this.api.getProfiles().size + 1).padStart(2, '0');
       if (useBasicField.value) {
         field = useBasicField;
         const isUrlMode = field.$('urlRadio').value;
         if (!isUrlMode) {
-          if (field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH && field.$('username').value.length > 0) {
+          const profileUsername =
+            field.$('username').value.length > 0 ? field.$('username').value + '@' : '';
+          const profileHostname = field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH);
+          if (profileUsername.length > 0 || profileHostname.length > 0) {
             aliasField.value =
-              String(this.api.getProfiles().size + 1).padStart(2, '0') +
-              ' - ' +
-              field.$('username').value +
-              '@' +
-              field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
-              ':' +
-              field.$('port').value;
-          } else if (field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH) {
-            aliasField.value =
-              String(this.api.getProfiles().size + 1).padStart(2, '0') +
-              ' - ' +
-              field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
-              ':' +
-              field.$('port').value;
-          } else if (field.$('username').value.length > 0) {
-            aliasField.value =
-              String(this.api.getProfiles().size + 1).padStart(2, '0') +
-              ' - ' +
-              field.$('username').value +
-              '@' +
-              field.$('host').value +
-              ':' +
-              field.$('port').value;
+              profileNo + ' - ' + profileUsername + profileHostname + ':' + field.$('port').value;
           } else {
-            aliasField.value =
-              String(this.api.getProfiles().size + 1).padStart(2, '0') +
-              ' - ' +
-              field.$('host').value +
-              ':' +
-              field.$('port').value;
+            aliasField.value = profileNo + ' - New Profile';
           }
         } else {
           this.updateAliasViaUrlValue(aliasField, field.$('url').value);
@@ -327,61 +337,56 @@ export class ConnectionForm extends JsonForm {
         if (!isUrlMode) {
           if (field.$('usernameCluster').value.length > 0) {
             aliasField.value =
-              String(this.api.getProfiles().size + 1).padStart(2, '0') +
+              profileNo +
               ' - ' +
               field.$('usernameCluster').value +
               '@' +
               field.$('replicaSetName').value;
           } else if (field.$('replicaSetName').value.length > 0) {
-            aliasField.value =
-              String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - ' + field.$('replicaSetName').value;
+            aliasField.value = profileNo + ' - ' + field.$('replicaSetName').value;
           } else {
-            aliasField.value = String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - New Cluster Profile';
+            aliasField.value = profileNo + ' - New Cluster Profile';
           }
         } else {
-          let urlCluster = field.$('urlCluster').value;
-          if (urlCluster.indexOf('replicaSet=') > 0) {
-            const rgx1 = /^(\S+)(replicaSet=)(\S*)(&\S*)/g;
-            const rgx2 = /^(\S+)(replicaSet=)(\S*)/g;
-            if (rgx1.test(urlCluster)) {
-              [, , , urlCluster] = urlCluster.split(rgx1);
-            } else if (rgx2.test(urlCluster)) {
-              [, , , urlCluster] = urlCluster.split(rgx2);
-            }
-            this.updateAliasViaUrlValue(aliasField, urlCluster);
-          } else {
-            this.updateAliasViaUrlValue(aliasField, field.$('urlCluster').value);
-          }
+          this.updateAliasViaUrlValue(aliasField, field.$('urlCluster').value);
         }
       }
     }
   }
   updateAliasViaUrlValue(aliasField: Object, urlValue: string) {
-    if (urlValue.length > MAX_URL_ALIAS_LENGTH) {
-      //eslint-disable-line
-      if (urlValue.split('//').length > 1) {
+    let urlParams = {};
+    if (urlValue.length > 0) {
+      try {
+        urlParams = mongodbUri.parse(urlValue);
+        urlParams = _.omit(urlParams, ['password']);
+        urlValue = mongodbUri.format(urlParams);
+      } catch (err) {
+        l.error('updateAliasViaUrlValue:: failed to parse url ::', urlValue);
+      }
+    } else {
+      return;
+    }
+    const profileNo = String(this.api.getProfiles().size + 1).padStart(2, '0');
+    if (urlParams.options && urlParams.options.replicaSet) {
+      if (urlParams.username) {
         aliasField.value =
-          String(this.api.getProfiles().size + 1).padStart(2, '0') +
-          ' - ' +
-          urlValue.split('//')[1].substring(0, MAX_URL_ALIAS_LENGTH);
+          profileNo + ' - ' + urlParams.username + '@' + urlParams.options.replicaSet;
       } else {
-        aliasField.value =
-          String(this.api.getProfiles().size + 1).padStart(2, '0') +
-          ' - ' +
-          urlValue.substring(0, MAX_URL_ALIAS_LENGTH);
+        aliasField.value = profileNo + ' - ' + urlParams.options.replicaSet;
       }
     } else if (urlValue.split('//').length > 1) {
       if (urlValue.split('//')[1] === '') {
-        aliasField.value = String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - New Profile';
+        aliasField.value = profileNo + ' - New Profile';
       } else {
-        aliasField.value = String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - ' + urlValue.split('//')[1]; //eslint-disable-line
+        aliasField.value =
+          profileNo + ' - ' + urlValue.split('//')[1].substring(0, MAX_URL_ALIAS_LENGTH);
       }
     } else {
-      aliasField.value = String(this.api.getProfiles().size + 1).padStart(2, '0') + ' - ' + urlValue;
+      aliasField.value = profileNo + ' - ' + urlValue.substring(0, MAX_URL_ALIAS_LENGTH);
     }
   }
 
-  updateClusterFields(field: Object) {
+  updateClusterFieldsFromBasic(field: Object) {
     const hostListField = field.$('hostsList');
     const hostField = field.$('host', SubformCategory.BASIC);
     const portField = field.$('port', SubformCategory.BASIC);
@@ -396,7 +401,10 @@ export class ConnectionForm extends JsonForm {
     if (sslField.value && sslField.value !== field.$('sslCluster').value) {
       field.$('sslCluster').value = sslField.value;
     }
-    const sslAllowInvalidCertificatesField = field.$('sslAllowInvalidCertificates', SubformCategory.BASIC);
+    const sslAllowInvalidCertificatesField = field.$(
+      'sslAllowInvalidCertificates',
+      SubformCategory.BASIC
+    );
     if (
       sslAllowInvalidCertificatesField.value &&
       sslAllowInvalidCertificatesField.value !== field.$('sslAllowInvalidCertificatesCluster').value
