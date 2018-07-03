@@ -23,7 +23,7 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-25T12:22:04+10:00
+ * @Last modified time: 2018-06-27T12:52:38+10:00
  */
 
 /* eslint import/no-dynamic-require: warn */
@@ -77,32 +77,38 @@ export default class FormBuilder {
       }
       res.fieldParseFn = defField.lookup + '_parse';
     }
-    if (defField.type == 'Text') {
+    if (defField.type === 'Text') {
       res.fieldBinding = 'TextField';
     }
-    if (defField.type == 'CodeMirror') {
+    if (defField.type === 'CodeMirror') {
       res.fieldBinding = 'CodeMirrorField';
     }
-    if (defField.type == 'Select') {
+    if (defField.type === 'Select') {
       res.fieldBinding = 'SelectField';
     }
-    if (defField.type == 'Boolean') {
+    if (defField.type === 'Boolean') {
       res.fieldBinding = 'BooleanField';
     }
-    if (defField.type == 'Numeric') {
+    if (defField.type === 'Numeric') {
       res.fieldBinding = 'NumericField';
       res.fieldMin = Object.prototype.hasOwnProperty.call(defField, 'min') ? defField.min : null;
       res.fieldMax = Object.prototype.hasOwnProperty.call(defField, 'max') ? defField.max : null;
     }
-    if (defField.type == 'Combo') {
+    if (defField.type === 'Combo') {
       res.fieldBinding = 'ComboField';
       if (Object.prototype.hasOwnProperty.call(defField, 'multi')) {
         res.multi = defField.multi;
       }
     }
-    if (defField.type == 'Table') {
+    if (defField.type === 'Table') {
       if (Object.prototype.hasOwnProperty.call(defField, 'maxColumns')) {
         res.maxColumns = defField.maxColumns;
+      }
+    }
+    if (defField.type === 'Radio') {
+      res.fieldBinding = 'RadioField';
+      if (Object.prototype.hasOwnProperty.call(defField, 'radios')) {
+        res.fieldRadios = defField.radios;
       }
     }
     return res;
@@ -168,6 +174,7 @@ export default class FormBuilder {
       result.bindings = {};
       result.arrayLast = []; // an object to keep reference of array fields to add last element later before sending to the template.
       result.multiCombo = []; // an object to keep reference of fields which are multi value combo fields
+      result.radios = []; // an object to keep reference of Radio Fields to spread then to boolean values with their values
       result.options = {};
       result.values = {};
 
@@ -228,6 +235,15 @@ export default class FormBuilder {
           }
         }
 
+        if (Object.prototype.hasOwnProperty.call(fld, 'fieldRadios')) {
+          if (result.options[fldName]) {
+            result.options[fldName].radios = fld.fieldRadios;
+          } else {
+            result.options[fldName] = { radios: fld.fieldRadios };
+          }
+          result.radios.push(fldName);
+        }
+
         if (fld.fieldQuery) {
           if (queries.indexOf(fld.fieldQuery) < 0) {
             queries.push(fld.fieldQuery);
@@ -244,20 +260,20 @@ export default class FormBuilder {
         const resField = this.getField(defField, formFunctions);
         setFormOptions(resField, resField.fieldName);
 
-        if (defField.type == 'Table') {
+        if (defField.type === 'Table') {
           for (const col of defField.columns) {
             const colField = this.getField(col, formFunctions);
             const colFieldName = resField.fieldName + '[].' + colField.fieldName;
             setFormOptions(colField, colFieldName);
           }
           result.arrayLast.push(resField.fieldName); // this is utilized after the form has returned the input document for the template
-        } else if (defField.type == 'Group') {
+        } else if (defField.type === 'Group') {
           for (const member of defField.members) {
             const memField = this.getField(member, formFunctions);
             const memFieldName = resField.fieldName + '.' + memField.fieldName;
             setFormOptions(memField, memFieldName);
           }
-          if (!defField.label || defField.label == '') {
+          if (!defField.label || defField.label === '') {
             result.labels[resField.fieldName] = '--nolabel--';
           }
         }
@@ -410,6 +426,24 @@ export default class FormBuilder {
                     traverseMultiCombo(arrCFlds, values, false);
                   } else {
                     traverseMultiCombo([fld], values, false);
+                  }
+                }
+              }
+              if (formDefs.radios.length > 0) {
+                for (const fld of formDefs.radios) {
+                  if (
+                    values[fld].length > 0 &&
+                    formDefs.options[fld] &&
+                    formDefs.options[fld].radios
+                  ) {
+                    const radioVals = formDefs.options[fld].radios;
+                    for (const radio of radioVals) {
+                      if (radio.value === values[fld]) {
+                        values[radio.value] = true;
+                      } else {
+                        values[radio.value] = false;
+                      }
+                    }
                   }
                 }
               }
