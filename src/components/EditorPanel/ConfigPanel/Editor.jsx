@@ -24,18 +24,40 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import _ from 'lodash';
 
+type EditorConfig = {
+  editor: {
+    fontFamily: string,
+    fontSize: string,
+    fontWeight: number,
+    fontColor: string,
+    lineHeight: number
+  }
+};
+
+type Props = {
+  settings: EditorConfig,
+  updateValue: Function,
+  renderFieldLabel: Function
+};
+
 @observer
-export default class Editor extends React.Component {
-  onStringInputChange = e => {
-    const fieldName = e.target.id;
-    const fieldValue = e.target.value;
+export default class Editor extends React.Component<Props> {
+  onStringInputChange = (event: SyntheticEvent<HTMLInputElement>) => {
+    if (!(event.target instanceof window.HTMLInputElement)) {
+      return;
+    }
+    const fieldName = event.target.id;
+    const fieldValue = event.target.value;
     l.debug(`updateValue(${fieldName}, ${fieldValue})`);
     this.props.updateValue(fieldName, fieldValue || null);
   };
 
-  onNumericalInputChange = e => {
-    const fieldName = e.target.id;
-    const rawValue = e.target.value;
+  onNumericalInputChange = (event: SyntheticEvent<HTMLInputElement>) => {
+    if (!(event.target instanceof window.HTMLInputElement)) {
+      return;
+    }
+    const fieldName = event.target.id;
+    const rawValue = event.target.value;
     let fieldValue;
 
     if (rawValue === '') {

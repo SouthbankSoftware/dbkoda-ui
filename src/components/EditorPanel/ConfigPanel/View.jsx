@@ -176,9 +176,9 @@ export default class View extends React.Component {
   shouldShowApplyButton = () => {
     return (
       this.props.store.configPage.selectedMenu === 'Performance' ||
-      this.props.store.configPage.selectedMenu === 'PasswordStore' ||
       this.props.store.configPage.selectedMenu === 'Paths' ||
-      this.props.store.configPage.selectedMenu === 'Application'
+      this.props.store.configPage.selectedMenu === 'Application' ||
+      this.props.store.configPage.selectedMenu === 'Editor'
     );
   };
 
