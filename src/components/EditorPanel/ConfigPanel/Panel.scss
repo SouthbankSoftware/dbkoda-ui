@@ -25,12 +25,12 @@
  */
 @import '../../../styles/_defaultTheme.scss';
 
-$menuBackground1: #837395;
-$menuBackground2: #cf7769;
-$menuBackground3: #7fa5ad;
-$menuBackground4: #6a9cce;
+$menuBackground1: #e0b448;
+$menuBackground2: #837395;
+$menuBackground3: #cf7769;
+$menuBackground4: #7fa5ad;
 $menuBackground5: #994182;
-$menuBackground6: #e0b448;
+$menuBackground6: #6a9cce;
 $menuBackground7: #adc88f;
 
 .pt-button {
@@ -164,7 +164,7 @@ h4 {
       }
 
       .menuItem .menuItemPaths {
-        background-color: $menuBackground2;
+        background-color: $menuBackground3;
 
         .st0 {
           fill: #efce4a;
@@ -176,7 +176,7 @@ h4 {
       }
 
       .menuItem .menuItemApplication {
-        background-color: $menuBackground3;
+        background-color: $menuBackground2;
 
         .st0 {
           fill: #ffffff;
@@ -188,7 +188,7 @@ h4 {
       }
 
       .menuItem .menuItemPasswordStore {
-        background-color: $menuBackground4;
+        background-color: $menuBackground6;
 
         .st0 {
           fill: #ffffff;
@@ -209,7 +209,7 @@ h4 {
       }
 
       .menuItem .menuItemPerformance {
-        background-color: $menuBackground5;
+        background-color: $menuBackground4;
 
         .st0 {
           fill: #aeafaf;
@@ -246,7 +246,7 @@ h4 {
       }
 
       .menuItem .menuItemShortcuts {
-        background-color: $menuBackground6;
+        background-color: $menuBackground7;
 
         .st0 {
           fill: #d7dadb;
@@ -287,6 +287,19 @@ h4 {
 
         .st4 {
           fill: #e1c3a0;
+        }
+
+        svg {
+          width: 65px;
+          height: 65px;
+        }
+      }
+
+      .menuItem .menuItemEditor {
+        background-color: $menuBackground5;
+
+        .st0 {
+          fill: #d7dadb;
         }
 
         svg {

@@ -1204,7 +1204,6 @@ class View extends React.Component {
     l.debug('getStyles()');
     const { editor } = this.props.config.settings;
     const styles = _.pick(editor, ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight']);
-    styles.color = editor.fontColor;
     return styles;
   }
 

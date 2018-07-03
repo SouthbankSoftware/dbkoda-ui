@@ -29,7 +29,6 @@ type EditorConfig = {
     fontFamily: string,
     fontSize: string,
     fontWeight: number,
-    fontColor: string,
     lineHeight: number
   }
 };
@@ -102,15 +101,6 @@ export default class Editor extends React.Component<Props> {
             id="editor.fontWeight"
             value={this.props.settings.editor.fontWeight}
             onChange={this.onNumericalInputChange}
-          />
-        </div>
-        <div className="form-row">
-          {this.props.renderFieldLabel('editor.fontColor')}
-          <input
-            type="text"
-            id="editor.fontColor"
-            value={this.props.settings.editor.fontColor}
-            onChange={this.onStringInputChange}
           />
         </div>
         <div className="form-row">

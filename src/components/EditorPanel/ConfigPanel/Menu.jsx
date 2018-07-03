@@ -59,13 +59,6 @@ export default class Menu extends React.Component {
           <HomeSectionIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
         <MenuItem
-          name="Paths"
-          isSelected={this.isItemSelected}
-          changeMenu={this.changeMenuSelected}
-        >
-          <PathsSectionIcon className="dbKodaSVG" width={20} height={20} />
-        </MenuItem>
-        <MenuItem
           name="Application"
           isSelected={this.isItemSelected}
           changeMenu={this.changeMenuSelected}
@@ -73,11 +66,11 @@ export default class Menu extends React.Component {
           <ApplicationSectionIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
         <MenuItem
-          name="PasswordStore"
+          name="Paths"
           isSelected={this.isItemSelected}
           changeMenu={this.changeMenuSelected}
         >
-          <PasswordStoreIcon className="dbKodaSVG" width={20} height={20} />
+          <PathsSectionIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
         <MenuItem
           name="Performance"
@@ -87,18 +80,25 @@ export default class Menu extends React.Component {
           <PerformanceSectionIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
         <MenuItem
-          name="Shortcuts"
-          isSelected={this.isItemSelected}
-          changeMenu={this.changeMenuSelected}
-        >
-          <ShortcutsSectionIcon className="dbKodaSVG" width={20} height={20} />
-        </MenuItem>
-        <MenuItem
           name="Editor"
           isSelected={this.isItemSelected}
           changeMenu={this.changeMenuSelected}
         >
           <EditorSectionIcon className="dbKodaSVG" width={20} height={20} />
+        </MenuItem>
+        <MenuItem
+          name="PasswordStore"
+          isSelected={this.isItemSelected}
+          changeMenu={this.changeMenuSelected}
+        >
+          <PasswordStoreIcon className="dbKodaSVG" width={20} height={20} />
+        </MenuItem>
+        <MenuItem
+          name="Shortcuts"
+          isSelected={this.isItemSelected}
+          changeMenu={this.changeMenuSelected}
+        >
+          <ShortcutsSectionIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
         {/* @TODO -> Re add this section once we have appropriate content.
         <MenuItem
