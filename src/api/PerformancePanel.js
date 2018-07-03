@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-06-01T14:22:16+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-03T13:51:41+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -100,7 +100,7 @@ export const handleNewData = (payload: *, performancePanel: PerformancePanelStat
   for (const widget of widgets.values()) {
     const { items, showAlarms, buffer } = widget;
     const { values, alarms } = buffer || widget;
-    const { historySize } = global.config.settings.performancePanel;
+    const { historySize } = global.config.performancePanel;
 
     if (values.length >= historySize) {
       // remove old history
@@ -129,7 +129,7 @@ export const handleNewData = (payload: *, performancePanel: PerformancePanelStat
         );
       }
 
-      const { alarmDisplayingWindow } = global.config.settings.performancePanel;
+      const { alarmDisplayingWindow } = global.config.performancePanel;
 
       // remove old alarms
       let removeCount = 0;
@@ -227,17 +227,17 @@ export const attachToMobx = (performancePanel: PerformancePanelState) => {
 export default class PerformancePanelApi {
   store: *;
   api: *;
-  config: *;
+  configStore: *;
   _disposers: Map<UUID, *> = new Map();
   _powerBlockerDisposers: Map<UUID, *> = new Map();
 
   externalPerformanceWindows: Map<UUID, *> = new Map();
   eventQueue: Object = {};
 
-  constructor(store: *, api: *, config: *) {
+  constructor(store: *, api: *, configStore: *) {
     this.store = store;
     this.api = api;
-    this.config = config;
+    this.configStore = configStore;
 
     this._attachPerformancePanelsToMobx();
 
@@ -449,7 +449,7 @@ export default class PerformancePanelApi {
   }
 
   _addPowerBlocker = profileId => {
-    if (IS_ELECTRON && this.config.settings.performancePanel.preventDisplaySleep) {
+    if (IS_ELECTRON && this.configStore.config.performancePanel.preventDisplaySleep) {
       const {
         remote: { powerSaveBlocker }
       } = window.require('electron');
@@ -552,7 +552,7 @@ export default class PerformancePanelApi {
     const {
       foregroundSamplingRate,
       backgroundSamplingRate
-    } = this.config.settings.performancePanel;
+    } = this.configStore.config.performancePanel;
 
     // always call create because it is idempotent
     featherClient()

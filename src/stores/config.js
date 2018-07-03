@@ -5,7 +5,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com, root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-06-25T19:40:43+10:00
+ * @Last modified time: 2018-07-03T13:35:09+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,14 +32,16 @@ import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import util from 'util';
 
-export default class Config {
-  path: string;
-  @observable settings: *;
+export default class ConfigStore {
+  configYmlPath: string;
+  @observable config: *;
+  @observable configDefaults: *;
+  @observable configSchema: *;
 
   constructor() {
-    this.path = global.PATHS.configPath;
+    this.configYmlPath = global.PATHS.configPath;
 
-    l.info(`config path: ${this.path}`);
+    l.info(`config path: ${this.configYmlPath}`);
 
     this._watchConfigErrors();
     this._watchConfigChanges();
@@ -56,7 +58,7 @@ export default class Config {
       'changed',
       action(changed => {
         _.forEach(changed, (v, k) => {
-          _.set(this.settings, k, v.new);
+          _.set(this.config, k, v.new);
         });
 
         l.debug('Config has been changed', changed);
@@ -102,15 +104,19 @@ export default class Config {
   /**
    * Load settings from config service. This should ONLY be done once during initialisation
    */
-  load = (): Promise<*> => {
+  load = (): Promise<void> => {
     return featherClient()
       .configService.get('current')
       .then(
-        action(({ payload }) => {
+        action(({ payload: { config, configDefaults, configSchema } }) => {
           // this will convert payload into new observable
-          this.settings = payload;
+          this.config = config;
+          global.config = this.config;
 
-          sendToMain('configLoaded', payload);
+          this.configDefaults = configDefaults;
+          this.configSchema = configSchema;
+
+          sendToMain('configLoaded', config);
 
           l.debug('config loaded');
         })
@@ -125,7 +131,7 @@ export default class Config {
    * Update settings. This should be the ONLY way to update both ui and controller settings. After
    * this request, ui should receive a changed event which will in term update ui settings.
    */
-  patch = (settings: {}) => {
+  patch = (settings: {}): Promise<void> => {
     return featherClient()
       .configService.patch('current', {
         config: settings

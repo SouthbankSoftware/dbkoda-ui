@@ -56,14 +56,14 @@ import './App.scss';
 
 @inject(allStores => ({
   store: allStores.store,
-  config: allStores.config,
+  configStore: allStores.configStore,
   api: allStores.api
 }))
 @observer
 class App extends React.Component {
   componentWillMount() {
     runInAction(() => {
-      if (this.props.config.settings.showNewFeaturesDialogOnStart === false) {
+      if (this.props.configStore.config.showNewFeaturesDialogOnStart === false) {
         this.props.store.editorPanel.showNewFeaturesDialog = false;
       } else {
         this.props.store.editorPanel.showNewFeaturesDialog = true;
@@ -132,7 +132,7 @@ class App extends React.Component {
 
   @action.bound
   closeOptIn(bool) {
-    this.props.config.patch({
+    this.props.configStore.patch({
       telemetryEnabled: bool
     });
     this.props.store.layout.optInVisible = false;

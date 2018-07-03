@@ -64,7 +64,7 @@ const PasswordDialogTypes = {
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  config: allStores.config,
+  configStore: allStores.configStore,
   profileStore: allStores.profileStore
 }))
 @observer
@@ -366,7 +366,7 @@ export default class ListView extends React.Component {
     l.log('shouldShowPasswordDialog');
     l.log(profile);
     let showPasswordDialog = false;
-    const { passwordStoreEnabled } = this.props.config.settings;
+    const { passwordStoreEnabled } = this.props.configStore.config;
     const { id, useClusterConfig, shaCluster, bRemotePass, bPassPhrase } = profile;
     const sha = useClusterConfig ? shaCluster : profile.sha;
     const ssh = profile.ssh && (bRemotePass || bPassPhrase);
@@ -891,10 +891,10 @@ export default class ListView extends React.Component {
                 dir="auto"
                 onChange={this.setPWText}
               />
-              {!this.props.config.settings.passwordStoreEnabled && (
+              {!this.props.configStore.config.passwordStoreEnabled && (
                 <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
               )}
-              {this.props.config.settings.passwordStoreEnabled && (
+              {this.props.configStore.config.passwordStoreEnabled && (
                 <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
               )}
             </div>
@@ -912,10 +912,10 @@ export default class ListView extends React.Component {
                   this.setState({ remotePass: event.target.value });
                 }}
               />
-              {!this.props.config.settings.passwordStoreEnabled && (
+              {!this.props.configStore.config.passwordStoreEnabled && (
                 <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
               )}
-              {this.props.config.settings.passwordStoreEnabled && (
+              {this.props.configStore.config.passwordStoreEnabled && (
                 <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
               )}
             </div>
@@ -934,10 +934,10 @@ export default class ListView extends React.Component {
                   this.setState({ passPhrase: event.target.value });
                 }}
               />
-              {!this.props.config.settings.passwordStoreEnabled && (
+              {!this.props.configStore.config.passwordStoreEnabled && (
                 <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
               )}
-              {this.props.config.settings.passwordStoreEnabled && (
+              {this.props.configStore.config.passwordStoreEnabled && (
                 <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
               )}
             </div>
@@ -978,10 +978,10 @@ export default class ListView extends React.Component {
                     this.setState({ remotePass: event.target.value });
                   }}
                 />
-                {!this.props.config.settings.passwordStoreEnabled && (
+                {!this.props.configStore.config.passwordStoreEnabled && (
                   <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
                 )}
-                {this.props.config.settings.passwordStoreEnabled && (
+                {this.props.configStore.config.passwordStoreEnabled && (
                   <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
                 )}
               </div>
@@ -1000,10 +1000,10 @@ export default class ListView extends React.Component {
                     this.setState({ passPhrase: event.target.value });
                   }}
                 />
-                {!this.props.config.settings.passwordStoreEnabled && (
+                {!this.props.configStore.config.passwordStoreEnabled && (
                   <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
                 )}
-                {this.props.config.settings.passwordStoreEnabled && (
+                {this.props.configStore.config.passwordStoreEnabled && (
                   <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
                 )}
               </div>

@@ -53,7 +53,7 @@ import './styles.scss';
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  config: allStores.config,
+  configStore: allStores.configStore,
   profileStore: allStores.profileStore
 }))
 @observer

@@ -2,8 +2,8 @@
  * @Author: Chris Trott <christrott>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-05-29T15:16:23+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-03T13:33:16+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,7 +31,7 @@ import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import StaticApi from '~/api/static';
 
-export default class Profiles {
+export default class ProfileStore {
   saveDebounced = _.debounce(this.save, 500);
   profilesFilePath;
   @observable profiles = observable.map();

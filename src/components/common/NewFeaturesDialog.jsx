@@ -3,8 +3,8 @@
  *
  * @Author: Michael Harrison
  * @Date:   2018-04-10 16:16:38
- * @Last modified by:   Mike
- * @Last modified time: 2018-04-10 16:16:38
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-03T14:02:57+10:00
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -34,7 +34,7 @@ import './NewFeaturesDialog.scss';
 type Props = {
   api: *,
   store: *,
-  config: *,
+  configStore: *,
   showDialog: boolean
 };
 
@@ -43,7 +43,7 @@ type State = {};
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  config: allStores.config
+  configStore: allStores.configStore
 }))
 @observer
 export default class NewFeaturesDialog extends React.Component<Props, State> {
@@ -54,12 +54,12 @@ export default class NewFeaturesDialog extends React.Component<Props, State> {
 
   @action.bound
   handleSwitch() {
-    if (this.props.config.settings.showNewFeaturesDialogOnStart === false) {
-      this.props.config.patch({
+    if (this.props.configStore.config.showNewFeaturesDialogOnStart === false) {
+      this.props.configStore.patch({
         showNewFeaturesDialogOnStart: true
       });
     } else {
-      this.props.config.patch({
+      this.props.configStore.patch({
         showNewFeaturesDialogOnStart: false
       });
     }
@@ -104,7 +104,7 @@ export default class NewFeaturesDialog extends React.Component<Props, State> {
         </div>
         <div className="dialogButtons">
           <Switch
-            checked={this.props.config.settings.showNewFeaturesDialogOnStart}
+            checked={this.props.configStore.config.showNewFeaturesDialogOnStart}
             label={globalString('general/newFeaturesDialog/openAtStart')}
             onChange={this.handleSwitch}
           />

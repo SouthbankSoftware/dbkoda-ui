@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-06-15T09:45:40+10:00
+ * @Last modified time: 2018-07-03T14:37:12+10:00
  */
 
 import _ from 'lodash';
@@ -81,14 +81,14 @@ export type Profile = {
 export default class ProfileApi {
   store;
   api;
-  config;
+  configStore;
   profileStore;
   toasterCallback;
 
-  constructor(store, api, profileStore, config) {
+  constructor(store, api, profileStore, configStore) {
     this.store = store;
     this.api = api;
-    this.config = config;
+    this.configStore = configStore;
     this.profileStore = profileStore;
     // this.profiles = profileStore.profiles;
     // this.profileList = store.profileList;
@@ -243,7 +243,7 @@ export default class ProfileApi {
       query.id = selectedProfile.id;
       query.shellId = selectedProfile.shellId;
     }
-    query.usePasswordStore = this.config.settings.passwordStoreEnabled;
+    query.usePasswordStore = this.configStore.config.passwordStoreEnabled;
 
     profileList.creatingNewProfile = true;
     const service = featherClient().service('/mongo-connection');
@@ -312,7 +312,7 @@ export default class ProfileApi {
           mongoType: res.mongoType
         });
       }
-      const { passwordStoreEnabled } = this.config.settings;
+      const { passwordStoreEnabled } = this.configStore.config;
       const storeNeedsPassword = passwordStoreEnabled
         ? this.api.passwordApi.isProfileMissingFromStore(res.id)
         : false;

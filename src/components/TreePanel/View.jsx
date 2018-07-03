@@ -62,7 +62,7 @@ import './View.scss';
   treeState: allStores.treeState,
   profileStore: allStores.profileStore,
   api: allStores.api,
-  config: allStores.config
+  configStore: allStores.configStore
 }))
 @ContextMenuTarget
 export default class TreeView extends React.Component {
@@ -500,7 +500,7 @@ export default class TreeView extends React.Component {
 
   @action.bound
   saveDrillCmd(cmd, path) {
-    this.props.config.patch({
+    this.props.configStore.patch({
       [cmd]: path
     });
   }
@@ -511,11 +511,11 @@ export default class TreeView extends React.Component {
     const electronFS = remote.require('fs');
 
     return new Promise((resolve, reject) => {
-      const drillPathExists = electronFS.existsSync(this.props.config.settings.drillCmd);
+      const drillPathExists = electronFS.existsSync(this.props.configStore.config.drillCmd);
       l.info('drillPathExists::', drillPathExists);
       if (
-        this.props.config.settings.drillCmd == null ||
-        this.props.config.settings.drillCmd == '' ||
+        this.props.configStore.config.drillCmd == null ||
+        this.props.configStore.config.drillCmd == '' ||
         !drillPathExists
       ) {
         const downloadDrill = () => {
@@ -557,12 +557,12 @@ export default class TreeView extends React.Component {
     const electronFS = remote.require('fs');
     return new Promise((resolve, reject) => {
       const drillCtrlPathExists = electronFS.existsSync(
-        this.props.config.settings.drillControllerCmd
+        this.props.configStore.config.drillControllerCmd
       );
       l.info('drillCtrlPathExists::', drillCtrlPathExists);
       if (
-        this.props.config.settings.drillControllerCmd == null ||
-        this.props.config.settings.drillControllerCmd == '' ||
+        this.props.configStore.config.drillControllerCmd == null ||
+        this.props.configStore.config.drillControllerCmd == '' ||
         !drillCtrlPathExists
       ) {
         ipcRenderer.send('drill', 'downloadController');

@@ -119,7 +119,7 @@ function collect(connect, monitor) {
   store: allStores.store,
   api: allStores.api,
   profiles: allStores.profileStore.profiles,
-  config: allStores.config
+  configStore: allStores.configStore
 }))
 @ContextMenuTarget
 class View extends React.Component {
@@ -668,7 +668,7 @@ class View extends React.Component {
   componentDidMount() {
     this.refresh();
     if (
-      this.props.config.settings.automaticAutoComplete &&
+      this.props.configStore.config.automaticAutoComplete &&
       this.editorObject.type === EditorTypes.DEFAULT &&
       !this._debouncedAutocomplete
     ) {

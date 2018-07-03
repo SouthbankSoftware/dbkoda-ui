@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T21:43:10+10:00
+ * @Last modified time: 2018-07-03T13:34:50+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -38,8 +38,8 @@ import { setUser, toggleRaygun } from '~/helpers/loggingApi';
 import { resizerStates } from '#/common/EnhancedSplitPane';
 import { Broker, EventType } from '../helpers/broker';
 import { ProfileStatus } from '../components/common/Constants';
-import Config from './config';
-import Profiles from './profiles';
+import ConfigStore from './config';
+import ProfileStore from './profile';
 
 let ipcRenderer;
 let stateStorePath;
@@ -613,35 +613,35 @@ export default class Store {
   @action.bound
   resetConfigPage(settingsObj) {
     this.configPage.changedFields.clear();
-    this.configPage.newSettings = observable.object(settingsObj || toJS(this.config.settings));
+    this.configPage.newSettings = observable.object(settingsObj || toJS(this.configStore.config));
   }
 
   loadRest() {
     // init config
-    this.config = new Config();
-    global.config = this.config;
+    this.configStore = new ConfigStore();
+    global.configStore = this.configStore;
 
     // init profiles
-    this.profileStore = new Profiles();
+    this.profileStore = new ProfileStore();
     global.profileStore = this.profileStore;
 
     // init api
-    this.api = new DataCenter(this, this.config, this.profileStore);
+    this.api = new DataCenter(this, this.configStore, this.profileStore);
     global.api = this.api;
 
-    return this.config
+    return this.configStore
       .load()
       .then(() => {
         const settingsUserChangedReaction = reaction(
-          () => this.config.settings.user.id,
+          () => this.configStore.config.user.id,
           () => {
-            setUser(this.config.settings.user);
+            setUser(this.configStore.config.user);
           },
           { fireImmediately: true }
         );
 
         const settingsTelemetryEnabledReaction = reaction(
-          () => this.config.settings.telemetryEnabled,
+          () => this.configStore.config.telemetryEnabled,
           enabled => {
             toggleRaygun(enabled);
           },
@@ -649,12 +649,12 @@ export default class Store {
         );
 
         const foregroundSamplingRateChangedReaction = reaction(
-          () => this.config.settings.performancePanel.foregroundSamplingRate,
+          () => this.configStore.config.performancePanel.foregroundSamplingRate,
           rate => this.api.reactToSamplingRateChange(rate, true)
         );
 
         const backgroundSamplingRateChangedReaction = reaction(
-          () => this.config.settings.performancePanel.backgroundSamplingRate,
+          () => this.configStore.config.performancePanel.backgroundSamplingRate,
           rate => this.api.reactToSamplingRateChange(rate, false)
         );
 
@@ -670,7 +670,7 @@ export default class Store {
         // TODO: redesign Preferences panel and get rid of this
         this.resetConfigPage();
 
-        if (this.config.settings.passwordStoreEnabled) {
+        if (this.configStore.config.passwordStoreEnabled) {
           this.api.passwordApi.showPasswordDialog();
         }
       })

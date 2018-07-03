@@ -43,7 +43,7 @@ import './Panel.scss';
 
 @inject(allStores => ({
   store: allStores.store,
-  config: allStores.config
+  configStore: allStores.configStore
 }))
 @observer
 export default class View extends React.Component {
@@ -51,7 +51,7 @@ export default class View extends React.Component {
 
   componentDidMount() {
     this._disposer = reaction(
-      () => toJS(this.props.config.settings),
+      () => toJS(this.props.configStore.config),
       settingsObj => {
         this.props.store.resetConfigPage(settingsObj);
       },
