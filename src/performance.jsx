@@ -3,7 +3,7 @@
  * @Date:   2018-02-26T13:19:02+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-08T11:37:29+10:00
+ * @Last modified time: 2018-07-03T17:02:43+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,7 +24,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import '~/env';
+import '~/helpers/env';
+import '~/helpers/postEnv';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as mobx from 'mobx';

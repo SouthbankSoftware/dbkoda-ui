@@ -5,7 +5,7 @@
  * @Date:   2017-06-20T15:09:51+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-03T13:58:55+10:00
+ * @Last modified time: 2018-07-03T17:01:21+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,7 +32,7 @@ import { reaction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
 import ReactGA from 'react-ga';
-import { analytics, protocol } from '../../env';
+import { analytics, protocol } from '~/helpers/env';
 import { AnalyticsEvents } from './Events';
 import { Broker, EventType } from '../../helpers/broker';
 
