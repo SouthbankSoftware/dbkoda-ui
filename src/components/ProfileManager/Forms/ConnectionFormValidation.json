@@ -31,67 +31,31 @@
             },
             {
               "$id": "host",
-              "required": ["disabled"],
+              "additionalProperties": false,
               "properties": {
-                "disabled": { "type": "boolean" }
+                "name": { "type": "string" },
+                "value": { "type": "string", "minLength": 1 }
               },
-              "select": { "$data": "0/disabled" },
-              "selectCases": {
-                "false": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "disabled": {},
-                    "name": { "type": "string" },
-                    "value": { "type": "string", "minLength": 1 }
-                  },
-                  "errorMessage": {
-                    "properties": {
-                      "value": "Host cannot be left empty."
-                    }
-                  }
-                },
-                "true": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "disabled": {},
-                    "name": { "type": "string" },
-                    "value": { "type": "string" }
-                  }
+              "errorMessage": {
+                "properties": {
+                  "value": "Host cannot be left empty."
                 }
               }
             },
             {
               "$id": "port",
-              "required": ["disabled"],
+              "additionalProperties": false,
               "properties": {
-                "disabled": { "type": "boolean" }
+                "name": { "type": "string" },
+                "value": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 65535
+                }
               },
-              "select": { "$data": "0/disabled" },
-              "selectCases": {
-                "false": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "disabled": {},
-                    "name": { "type": "string" },
-                    "value": {
-                      "type": "number",
-                      "minimum": 0,
-                      "maximum": 65535
-                    }
-                  },
-                  "errorMessage": {
-                    "properties": {
-                      "value": "Port can be any number between 0 to 65535"
-                    }
-                  }
-                },
-                "true": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "disabled": {},
-                    "name": { "type": "string" },
-                    "value": { "type": "number" }
-                  }
+              "errorMessage": {
+                "properties": {
+                  "value": "Port can be any number between 0 to 65535"
                 }
               }
             },
@@ -104,41 +68,15 @@
               }
             },
             {
-              "$id": "urlRadio",
+              "$id": "url",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
-                "value": { "type": "boolean" }
-              }
-            },
-            {
-              "$id": "url",
-              "required": ["disabled"],
-              "properties": {
-                "disabled": { "type": "boolean" }
+                "value": { "type": "string", "pattern": "^mongodb://" }
               },
-              "select": { "$data": "0/disabled" },
-              "selectCases": {
-                "false": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "disabled": {},
-                    "name": { "type": "string" },
-                    "value": { "type": "string", "pattern": "^mongodb://" }
-                  },
-                  "errorMessage": {
-                    "properties": {
-                      "value": "URI should start with 'mongodb://' protocol"
-                    }
-                  }
-                },
-                "true": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "disabled": {},
-                    "name": { "type": "string" },
-                    "value": { "type": "string" }
-                  }
+              "errorMessage": {
+                "properties": {
+                  "value": "URI should start with 'mongodb://' protocol"
                 }
               }
             },
