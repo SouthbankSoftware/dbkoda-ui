@@ -116,6 +116,7 @@ globals:
   IS_PRODUCTION: false
   IS_DEVELOPMENT: false
   IS_TEST: false
+  IS_STORYBOOK: false
   GetRandomPort: false
   UAT: false
   logToMain: false

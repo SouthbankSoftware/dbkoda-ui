@@ -5,7 +5,7 @@
  * @Date:   2018-05-23T11:55:14+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-03T16:22:48+10:00
+ * @Last modified time: 2018-07-04T16:44:16+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,51 +26,42 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
+import 'regenerator-runtime/runtime';
 import * as React from 'react';
-import { Provider, observer, inject } from 'mobx-react';
-import { observable } from 'mobx';
+import { Provider } from 'mobx-react';
+import * as mobx from 'mobx';
 import { storiesOf } from '@storybook/react';
-import { withKnobs, text, number, select, boolean, array } from '@storybook/addon-knobs';
-import { action } from '@storybook/addon-actions';
+import { withKnobs } from '@storybook/addon-knobs';
+// import { withKnobs, text, number, select, boolean, array } from '@storybook/addon-knobs';
+// import { action } from '@storybook/addon-actions';
 // mimicking the same css env as in app
 import 'normalize.css/normalize.css';
 import '~/styles/global.scss';
 import '#/App.scss';
-import ConfigStore from '~/stores/config';
+import { Broker, EventType } from '~/helpers/broker';
+import Store from '~/stores/global';
+import { en as globalStrings } from '~/messages/en.json';
 import ConfigEntry from './ConfigEntry';
 
-global.PATHS = {
-  configPath: '/test/path/config.yml'
+const store = new Store();
+global.store = store;
+global.mobx = mobx;
+global.globalString = (path: string) => {
+  return _.get(globalStrings, path.split('/'));
 };
-const store = observable({
-  configPanel: {
-    currentMenu: 'Home',
-    // $FlowFixMe
-    changes: observable.map(null),
-    // $FlowFixMe
-    errors: observable.map(null)
-  }
-});
-const configStore = new ConfigStore();
+let storeLoaded = false;
 
-@inject(({ store, configStore }) => {
-  return {
-    store,
-    configStore
-  };
-})
-@observer
 class LOADER extends React.Component<*, *> {
   componentDidMount() {
-    const { configStore } = this.props;
-
-    configStore.load();
+    Broker.once(EventType.APP_READY, () => {
+      storeLoaded = true;
+      this.forceUpdate();
+    });
   }
 
   render() {
-    const { configStore } = this.props;
-
-    if (configStore.config) {
+    if (storeLoaded) {
       return <ConfigEntry />;
     }
 
@@ -81,7 +72,12 @@ class LOADER extends React.Component<*, *> {
 storiesOf('ConfigEntry', module)
   .addDecorator(withKnobs)
   .add('normal', () => (
-    <Provider store={store} configStore={configStore}>
+    <Provider
+      store={store}
+      api={store.api}
+      configStore={store.configStore}
+      profileStore={store.profileStore}
+    >
       <LOADER />
     </Provider>
   ));

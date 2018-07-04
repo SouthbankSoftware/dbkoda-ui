@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-03T15:43:05+10:00
+ * @Last modified time: 2018-07-04T16:20:00+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,7 +32,6 @@ import { EditorTypes, DrawerPanes, NavPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import moment from 'moment';
-import Globalize from 'globalize';
 import DataCenter from '~/api/DataCenter';
 import { setUser, toggleRaygun } from '~/helpers/loggingApi';
 import { resizerStates } from '#/common/EnhancedSplitPane';
@@ -42,18 +41,14 @@ import ConfigStore from './config';
 import ProfileStore from './profile';
 
 let ipcRenderer;
-let stateStorePath;
 
 if (IS_ELECTRON) {
   const electron = window.require('electron');
 
   ipcRenderer = electron.ipcRenderer; // eslint-disable-line prefer-destructuring
-
-  const { remote } = electron;
-
-  global.PATHS = remote.getGlobal('PATHS');
-  stateStorePath = global.PATHS.stateStore;
 }
+
+const stateStorePath = global.PATHS.stateStore;
 
 global.EOL = global.IS_ELECTRON
   ? window.require('os').EOL
@@ -61,9 +56,8 @@ global.EOL = global.IS_ELECTRON
     ? '\r\n'
     : '\n';
 
-if (IS_TEST) {
-  global.VERSION = '';
-}
+// just in case webpack is not in context
+global.VERSION = '';
 
 export default class Store {
   @nodump api = null;
@@ -492,7 +486,8 @@ export default class Store {
       delete newStore.configPanel;
     }
 
-    Globalize.locale(newStore.locale || 'en');
+    // TODO: enable this when we hv internationalization support
+    // Globalize.locale(newStore.locale || 'en');
 
     newStore.layout.alertIsLoading = false;
     newStore.layout.overallSplitResizerState = resizerStates.ALL_SHOWN;
@@ -646,21 +641,26 @@ export default class Store {
     return this.configStore
       .load()
       .then(() => {
-        const settingsUserChangedReaction = reaction(
-          () => this.configStore.config.user.id,
-          () => {
-            setUser(this.configStore.config.user);
-          },
-          { fireImmediately: true }
-        );
+        let settingsUserChangedReaction;
+        let settingsTelemetryEnabledReaction;
 
-        const settingsTelemetryEnabledReaction = reaction(
-          () => this.configStore.config.telemetryEnabled,
-          enabled => {
-            toggleRaygun(enabled);
-          },
-          { fireImmediately: true }
-        );
+        if (!IS_STORYBOOK) {
+          settingsUserChangedReaction = reaction(
+            () => this.configStore.config.user.id,
+            () => {
+              setUser(this.configStore.config.user);
+            },
+            { fireImmediately: true }
+          );
+
+          settingsTelemetryEnabledReaction = reaction(
+            () => this.configStore.config.telemetryEnabled,
+            enabled => {
+              toggleRaygun(enabled);
+            },
+            { fireImmediately: true }
+          );
+        }
 
         const foregroundSamplingRateChangedReaction = reaction(
           () => this.configStore.config.performancePanel.foregroundSamplingRate,
@@ -674,8 +674,10 @@ export default class Store {
 
         // stop all PP when refreshing
         Broker.once(EventType.WINDOW_REFRESHING, () => {
-          settingsTelemetryEnabledReaction();
-          settingsUserChangedReaction();
+          if (!IS_STORYBOOK) {
+            settingsTelemetryEnabledReaction();
+            settingsUserChangedReaction();
+          }
           foregroundSamplingRateChangedReaction();
           backgroundSamplingRateChangedReaction();
         });
@@ -812,11 +814,16 @@ export default class Store {
 
     if (initOnly) return;
 
-    Broker.on(EventType.FEATHER_CLIENT_LOADED, value => {
-      if (value) {
-        this.load();
-      }
-    });
+    if (global.IS_FEATHERS_READY) {
+      this.load();
+    } else {
+      Broker.on(EventType.FEATHER_CLIENT_LOADED, value => {
+        if (value) {
+          global.IS_FEATHERS_READY = true;
+          this.load();
+        }
+      });
+    }
 
     if (IS_ELECTRON) {
       ipcRenderer.once('update', (event, message) => {

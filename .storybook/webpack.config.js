@@ -3,7 +3,7 @@
  * @Date:   2018-05-23T12:13:42+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-25T00:21:41+10:00
+ * @Last modified time: 2018-07-04T15:07:59+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,20 +25,69 @@
  */
 
 const path = require('path');
+const os = require('os');
+const webpack = require('@storybook/core/node_modules/webpack');
+
+const home = os.homedir();
+const WEBPACK_PATHS = {
+  configPath: path.resolve(home, '.dbKoda/config.yml'),
+  profilesPath: path.resolve(home, '.dbKoda/profiles.yml'),
+  stateStore: path.resolve(home, '.dbKoda/stateStore.json')
+};
 
 module.exports = {
+  context: path.resolve(__dirname, '../src'),
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-        include: path.resolve(__dirname, '../')
+        use: ['style-loader', 'css-loader']
+        // include: path.resolve(__dirname, '../')
       },
       {
         test: /\.scss$/,
-        loaders: ['style-loader', 'css-loader', 'sass-loader'],
-        include: path.resolve(__dirname, '../')
+        loaders: ['style-loader', 'css-loader', 'sass-loader']
+        // include: path.resolve(__dirname, '../')
+      },
+      {
+        test: /\.handlebars|hbs$/,
+        loader:
+          'handlebars-loader?helperDirs[]=' + path.join(__dirname, '../src/helpers/handlebars')
+        // include: path.resolve(__dirname, '../')
+      },
+      {
+        test: /\.(svg)$/i,
+        use: [
+          {
+            loader: 'babel-loader'
+          },
+          {
+            loader: 'react-svg-loader',
+            query: {
+              svgo: {
+                plugins: [
+                  {
+                    removeTitle: false
+                  }
+                ],
+                floatPrecision: 2
+              }
+            }
+          }
+        ]
       }
     ]
-  }
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    alias: {
+      handlebars: 'handlebars/dist/handlebars.js'
+    }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      WEBPACK_PATHS: JSON.stringify(WEBPACK_PATHS),
+      IS_STORYBOOK: true
+    })
+  ]
 };

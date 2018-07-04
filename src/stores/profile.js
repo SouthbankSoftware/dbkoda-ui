@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-03T13:33:16+10:00
+ * @Last modified time: 2018-07-04T16:33:05+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,13 +33,13 @@ import StaticApi from '~/api/static';
 
 export default class ProfileStore {
   saveDebounced = _.debounce(this.save, 500);
-  profilesFilePath;
+  profilesYmlPath: string;
   @observable profiles = observable.map();
 
   constructor() {
-    if (global.PATHS) {
-      this.profilesFilePath = global.PATHS.profilesPath;
-    }
+    this.profilesYmlPath = global.PATHS.profilesPath;
+
+    l.info(`profiles path: ${this.profilesYmlPath}`);
   }
 
   sanitize(profilesList) {
@@ -72,14 +72,14 @@ export default class ProfileStore {
 
   @action.bound
   load() {
-    if (!this.profilesFilePath) {
+    if (!this.profilesYmlPath) {
       return;
     }
     this.loading = true;
     // Call controller file get service
     return featherClient()
       .service('files')
-      .get(this.profilesFilePath, {
+      .get(this.profilesYmlPath, {
         query: {
           watching: 'false'
         }
@@ -97,7 +97,8 @@ export default class ProfileStore {
               this.loading = false;
             });
           }
-          l.info('Profiles loaded successfully!');
+
+          l.debug('profiles loaded');
         });
       })
       .catch(e => {
@@ -112,7 +113,7 @@ export default class ProfileStore {
 
   @action.bound
   save() {
-    if (!this.profilesFilePath) {
+    if (!this.profilesYmlPath) {
       return;
     }
     this.loading = true;
@@ -121,7 +122,7 @@ export default class ProfileStore {
       return featherClient()
         .service('files')
         .create({
-          _id: this.profilesFilePath,
+          _id: this.profilesYmlPath,
           content: yaml.safeDump(exportProfiles, { skipInvalid: true }),
           watching: false
         })

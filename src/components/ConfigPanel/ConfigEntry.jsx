@@ -5,7 +5,7 @@
  * @Date:   2018-07-03T15:08:13+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-03T15:30:17+10:00
+ * @Last modified time: 2018-07-04T16:45:53+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,6 +30,6 @@ import * as React from 'react';
 
 export default class ConfigEntry extends React.Component<*, *> {
   render() {
-    return <div>test1</div>;
+    return <div>Coming soon!</div>;
   }
 }

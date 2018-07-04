@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-03T16:57:19+10:00
+ * @Last modified time: 2018-07-04T16:38:07+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -23,11 +23,26 @@
 
 import _ from 'lodash';
 
+// default logging API
+global.l = {
+  error: console.error,
+  warn: console.warn,
+  notice: console.log.bind(null, '%cNotice: ', 'color: green'),
+  info: console.log,
+  log: console.log,
+  debug: console.log.bind(null, '%cDebug: ', 'color: blue')
+};
+
+// defaults for webpack
+global.VERSION = '';
+global.IS_STORYBOOK = false;
+
 global.IS_PRODUCTION = process.env.NODE_ENV === 'production';
 global.IS_DEVELOPMENT = !IS_PRODUCTION;
 global.IS_TEST = process.env.NODE_ENV === 'test';
 global.IS_ELECTRON = _.has(window, 'process.versions.electron');
 global.WINDOW_NAME = window.location.pathname === '/ui/' ? 'main' : 'performance';
+global.IS_FEATHERS_READY = false;
 
 if (IS_ELECTRON) {
   // fix the problem that process.platform is not available at start
@@ -36,8 +51,16 @@ if (IS_ELECTRON) {
   const { remote } = window.require('electron');
 
   global.UAT = remote.getGlobal('UAT');
+  global.PATHS = remote.getGlobal('PATHS');
 } else {
   global.UAT = false;
+
+  if (!IS_TEST) {
+    // eslint-disable-next-line no-undef
+    global.PATHS = WEBPACK_PATHS;
+  } else {
+    global.PATHS = {};
+  }
 }
 
 global.sendToMain = (channel, ...args) => {
