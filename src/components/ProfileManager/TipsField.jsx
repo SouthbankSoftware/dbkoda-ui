@@ -3,7 +3,7 @@
  * @Date:   2018-01-25T15:46:41+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-31T09:35:53+11:00
+ * @Last modified time: 2018-07-05T13:32:53+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -43,7 +43,7 @@ export default class TipsField extends React.Component {
       tips,
       selectedIdx: 0,
       prevEnabled: false,
-      nextEnabled: tips.length > 0
+      nextEnabled: tips.length > 1
     };
   }
   componentWillReceiveProps(nextProps: Props) {
@@ -52,7 +52,7 @@ export default class TipsField extends React.Component {
         tips: nextProps.tips,
         selectedIdx: 0,
         prevEnabled: false,
-        nextEnabled: nextProps.tips.length > 0
+        nextEnabled: nextProps.tips.length > 1
       });
     }
   }
