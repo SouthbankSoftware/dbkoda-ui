@@ -660,6 +660,7 @@ class View extends React.Component {
     this.prettifyAll = this.prettifyAll.bind(this);
     this.prettifySelection = this.prettifySelection.bind(this);
     this.translateToNativeCode = this.translateToNativeCode.bind(this);
+    this.getStyles = this.getStyles.bind(this);
   }
 
   /**
@@ -1199,19 +1200,27 @@ class View extends React.Component {
     this.setState({ openTranslator: false });
   }
 
+  getStyles() {
+    l.debug('getStyles()');
+    const { editor } = this.props.config.settings;
+    const styles = _.pick(editor, ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight']);
+    return styles;
+  }
+
   /**
    * Render method for the component.
    */
   render() {
     const { connectDropTarget, isOver } = this.props; // eslint-disable-line
     const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    const styles = this.getStyles();
     if (editor && editor.openTranslator && this.editor) {
       let cm = null;
       if (this.editor) {
         cm = this.editor.getCodeMirror();
       }
       return connectDropTarget(
-        <div className="editorView translator-open">
+        <div className="editorView translator-open" style={styles}>
           <SplitPane split="vertical" primary="second" defaultSize={512} minSize={200}>
             <CodeMirrorEditor
               ref={ref => (this.editor = ref)}
@@ -1233,7 +1242,7 @@ class View extends React.Component {
     }
 
     return connectDropTarget(
-      <div className="editorView">
+      <div className="editorView" style={styles}>
         <CodeMirrorEditor
           ref={ref => (this.editor = ref)}
           codeMirrorInstance={CodeMirror}

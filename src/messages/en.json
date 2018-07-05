@@ -374,6 +374,7 @@
           "paths": "Paths",
           "performance": "Performance Lab",
           "application": "Application",
+          "editor": "Editor",
           "passwords": "Password Store",
           "User Guide": "User Guide"
         },
@@ -389,6 +390,13 @@
         "tableOutputDefault": "Use Table Output as Default Output",
         "showWelcomePageAtStart": "Show Welcome Page on Startup",
         "automaticAutoComplete": "Run AutoComplete automatically when typing (Experimental)",
+        "editor": {
+          "fontFamily": "Font Family",
+          "fontSize": "Font Size",
+          "fontWeight": "Font Weight",
+          "fontColor": "Font Color",
+          "lineHeight": "Line Height"
+        },
         "performancePanel": {
           "preventDisplaySleep":
             "Prevent display sleep when panel is visible. (Panel restart required)",
