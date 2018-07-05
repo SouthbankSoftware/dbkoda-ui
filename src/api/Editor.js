@@ -72,7 +72,8 @@ export default class EditorApi {
       this.store.startCreatingNewEditor();
       const profileId =
         options.profileId ||
-        (this.store.editorToolbar.newEditorForTreeAction
+        (this.store.editorToolbar.newEditorForTreeAction ||
+        this.store.editorPanel.activeDropdownId == 'Default'
           ? this.store.profileList.selectedProfile.id
           : this.store.editorPanel.activeDropdownId);
       if (!editorOptions.type) {
