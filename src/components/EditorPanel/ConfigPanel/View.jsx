@@ -39,6 +39,7 @@ import Performance from './Performance';
 import LearnShortcuts from './LearnShortcuts';
 import WelcomeView from './WelcomeView';
 import Features from './Features';
+import Editor from './Editor';
 import './Panel.scss';
 
 @inject(allStores => ({
@@ -146,6 +147,16 @@ export default class View extends React.Component {
           />
         );
         break;
+      case 'Editor':
+        form = (
+          <Editor
+            updateValue={this.updateValue}
+            settings={this.props.store.configPage.newSettings}
+            changedFields={this.props.store.configPage.changedFields}
+            renderFieldLabel={this.renderFieldLabel}
+          />
+        );
+        break;
       case 'Shortcuts':
         form = <LearnShortcuts />;
         break;
@@ -165,9 +176,9 @@ export default class View extends React.Component {
   shouldShowApplyButton = () => {
     return (
       this.props.store.configPage.selectedMenu === 'Performance' ||
-      this.props.store.configPage.selectedMenu === 'PasswordStore' ||
       this.props.store.configPage.selectedMenu === 'Paths' ||
-      this.props.store.configPage.selectedMenu === 'Application'
+      this.props.store.configPage.selectedMenu === 'Application' ||
+      this.props.store.configPage.selectedMenu === 'Editor'
     );
   };
 

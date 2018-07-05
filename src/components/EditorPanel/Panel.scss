@@ -694,7 +694,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
   .CodeMirror,
   .ReactCodeMirror {
     height: 100%;
-    font-family: 'Courier New', 'Courier', 'monospace' !important;
+    font-family: inherit;
   }
 
   .cm-s-ambiance .CodeMirror-linenumber {
