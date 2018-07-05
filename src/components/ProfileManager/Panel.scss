@@ -3,7 +3,7 @@
  * @Date:   2018-01-10T09:56:16+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-05-28T11:24:31+10:00
+ * @Last modified time: 2018-07-05T13:22:10+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,8 +33,9 @@
   height: 100%;
 
   .connectionLeftPane {
+    left: 0;
     height: 100%;
-    width: 100%;
+    width: 250px;
     position: absolute;
     background-color: $panelLeftBackground;
 
@@ -100,71 +101,66 @@
   }
 
   .tips-field {
-    .tips-heading {
-      margin: 80px 30px 10px;
-      color: $connectionButtonFontColour;
-    }
+    height: 100%;
+    .pt-form-content {
+      height: 100%;
+      .tips-heading {
+        padding: 30px 30px 10px;
+        line-height: 20px;
+        color: $connectionButtonFontColour;
+      }
 
-    div.pt-card {
-      margin: 10px 30px 0;
-      color: $connectionButtonFontColour;
-      background-color: $panelLeftBackground;
-      border-radius: 0;
-      height: 300px;
-    }
-
-    @media (max-height: 730px) {
       div.pt-card {
-        height: 250px;
-      }
-    }
-
-    div.profile-button-panel {
-      margin: 0 30px 0 30px !important;
-      justify-content: space-between !important;
-      background-color: darken($panelLeftBackground, 2);
-
-      .pt-button {
-        width: 50px !important;
-        height: 50px !important;
-        border-style: none;
+        margin: 10px 30px 0;
+        color: $connectionButtonFontColour;
+        background-color: $panelLeftBackground;
         border-radius: 0;
-        background-color: rgba(0, 0, 0, 0);
+        height: calc(100% - 140px);
+        overflow-y: auto;
+      }
 
-        &:before {
-          font-size: 30px;
+      div.profile-button-panel {
+        margin: 0 30px 0 30px !important;
+        justify-content: space-between !important;
+        background-color: darken($panelLeftBackground, 2);
+
+        .pt-button {
+          width: 50px !important;
+          height: 50px !important;
+          border-style: none;
+          border-radius: 0;
+          background-color: rgba(0, 0, 0, 0);
+
+          &:before {
+            font-size: 30px;
+          }
         }
-      }
 
-      button:focus {
-        outline: none;
-        box-shadow: unset !important;
-      }
+        button:focus {
+          outline: none;
+          box-shadow: unset !important;
+        }
 
-      .pt-icon-chevron-left {
-        border-right: 1px solid lighten($connectionButtonBackgroundColour, 10);
-      }
+        .pt-icon-chevron-left {
+          border-right: 1px solid lighten($connectionButtonBackgroundColour, 10);
+        }
 
-      .pt-icon-chevron-right {
-        border-left: 1px solid lighten($connectionButtonBackgroundColour, 10);
+        .pt-icon-chevron-right {
+          border-left: 1px solid lighten($connectionButtonBackgroundColour, 10);
+        }
       }
     }
   }
 
   .react-grid-layout {
     position: absolute;
-    left: 0;
+    left: 250px;
     right: 0;
   }
 
   .react-grid-item {
     background: darken($panelLeftBackground, 5);
     border-right: 1px solid lighten($panelLeftBackground, 10);
-  }
-
-  .react-grid-item:first-child {
-    background: darken($panelLeftBackground, 5);
-    border: none;
   }
 
   .no-border {
@@ -235,12 +231,19 @@
 
   // Dynamic Form styling
   .formFields {
-    margin: 90px 30px 30px;
+    padding: 30px 30px 10px;
+    display: grid;
   }
 
   @media (max-width: 1140px) {
     .formFields {
-      margin: 90px 20px 30px;
+      padding: 30px 20px 10px;
+    }
+  }
+
+  @media (min-height: 768px) {
+    .formFields {
+      align-content: center;
     }
   }
 
@@ -295,13 +298,7 @@
   .form-scrollable {
     overflow-y: auto;
     overflow-x: hidden;
-  }
-
-  .form-scrollable:after {
-    display: block;
-    content: '';
-    width: 100%;
-    height: 50px;
+    height: 100%;
   }
 
   .form-title {
@@ -338,7 +335,7 @@
     .pt-popover-wrapper,
     .pt-select {
       width: 100%;
-      min-width: 200px;
+      min-width: 120px;
       border-radius: 0;
       border-style: none;
       box-shadow: none;
@@ -769,14 +766,18 @@
   }
 
   form.formButtons {
-    margin: 30px;
+    margin: 30px 10px;
+    height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   div.profile-button-panel {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin: 10px 10px;
 
     button.pt-button {
       font-weight: lighter;
