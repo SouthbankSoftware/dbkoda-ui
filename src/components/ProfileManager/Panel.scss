@@ -232,7 +232,6 @@
   // Dynamic Form styling
   .formFields {
     padding: 30px 30px 10px;
-    display: grid;
   }
 
   @media (max-width: 1140px) {
@@ -241,7 +240,20 @@
     }
   }
 
+  @media (max-width: 1024px) {
+    .formFields {
+      padding: 30px 10px 10px;
+    }
+  }
+
   @media (min-height: 768px) {
+    .formFields {
+      display: grid;
+      align-content: start;
+      grid-template-columns: 100%;
+    }
+  }
+  @media (min-height: 850px) {
     .formFields {
       align-content: center;
     }
@@ -315,7 +327,13 @@
   }
 
   .pt-form-group {
-    padding: 0 11px;
+    padding: 0 10px;
+  }
+
+  @media (max-height: 660px) {
+    .pt-form-group {
+      margin: 0 0 10px;
+    }
   }
 
   .pt-form-content {

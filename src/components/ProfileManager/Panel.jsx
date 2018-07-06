@@ -250,9 +250,9 @@ export default class ProfileManager extends React.Component<Props, State> {
             key="rowBottom"
             className="no-border minus-one-z-index"
             data-grid={{
-              x: 6,
+              x: 8,
               y: 7,
-              w: 6,
+              w: 4,
               h: 2,
               static: true
             }}

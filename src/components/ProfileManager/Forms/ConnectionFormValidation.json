@@ -31,31 +31,67 @@
             },
             {
               "$id": "host",
-              "additionalProperties": false,
+              "required": ["disabled"],
               "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "string", "minLength": 1 }
+                "disabled": { "type": "boolean" }
               },
-              "errorMessage": {
-                "properties": {
-                  "value": "Host cannot be left empty."
+              "select": { "$data": "0/disabled" },
+              "selectCases": {
+                "false": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string", "minLength": 1 }
+                  },
+                  "errorMessage": {
+                    "properties": {
+                      "value": "Host cannot be left empty."
+                    }
+                  }
+                },
+                "true": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string" }
+                  }
                 }
               }
             },
             {
               "$id": "port",
-              "additionalProperties": false,
+              "required": ["disabled"],
               "properties": {
-                "name": { "type": "string" },
-                "value": {
-                  "type": "number",
-                  "minimum": 0,
-                  "maximum": 65535
-                }
+                "disabled": { "type": "boolean" }
               },
-              "errorMessage": {
-                "properties": {
-                  "value": "Port can be any number between 0 to 65535"
+              "select": { "$data": "0/disabled" },
+              "selectCases": {
+                "false": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 65535
+                    }
+                  },
+                  "errorMessage": {
+                    "properties": {
+                      "value": "Port can be any number between 0 to 65535"
+                    }
+                  }
+                },
+                "true": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "number" }
+                  }
                 }
               }
             },
@@ -69,14 +105,32 @@
             },
             {
               "$id": "url",
-              "additionalProperties": false,
+              "required": ["disabled"],
               "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "string", "pattern": "^mongodb://" }
+                "disabled": { "type": "boolean" }
               },
-              "errorMessage": {
-                "properties": {
-                  "value": "URI should start with 'mongodb://' protocol"
+              "select": { "$data": "0/disabled" },
+              "selectCases": {
+                "false": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string", "pattern": "^mongodb://" }
+                  },
+                  "errorMessage": {
+                    "properties": {
+                      "value": "URI should start with 'mongodb://' protocol"
+                    }
+                  }
+                },
+                "true": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string" }
+                  }
                 }
               }
             },
@@ -193,14 +247,6 @@
               "properties": {
                 "name": { "type": "string" },
                 "value": { "type": "string" }
-              }
-            },
-            {
-              "$id": "urlClusterRadio",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "boolean" }
               }
             },
             {
