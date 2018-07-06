@@ -41,7 +41,7 @@ export type Profile = {
   wtimeoutMS: number,
   journal: boolen,
   readPref: string,
-  urlClusterRadio: boolen, // true if connecting via Cluster URL
+  urlClusterRadio: boolen, // Depricated: true if connecting via Cluster URL
   urlCluster: string,
   databaseCluster: string,
   sslCluster: boolean,

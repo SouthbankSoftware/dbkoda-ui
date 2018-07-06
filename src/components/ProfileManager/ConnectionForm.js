@@ -144,7 +144,6 @@ export class ConnectionForm extends JsonForm {
       field.name == 'usernameCluster' ||
       field.name == 'replicaSetName' ||
       field.name == 'useClusterConfig' ||
-      // field.name == 'urlClusterRadio' ||
       field.name == 'urlCluster'
     ) {
       this.updateAlias(field);
@@ -473,8 +472,6 @@ export class ConnectionForm extends JsonForm {
       const profileNo = String(this.api.getProfiles().size + 1).padStart(2, '0');
       if (useBasicField.value) {
         field = useBasicField;
-        // const isUrlMode = field.$('urlRadio').value;
-        // if (!isUrlMode) {
         const profileUsername =
           field.$('username').value.length > 0 ? field.$('username').value + '@' : '';
         const profileHostname = field.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH);
@@ -484,13 +481,8 @@ export class ConnectionForm extends JsonForm {
         } else {
           aliasField.value = profileNo + ' - New Profile';
         }
-        // } else {
-        //   this.updateAliasViaUrlValue(aliasField, field.$('url').value);
-        // }
       } else if (useClusterField.value) {
         field = useClusterField;
-        // const isUrlMode = field.$('urlClusterRadio').value;
-        // if (!isUrlMode) {
         if (field.$('usernameCluster').value.length > 0) {
           aliasField.value =
             profileNo +
@@ -503,42 +495,7 @@ export class ConnectionForm extends JsonForm {
         } else {
           aliasField.value = profileNo + ' - New Cluster Profile';
         }
-        // } else {
-        //   this.updateAliasViaUrlValue(aliasField, field.$('urlCluster').value);
-        // }
       }
-    }
-  }
-  updateAliasViaUrlValue(aliasField: Object, urlValue: string) {
-    let urlParams = {};
-    if (urlValue.length > 0) {
-      try {
-        urlParams = mongodbUri.parse(urlValue);
-        urlParams = _.omit(urlParams, ['password']);
-        urlValue = mongodbUri.format(urlParams);
-      } catch (err) {
-        l.error('updateAliasViaUrlValue:: failed to parse url ::', urlValue);
-      }
-    } else {
-      return;
-    }
-    const profileNo = String(this.api.getProfiles().size + 1).padStart(2, '0');
-    if (urlParams.options && urlParams.options.replicaSet) {
-      if (urlParams.username) {
-        aliasField.value =
-          profileNo + ' - ' + urlParams.username + '@' + urlParams.options.replicaSet;
-      } else {
-        aliasField.value = profileNo + ' - ' + urlParams.options.replicaSet;
-      }
-    } else if (urlValue.split('//').length > 1) {
-      if (urlValue.split('//')[1] === '') {
-        aliasField.value = profileNo + ' - New Profile';
-      } else {
-        aliasField.value =
-          profileNo + ' - ' + urlValue.split('//')[1].substring(0, MAX_URL_ALIAS_LENGTH);
-      }
-    } else {
-      aliasField.value = profileNo + ' - ' + urlValue.substring(0, MAX_URL_ALIAS_LENGTH);
     }
   }
 
@@ -666,6 +623,11 @@ export class ConnectionForm extends JsonForm {
       let profileParams = mongodbUri.parse(profile.url);
       profileParams = _.omit(profileParams, ['password']);
       profile.url = mongodbUri.format(profileParams);
+    }
+    if (profile.urlCluster && profile.urlCluster.length > 0) {
+      let profileParams = mongodbUri.parse(profile.urlCluster);
+      profileParams = _.omit(profileParams, ['password']);
+      profile.urlCluster = mongodbUri.format(profileParams);
     }
     l.info('Profile:', profile);
     return this.api.saveProfile(profile);
