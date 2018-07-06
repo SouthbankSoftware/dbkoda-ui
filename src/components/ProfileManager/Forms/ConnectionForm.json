@@ -69,7 +69,7 @@
         "placeholder": "mongodb://",
         "value": "mongodb://",
         "type": "text",
-        "column": 1,
+        "column": 4,
         "disabled": false,
         "checkbox": "enabled"
       },
@@ -249,7 +249,7 @@
         "rules": "regex:/^mongodb:///",
         "value": "mongodb://",
         "type": "text",
-        "column": 2,
+        "column": 4,
         "disabled": true,
         "checkbox": "enabled"
       },

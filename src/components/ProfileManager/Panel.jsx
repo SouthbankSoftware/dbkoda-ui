@@ -247,6 +247,19 @@ export default class ProfileManager extends React.Component<Props, State> {
             <TipsField tips={this.form.getSubformTips(this.state.selectedSubform)} />
           </div>
           <div
+            key="columnUrl"
+            className="no-border"
+            data-grid={{
+              x: 0,
+              y: 7,
+              w: 8,
+              h: 2,
+              static: true
+            }}
+          >
+            <div className="pt-dark form-scrollable formFields">{this.renderUIFields(4)}</div>
+          </div>
+          <div
             key="rowBottom"
             className="no-border minus-one-z-index"
             data-grid={{
