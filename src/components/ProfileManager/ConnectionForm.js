@@ -29,7 +29,6 @@
 import _ from 'lodash';
 import { action } from 'mobx';
 import mongodbUri from 'mongodb-uri';
-import StaticApi from '~/api/static';
 import { Profile } from '~/api/Profile';
 import { JsonForm } from './JsonForm';
 import type { Field, SubForm, Form } from './JsonForm';
