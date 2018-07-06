@@ -33,7 +33,6 @@ import { Profile } from '~/api/Profile';
 import { JsonForm } from './JsonForm';
 import type { Field, SubForm, Form } from './JsonForm';
 
-const MAX_URL_ALIAS_LENGTH = 25;
 const MAX_HOSTNAME_ALIAS_LENGTH = 20;
 export const SubformCategory = {
   BASIC: 'basic',
