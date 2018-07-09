@@ -104,14 +104,6 @@
               }
             },
             {
-              "$id": "urlRadio",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "boolean" }
-              }
-            },
-            {
               "$id": "url",
               "required": ["disabled"],
               "properties": {
@@ -255,14 +247,6 @@
               "properties": {
                 "name": { "type": "string" },
                 "value": { "type": "string" }
-              }
-            },
-            {
-              "$id": "urlClusterRadio",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "boolean" }
               }
             },
             {

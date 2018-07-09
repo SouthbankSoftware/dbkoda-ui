@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-06-01T10:34:20+10:00
+ * @Last modified time: 2018-07-05T12:51:58+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -186,6 +186,13 @@ export default class ProfileManager extends React.Component<Props, State> {
   render() {
     return (
       <div className="ProfileManager">
+        <div key="column0" className="connectionLeftPane">
+          <div className="connection-form">
+            <div className="pt-dark">{this.renderUIFields(0, SubformCategory.BASIC)}</div>
+
+            {this.renderMenu()}
+          </div>
+        </div>
         <ReactGridLayout
           className="layout"
           layouts={{
@@ -203,29 +210,11 @@ export default class ProfileManager extends React.Component<Props, State> {
           margin={[1, 0]}
         >
           <div
-            key="column0"
-            data-grid={{
-              x: 0,
-              y: 0,
-              w: 2,
-              h: 9,
-              static: true
-            }}
-          >
-            <div key="column0" className="connectionLeftPane">
-              <div className="connection-form">
-                <div className="pt-dark">{this.renderUIFields(0, SubformCategory.BASIC)}</div>
-
-                {this.renderMenu()}
-              </div>
-            </div>
-          </div>
-          <div
             key="column1"
             data-grid={{
-              x: 2,
+              x: 0,
               y: 1.5,
-              w: 3.5,
+              w: 4,
               h: 5.5,
               static: true
             }}
@@ -235,9 +224,9 @@ export default class ProfileManager extends React.Component<Props, State> {
           <div
             key="column2"
             data-grid={{
-              x: 5.5,
+              x: 4,
               y: 1.5,
-              w: 3.5,
+              w: 4,
               h: 5.5,
               static: true
             }}
@@ -248,9 +237,9 @@ export default class ProfileManager extends React.Component<Props, State> {
             key="column3"
             className="no-border"
             data-grid={{
-              x: 9,
+              x: 8,
               y: 1.5,
-              w: 3,
+              w: 4,
               h: 5.5,
               static: true
             }}
@@ -258,12 +247,25 @@ export default class ProfileManager extends React.Component<Props, State> {
             <TipsField tips={this.form.getSubformTips(this.state.selectedSubform)} />
           </div>
           <div
+            key="columnUrl"
+            className="no-border"
+            data-grid={{
+              x: 0,
+              y: 7,
+              w: 8,
+              h: 2,
+              static: true
+            }}
+          >
+            <div className="pt-dark form-scrollable formFields">{this.renderUIFields(4)}</div>
+          </div>
+          <div
             key="rowBottom"
             className="no-border minus-one-z-index"
             data-grid={{
-              x: 6,
+              x: 8,
               y: 7,
-              w: 6,
+              w: 4,
               h: 2,
               static: true
             }}
