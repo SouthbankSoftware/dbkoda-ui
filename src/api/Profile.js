@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-07-03T14:37:12+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-07-03T16:36:27+10:00
  */
 
 import _ from 'lodash';
@@ -41,7 +41,7 @@ export type Profile = {
   wtimeoutMS: number,
   journal: boolen,
   readPref: string,
-  urlClusterRadio: boolen, // true if connecting via Cluster URL
+  urlClusterRadio: boolen, // Depricated: true if connecting via Cluster URL
   urlCluster: string,
   databaseCluster: string,
   sslCluster: boolean,
@@ -161,7 +161,7 @@ export default class ProfileApi {
         query.password = data.passwordCluster;
         query.authenticationDatabase = data.authenticationDatabaseCluster;
       }
-      if (data.sslCluster) {
+      if (data.sslCluster && connectionUrl.indexOf('ssl=') < 0) {
         connectionUrl.indexOf('?') > 0
           ? (connectionUrl += '&ssl=true')
           : (connectionUrl += '?ssl=true');
@@ -182,7 +182,7 @@ export default class ProfileApi {
         query.password = data.password;
         query.authenticationDatabase = data.authenticationDatabase;
       }
-      if (data.ssl) {
+      if (data.ssl && connectionUrl.indexOf('ssl=') < 0) {
         connectionUrl.indexOf('?') > 0
           ? (connectionUrl += '&ssl=true')
           : (connectionUrl += '?ssl=true');

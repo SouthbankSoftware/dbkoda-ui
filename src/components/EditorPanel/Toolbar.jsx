@@ -593,7 +593,7 @@ export default class Toolbar extends React.Component {
    */
   render() {
     const profile = this.props.store.profileList.selectedProfile;
-
+    const selectedProfileIsConnected = profile ? profile.status == 'OPEN' : false;
     const profiles = [...this.props.profileStore.profiles.entries()];
     const { api } = this.props;
     let hasPerformancePanel = false;
@@ -827,7 +827,9 @@ export default class Toolbar extends React.Component {
               <AnchorButton
                 className="pt-button pt-intent-primary addEditorButton"
                 loading={this.props.store.editorToolbar.newConnectionLoading}
-                disabled={this.props.store.editorToolbar.noActiveProfile}
+                disabled={
+                  this.props.store.editorToolbar.noActiveProfile && !selectedProfileIsConnected
+                }
                 onClick={this.props.api.addEditor}
               >
                 <AddIcon className="dbKodaSVG" width={20} height={20} />
@@ -843,7 +845,9 @@ export default class Toolbar extends React.Component {
               <AnchorButton
                 className="pt-button pt-intent-primary openFileButton"
                 onClick={this.openFile}
-                disabled={this.props.store.editorToolbar.noActiveProfile}
+                disabled={
+                  this.props.store.editorToolbar.noActiveProfile && !selectedProfileIsConnected
+                }
               >
                 <OpenFileIcon className="dbKodaSVG" width={20} height={20} />
               </AnchorButton>

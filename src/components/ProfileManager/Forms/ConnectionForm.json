@@ -18,7 +18,15 @@
         "value": true,
         "type": "switch",
         "column": 1,
-        "refFields": ["urlRadio", "database", "ssl", "sslAllowInvalidCertificates", "sha"],
+        "refFields": [
+          "host",
+          "port",
+          "database",
+          "url",
+          "ssl",
+          "sslAllowInvalidCertificates",
+          "sha"
+        ],
         "disabled": false
       },
       {
@@ -28,7 +36,7 @@
         "type": "text",
         "column": 1,
         "disabled": false,
-        "checkbox": "disabled"
+        "checkbox": "enabled"
       },
       {
         "name": "port",
@@ -41,7 +49,7 @@
         },
         "column": 1,
         "disabled": false,
-        "checkbox": "disabled"
+        "checkbox": "enabled"
       },
       {
         "name": "database",
@@ -56,23 +64,13 @@
         "checkbox": "enabled"
       },
       {
-        "name": "urlRadio",
-        "label": "Use URI instead",
-        "value": false,
-        "type": "switch",
-        "column": 1,
-        "refFields": ["url", "host", "port"],
-        "disabled": false,
-        "checkbox": "enabled"
-      },
-      {
         "name": "url",
         "label": "URI",
         "placeholder": "mongodb://",
         "value": "mongodb://",
         "type": "text",
-        "column": 1,
-        "disabled": true,
+        "column": 4,
+        "disabled": false,
         "checkbox": "enabled"
       },
       {
@@ -152,11 +150,17 @@
         "type": "switch",
         "column": 1,
         "refFields": [
-          "urlClusterRadio",
           "databaseCluster",
           "sslCluster",
           "sslAllowInvalidCertificatesCluster",
-          "shaCluster"
+          "shaCluster",
+          "urlCluster",
+          "hostsList",
+          "replicaSetName",
+          "w",
+          "wtimeoutMS",
+          "journal",
+          "readPref"
         ],
         "disabled": false
       },
@@ -173,7 +177,7 @@
         "column": 1,
         "rules": "string",
         "disabled": false,
-        "checkbox": "disabled"
+        "checkbox": "enabled"
       },
       {
         "name": "replicaSetName",
@@ -183,7 +187,7 @@
         "column": 1,
         "rules": "string",
         "disabled": false,
-        "checkbox": "disabled"
+        "checkbox": "enabled"
       },
       {
         "name": "w",
@@ -194,7 +198,7 @@
         "column": 1,
         "rules": "string",
         "disabled": false,
-        "checkbox": "disabled"
+        "checkbox": "enabled"
       },
       {
         "name": "wtimeoutMS",
@@ -205,7 +209,7 @@
         "column": 1,
         "rules": "string",
         "disabled": false,
-        "checkbox": "disabled"
+        "checkbox": "enabled"
       },
       {
         "name": "journal",
@@ -217,7 +221,7 @@
         "type": "checkbox",
         "column": 1,
         "disabled": false,
-        "checkbox": "disabled"
+        "checkbox": "enabled"
       },
       {
         "name": "readPref",
@@ -236,24 +240,6 @@
         "type": "select",
         "column": 1,
         "disabled": false,
-        "checkbox": "disabled"
-      },
-      {
-        "name": "urlClusterRadio",
-        "label": "Use Cluster URI instead",
-        "value": false,
-        "type": "switch",
-        "column": 2,
-        "refFields": [
-          "urlCluster",
-          "hostsList",
-          "replicaSetName",
-          "w",
-          "wtimeoutMS",
-          "journal",
-          "readPref"
-        ],
-        "disabled": true,
         "checkbox": "enabled"
       },
       {
@@ -263,7 +249,7 @@
         "rules": "regex:/^mongodb:///",
         "value": "mongodb://",
         "type": "text",
-        "column": 2,
+        "column": 4,
         "disabled": true,
         "checkbox": "enabled"
       },
