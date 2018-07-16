@@ -5,7 +5,7 @@
  * @Date:   2018-02-07T10:41:12+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-03T13:51:25+10:00
+ * @Last modified time: 2018-07-16T16:20:29+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,6 +29,7 @@
 import { action } from 'mobx';
 import _ from 'lodash';
 import Mousetrap from 'mousetrap';
+import 'mousetrap-global-bind';
 import { featherClient } from '~/helpers/feathers';
 import { DialogHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { NewToaster } from '#/common/Toaster';

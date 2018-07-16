@@ -5,7 +5,7 @@
  * @Date:   2018-07-11T16:08:26+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-12T22:29:49+10:00
+ * @Last modified time: 2018-07-16T15:49:30+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -83,7 +83,7 @@ export default class MenuEntry extends React.Component<*> {
         >
           {icon}
         </Popover>
-        {showIndicator && <Icon className="Indicator" icon="dot" iconSize={20} title={false} />}
+        {showIndicator && <Icon className="Indicator" icon="dot" iconSize={24} title={false} />}
       </div>
     );
   }
