@@ -5,7 +5,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-16T13:45:43+10:00
+ * @Last modified time: 2018-07-16T14:52:23+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -69,8 +69,6 @@ export default class Panel extends React.Component<Props> {
     this.setEditorRef = this.setEditorRef.bind(this);
     // $FlowFixMe
     this.getDocumentAtLine = this.getDocumentAtLine.bind(this);
-    this.props.store.outputPanel.editorRefs = {};
-    this.props.store.outputPanel.__nodump__ = ['editorRefs', '__nodump__'];
 
     /**
      * Reaction function for when the active editorPanel is changed,
