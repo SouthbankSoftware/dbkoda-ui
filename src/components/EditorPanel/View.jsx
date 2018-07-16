@@ -966,7 +966,6 @@ class View extends React.Component {
     if (this.editor) {
       const cm = this.editor.getCodeMirror();
       cm.refresh();
-      cm.focus();
       this.setupAutoCompletion();
       cm.scrollIntoView(cm.getCursor());
     }
@@ -1112,8 +1111,6 @@ class View extends React.Component {
         this.props.store.editorToolbar.isActiveExecuting = false;
         this.props.store.editorPanel.stoppingExecution = false;
       });
-      const cm = this.editor.getCodeMirror();
-      cm.focus();
     }
   }
 
