@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-04T16:33:05+10:00
+ * @Last modified time: 2018-07-10T13:33:31+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -98,7 +98,7 @@ export default class ProfileStore {
             });
           }
 
-          l.debug('profiles loaded');
+          l.debug('Profiles loaded');
         });
       })
       .catch(e => {

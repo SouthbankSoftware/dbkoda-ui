@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-04T16:20:00+10:00
+ * @Last modified time: 2018-07-16T10:10:20+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -86,7 +86,7 @@ export default class Store {
 
   @observable
   configPanel = observable({
-    currentMenu: 'Home',
+    currentMenuEntry: 'welcome',
     changes: observable.map(null),
     errors: observable.map(null)
   });
@@ -634,13 +634,13 @@ export default class Store {
     this.profileStore = new ProfileStore();
     global.profileStore = this.profileStore;
 
-    // init api
-    this.api = new DataCenter(this, this.configStore, this.profileStore);
-    global.api = this.api;
-
     return this.configStore
       .load()
       .then(() => {
+        // init api
+        this.api = new DataCenter(this, this.configStore, this.profileStore);
+        global.api = this.api;
+
         let settingsUserChangedReaction;
         let settingsTelemetryEnabledReaction;
 
@@ -699,11 +699,6 @@ export default class Store {
               this.profileList.selectedProfile.id
             );
           }
-
-          this.saveUponEditorsChange();
-
-          // FIXME
-          // this.saveUponProfileChange();
 
           if (this.api) {
             this.api.init();
@@ -804,13 +799,8 @@ export default class Store {
     }
   }
 
-  saveUponEditorsChange() {
-    this.editors.observe(this.saveDebounced);
-  }
-
   constructor(initOnly: false) {
     this.save = this.save.bind(this);
-    this.saveDebounced = _.debounce(this.save, 500);
 
     if (initOnly) return;
 

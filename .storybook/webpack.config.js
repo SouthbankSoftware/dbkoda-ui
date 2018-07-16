@@ -3,7 +3,7 @@
  * @Date:   2018-05-23T12:13:42+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-04T15:07:59+10:00
+ * @Last modified time: 2018-07-05T14:32:15+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -42,18 +42,15 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
-        // include: path.resolve(__dirname, '../')
       },
       {
         test: /\.scss$/,
         loaders: ['style-loader', 'css-loader', 'sass-loader']
-        // include: path.resolve(__dirname, '../')
       },
       {
         test: /\.handlebars|hbs$/,
         loader:
           'handlebars-loader?helperDirs[]=' + path.join(__dirname, '../src/helpers/handlebars')
-        // include: path.resolve(__dirname, '../')
       },
       {
         test: /\.(svg)$/i,
@@ -75,6 +72,14 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.(png|woff|eot|ttf|woff2)(\?.*$|$)/,
+        loader: 'url-loader?limit=100000&mimetype=application/font-woff'
+      },
+      {
+        test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file-loader?name=images/[hash].[ext]'
       }
     ]
   },

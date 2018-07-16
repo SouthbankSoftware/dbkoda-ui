@@ -5,7 +5,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com, root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-03T13:35:09+10:00
+ * @Last modified time: 2018-07-13T00:07:13+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,37 +32,67 @@ import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import util from 'util';
 
+export type Config = {};
+export type ConfigSchema = {};
+
 export default class ConfigStore {
   configYmlPath: string;
-  @observable config: *;
-  @observable configDefaults: *;
-  @observable configSchema: *;
+  @observable config: Config;
+  @observable configDefaults: Config;
+  @observable configSchema: ConfigSchema;
 
   constructor() {
     this.configYmlPath = global.PATHS.configPath;
 
     l.info(`config path: ${this.configYmlPath}`);
 
-    this._watchConfigErrors();
-    this._watchConfigChanges();
+    this._watchForConfigErrorReset();
+    this._watchForConfigError();
+    this._watchForConfigChanged();
   }
 
-  _watchConfigErrors = () => {
+  _watchForConfigErrorReset = () => {
+    featherClient().configService.on(
+      'errorReset',
+      action(({ payload: { paths } }) => {
+        for (const path of paths) {
+          global.api.clearConfigError(path);
+        }
+      })
+    );
+  };
+
+  _watchForConfigError = () => {
     featherClient().configService.on('error', ({ payload: { error, level } }) => {
       this._handleError(error, level, false);
     });
   };
 
-  _watchConfigChanges = () => {
+  _watchForConfigChanged = () => {
     featherClient().configService.on(
       'changed',
       action(changed => {
+        const {
+          configPanel: { changes, errors }
+        } = global.store;
+
         _.forEach(changed, (v, k) => {
-          _.set(this.config, k, v.new);
+          _.set(this, k, v.new);
+
+          const wantedValue = changes.get(k);
+
+          if (wantedValue === null || wantedValue == v.new) {
+            changes.delete(k);
+          }
         });
 
+        for (const [k, v] of errors.entries()) {
+          if (!v.asyncError) {
+            errors.delete(k);
+          }
+        }
+
         l.debug('Config has been changed', changed);
-        this._showToaster('Config has been successfully updated', 'info');
       })
     );
   };
@@ -89,17 +119,40 @@ export default class ConfigStore {
     });
   };
 
-  _handleError = (
-    error: FeathersError,
-    level: 'error' | 'warn' = 'error',
-    logError: boolean = true
-  ) => {
-    if (logError) {
-      l[level](error);
-    }
+  _handleError = action(
+    (error: FeathersError, level: 'error' | 'warn' = 'error', logError: boolean = true) => {
+      if (logError) {
+        l[level](error);
+      }
 
-    this._showToaster(util.format(error.message, error.errors || ''), level);
-  };
+      if (!_.isEmpty(error.errors)) {
+        const {
+          configPanel: { errors }
+        } = global.store;
+
+        const asyncError = _.get(error, 'data.asyncError');
+
+        _.forEach(error.errors, (v, k) => {
+          if (k.startsWith('config.')) {
+            const err = {
+              message: v
+            };
+
+            if (asyncError) {
+              // $FlowFixMe
+              err.asyncError = true;
+            }
+
+            errors.set(k, err);
+          } else {
+            this._showToaster(util.format(error.message, k, v), level);
+          }
+        });
+      } else {
+        this._showToaster(error.message, level);
+      }
+    }
+  );
 
   /**
    * Load settings from config service. This should ONLY be done once during initialisation
@@ -118,7 +171,7 @@ export default class ConfigStore {
 
           sendToMain('configLoaded', config);
 
-          l.debug('config loaded');
+          l.debug('Config loaded');
         })
       )
       .catch(err => {
@@ -131,10 +184,12 @@ export default class ConfigStore {
    * Update settings. This should be the ONLY way to update both ui and controller settings. After
    * this request, ui should receive a changed event which will in term update ui settings.
    */
-  patch = (settings: {}): Promise<void> => {
+  patch = (config: Config): Promise<void> => {
+    l.debug('Patching config...');
+
     return featherClient()
       .configService.patch('current', {
-        config: settings
+        config
       })
       .catch(err => {
         err.message = `Failed to patch config: ${err.message}`;

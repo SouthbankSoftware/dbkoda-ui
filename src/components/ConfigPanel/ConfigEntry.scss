@@ -1,0 +1,160 @@
+/**
+ * @Author: Guan Gui <guiguan>
+ * @Date:   2018-07-05T14:14:01+10:00
+ * @Email:  root@guiguan.net
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-12T14:34:02+10:00
+ *
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import '../../styles/_defaultTheme.scss';
+
+$configErrorColor: #c6637b;
+
+.ConfigEntryTooltip {
+  opacity: 0.9;
+
+  .Body {
+    max-width: 250px;
+    background-color: $connectionActiveTextFieldBackgroundColour;
+    color: $connectionActiveTextFieldTextColour;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: lighter;
+    padding: 2px;
+  }
+}
+
+.ConfigEntry {
+  font-weight: lighter;
+
+  .Header,
+  .Footer {
+    padding: 5px 0;
+  }
+
+  .Header {
+    font-size: 14px;
+    line-height: 14px;
+    color: $connectionHeadingsFontColour;
+
+    .Tooltip {
+      line-height: 12px;
+      margin: 1px 0 0 3px;
+    }
+
+    .InfoIcon {
+      cursor: help;
+    }
+  }
+
+  .Body {
+    display: flex;
+    align-items: center;
+
+    .BrowseBtn,
+    .ChangeIndicator {
+      flex: none;
+    }
+
+    .ChangeIndicator {
+      margin-left: 3px;
+      color: $configErrorColor;
+      cursor: pointer;
+    }
+
+    .Switch {
+      width: 32px;
+      height: 20px;
+      padding-left: 0 !important;
+      margin-bottom: 0;
+    }
+
+    .Switch ~ .ChangeIndicator {
+      margin: 1px 0 0 3px;
+    }
+
+    .BrowseBtn {
+      width: 60px;
+      border-radius: 0;
+      background-color: lighten($connectionHeadingsFontColour, 10) !important;
+      color: $connectionActiveTextFieldTextColour !important;
+      box-shadow: none !important;
+    }
+
+    .BrowseBtn:hover {
+      background-color: $connectionActiveTextFieldBackgroundColour !important;
+      color: $connectionActiveTextFieldTextColour !important;
+    }
+
+    .BrowseBtn:active {
+      background-color: darken($connectionActiveTextFieldBackgroundColour, 5) !important;
+      color: $connectionActiveTextFieldTextColour !important;
+    }
+
+    .BrowseBtn:disabled {
+      background-color: lighten($connectionHeadingsFontColour, 10) !important;
+      color: $connectionActiveTextFieldTextColour !important;
+    }
+
+    .pt-control input:focus ~ .pt-control-indicator,
+    input[type='radio']:focus,
+    input[type='checkbox']:focus {
+      box-shadow: none !important;
+    }
+
+    .pt-control.pt-switch input:checked ~ .pt-control-indicator {
+      background-color: #a3c084 !important;
+    }
+
+    input {
+      background-color: $connectionHeadingsFontColour;
+      color: $connectionActiveTextFieldTextColour;
+      border: none;
+      padding: 0 10px;
+      vertical-align: middle;
+      line-height: 30px;
+      width: 50px;
+      flex: 1 1 auto;
+    }
+
+    input:disabled {
+      cursor: not-allowed;
+      opacity: 0.2;
+    }
+
+    input:focus {
+      background-color: $connectionActiveTextFieldBackgroundColour;
+    }
+
+    input::placeholder {
+      color: lighten($connectionActiveTextFieldTextColour, 20) !important;
+    }
+
+    input[type='text'].error,
+    .pt-control.error input ~ .pt-control-indicator {
+      box-shadow: inset 0 0 3px 2px $configErrorColor !important;
+    }
+  }
+
+  .Footer {
+    color: $configErrorColor;
+  }
+}

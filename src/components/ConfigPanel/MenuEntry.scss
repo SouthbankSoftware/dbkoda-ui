@@ -1,0 +1,73 @@
+/**
+ * @Author: Guan Gui <guiguan>
+ * @Date:   2018-07-12T10:26:17+10:00
+ * @Email:  root@guiguan.net
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-12T21:23:13+10:00
+ *
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import './ConfigEntry.scss';
+
+.ConfigPanelMenuEntryTooltip {
+  opacity: 0.9;
+
+  .Body {
+    max-width: 250px;
+    background-color: $connectionActiveTextFieldBackgroundColour;
+    color: $connectionActiveTextFieldTextColour;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: lighter;
+    padding: 2px;
+  }
+}
+
+.ConfigPanelMenuEntry {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  display: inline-block;
+  margin: 6px;
+  cursor: pointer;
+
+  .Tooltip,
+  .pt-popover-target,
+  .Tooltip svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .Tooltip svg {
+    padding: 10px;
+    opacity: 0.6;
+  }
+
+  &:hover .Tooltip svg,
+  &.selected .Tooltip svg {
+    opacity: 1;
+  }
+
+  .Indicator {
+    position: absolute;
+    right: 0;
+    color: $configErrorColor;
+  }
+}

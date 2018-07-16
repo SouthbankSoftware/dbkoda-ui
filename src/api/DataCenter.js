@@ -3,7 +3,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-03T14:05:33+10:00
+ * @Last modified time: 2018-07-12T18:51:09+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -38,6 +38,7 @@ import TopConnectionsApi from './TopConnections';
 import ProfilingApi from './Profiling';
 import AggregationApi from './Aggregation';
 import StorageDrilldownApi from './StorageDrilldown';
+import ConfigPanelApi from './ConfigPanel';
 import StaticApi from './static';
 
 export default class DataCenter {
@@ -63,6 +64,7 @@ export default class DataCenter {
     this.profilingApi = new ProfilingApi(store, this);
     this.aggregationApi = new AggregationApi(store, this);
     this.storageDrilldownApi = new StorageDrilldownApi(store, this);
+    this.configPanelApi = new ConfigPanelApi(store, this, configStore);
 
     this.init = this.init.bind(this);
 
@@ -171,6 +173,18 @@ export default class DataCenter {
         'checkForExistingDrillProfile',
         'openEditorWithDrillProfileId',
         'deleteProfileFromDrill'
+      ])
+    );
+
+    // Config Panel API public functions
+    _.assign(
+      this,
+      _.pick(this.configPanelApi, [
+        'selectMenuEntry',
+        'clearConfigError',
+        'getConfigError',
+        'getCurrentConfigValue',
+        'setCurrentConfigValue'
       ])
     );
 

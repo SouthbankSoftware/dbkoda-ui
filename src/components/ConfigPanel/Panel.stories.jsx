@@ -5,7 +5,7 @@
  * @Date:   2018-05-23T11:55:14+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-04T16:44:16+10:00
+ * @Last modified time: 2018-07-11T14:31:03+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,55 +29,30 @@
 import _ from 'lodash';
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
-import { Provider } from 'mobx-react';
-import * as mobx from 'mobx';
 import { storiesOf } from '@storybook/react';
 import { withKnobs } from '@storybook/addon-knobs';
 // import { withKnobs, text, number, select, boolean, array } from '@storybook/addon-knobs';
 // import { action } from '@storybook/addon-actions';
-// mimicking the same css env as in app
-import 'normalize.css/normalize.css';
-import '~/styles/global.scss';
-import '#/App.scss';
-import { Broker, EventType } from '~/helpers/broker';
-import Store from '~/stores/global';
-import { en as globalStrings } from '~/messages/en.json';
-import ConfigEntry from './ConfigEntry';
+import '~/helpers/storybook/styles.scss';
 
-const store = new Store();
-global.store = store;
-global.mobx = mobx;
+import { en as globalStrings } from '~/messages/en.json';
+import StoreLoader from '~/helpers/storybook/StoreLoader';
+import ConfigPanel from './Panel';
+import PathsConfigPanel from './PathsConfigPanel';
+
 global.globalString = (path: string) => {
   return _.get(globalStrings, path.split('/'));
 };
-let storeLoaded = false;
 
-class LOADER extends React.Component<*, *> {
-  componentDidMount() {
-    Broker.once(EventType.APP_READY, () => {
-      storeLoaded = true;
-      this.forceUpdate();
-    });
-  }
-
-  render() {
-    if (storeLoaded) {
-      return <ConfigEntry />;
-    }
-
-    return null;
-  }
-}
-
-storiesOf('ConfigEntry', module)
+storiesOf('ConfigPanel', module)
   .addDecorator(withKnobs)
-  .add('normal', () => (
-    <Provider
-      store={store}
-      api={store.api}
-      configStore={store.configStore}
-      profileStore={store.profileStore}
-    >
-      <LOADER />
-    </Provider>
+  .add('PathsConfigPanel', () => (
+    <StoreLoader>
+      <PathsConfigPanel />
+    </StoreLoader>
+  ))
+  .add('ConfigPanel', () => (
+    <StoreLoader>
+      <ConfigPanel />
+    </StoreLoader>
   ));

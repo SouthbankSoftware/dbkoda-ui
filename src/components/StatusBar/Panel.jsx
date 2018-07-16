@@ -22,7 +22,7 @@
  * @Date:   2017-09-20 10:35:04
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:51:27+10:00
+ * @Last modified time: 2018-07-12T22:46:14+10:00
  */
 
 /* eslint no-prototype-builtins:warn */
@@ -38,7 +38,7 @@ import { Broker, EventType } from '~/helpers/broker';
 import { NewToaster } from '#/common/Toaster';
 import LoadingView from '#/common/LoadingView';
 import HappyIcon from '../../styles/icons/happy.svg';
-import HomeSectionIcon from '../../styles/icons/color/home-icon.svg';
+import HomeSectionIcon from '../../styles/icons/home-icon-solid.svg';
 import NeutralIcon from '../../styles/icons/neutral.svg';
 import SadIcon from '../../styles/icons/sad.svg';
 import BugIcon from '../../styles/icons/error.svg';
