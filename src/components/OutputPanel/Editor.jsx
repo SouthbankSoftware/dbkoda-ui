@@ -132,13 +132,10 @@ export default class Editor extends React.Component {
   }
 
   @action
-  refresh = (bFocus = false) => {
+  refresh = () => {
     if (this.editor) {
       const cm = this.editor.getCodeMirror();
       cm.refresh();
-      if (bFocus) {
-        // cm.focus();
-      }
       if (this.outputObj.shouldScrollToBottom) {
         this.outputObj.scrollToButtom(cm);
         this.outputObj.shouldScrollToBottom = false;
