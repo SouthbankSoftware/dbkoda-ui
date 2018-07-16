@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-16T10:10:20+10:00
+ * @Last modified time: 2018-07-16T14:33:27+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,7 +25,7 @@
  */
 
 import _ from 'lodash';
-import { action, observable, when, runInAction, toJS, reaction } from 'mobx';
+import { action, observable, when, runInAction, reaction } from 'mobx';
 import { dump, restore, nodump } from 'dumpenvy';
 import { serializer, deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
 import { EditorTypes, DrawerPanes, NavPanes } from '#/common/Constants';
@@ -62,6 +62,7 @@ global.VERSION = '';
 export default class Store {
   @nodump api = null;
   @nodump profileStore = null;
+  @nodump configStore = null;
   @observable locale = 'en';
   // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
   // DefinePlugin. The version is retrieved automatically from package.json at the building time of
@@ -91,42 +92,36 @@ export default class Store {
     errors: observable.map(null)
   });
 
-  // @nodump
-  @observable.shallow
-  configPage = observable.object(
-    {
-      isOpen: true,
-      selectedMenu: 'Paths',
-      changedFields: observable.array(null, { deep: false }),
-      newSettings: null
-    },
-    null,
-    {
-      deep: true
-    }
-  );
-
   @observable
-  editorPanel = observable({
-    creatingNewEditor: false,
-    res: null,
-    activeEditorId: 'Default',
-    activeDropdownId: 'Default',
-    executingEditorAll: false,
-    executingEditorLines: false,
-    executingExplain: undefined,
-    stoppingExecution: false,
-    removingTabId: false,
-    isRemovingCurrentTab: false,
-    tabFilter: '',
-    showingSavingDialogEditorIds: [],
-    lastFileSavingDirectoryPath: IS_ELECTRON ? global.PATHS.userHome : '',
-    shouldScrollToActiveTab: false,
-    tabScrollLeftPosition: 0,
-    updateAggregateDetails: false,
-    updateAggregateCode: false,
-    showNewFeaturesDialog: true
-  });
+  editorPanel = observable(
+    {
+      creatingNewEditor: false,
+      res: null,
+      activeEditorId: 'Default',
+      activeDropdownId: 'Default',
+      executingEditorAll: false,
+      executingEditorLines: false,
+      executingExplain: undefined,
+      stoppingExecution: false,
+      removingTabId: false,
+      isRemovingCurrentTab: false,
+      tabFilter: '',
+      showingSavingDialogEditorIds: [],
+      lastFileSavingDirectoryPath: IS_ELECTRON ? global.PATHS.userHome : '',
+      shouldScrollToActiveTab: false,
+      tabScrollLeftPosition: 0,
+      updateAggregateDetails: false,
+      updateAggregateCode: false,
+      showNewFeaturesDialog: true,
+      editorRefs: {},
+      __nodump__: ['editorRefs', '__nodump__']
+    },
+    {
+      editorRefs: observable.ref,
+      __nodump__: observable.ref
+    },
+    { deep: false }
+  );
 
   @observable
   editorToolbar = observable({
@@ -231,6 +226,7 @@ export default class Store {
     creatingNewProfile: false
   });
 
+  @nodump
   @observable
   dragItem = observable({
     dragDrop: false,
@@ -248,7 +244,9 @@ export default class Store {
     repeatPassword: ''
   };
 
-  @observable topology = observable({ isChanged: false, json: {}, profileId: '' });
+  @nodump
+  @observable
+  topology = observable({ isChanged: false, json: {}, profileId: '' });
 
   @action.bound
   setDrawerChild = value => {
@@ -470,7 +468,7 @@ export default class Store {
 
     try {
       this.cleanStore(newStore);
-      _.assign(this, newStore);
+      _.assign(this, _.pick(newStore, _.keys(this)));
     } catch (err) {
       l.error(err);
     }
@@ -619,12 +617,6 @@ export default class Store {
     return Promise.reject(new Error('Backup only supported in Electron'));
   }
 
-  @action.bound
-  resetConfigPage(settingsObj) {
-    this.configPage.changedFields.clear();
-    this.configPage.newSettings = observable.object(settingsObj || toJS(this.configStore.config));
-  }
-
   loadRest() {
     // init config
     this.configStore = new ConfigStore();
@@ -681,10 +673,6 @@ export default class Store {
           foregroundSamplingRateChangedReaction();
           backgroundSamplingRateChangedReaction();
         });
-
-        // init configPage so that Preferences panel can render
-        // TODO: redesign Preferences panel and get rid of this
-        this.resetConfigPage();
 
         if (this.configStore.config.passwordStoreEnabled) {
           this.api.passwordApi.showPasswordDialog();
