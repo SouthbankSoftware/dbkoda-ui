@@ -5,7 +5,7 @@
  * @Date:   2018-07-03T15:08:13+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-12T21:36:53+10:00
+ * @Last modified time: 2018-07-16T15:13:14+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -62,7 +62,8 @@ type Props = {
   store: any | Store,
   api: any | *,
   path: string,
-  disabled: boolean
+  disabled: boolean,
+  onChange?: (value: any) => void
 };
 
 // $FlowIssue
@@ -121,15 +122,23 @@ export default class ConfigEntry extends React.Component<Props> {
   };
 
   _onSwitchChange = (event: *) => {
-    const { api, path } = this.props;
+    const { api, path, onChange } = this.props;
 
-    api.setCurrentConfigValue(path, event.target.checked);
+    if (onChange) {
+      onChange(event.target.checked);
+    } else {
+      api.setCurrentConfigValue(path, event.target.checked);
+    }
   };
 
   _onInputChange = (event: *) => {
-    const { api, path } = this.props;
+    const { api, path, onChange } = this.props;
 
-    api.setCurrentConfigValue(path, event.target.value || this.configDefault);
+    if (onChange) {
+      onChange(event.target.value);
+    } else {
+      api.setCurrentConfigValue(path, event.target.value || this.configDefault);
+    }
   };
 
   _onBrowse = () => {
