@@ -5,7 +5,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com, root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-17T12:06:23+10:00
+ * @Last modified time: 2018-07-17T20:58:43+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -133,6 +133,19 @@ export default class ConfigStore {
 
         const asyncError = _.get(error, 'data.asyncError');
 
+        if (asyncError && error.className === 'MongoConfigError') {
+          // clear old Mongo async errors
+          for (const [k, v] of errors.entries()) {
+            if (v.asyncError && k.startsWith('config.mongo')) {
+              errors.delete(k);
+            }
+          }
+
+          // open PathsConfigPanel
+          global.store.configPanel.currentMenuEntry = 'paths';
+          global.store.setActiveNavPane(NavPanes.CONFIG);
+        }
+
         _.forEach(error.errors, (v, k) => {
           if (k.startsWith('config.')) {
             const err = {
@@ -142,12 +155,6 @@ export default class ConfigStore {
             if (asyncError) {
               // $FlowFixMe
               err.asyncError = true;
-
-              if (error.className === 'MongoConfigError') {
-                // open PathsConfigPanel
-                global.store.configPanel.currentMenuEntry = 'paths';
-                global.store.setActiveNavPane(NavPanes.CONFIG);
-              }
             }
 
             errors.set(k, err);
