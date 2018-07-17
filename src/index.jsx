@@ -3,7 +3,7 @@
  * @Date:   2017-07-13T10:36:10+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:53:58+10:00
+ * @Last modified time: 2018-07-03T17:02:26+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,7 +24,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import '~/env';
+import '~/helpers/env';
+import '~/helpers/postEnv';
 import Store from '~/stores/global';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -56,7 +57,7 @@ const renderApp = () => {
         <Provider
           store={store}
           api={store.api}
-          config={store.config}
+          configStore={store.configStore}
           profileStore={store.profileStore}
         >
           <ErrorBoundary emitCrashEvent>

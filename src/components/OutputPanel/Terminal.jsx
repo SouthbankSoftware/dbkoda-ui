@@ -86,7 +86,7 @@ function collect(connect, monitor) {
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  config: allStores.config
+  configStore: allStores.configStore
 }))
 @observer
 @ContextMenuTarget
@@ -193,7 +193,7 @@ class Terminal extends React.Component {
         cm.execCommand('autocomplete');
       }
     }, 400);
-    if (this.props.config.settings.automaticAutoComplete && editorType !== EditorTypes.DRILL) {
+    if (this.props.configStore.config.automaticAutoComplete && editorType !== EditorTypes.DRILL) {
       cm.on('change', this.automaticAutocomplete);
     }
 
@@ -238,7 +238,7 @@ class Terminal extends React.Component {
     cm.on('keydown', this.cmKeydown);
 
     this.cleanUp = () => {
-      if (this.props.config.settings.automaticAutoComplete && editorType !== EditorTypes.DRILL) {
+      if (this.props.configStore.config.automaticAutoComplete && editorType !== EditorTypes.DRILL) {
         cm.off('change', this.automaticAutocomplete);
       }
       cm.off('keydown', this.cmKeydown);
@@ -356,7 +356,7 @@ class Terminal extends React.Component {
       this.props.store.editorToolbar.isActiveExecuting = false;
       this.props.store.editorPanel.stoppingExecution = false;
       // Open Table view if default table setting is on
-      if (this.props.config.settings.tableOutputDefault) {
+      if (this.props.configStore.config.tableOutputDefault) {
         const lineNumber = this.props.store.outputs.get(activeEditorId).currentExecStartLine;
         const editor = this.props.store.outputPanel.editorRefs[activeEditorId];
         const cm = editor.getCodeMirror();

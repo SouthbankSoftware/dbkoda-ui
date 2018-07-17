@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T21:43:10+10:00
+ * @Last modified time: 2018-07-17T14:47:23+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,35 +25,30 @@
  */
 
 import _ from 'lodash';
-import { action, observable, when, runInAction, toJS, reaction } from 'mobx';
+import { action, observable, when, runInAction, reaction } from 'mobx';
 import { dump, restore, nodump } from 'dumpenvy';
 import { serializer, deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
 import { EditorTypes, DrawerPanes, NavPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import moment from 'moment';
-import Globalize from 'globalize';
 import DataCenter from '~/api/DataCenter';
 import { setUser, toggleRaygun } from '~/helpers/loggingApi';
 import { resizerStates } from '#/common/EnhancedSplitPane';
 import { Broker, EventType } from '../helpers/broker';
 import { ProfileStatus } from '../components/common/Constants';
-import Config from './config';
-import Profiles from './profiles';
+import ConfigStore from './config';
+import ProfileStore from './profile';
 
 let ipcRenderer;
-let stateStorePath;
 
 if (IS_ELECTRON) {
   const electron = window.require('electron');
 
   ipcRenderer = electron.ipcRenderer; // eslint-disable-line prefer-destructuring
-
-  const { remote } = electron;
-
-  global.PATHS = remote.getGlobal('PATHS');
-  stateStorePath = global.PATHS.stateStore;
 }
+
+const stateStorePath = global.PATHS.stateStore;
 
 global.EOL = global.IS_ELECTRON
   ? window.require('os').EOL
@@ -61,13 +56,13 @@ global.EOL = global.IS_ELECTRON
     ? '\r\n'
     : '\n';
 
-if (IS_TEST) {
-  global.VERSION = '';
-}
+// just in case webpack is not in context
+global.VERSION = '';
 
 export default class Store {
   @nodump api = null;
   @nodump profileStore = null;
+  @nodump configStore = null;
   @observable locale = 'en';
   // NOTE: this is not a global variable but a placeholder string that will be replaced by webpack
   // DefinePlugin. The version is retrieved automatically from package.json at the building time of
@@ -80,52 +75,40 @@ export default class Store {
   @observable.shallow outputs = observable.map(null, { deep: false });
   @observable.shallow terminals = observable.map(null, { deep: false });
   @observable.shallow performancePanels = observable.map(null, { deep: false });
-
   @observable.shallow performancePanel = null;
 
   @observable
-  welcomePage = observable({
-    isOpen: true,
-    newsFeed: [],
-    currentContent: 'Welcome' // Can be 'Welcome', 'Choose Theme' or 'Keyboard Shortcuts'
+  configPanel = observable({
+    currentMenuEntry: 'welcome',
+    changes: observable.map(null),
+    errors: observable.map(null)
   });
-
-  // @nodump
-  @observable.shallow
-  configPage = observable.object(
-    {
-      isOpen: true,
-      selectedMenu: 'Paths',
-      changedFields: observable.array(null, { deep: false }),
-      newSettings: null
-    },
-    null,
-    {
-      deep: true
-    }
-  );
 
   @observable
-  editorPanel = observable({
-    creatingNewEditor: false,
-    res: null,
-    activeEditorId: 'Default',
-    activeDropdownId: 'Default',
-    executingEditorAll: false,
-    executingEditorLines: false,
-    executingExplain: undefined,
-    stoppingExecution: false,
-    removingTabId: false,
-    isRemovingCurrentTab: false,
-    tabFilter: '',
-    showingSavingDialogEditorIds: [],
-    lastFileSavingDirectoryPath: IS_ELECTRON ? global.PATHS.userHome : '',
-    shouldScrollToActiveTab: false,
-    tabScrollLeftPosition: 0,
-    updateAggregateDetails: false,
-    updateAggregateCode: false,
-    showNewFeaturesDialog: true
-  });
+  editorPanel = observable(
+    {
+      creatingNewEditor: false,
+      res: null,
+      activeEditorId: 'Default',
+      activeDropdownId: 'Default',
+      executingEditorAll: false,
+      executingEditorLines: false,
+      executingExplain: undefined,
+      stoppingExecution: false,
+      removingTabId: false,
+      isRemovingCurrentTab: false,
+      tabFilter: '',
+      showingSavingDialogEditorIds: [],
+      lastFileSavingDirectoryPath: IS_ELECTRON ? global.PATHS.userHome : '',
+      shouldScrollToActiveTab: false,
+      tabScrollLeftPosition: 0,
+      updateAggregateDetails: false,
+      updateAggregateCode: false,
+      showNewFeaturesDialog: true
+    },
+    {},
+    { deep: false }
+  );
 
   @observable
   editorToolbar = observable({
@@ -142,15 +125,24 @@ export default class Store {
   });
 
   @observable
-  outputPanel = observable({
-    currentTab: 'Default',
-    clearingOutput: false,
-    executingShowMore: false,
-    executingTerminalCmd: false,
-    sendingCommand: '',
-    collapseTable: false,
-    expandTable: false
-  });
+  outputPanel = observable(
+    {
+      currentTab: 'Default',
+      clearingOutput: false,
+      executingShowMore: false,
+      executingTerminalCmd: false,
+      sendingCommand: '',
+      collapseTable: false,
+      expandTable: false,
+      editorRefs: {},
+      __nodump__: ['editorRefs', '__nodump__']
+    },
+    {
+      editorRefs: observable.ref,
+      __nodump__: observable.ref
+    },
+    { deep: false }
+  );
 
   @observable
   layout = {
@@ -167,7 +159,7 @@ export default class Store {
   @observable
   drawer = observable({
     drawerChild: DrawerPanes.DEFAULT,
-    activeNavPane: NavPanes.EDITOR
+    activeNavPane: NavPanes.CONFIG
   });
 
   @observable
@@ -230,6 +222,7 @@ export default class Store {
     creatingNewProfile: false
   });
 
+  @nodump
   @observable
   dragItem = observable({
     dragDrop: false,
@@ -247,7 +240,9 @@ export default class Store {
     repeatPassword: ''
   };
 
-  @observable topology = observable({ isChanged: false, json: {}, profileId: '' });
+  @nodump
+  @observable
+  topology = observable({ isChanged: false, json: {}, profileId: '' });
 
   @action.bound
   setDrawerChild = value => {
@@ -469,7 +464,7 @@ export default class Store {
 
     try {
       this.cleanStore(newStore);
-      _.assign(this, newStore);
+      _.assign(this, _.pick(newStore, _.keys(this)));
     } catch (err) {
       l.error(err);
     }
@@ -478,7 +473,15 @@ export default class Store {
   }
 
   cleanStore(newStore) {
-    Globalize.locale(newStore.locale || 'en');
+    if (newStore.version !== this.version) {
+      // upgrading from previous versions
+
+      // reset config panel states
+      delete newStore.configPanel;
+    }
+
+    // TODO: enable this when we hv internationalization support
+    // Globalize.locale(newStore.locale || 'en');
 
     newStore.layout.alertIsLoading = false;
     newStore.layout.overallSplitResizerState = resizerStates.ALL_SHOWN;
@@ -552,6 +555,8 @@ export default class Store {
     });
 
     // OutputPanel:
+    newStore.outputPanel.editorRefs = {};
+    newStore.outputPanel.__nodump__ = ['editorRefs', '__nodump__'];
     newStore.outputPanel.clearingOutput = false;
     newStore.outputPanel.executingShowMore = false;
     newStore.outputPanel.executingTerminalCmd = false;
@@ -610,67 +615,64 @@ export default class Store {
     return Promise.reject(new Error('Backup only supported in Electron'));
   }
 
-  @action.bound
-  resetConfigPage(settingsObj) {
-    this.configPage.changedFields.clear();
-    this.configPage.newSettings = observable.object(settingsObj || toJS(this.config.settings));
-  }
-
   loadRest() {
     // init config
-    this.config = new Config();
-    global.config = this.config;
+    this.configStore = new ConfigStore();
+    global.configStore = this.configStore;
 
     // init profiles
-    this.profileStore = new Profiles();
+    this.profileStore = new ProfileStore();
     global.profileStore = this.profileStore;
 
-    // init api
-    this.api = new DataCenter(this, this.config, this.profileStore);
-    global.api = this.api;
-
-    return this.config
+    return this.configStore
       .load()
       .then(() => {
-        const settingsUserChangedReaction = reaction(
-          () => this.config.settings.user.id,
-          () => {
-            setUser(this.config.settings.user);
-          },
-          { fireImmediately: true }
-        );
+        // init api
+        this.api = new DataCenter(this, this.configStore, this.profileStore);
+        global.api = this.api;
 
-        const settingsTelemetryEnabledReaction = reaction(
-          () => this.config.settings.telemetryEnabled,
-          enabled => {
-            toggleRaygun(enabled);
-          },
-          { fireImmediately: true }
-        );
+        let settingsUserChangedReaction;
+        let settingsTelemetryEnabledReaction;
+
+        if (!IS_STORYBOOK) {
+          settingsUserChangedReaction = reaction(
+            () => this.configStore.config.user.id,
+            () => {
+              setUser(this.configStore.config.user);
+            },
+            { fireImmediately: true }
+          );
+
+          settingsTelemetryEnabledReaction = reaction(
+            () => this.configStore.config.telemetryEnabled,
+            enabled => {
+              toggleRaygun(enabled);
+            },
+            { fireImmediately: true }
+          );
+        }
 
         const foregroundSamplingRateChangedReaction = reaction(
-          () => this.config.settings.performancePanel.foregroundSamplingRate,
+          () => this.configStore.config.performancePanel.foregroundSamplingRate,
           rate => this.api.reactToSamplingRateChange(rate, true)
         );
 
         const backgroundSamplingRateChangedReaction = reaction(
-          () => this.config.settings.performancePanel.backgroundSamplingRate,
+          () => this.configStore.config.performancePanel.backgroundSamplingRate,
           rate => this.api.reactToSamplingRateChange(rate, false)
         );
 
         // stop all PP when refreshing
         Broker.once(EventType.WINDOW_REFRESHING, () => {
-          settingsTelemetryEnabledReaction();
-          settingsUserChangedReaction();
+          if (!IS_STORYBOOK) {
+            settingsTelemetryEnabledReaction();
+            settingsUserChangedReaction();
+          }
           foregroundSamplingRateChangedReaction();
           backgroundSamplingRateChangedReaction();
         });
 
-        // init configPage so that Preferences panel can render
-        // TODO: redesign Preferences panel and get rid of this
-        this.resetConfigPage();
-
-        if (this.config.settings.passwordStoreEnabled) {
+        if (this.configStore.config.passwordStoreEnabled) {
           this.api.passwordApi.showPasswordDialog();
         }
       })
@@ -683,11 +685,6 @@ export default class Store {
               this.profileList.selectedProfile.id
             );
           }
-
-          this.saveUponEditorsChange();
-
-          // FIXME
-          // this.saveUponProfileChange();
 
           if (this.api) {
             this.api.init();
@@ -788,21 +785,21 @@ export default class Store {
     }
   }
 
-  saveUponEditorsChange() {
-    this.editors.observe(this.saveDebounced);
-  }
-
   constructor(initOnly: false) {
     this.save = this.save.bind(this);
-    this.saveDebounced = _.debounce(this.save, 500);
 
     if (initOnly) return;
 
-    Broker.on(EventType.FEATHER_CLIENT_LOADED, value => {
-      if (value) {
-        this.load();
-      }
-    });
+    if (global.IS_FEATHERS_READY) {
+      this.load();
+    } else {
+      Broker.on(EventType.FEATHER_CLIENT_LOADED, value => {
+        if (value) {
+          global.IS_FEATHERS_READY = true;
+          this.load();
+        }
+      });
+    }
 
     if (IS_ELECTRON) {
       ipcRenderer.once('update', (event, message) => {

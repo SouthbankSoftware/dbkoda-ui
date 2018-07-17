@@ -1233,7 +1233,7 @@ export default class GraphicalBuilder extends React.Component {
                   NewToaster.show({
                     message: globalString('aggregate_builder/export_passed'),
                     className: 'success',
-                    icon: 'pt-icon-thumbs-up'
+                    icon: 'thumbs-up'
                   });
                   runInAction('update fileName and path', () => {
                     currentEditor.fileName = path.basename(fileName);
@@ -1534,7 +1534,7 @@ export default class GraphicalBuilder extends React.Component {
           NewToaster.show({
             message: globalString('aggregate_builder/import_passed'),
             className: 'success',
-            icon: 'pt-icon-thumbs-up'
+            icon: 'thumbs-up'
           });
         });
       });

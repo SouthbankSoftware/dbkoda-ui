@@ -5,7 +5,7 @@
  * @Date:   2017-06-20T15:09:51+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:43:26+10:00
+ * @Last modified time: 2018-07-03T17:01:21+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,18 +32,18 @@ import { reaction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
 import ReactGA from 'react-ga';
-import { analytics, protocol } from '../../env';
+import { analytics, protocol } from '~/helpers/env';
 import { AnalyticsEvents } from './Events';
 import { Broker, EventType } from '../../helpers/broker';
 
 type Props = {
   store: *,
-  config: *
+  configStore: *
 };
 
 @inject(allStores => ({
   store: allStores.store,
-  config: allStores.config
+  configStore: allStores.configStore
 }))
 @observer
 export default class Analytics extends React.Component<Props> {
@@ -52,7 +52,7 @@ export default class Analytics extends React.Component<Props> {
   reactions = [];
 
   componentDidMount() {
-    const { telemetryEnabled } = this.props.config.settings;
+    const { telemetryEnabled } = this.props.configStore.config;
 
     if (telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.APP_OPEN, 'App', this.props.store.version);
@@ -61,7 +61,7 @@ export default class Analytics extends React.Component<Props> {
     // provide our own user id
     this.reactions.push(
       reaction(
-        () => this.props.config.settings.user.id,
+        () => this.props.configStore.config.user.id,
         userId => {
           ReactGA.set({ userId });
         }
@@ -75,7 +75,7 @@ export default class Analytics extends React.Component<Props> {
      */
     this.reactions.push(
       reaction(
-        () => this.props.config.settings.telemetryEnabled,
+        () => this.props.configStore.config.telemetryEnabled,
         telemetryEnabled => {
           if (!this.props.store.layout.optInVisible) {
             if (telemetryEnabled) {
@@ -96,7 +96,7 @@ export default class Analytics extends React.Component<Props> {
       reaction(
         () => this.props.store.layout.optInVisible,
         _ => {
-          if (this.props.config.settings.telemetryEnabled) {
+          if (this.props.configStore.config.telemetryEnabled) {
             this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
           } else {
             this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
@@ -126,7 +126,7 @@ export default class Analytics extends React.Component<Props> {
   initialize = () => {
     let siteUrl;
     const gaCode = analytics;
-    const userId = this.props.config.settings.user.id;
+    const userId = this.props.configStore.config.user.id;
 
     if (process.env.NODE_ENV === 'development') {
       siteUrl = protocol + 'dev.dbkoda.com';
@@ -208,7 +208,7 @@ export default class Analytics extends React.Component<Props> {
    * @param {Object} profile - An object that represents the newly created profile
    */
   newProfileCreated = (profile: *) => {
-    if (this.props.config.settings.telemetryEnabled) {
+    if (this.props.configStore.config.telemetryEnabled) {
       let mongoInfo =
         '{ dbVersion: ' +
         profile.dbVersion +
@@ -233,11 +233,11 @@ export default class Analytics extends React.Component<Props> {
    * @param {String} service - The service type that has been called.
    */
   controllerActivity = (service: *) => {
-    if (this.props.config.settings.telemetryEnabled) {
+    if (this.props.configStore.config.telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.CONTROLLER_ACTIVITY, 'Service', service);
       if (
         this.props.store.dateLastPinged &&
-        this.props.config.settings.telemetryEnabled &&
+        this.props.configStore.config.telemetryEnabled &&
         this.hasOneDayPassed(this.props.store.dateLastPinged, this.getToday())
       ) {
         Broker.emit(EventType.PING_HOME);
@@ -254,7 +254,7 @@ export default class Analytics extends React.Component<Props> {
   };
 
   keyFeatureEvent = (feature: *) => {
-    if (this.props.config.settings.telemetryEnabled) {
+    if (this.props.configStore.config.telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.KEY_FEATURE_USED, 'FeatureUsed', feature);
     }
   };

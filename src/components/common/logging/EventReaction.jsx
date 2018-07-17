@@ -2,7 +2,7 @@
  * @Author: mike
  * @Date:   2017-03-28 16:13:50
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T13:30:31+11:00
+ * @Last modified time: 2018-07-04T15:49:01+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -38,7 +38,7 @@ const instance = false;
  */
 @inject(allStores => ({
   store: allStores.store,
-  config: allStores.config
+  configStore: allStores.configStore
 }))
 @observer
 export default class EventReaction extends React.Component {
@@ -47,7 +47,7 @@ export default class EventReaction extends React.Component {
 
     const typeEnum = EventLogging.getTypeEnum();
     const fragmentEnum = EventLogging.getFragmentEnum();
-    const { store, config } = this.props.store;
+    const { store, configStore } = this.props.store;
     const editorPanelObserver = observe(store.editorPanel, change =>
       this.observeEditorPanel(change, typeEnum, fragmentEnum)
     );
@@ -57,11 +57,11 @@ export default class EventReaction extends React.Component {
     const profileOutputObserver = observe(store.outputPanel, change =>
       this.observeOutputPanel(change, typeEnum, fragmentEnum)
     );
-    const userPreferencesObserver = observe(config.settings, change =>
+    const userPreferencesObserver = observe(configStore.config, change =>
       this.observeUserPreferences(change, typeEnum, fragmentEnum)
     );
 
-    if (this.props.config.settings.telemtryEnabled) {
+    if (this.props.configStore.config.telemtryEnabled) {
       EventLogging.recordEvent(
         typeEnum.EVENT.APP.OPEN,
         fragmentEnum.PROFILES,
@@ -72,7 +72,7 @@ export default class EventReaction extends React.Component {
   }
 
   observeEditorPanel(change, typeEnum, fragmentEnum) {
-    if (this.props.config.settings.telemetryEnabled) {
+    if (this.props.configStore.config.telemetryEnabled) {
       switch (change.type) {
         case 'update':
           switch (change.name) {
@@ -174,7 +174,7 @@ export default class EventReaction extends React.Component {
   }
 
   observeProfilePanel(change, typeEnum, fragmentEnum) {
-    if (this.props.config.settings.telemetryEnabled) {
+    if (this.props.configStore.config.telemetryEnabled) {
       switch (change.type) {
         case 'update':
           switch (change.name) {
@@ -226,7 +226,7 @@ export default class EventReaction extends React.Component {
   }
 
   observeOutputPanel(change, typeEnum, fragmentEnum) {
-    if (this.props.config.settings.telemetryEnabled) {
+    if (this.props.configStore.config.telemetryEnabled) {
       switch (change.type) {
         case 'update':
           switch (change.name) {
@@ -287,7 +287,7 @@ export default class EventReaction extends React.Component {
   }
 
   observeUserPreferences(change, typeEnum, fragmentEnum) {
-    if (this.props.config.settings.telemetryEnabled) {
+    if (this.props.configStore.config.telemetryEnabled) {
       switch (change.type) {
         case 'update':
           switch (change.name) {

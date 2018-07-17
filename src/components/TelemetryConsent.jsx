@@ -36,7 +36,7 @@ const React = require('react');
 @inject(allStores => ({
   store: allStores.store,
   layout: allStores.store.layout,
-  config: allStores.config
+  configStore: allStores.configStore
 }))
 @observer
 export default class TelemetryConsent extends React.Component {
@@ -83,12 +83,12 @@ export default class TelemetryConsent extends React.Component {
 
   @action.bound
   handleSwitch() {
-    if (this.props.config.settings.telemetryEnabled === false) {
-      this.props.config.patch({
+    if (this.props.configStore.config.telemetryEnabled === false) {
+      this.props.configStore.patch({
         telemetryEnabled: true
       });
     } else {
-      this.props.config.patch({
+      this.props.configStore.patch({
         telemetryEnabled: false
       });
       if (IS_ELECTRON) {
@@ -102,13 +102,13 @@ export default class TelemetryConsent extends React.Component {
     this.props.layout.optInVisible = false;
     if (
       this.props.store.dateLastPinged &&
-      this.props.config.settings.telemetryEnabled &&
+      this.props.configStore.config.telemetryEnabled &&
       this.hasOneDayPassed(this.props.store.dateLastPinged, this.getToday())
     ) {
       this.props.store.dateLastPinged = this.getToday();
       this.props.store.firstPingDate = this.getToday();
       Broker.emit(EventType.PING_HOME);
-    } else if (!this.props.store.dateLastPinged && this.props.config.settings.telemetryEnabled) {
+    } else if (!this.props.store.dateLastPinged && this.props.configStore.config.telemetryEnabled) {
       this.props.store.dateLastPinged = this.getToday();
       this.props.store.firstPingDate = this.getToday();
       Broker.emit(EventType.PING_HOME);
@@ -132,9 +132,9 @@ export default class TelemetryConsent extends React.Component {
             <a onClick={this.openPrivacyPolicy}>{globalString('telemetry_dialog/privacy_link')}</a>
           </p>
         </div>
-        <div className={'dialogButtons ' + this.props.config.settings.telemetryEnabled}>
+        <div className={'dialogButtons ' + this.props.configStore.config.telemetryEnabled}>
           <Switch
-            checked={this.props.config.settings.telemetryEnabled}
+            checked={this.props.configStore.config.telemetryEnabled}
             label="Enable Telemetry"
             onChange={this.handleSwitch}
           />

@@ -53,7 +53,7 @@ import './styles.scss';
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  config: allStores.config,
+  configStore: allStores.configStore,
   profileStore: allStores.profileStore
 }))
 @observer
@@ -130,7 +130,7 @@ export default class Toolbar extends React.Component {
     NewToaster.show({
       message: globalString('profile/removeSuccess'),
       className: 'success',
-      icon: 'pt-icon-thumbs-up'
+      icon: 'thumbs-up'
     });
     Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideRemoveConnectionAlert);
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.removeProfile);
@@ -173,7 +173,7 @@ export default class Toolbar extends React.Component {
           NewToaster.show({
             message: globalString('profile/toolbar/connectionClosed'),
             className: 'success',
-            icon: 'pt-icon-thumbs-up'
+            icon: 'thumbs-up'
           });
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
         })

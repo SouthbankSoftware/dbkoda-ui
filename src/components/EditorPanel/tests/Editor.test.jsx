@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T18:17:25+11:00
+ * @Last modified time: 2018-07-04T15:52:57+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,7 +29,7 @@ import '~/helpers/configEnzyme';
 import { shallow, mount } from 'enzyme';
 import { configure } from 'mobx';
 import Store from '~/stores/global';
-import Profiles from '~/stores/profiles';
+import Profiles from '~/stores/profile';
 import DataCenter from '~/api/DataCenter';
 import globalizeInit from '#/tests/helpers/globalize.js';
 import { EditorPanel, EditorToolbar } from '../index.js';

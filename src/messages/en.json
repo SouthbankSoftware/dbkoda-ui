@@ -410,25 +410,22 @@
         "maxOutputHistory": "Maximum number of lines should be kept as output history",
         "mongoCmd": "Mongo Binary Path",
         "drillCmd": "Apache Drill Path",
-        "docker-image-name": "Docker Image Name",
-        "docker-container-id": "Docker Container ID",
-        "docker-volume": "Mount Volume",
-        "docker-cmd": "Mongo Command",
         "drillControllerCmd": "Drill Controller Path",
         "passwordStoreEnabled": "Password Store Enabled",
         "applyButton": "Apply",
-        "docker-placeholder": {
-          "image": "Docker Image Name",
-          "container-id": "Docker Container ID",
-          "host-path": "Path in the host",
-          "container-path": "Path in the container"
+        "docker": {
+          "cmd": "Binary path",
+          "imageName": "Image name",
+          "containerId": "Container id",
+          "mountVolume": "Mount volume",
+          "mongoCmdPreview": "Dockerized Mongo command preview"
         },
         "docker-tooltip": {
-          "image": "Docker Image Name includes mongo shell binary",
-          "container": "Docker Container ID includes mongo shell binary",
-          "host-volume": "Host mount path",
-          "container-volume": "Docker container mount path",
-          "docker-shell-cmd": "Docker command to launch mongo shell"
+          "cmd": "Path to Docker executable binary",
+          "imageName": "The Docker image used to create Mongo shell",
+          "containerId": "The existing Docker container id used to create Mongo shell",
+          "hostPath": "Host mount path",
+          "containerPath": "Docker container mount path"
         },
         "remove_store_dialog": {
           "question": "Are you sure you would like to disable the password store?",
@@ -452,6 +449,17 @@
         "dontSave": "Don't Save",
         "cancel": "Cancel",
         "save": "Save"
+      }
+    },
+    "config": {
+      "menu": {
+        "welcome": "Welcome to dbKoda",
+        "general": "General",
+        "paths": "Paths",
+        "performanceLab": "Performance Lab",
+        "editor": "Editor",
+        "passwordStore": "Password Store",
+        "shortcuts": "Keyboard Shortcuts"
       }
     },
     "connection": {

@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-06-01T14:24:21+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-03T13:38:06+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,29 +33,27 @@ import { handleNewData, attachToMobx } from '~/api/PerformancePanel';
 import { setUser, toggleRaygun } from '~/helpers/loggingApi';
 import PerformanceWindowApi from '../api/PerformanceWindow';
 
-global.config = {
-  settings: null
-};
+global.config = null;
 
 if (IS_ELECTRON) {
   const { ipcRenderer } = window.require('electron');
 
-  global.config.settings = ipcRenderer.sendSync('configQueried');
-  const { user, telemetryEnabled } = global.config.settings;
+  global.config = ipcRenderer.sendSync('configQueried');
+  const { user, telemetryEnabled } = global.config;
   setUser(user);
   toggleRaygun(telemetryEnabled, false);
 
   ipcRenderer.on('configChanged', (_event, changed) => {
     _.forEach(changed, (v, k) => {
-      _.set(global.config.settings, k, v.new);
+      _.set(global.config, k, v.new);
     });
 
     if (_.has(changed, 'user.id')) {
-      setUser(_.get(global.config.settings, 'user'));
+      setUser(_.get(global.config, 'user'));
     }
 
     if (_.has(changed, 'telemetryEnabled')) {
-      toggleRaygun(_.get(global.config.settings, 'telemetryEnabled'));
+      toggleRaygun(_.get(global.config, 'telemetryEnabled'));
     }
   });
 }

@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-17T12:55:19+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-06-27T13:20:20+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-06T15:41:21+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -61,30 +61,24 @@ p {
 ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
-  background-color: rgba(0, 0, 0, 0);
+  background: rgba(0, 0, 0, 0.1);
   -webkit-border-radius: 100px;
 }
 
 ::-webkit-scrollbar:hover {
-  background-color: rgba(0, 0, 0, 0.09) !important;
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: $scrollBarThumb !important;
+  background-color: rgba(255, 255, 255, 0.2);
   -webkit-border-radius: 100px;
   background-clip: padding-box;
-  border: 2px solid rgba(0, 0, 0, 0);
   min-height: 10px; /*Prevent it from getting too small */
   min-width: 10px;
 }
 
-::-webkit-scrollbar-thumb:active {
-  background: darken($scrollBarThumb, 5) !important; /* Some darker color when you click it */
-  -webkit-border-radius: 100px;
-}
-
 ::-webkit-scrollbar-corner {
-  background-color: rgba(0, 0, 0, 0);
+  background: none;
 }
 
 .profileList,

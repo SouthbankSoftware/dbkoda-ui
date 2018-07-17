@@ -3,14 +3,37 @@
  * @Date:   2017-07-31T09:42:43+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:43:12+10:00
+ * @Last modified time: 2018-07-04T15:43:23+10:00
  */
 
 import { Doc } from 'codemirror';
 import _ from 'lodash';
 import { NewToaster } from '#/common/Toaster';
+import { toStrict } from '~/helpers/mongodbExtendedJsonUtils';
 
 const MAX_DOCUMENTS = 500;
+
+const _parseExtendedJsonString = (input: string): JSON => {
+  const jsonStr = toStrict(input);
+
+  try {
+    return JSON.parse(jsonStr);
+  } catch (err) {
+    let bugContext = '';
+
+    if (err.message) {
+      const match = err.message.match(/position (\d+)/);
+
+      if (match) {
+        const bugIdx = Number(match[1]);
+        const width = 20;
+        bugContext = JSON.stringify(jsonStr.substring(bugIdx - width, bugIdx + width));
+      }
+    }
+
+    l.error('Failed to parse extended json string', err, bugContext);
+  }
+};
 
 export default class StaticApi {
   static mongoProtocol = 'mongodb://';
@@ -49,39 +72,17 @@ export default class StaticApi {
   }
 
   static parseShellJson(jsonStr) {
-    return new Promise((resolve, reject) => {
-      const ParseWorker = require('worker-loader!./workers/jsonParse.js'); // eslint-disable-line
-      const parseWorker = new ParseWorker();
-      parseWorker.postMessage({ cmd: 'start', jsonStr });
-      parseWorker.addEventListener('message', e => {
-        if (e.data[1]) {
-          reject(e.data[1]);
-        } else {
-          resolve(e.data[0]);
-        }
-      });
+    return new Promise(resolve => {
+      resolve(_parseExtendedJsonString(jsonStr));
     });
   }
 
   static parseTableJson(jsonStr, lines, cm, outputId) {
-    return new Promise((resolve, reject) => {
-      this.findResultSet(jsonStr, lines, cm, outputId)
-        .then(res => {
-          const ParseWorker = require('worker-loader!./workers/jsonParse.js'); // eslint-disable-line
-          const parseWorker = new ParseWorker();
-          parseWorker.postMessage({ cmd: 'start', jsonStr: res });
-          parseWorker.addEventListener('message', e => {
-            if (e.data[1]) {
-              reject(e.data[1]);
-            } else {
-              resolve(e.data[0]);
-            }
-          });
-        })
-        .catch(error => {
-          l.error('Error while parsing JSON:', error);
-        });
-    });
+    return this.findResultSet(jsonStr, lines, cm, outputId)
+      .then(_parseExtendedJsonString)
+      .catch(error => {
+        l.error('Error while parsing JSON:', error);
+      });
   }
 
   static parseDefaultTableJson(rsStr, resultSet, cm, outputId) {
@@ -109,16 +110,7 @@ export default class StaticApi {
         currentLine = lines.end + 1;
       }
       if (documents.length > 0) {
-        const ParseWorker = require('worker-loader!./workers/jsonParse.js'); // eslint-disable-line
-        const parseWorker = new ParseWorker();
-        parseWorker.postMessage({ cmd: 'start', jsonStr: `[ ${documents.join(',')} ]` });
-        parseWorker.addEventListener('message', e => {
-          if (e.data[1]) {
-            reject(e.data[1]);
-          } else {
-            resolve(e.data[0]);
-          }
-        });
+        resolve(_parseExtendedJsonString(`[ ${documents.join(',')} ]`));
       } else {
         reject(documents);
       }

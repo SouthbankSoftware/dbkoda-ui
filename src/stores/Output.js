@@ -67,7 +67,7 @@ export default class Output {
   };
 
   _removeExpiredHistory = cm => {
-    const maxOutputHistory = _.get(global, 'config.settings.maxOutputHistory');
+    const maxOutputHistory = _.get(global, 'configStore.config.maxOutputHistory');
 
     if (maxOutputHistory !== undefined) {
       const numLines = cm.lineCount();

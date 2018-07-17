@@ -3,7 +3,7 @@
  * @Date:   2017-07-24T14:46:20+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-29T00:45:02+10:00
+ * @Last modified time: 2018-07-13T02:12:10+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -119,7 +119,7 @@ function collect(connect, monitor) {
   store: allStores.store,
   api: allStores.api,
   profiles: allStores.profileStore.profiles,
-  config: allStores.config
+  configStore: allStores.configStore
 }))
 @ContextMenuTarget
 class View extends React.Component {
@@ -669,7 +669,7 @@ class View extends React.Component {
   componentDidMount() {
     this.refresh();
     if (
-      this.props.config.settings.automaticAutoComplete &&
+      this.props.configStore.config.automaticAutoComplete &&
       this.editorObject.type === EditorTypes.DEFAULT &&
       !this._debouncedAutocomplete
     ) {
@@ -1199,7 +1199,7 @@ class View extends React.Component {
 
   getStyles() {
     l.debug('getStyles()');
-    const { editor } = this.props.config.settings;
+    const { editor } = this.props.configStore.config;
     const styles = _.pick(editor, ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight']);
     return styles;
   }

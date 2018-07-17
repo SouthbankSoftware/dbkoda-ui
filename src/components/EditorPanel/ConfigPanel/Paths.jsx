@@ -3,7 +3,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T17:50:54+11:00
+ * @Last modified time: 2018-06-18T16:31:03+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -78,14 +78,13 @@ export default class Paths extends React.Component {
     const { settings } = this.props;
     return (
       <div className="formContentWrapper">
+        <div className="sectionHeader"> {globalString('editor/config/sections/paths')}</div>
         <RadioGroup onChange={this.changeRadio} selectedValue={settings.dockerEnabled}>
           <Radio
             className="sectionHeader"
             value={false}
-            label={globalString('editor/config/sections/paths')}
+            label={globalString('editor/config/mongoCmd')}
           />
-
-          <div className="form-row">{this.props.renderFieldLabel('mongoCmd')}</div>
           <div className="fileInput">
             <input
               type="text"

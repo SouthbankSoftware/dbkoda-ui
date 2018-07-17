@@ -474,7 +474,7 @@ export default class Toolbar extends React.Component {
             NewToaster.show({
               message: 'Swapped Profiles.',
               className: 'success',
-              icon: 'pt-icon-thumbs-up'
+              icon: 'thumbs-up'
             });
           } else {
             const match = res.match(/Error/g);
@@ -495,7 +495,7 @@ export default class Toolbar extends React.Component {
               NewToaster.show({
                 message: 'Swapped Profiles.',
                 className: 'success',
-                icon: 'pt-icon-thumbs-up'
+                icon: 'thumbs-up'
               });
             }
           }

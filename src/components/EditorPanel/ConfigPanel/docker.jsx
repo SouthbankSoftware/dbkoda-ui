@@ -3,7 +3,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-15T09:57:04+11:00
+ * @Last modified time: 2018-06-18T16:47:07+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -64,33 +64,34 @@ export default class Docker extends React.Component {
     this.calculateFinalCommand(nextProps.store.configPage.newSettings.docker);
   }
 
-  calculateFinalCommand(docker) {
-    const dockerSubCmd = docker.createNew ? 'run' : 'exec';
-    const imageName = dockerSubCmd === 'run' ? docker.imageName : docker.containerID;
-    const rmParam = dockerSubCmd === 'run' ? '--rm' : '';
-    let mongoCmd = `docker ${dockerSubCmd} -it ${rmParam}`;
-    const mongoVersionCmd = `docker ${dockerSubCmd} ${imageName} mongo --version`;
-    let mongoSiblingCmd = `docker ${dockerSubCmd} ${rmParam}`;
-    if (docker.hostPath && docker.containerPath && dockerSubCmd === 'run') {
-      mongoCmd += ` -v ${docker.hostPath}:${docker.containerPath} ${imageName} mongo`;
-      mongoSiblingCmd += ` -v ${docker.hostPath}:${docker.containerPath} ${imageName}`;
+  calculateFinalCommand(dockerSettingsObj) {
+    if (!dockerSettingsObj) return;
+
+    const { cmd } = dockerSettingsObj;
+
+    if (!cmd) return;
+
+    const { imageName, containerId } = dockerSettingsObj;
+
+    const subCmd = dockerSettingsObj.createNew ? 'run' : 'exec';
+    const targetName = subCmd === 'run' ? imageName : containerId;
+
+    if (!targetName) return;
+
+    const { hostPath, containerPath } = dockerSettingsObj;
+
+    const rmParam = subCmd === 'run' ? '--rm' : '';
+
+    let mongoCmd = `${cmd} ${subCmd} -it ${rmParam}`;
+
+    if (subCmd === 'run' && hostPath && containerPath) {
+      mongoCmd += ` -v ${hostPath}:${containerPath} ${targetName} mongo`;
     } else {
-      mongoCmd += ` ${imageName} mongo`;
-      mongoSiblingCmd += ` ${imageName}`;
+      mongoCmd += ` ${targetName} mongo`;
     }
-    const { updateValue } = this.props;
-    updateValue('docker.mongoCmd', mongoCmd);
-    updateValue('docker.mongoVersionCmd', mongoVersionCmd);
-    ['mongorestore', 'mongodump', 'mongoimport', 'mongoexport'].forEach(cmd => {
-      updateValue(`docker.${cmd}Cmd`, `${mongoSiblingCmd} ${cmd}`);
-    });
+
     this.setState({ finalCmd: mongoCmd });
   }
-
-  changeFinalCommand = e => {
-    this.setState({ finalCmd: e.target.value });
-    this.props.updateValue('docker.mongoCmd', e.target.value);
-  };
 
   render() {
     const { dockerEnabled, onPathEntered } = this.props;
@@ -98,18 +99,40 @@ export default class Docker extends React.Component {
     const { docker } = settings;
     return (
       <div className="docker-config-container">
+        <div className="cmd">
+          <div className="config-label-width text-label">
+            {globalString('editor/config/docker/cmd')}
+          </div>
+          <div className="inline-file-input">
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              content={globalString('editor/config/docker-tooltip/cmd')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+            >
+              <input
+                type="text"
+                id="docker.cmd"
+                disabled={!dockerEnabled}
+                value={docker.cmd || ''}
+                onChange={onPathEntered}
+              />
+            </Tooltip>
+          </div>
+        </div>
         <RadioGroup inline onChange={this.changeRadio} selectedValue={docker.createNew}>
           <Radio
             className="config-label-width inline-file-input form-row"
             disabled={!dockerEnabled}
             value
-            label={globalString('editor/config/docker-image-name')}
+            label={globalString('editor/config/docker/imageName')}
           />
           <div className="inline-file-input">
             <Tooltip
               intent={Intent.PRIMARY}
               hoverOpenDelay={1000}
-              content={globalString('editor/config/docker-tooltip/image')}
+              content={globalString('editor/config/docker-tooltip/imageName')}
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}
             >
@@ -131,21 +154,21 @@ export default class Docker extends React.Component {
             className="config-label-width inline-file-input form-row"
             disabled={!dockerEnabled}
             value={false}
-            label={globalString('editor/config/docker-container-id')}
+            label={globalString('editor/config/docker/containerId')}
           />
           <div className="inline-file-input">
             <Tooltip
               intent={Intent.PRIMARY}
               hoverOpenDelay={1000}
-              content={globalString('editor/config/docker-tooltip/container')}
+              content={globalString('editor/config/docker-tooltip/containerId')}
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}
             >
               <input
                 type="text"
-                id="docker.containerID"
+                id="docker.containerId"
                 disabled={!dockerEnabled || docker.createNew}
-                value={docker.containerID || ''}
+                value={docker.containerId || ''}
                 onChange={onPathEntered}
               />
             </Tooltip>
@@ -153,12 +176,12 @@ export default class Docker extends React.Component {
         </RadioGroup>
         <div className="docker-mount-volume">
           <span className="config-label-width text-label">
-            {globalString('editor/config/docker-volume')}
+            {globalString('editor/config/docker/mountVolume')}
           </span>
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
-            content={globalString('editor/config/docker-tooltip/host-volume')}
+            content={globalString('editor/config/docker-tooltip/hostPath')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}
           >
@@ -174,7 +197,7 @@ export default class Docker extends React.Component {
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
-            content={globalString('editor/config/docker-tooltip/container-volume')}
+            content={globalString('editor/config/docker-tooltip/containerPath')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}
           >
@@ -189,16 +212,9 @@ export default class Docker extends React.Component {
         </div>
         <div className="final-command-container">
           <div className="config-label-width text-label">
-            {globalString('editor/config/docker-cmd')}
+            {globalString('editor/config/docker/mongoCmdPreview')}
           </div>
-          <input
-            type="text"
-            id="docker.dockerCmd"
-            className="final-command"
-            disabled={!dockerEnabled}
-            value={this.state.finalCmd || ''}
-            onChange={this.changeFinalCommand}
-          />
+          <input type="text" className="final-command" disabled value={this.state.finalCmd || ''} />
         </div>
       </div>
     );

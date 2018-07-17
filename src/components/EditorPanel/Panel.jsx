@@ -3,7 +3,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-06-12T11:24:44+10:00
+ * @Last modified time: 2018-07-17T14:21:51+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -52,7 +52,6 @@ import { AggregateGraphicalBuilder } from '../AggregateViews';
 import Toolbar from './Toolbar';
 import View from './View';
 import './Panel.scss';
-import { ConfigView } from './ConfigPanel';
 
 const splitPane2Style = {
   display: 'flex',
@@ -66,7 +65,7 @@ const splitPane2Style = {
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  config: allStores.config,
+  configStore: allStores.configStore,
   profileStore: allStores.profileStore
 }))
 @observer
@@ -214,42 +213,6 @@ export default class Panel extends React.Component {
     const deletedEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     this.props.store.editorToolbar.isActiveExecuting = false;
     this.props.api.removeEditor(deletedEditor);
-    this.forceUpdate();
-  }
-
-  /**
-   * Action for closing the welcome Tab
-   */
-  @action.bound
-  closeWelcome() {
-    this.props.store.welcomePage.isOpen = false;
-    this.props.store.editorPanel.removingTabId = true; // TODO: There shouldn't be an output visible for the welcome page. Have tp replace this logic with this.props.api.removeOutput(deletedEditor);
-    if (this.props.store.editorPanel.activeEditorId == 'Default') {
-      const editors = [...this.props.store.editors.entries()];
-      this.props.store.editorPanel.activeEditorId = editors[0][1].id;
-    }
-    this.forceUpdate();
-  }
-
-  /**
-   * Action for closing the config Tab
-   */
-  @action.bound
-  closeConfig() {
-    if (this.props.store.configPage.changedFields.length > 0) {
-      this.props.store.editorPanel.showingSavingDialogEditorIds.push('Config');
-      return;
-    }
-    this.props.store.configPage.isOpen = false;
-    this.props.store.editorPanel.removingTabId = true;
-    if (this.props.store.editorPanel.activeEditorId === 'Config') {
-      if (this.props.store.welcomePage.isOpen) {
-        this.changeTab('Default');
-      } else {
-        const editors = [...this.props.store.editors.entries()];
-        this.props.store.editorPanel.activeEditorId = editors[0][1].id;
-      }
-    }
     this.forceUpdate();
   }
 
@@ -412,7 +375,7 @@ export default class Panel extends React.Component {
           <div className="menuItemWrapper closeTabItem">
             <MenuItem
               onClick={() => {
-                tabId === 'Default' ? this.closeWelcome() : this.closeTab(currentEditor);
+                this.closeTab(currentEditor);
               }}
               text={globalString('editor/tabMenu/closeTab')}
               icon="pt-icon-small-cross"
@@ -465,32 +428,6 @@ export default class Panel extends React.Component {
   }
 
   @action.bound
-  renderWelcome() {
-    if (this.props.store.editors.size == 0) {
-      return (
-        <Tab
-          className="configTab"
-          id="Default"
-          title={globalString('editor/home/title')}
-          panel={<ConfigView title={globalString('editor/config/heading')} />}
-        />
-      );
-    }
-    return (
-      <Tab
-        className={this.props.store.welcomePage.isOpen ? 'welcomeTab' : 'welcomeTab notVisible'}
-        id="Default"
-        title={globalString('editor/welcome/heading')}
-        panel={<ConfigView title={globalString('editor/config/heading')} />}
-      >
-        <Button className="pt-minimal" onClick={this.closeWelcome}>
-          <span className="pt-icon-cross" />
-        </Button>
-      </Tab>
-    );
-  }
-
-  @action.bound
   onSavingDialogSaveButtonClicked(unbindGlobalKeys, currentEditor) {
     this.onSavingDialogCancelButtonClicked(unbindGlobalKeys);
     if (!currentEditor) {
@@ -499,7 +436,6 @@ export default class Panel extends React.Component {
       const { patch } = this.props.config;
 
       configPage.changedFields.clear();
-      this.closeConfig();
       patch(newSettings);
     } else {
       this.toolbar.wrappedInstance
@@ -528,7 +464,6 @@ export default class Panel extends React.Component {
       const { configPage } = this.props.store;
 
       configPage.changedFields.clear();
-      this.closeConfig();
     } else {
       currentEditor.doc.markClean();
       this.closeTab(currentEditor);
@@ -757,25 +692,6 @@ export default class Panel extends React.Component {
     return editor.alias + ' (' + getEditorDisplayName(editor) + ')';
   };
 
-  /**
-   * Render the configuration/preferences window
-   */
-  @action.bound
-  renderConfigTab() {
-    return (
-      <Tab
-        className="configTab"
-        id="Config"
-        title={globalString('editor/config/heading')}
-        panel={<ConfigView title={globalString('editor/config/heading')} />}
-      >
-        <Button className="pt-minimal" onClick={this.closeConfig}>
-          <span className="pt-icon-cross" />
-        </Button>
-      </Tab>
-    );
-  }
-
   TabHeader = observer(
     withTooltip(({ editor }) => editor.path)(({ editor, editorTitle }) => (
       <div>
@@ -881,7 +797,6 @@ export default class Panel extends React.Component {
           onChange={this.changeTab}
           selectedTabId={this.props.store.editorPanel.activeEditorId}
         >
-          {this.renderWelcome()}
           {editors.map(editor => {
             const [, editorObj] = editor;
             const tabClassName = editorObj.alias.replace(/[\. ]/g, '');

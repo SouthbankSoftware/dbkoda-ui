@@ -42,7 +42,7 @@ import ConfigDatabaseIcon from '../../../styles/icons/config-database-icon-2.svg
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  config: allStores.config
+  configStore: allStores.configStore
 }))
 @observer
 export default class Panel extends React.Component {
@@ -60,12 +60,12 @@ export default class Panel extends React.Component {
 
   @action.bound
   telemetryEnabledChanged() {
-    if (this.props.config.settings.telemetryEnabled) {
-      this.props.config.patch({
+    if (this.props.configStore.config.telemetryEnabled) {
+      this.props.configStore.patch({
         telemetryEnabled: false
       });
     } else {
-      this.props.config.patch({
+      this.props.configStore.patch({
         telemetryEnabled: true
       });
     }

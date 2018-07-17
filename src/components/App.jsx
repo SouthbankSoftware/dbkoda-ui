@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-02T11:18:18+10:00
+ * @Last modified time: 2018-07-11T12:15:22+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,6 +34,7 @@ import { DBKodaToaster } from '#/common/Toaster';
 import { Analytics } from '#/Analytics';
 import { StatusPanel } from '#/StatusBar';
 import HomeEditor from '#/HomeEditor';
+import { ConfigPanel } from '#/ConfigPanel';
 import { PerformancePanel } from '#/PerformancePanel';
 import { ProfileManager } from '#/ProfileManager';
 import { SideNav } from '#/SideNav';
@@ -56,14 +57,14 @@ import './App.scss';
 
 @inject(allStores => ({
   store: allStores.store,
-  config: allStores.config,
+  configStore: allStores.configStore,
   api: allStores.api
 }))
 @observer
 class App extends React.Component {
   componentWillMount() {
     runInAction(() => {
-      if (this.props.config.settings.showNewFeaturesDialogOnStart === false) {
+      if (this.props.configStore.config.showNewFeaturesDialogOnStart === false) {
         this.props.store.editorPanel.showNewFeaturesDialog = false;
       } else {
         this.props.store.editorPanel.showNewFeaturesDialog = true;
@@ -135,7 +136,7 @@ class App extends React.Component {
 
   @action.bound
   closeOptIn(bool) {
-    this.props.config.patch({
+    this.props.configStore.patch({
       telemetryEnabled: bool
     });
     this.props.store.layout.optInVisible = false;
@@ -155,10 +156,11 @@ class App extends React.Component {
         <NewFeaturesDialog showDialog={this.props.store.editorPanel.showNewFeaturesDialog} />
         <PasswordResetDialog />
         <div className="mainContainer">
-          <SideNav menuItems={[NavPanes.EDITOR, NavPanes.PROFILE]} />
+          <SideNav menuItems={[NavPanes.EDITOR, NavPanes.PROFILE, NavPanes.CONFIG]} />
           <div className="fullPanel hasStatusbar">
+            {store.drawer && store.drawer.activeNavPane == NavPanes.CONFIG && <ConfigPanel />}
             {store.drawer && store.drawer.activeNavPane == NavPanes.PROFILE && <ProfileManager />}
-            {!store.drawer || (store.drawer.activeNavPane == NavPanes.EDITOR && <HomeEditor />)}
+            <HomeEditor />
           </div>
         </div>
         <StatusPanel className="statusPanel" />

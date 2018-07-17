@@ -37,8 +37,28 @@ export const FieldBindings = {
   inplacetext: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onConfirm'],
   password: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
   number: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onValueChange', 'onBlur'],
-  checkbox: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onClick', 'onChange', 'onBlur'],
-  switch: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onClick', 'onChange', 'onBlur'],
+  checkbox: [
+    'name',
+    'value',
+    'type',
+    'id',
+    'placeholder',
+    'disabled',
+    'onClick',
+    'onChange',
+    'onBlur'
+  ],
+  switch: [
+    'name',
+    'value',
+    'type',
+    'id',
+    'placeholder',
+    'disabled',
+    'onClick',
+    'onChange',
+    'onBlur'
+  ],
   file: ['name', 'value', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
   select: ['name', 'value', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur']
 };

@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T18:18:53+11:00
+ * @Last modified time: 2018-07-04T15:54:56+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -46,7 +46,7 @@ describe('App', () => {
           password: { showDialog: false, verifyPassword: false },
           editorPanel: { showNewFeaturesDialog: false }
         }}
-        config={{ settings: { showNewFeaturesDialogOnStart: false } }}
+        configStore={{ config: { showNewFeaturesDialogOnStart: false } }}
         layout={layout}
       />
     );

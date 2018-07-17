@@ -65,7 +65,7 @@ import EnhanceJSONIcon from '../../styles/icons/enhanced-json-icon.svg';
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  config: allStores.config
+  configStore: allStores.configStore
 }))
 @observer
 export default class Toolbar extends React.Component {
@@ -245,7 +245,7 @@ export default class Toolbar extends React.Component {
 
   onExecutionFinished() {
     l.info('Execution Finished!');
-    if (this.props.config.settings.tableOutputDefault) {
+    if (this.props.configStore.config.tableOutputDefault) {
       setTimeout(() => {
         this.openTableView(false, true);
       }, 0);

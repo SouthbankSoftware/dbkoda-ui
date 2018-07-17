@@ -91,7 +91,7 @@ type State = {
 export default class HistoryView extends React.PureComponent<Props, State> {
   // we don't put these variables as state, because we use them as record, and changing them doesn't
   // need to re-render our component
-  _brushSize: number = global.config.settings.performancePanel.historyBrushSize;
+  _brushSize: number = global.config.performancePanel.historyBrushSize;
   _brushEndIdx: ?number = null;
   _shouldUpdate: boolean = true;
   _autorunDisposer: *;

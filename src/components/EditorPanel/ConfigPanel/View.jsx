@@ -3,7 +3,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-09T12:03:17+10:00
+ * @Last modified time: 2018-06-18T15:04:52+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -44,7 +44,7 @@ import './Panel.scss';
 
 @inject(allStores => ({
   store: allStores.store,
-  config: allStores.config
+  configStore: allStores.configStore
 }))
 @observer
 export default class View extends React.Component {
@@ -52,7 +52,7 @@ export default class View extends React.Component {
 
   componentDidMount() {
     this._disposer = reaction(
-      () => toJS(this.props.config.settings),
+      () => toJS(this.props.configStore.config),
       settingsObj => {
         this.props.store.resetConfigPage(settingsObj);
       },
@@ -81,7 +81,6 @@ export default class View extends React.Component {
       // changed, add to changedFields
       changedFields.push(configPath);
     }
-    // this.setState({newSettings});
   }
 
   applyChanges = () => {

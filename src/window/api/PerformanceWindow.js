@@ -347,7 +347,7 @@ export default class PerformanceWindowApi {
     this.showToaster({
       message: 'Suggestions code will open a new editor in main window.',
       className: 'success',
-      iconName: 'pt-icon-thumbs-up'
+      iconName: 'thumbs-up'
     });
     this.sendCommandToMainProcess('pw_focusMainWindow');
   };

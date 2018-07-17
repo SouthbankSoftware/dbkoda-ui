@@ -4,8 +4,8 @@
  * @Author: Chris Trott <christrott>
  * @Date:   2018-04-16T14:56:12+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-04-27T10:31:05+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-11T12:18:00+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,6 +33,7 @@ import { NavPanes } from '#/common/Constants';
 import MenuItem from '#/common/MenuItem.jsx';
 import EditorIcon from '~/styles/icons/home-icon.svg';
 import ProfileIcon from '~/styles/icons/connection-icon.svg';
+import ConfigIcon from '~/styles/icons/cog.svg';
 import PerformanceIcon from '~/styles/icons/performance-icon.svg';
 import ProfilingIcon from '~/styles/icons/full-screen-profiling-icon.svg';
 import TopCommandsIcon from '~/styles/icons/full-screen-top-connections-icon.svg';
@@ -102,6 +103,15 @@ export default class SideNav extends React.Component<Props, State> {
             changeMenu={this.changeMenuSelected}
           >
             <ProfileIcon className="dbKodaSVG" />
+          </MenuItem>
+        )}
+        {checkMenuItem(NavPanes.CONFIG) && (
+          <MenuItem
+            name={NavPanes.CONFIG}
+            isSelected={this.isItemSelected}
+            changeMenu={this.changeMenuSelected}
+          >
+            <ConfigIcon className="dbKodaSVG" />
           </MenuItem>
         )}
         {checkMenuItem(NavPanes.PERFORMANCE) && (

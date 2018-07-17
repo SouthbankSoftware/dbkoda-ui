@@ -3,8 +3,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-15T12:03:27+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-05-21T12:20:44+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-11T11:54:43+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -48,6 +48,7 @@ export const EditorTypes = {
 export const NavPanes = {
   EDITOR: 'Editor',
   PROFILE: 'Profile',
+  CONFIG: 'Config',
   PERFORMANCE: 'Performance',
   PERFORMANCE_LINK: 'Open Performance Lab',
   TOP_CONNECTIONS: 'Top Connections',

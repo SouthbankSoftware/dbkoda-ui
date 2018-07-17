@@ -5,7 +5,7 @@
  * @Date:   2018-02-07T10:41:12+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T18:00:37+11:00
+ * @Last modified time: 2018-07-16T16:20:29+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,6 +29,7 @@
 import { action } from 'mobx';
 import _ from 'lodash';
 import Mousetrap from 'mousetrap';
+import 'mousetrap-global-bind';
 import { featherClient } from '~/helpers/feathers';
 import { DialogHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { NewToaster } from '#/common/Toaster';
@@ -37,13 +38,13 @@ import { Broker, EventType } from '../helpers/broker';
 export default class Password {
   store: *;
   api: *;
-  config: *;
+  configStore: *;
   MIN_PASSWORD_LENGTH: number = 8;
 
-  constructor(store: *, api: *, config: *) {
+  constructor(store: *, api: *, configStore: *) {
     this.store = store;
     this.api = api;
-    this.config = config;
+    this.configStore = configStore;
     Broker.on(EventType.MASTER_PASSWORD_REQUIRED, this.showPasswordDialog.bind(this));
     Broker.on(EventType.PASSWORD_STORE_RESET, this.onPasswordReset.bind(this));
   }
@@ -53,7 +54,7 @@ export default class Password {
     l.info('Due to too many login attempts, your password store has been reset!');
     this.closePasswordDialog();
     this.store.password.showResetDialog = true;
-    this.config.patch({
+    this.configStore.patch({
       passwordStoreEnabled: false
     });
   }
@@ -117,8 +118,8 @@ export default class Password {
       .then(missingProfileIds => {
         l.info(`missingProfileIds: ${missingProfileIds}`);
         this.store.password.missingProfiles = missingProfileIds;
-        if (!this.config.settings.passwordStoreEnabled) {
-          this.config.patch({
+        if (!this.configStore.config.passwordStoreEnabled) {
+          this.configStore.patch({
             passwordStoreEnabled: true
           });
         }
@@ -147,7 +148,7 @@ export default class Password {
       .service('master-pass')
       .remove()
       .then(() => {
-        this.config.patch({
+        this.configStore.patch({
           passwordStoreEnabled: false
         });
       })

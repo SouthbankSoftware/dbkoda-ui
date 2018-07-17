@@ -1,11 +1,11 @@
 /**
  * @flow
  *
- * @Author: Chris Trott <christrott>
+ * @Author: Chris Trott <christrott>, Guan Gui <guiguan>
  * @Date:   2017-07-21T09:27:03+10:00
- * @Email:  chris@southbanksoftware.com
+ * @Email:  chris@southbanksoftware.com, root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:54:31+10:00
+ * @Last modified time: 2018-07-17T12:06:23+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,62 +30,160 @@ import _ from 'lodash';
 import { action, observable } from 'mobx';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
+import util from 'util';
+import { NavPanes } from '#/common/Constants';
 
-export default class Config {
-  path: string;
-  @observable settings: *;
+export type Config = {};
+export type ConfigSchema = {};
+
+export default class ConfigStore {
+  configYmlPath: string;
+  @observable config: Config;
+  @observable configDefaults: Config;
+  @observable configSchema: ConfigSchema;
 
   constructor() {
-    this.path = global.PATHS.configPath;
+    this.configYmlPath = global.PATHS.configPath;
 
-    l.info(`config path: ${this.path}`);
+    l.info(`config path: ${this.configYmlPath}`);
 
-    this._watchConfigChanges();
+    this._watchForConfigErrorReset();
+    this._watchForConfigError();
+    this._watchForConfigChanged();
   }
 
-  _watchConfigChanges = () => {
+  _watchForConfigErrorReset = () => {
     featherClient().configService.on(
-      'changed',
-      action(changed => {
-        _.forEach(changed, (v, k) => {
-          _.set(this.settings, k, v.new);
-        });
-
-        sendToMain('configChanged', changed);
-
-        l.debug('config changed');
+      'errorReset',
+      action(({ payload: { paths } }) => {
+        for (const path of paths) {
+          global.api.clearConfigError(path);
+        }
       })
     );
   };
 
-  _handleError = (message: string) => {
-    l.error(message);
+  _watchForConfigError = () => {
+    featherClient().configService.on('error', ({ payload: { error, level } }) => {
+      this._handleError(error, level, false);
+    });
+  };
+
+  _watchForConfigChanged = () => {
+    featherClient().configService.on(
+      'changed',
+      action(changed => {
+        const {
+          configPanel: { changes, errors }
+        } = global.store;
+
+        _.forEach(changed, (v, k) => {
+          _.set(this, k, v.new);
+
+          const wantedValue = changes.get(k);
+
+          if (wantedValue === null || wantedValue == v.new) {
+            changes.delete(k);
+          }
+        });
+
+        for (const [k, v] of errors.entries()) {
+          if (!v.asyncError) {
+            errors.delete(k);
+          }
+        }
+
+        l.debug('Config has been changed', changed);
+      })
+    );
+  };
+
+  _showToaster = (message: string, level: 'error' | 'warn' | 'info' = 'error') => {
+    let className;
+    let icon;
+
+    if (level === 'error') {
+      className = 'danger';
+      icon = 'thumbs-down';
+    } else if (level === 'warn') {
+      className = 'warning';
+      icon = 'thumbs-down';
+    } else {
+      className = 'success';
+      icon = 'thumbs-up';
+    }
 
     NewToaster.show({
       message,
-      className: 'danger',
-      icon: 'thumbs-down'
+      className,
+      icon
     });
   };
+
+  _handleError = action(
+    (error: FeathersError, level: 'error' | 'warn' = 'error', logError: boolean = true) => {
+      if (logError) {
+        l[level](error);
+      }
+
+      if (!_.isEmpty(error.errors)) {
+        const {
+          configPanel: { errors }
+        } = global.store;
+
+        const asyncError = _.get(error, 'data.asyncError');
+
+        _.forEach(error.errors, (v, k) => {
+          if (k.startsWith('config.')) {
+            const err = {
+              message: v
+            };
+
+            if (asyncError) {
+              // $FlowFixMe
+              err.asyncError = true;
+
+              if (error.className === 'MongoConfigError') {
+                // open PathsConfigPanel
+                global.store.configPanel.currentMenuEntry = 'paths';
+                global.store.setActiveNavPane(NavPanes.CONFIG);
+              }
+            }
+
+            errors.set(k, err);
+          } else {
+            this._showToaster(util.format(error.message, k, v), level);
+          }
+        });
+      } else {
+        this._showToaster(error.message, level);
+      }
+    }
+  );
 
   /**
    * Load settings from config service. This should ONLY be done once during initialisation
    */
-  load = (): Promise<*> => {
+  load = (): Promise<void> => {
     return featherClient()
       .configService.get('current')
       .then(
-        action(({ payload }) => {
+        action(({ payload: { config, configDefaults, configSchema } }) => {
           // this will convert payload into new observable
-          this.settings = payload;
+          this.config = config;
+          global.config = this.config;
 
-          sendToMain('configLoaded', payload);
+          this.configDefaults = configDefaults;
+          this.configSchema = configSchema;
 
-          l.debug('config loaded');
+          sendToMain('configLoaded', config);
+
+          l.debug('Config loaded');
         })
       )
       .catch(err => {
-        this._handleError(`Failed to load initial config: ${err.message}`);
+        err.message = `Failed to load initial config: ${err.message}`;
+        this._handleError(err);
       });
   };
 
@@ -93,23 +191,16 @@ export default class Config {
    * Update settings. This should be the ONLY way to update both ui and controller settings. After
    * this request, ui should receive a changed event which will in term update ui settings.
    */
-  patch = (settings: {}) => {
+  patch = (config: Config): Promise<void> => {
+    l.debug('Patching config...');
+
     return featherClient()
       .configService.patch('current', {
-        config: settings
+        config
       })
       .catch(err => {
-        let message;
-
-        if (err.errors) {
-          message = JSON.stringify(err.errors);
-        } else if (err.message) {
-          message = err.message; // eslint-disable-line prefer-destructuring
-        } else {
-          message = String(err);
-        }
-
-        this._handleError(`Failed to update config: ${message}`);
+        err.message = `Failed to patch config: ${err.message}`;
+        this._handleError(err);
       });
   };
 }

@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T10:31:06+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T20:32:49+11:00
+ * @Last modified time: 2018-07-03T13:52:55+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -76,12 +76,12 @@ export type SshProfile = {
 export default class TerminalApi {
   store: *;
   api: *;
-  config: *;
+  configStore: *;
 
-  constructor(store: *, api: *, config: *) {
+  constructor(store: *, api: *, configStore: *) {
     this.store = store;
     this.api = api;
-    this.config = config;
+    this.configStore = configStore;
   }
 
   _findNextTerminalName(type: TerminalType): number {
@@ -122,9 +122,9 @@ export default class TerminalApi {
     const id = uuid();
     const type = terminalTypes.ssh;
     const usePasswordStore =
-      typeof this.config.settings.passwordStoreEnabled === 'object'
+      typeof this.configStore.config.passwordStoreEnabled === 'object'
         ? false
-        : this.config.settings.passwordStoreEnabled;
+        : this.configStore.config.passwordStoreEnabled;
     const { profileId, username, password, host, privateKey, passphrase, port } = profile;
     const { switchToUponCreation = true, skipWhenExisting = false, eagerCreation = false } =
       options || {};
