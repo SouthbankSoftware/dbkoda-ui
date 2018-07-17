@@ -5,7 +5,7 @@
  * @Date:   2018-07-10T15:32:22+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-13T01:25:36+10:00
+ * @Last modified time: 2018-07-17T14:55:27+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,6 +29,11 @@
 import _ from 'lodash';
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
+import { Button } from '@blueprintjs/core';
+import { NavPanes } from '#/common/Constants';
+import Mousetrap from 'mousetrap';
+import 'mousetrap-global-bind';
+import { DialogHotkeys } from '#/common/hotkeys/hotkeyList';
 import WelcomeConfigPanel, { WelcomeMenuEntry } from './WelcomeConfigPanel';
 import GeneralConfigPanel, { GeneralMenuEntry } from './GeneralConfigPanel';
 import PathsConfigPanel, { PathsMenuEntry } from './PathsConfigPanel';
@@ -71,14 +76,31 @@ export const manifest = {
 };
 
 // $FlowIssue
-@inject(({ store: { configPanel }, api }) => ({
+@inject(({ store: { setActiveNavPane, configPanel }, api }) => ({
   store: {
     configPanel
   },
+  setActiveNavPane,
   api
 }))
 @observer
 export default class ConfigPanel extends React.Component<*> {
+  _closePanel = () => {
+    const { setActiveNavPane } = this.props;
+
+    setActiveNavPane(NavPanes.EDITOR);
+  };
+
+  componentDidMount() {
+    // $FlowFixMe
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this._closePanel);
+  }
+
+  componentWillUnmount() {
+    // $FlowFixMe
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this._closePanel);
+  }
+
   render() {
     const {
       store: {
@@ -104,6 +126,11 @@ export default class ConfigPanel extends React.Component<*> {
         <div className="MainPanel">
           <SelectedConfigPanel />
         </div>
+        <Button
+          className="CloseBtn pt-button pt-intent-primary"
+          text="X"
+          onClick={this._closePanel}
+        />
       </div>
     );
   }

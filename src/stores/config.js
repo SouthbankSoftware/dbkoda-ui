@@ -5,7 +5,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com, root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-13T00:07:13+10:00
+ * @Last modified time: 2018-07-17T12:06:23+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,6 +31,7 @@ import { action, observable } from 'mobx';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import util from 'util';
+import { NavPanes } from '#/common/Constants';
 
 export type Config = {};
 export type ConfigSchema = {};
@@ -141,6 +142,12 @@ export default class ConfigStore {
             if (asyncError) {
               // $FlowFixMe
               err.asyncError = true;
+
+              if (error.className === 'MongoConfigError') {
+                // open PathsConfigPanel
+                global.store.configPanel.currentMenuEntry = 'paths';
+                global.store.setActiveNavPane(NavPanes.CONFIG);
+              }
             }
 
             errors.set(k, err);

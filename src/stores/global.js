@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-16T14:52:30+10:00
+ * @Last modified time: 2018-07-17T14:47:23+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -75,15 +75,7 @@ export default class Store {
   @observable.shallow outputs = observable.map(null, { deep: false });
   @observable.shallow terminals = observable.map(null, { deep: false });
   @observable.shallow performancePanels = observable.map(null, { deep: false });
-
   @observable.shallow performancePanel = null;
-
-  @observable
-  welcomePage = observable({
-    isOpen: true,
-    newsFeed: [],
-    currentContent: 'Welcome' // Can be 'Welcome', 'Choose Theme' or 'Keyboard Shortcuts'
-  });
 
   @observable
   configPanel = observable({
@@ -112,14 +104,9 @@ export default class Store {
       tabScrollLeftPosition: 0,
       updateAggregateDetails: false,
       updateAggregateCode: false,
-      showNewFeaturesDialog: true,
-      editorRefs: {},
-      __nodump__: ['editorRefs', '__nodump__']
+      showNewFeaturesDialog: true
     },
-    {
-      editorRefs: observable.ref,
-      __nodump__: observable.ref
-    },
+    {},
     { deep: false }
   );
 
@@ -138,15 +125,24 @@ export default class Store {
   });
 
   @observable
-  outputPanel = observable({
-    currentTab: 'Default',
-    clearingOutput: false,
-    executingShowMore: false,
-    executingTerminalCmd: false,
-    sendingCommand: '',
-    collapseTable: false,
-    expandTable: false
-  });
+  outputPanel = observable(
+    {
+      currentTab: 'Default',
+      clearingOutput: false,
+      executingShowMore: false,
+      executingTerminalCmd: false,
+      sendingCommand: '',
+      collapseTable: false,
+      expandTable: false,
+      editorRefs: {},
+      __nodump__: ['editorRefs', '__nodump__']
+    },
+    {
+      editorRefs: observable.ref,
+      __nodump__: observable.ref
+    },
+    { deep: false }
+  );
 
   @observable
   layout = {
@@ -163,7 +159,7 @@ export default class Store {
   @observable
   drawer = observable({
     drawerChild: DrawerPanes.DEFAULT,
-    activeNavPane: NavPanes.EDITOR
+    activeNavPane: NavPanes.CONFIG
   });
 
   @observable

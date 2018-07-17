@@ -3,7 +3,7 @@
  * @Date:   2018-07-11T14:25:39+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-12T19:19:15+10:00
+ * @Last modified time: 2018-07-17T14:56:24+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -66,5 +66,29 @@
     max-height: 80%;
     width: 100%;
     overflow: auto;
+  }
+
+  button.CloseBtn {
+    background-color: unset;
+    background-image: unset;
+    align-self: flex-end;
+    box-shadow: unset !important;
+    font-size: 25pt;
+    font-weight: 100;
+    color: $connectionCloseIconColor;
+    margin-right: 10px;
+    margin-top: 20px;
+    position: fixed;
+    top: 0;
+    right: 0;
+  }
+
+  button.CloseBtn:hover {
+    color: $connectionCloseIconHover;
+    background-color: unset;
+    background-image: unset;
+    box-shadow: unset;
+    border: unset;
+    border-radius: 50%;
   }
 }

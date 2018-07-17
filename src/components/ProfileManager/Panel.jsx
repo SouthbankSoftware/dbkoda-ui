@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-07-05T12:51:58+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-17T14:49:50+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -96,7 +96,7 @@ export default class ProfileManager extends React.Component<Props, State> {
     this.closeDialog = this.closeDialog.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.submitDialog);
     Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeDialog);
   }
