@@ -5,7 +5,7 @@
  * @Date:   2018-05-29T21:57:08+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-06-27T11:26:30+10:00
+ * @Last modified time: 2018-07-18T11:01:56+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -52,11 +52,12 @@ class MainPanel extends React.Component<*, *> {
 
   @action.bound
   updateRightSplitResizerState(state, prevState) {
-    if (prevState === resizerStates.S_HIDDEN) {
+    if (prevState === resizerStates.P_HIDDEN) {
       // output panel just toggled on
 
       const {
         store: {
+          outputs,
           outputPanel,
           editorPanel: { activeEditorId }
         }
@@ -71,6 +72,7 @@ class MainPanel extends React.Component<*, *> {
         outputPanel.currentTab = 'Default';
         setTimeout(() =>
           runInAction(() => {
+            outputs.get(activeEditorId).shouldScrollToBottom = true;
             outputPanel.currentTab = activeEditorId;
           })
         );
