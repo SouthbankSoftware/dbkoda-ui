@@ -3,7 +3,7 @@
  * @Date:   2017-07-17T12:55:19+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-06T15:41:21+10:00
+ * @Last modified time: 2018-07-19T17:40:19+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -403,7 +403,7 @@ div.pt-dialog {
 
 .pt-tab-list {
   margin-left: 28px;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .pt-tab-list::-webkit-scrollbar {
