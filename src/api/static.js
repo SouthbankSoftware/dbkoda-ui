@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T09:42:43+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-04T15:43:23+10:00
+ * @Last modified time: 2018-07-19T18:53:37+10:00
  */
 
 import { Doc } from 'codemirror';
@@ -32,6 +32,7 @@ const _parseExtendedJsonString = (input: string): JSON => {
     }
 
     l.error('Failed to parse extended json string', err, bugContext);
+    throw err;
   }
 };
 
@@ -78,11 +79,7 @@ export default class StaticApi {
   }
 
   static parseTableJson(jsonStr, lines, cm, outputId) {
-    return this.findResultSet(jsonStr, lines, cm, outputId)
-      .then(_parseExtendedJsonString)
-      .catch(error => {
-        l.error('Error while parsing JSON:', error);
-      });
+    return this.findResultSet(jsonStr, lines, cm, outputId).then(_parseExtendedJsonString);
   }
 
   static parseDefaultTableJson(rsStr, resultSet, cm, outputId) {
