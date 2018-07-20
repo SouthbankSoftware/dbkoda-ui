@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: chris
+ * @Date:   2017-08-16T12:05:28+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-19T18:17:21+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,17 +22,11 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: chris
- * @Date:   2017-08-16T12:05:28+10:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-09-15 12:35:13
  */
 
 /* eslint no-prototype-builtins:warn */
 
+import _ from 'lodash';
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
 import { inject } from 'mobx-react';
@@ -134,7 +134,7 @@ export default class Panel extends React.Component {
   }
 
   render() {
-    if (this.props.tableJson.json[0] && this.props.tableJson.json[0].loading === 'isLoading') {
+    if (_.get(this.props, 'tableJson.json[0].loading') === 'isLoading') {
       // Probably loading. ;)
       this.state.isLoading = true;
     } else {

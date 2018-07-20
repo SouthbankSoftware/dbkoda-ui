@@ -23,7 +23,7 @@
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:26:07+10:00
+ * @Last modified time: 2018-07-19T19:00:46+10:00
  */
 
 import React from 'react';
@@ -734,7 +734,7 @@ export default class Toolbar extends React.Component {
       runInAction(() => {
         NewToaster.show({
           message: globalString('output/editor/tabularError'),
-          className: 'warning',
+          className: 'danger',
           icon: ''
         });
       });
@@ -776,7 +776,7 @@ export default class Toolbar extends React.Component {
         l.debug('No json output');
         NewToaster.show({
           message: globalString('output/editor/tabularError'),
-          className: 'warning',
+          className: 'danger',
           icon: ''
         });
       });
@@ -830,7 +830,7 @@ export default class Toolbar extends React.Component {
         l.debug('No json output');
         NewToaster.show({
           message: globalString('output/editor/tabularError'),
-          className: 'warning',
+          className: 'danger',
           icon: ''
         });
       });
