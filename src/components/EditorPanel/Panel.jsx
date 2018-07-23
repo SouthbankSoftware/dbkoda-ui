@@ -46,6 +46,7 @@ import _ from 'lodash';
 import withTooltip from '#/hoc/withTooltip';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList';
 import FilterList from '#/common/FilterList';
+import WelcomeConfigPanel from '#/common/WelcomeView/WelcomeConfigPanel';
 import { EditorTypes, DrawerPanes } from '#/common/Constants';
 import findElementAttributeUpward from '~/helpers/findElementAttributeUpward';
 import { AggregateGraphicalBuilder } from '../AggregateViews';
@@ -222,6 +223,8 @@ export default class Panel extends React.Component {
    */
   @action
   changeTab(newTabId) {
+    l.debug('!!!!');
+    l.debug('!!!! - ', newTabId);
     const { editorPanel, editorToolbar, editors } = this.props.store;
     let currEditor = editors.get(newTabId);
     // An unknown bug causes changeTab('Config') to be called after Config tab is closed.
@@ -696,10 +699,12 @@ export default class Panel extends React.Component {
     withTooltip(({ editor }) => editor.path)(({ editor, editorTitle }) => (
       <div>
         {editorTitle}
-        {this.renderUnsavedFileIndicator(editor.id)}
-        <Button className="pt-minimal" onClick={() => this.closeTab(editor)}>
-          <span className="pt-icon-cross" />
-        </Button>
+        {editor && this.renderUnsavedFileIndicator(editor.id)}
+        {editor && (
+          <Button className="pt-minimal" onClick={() => this.closeTab(editor)}>
+            <span className="pt-icon-cross" />
+          </Button>
+        )}
       </div>
     ))
   );
@@ -797,6 +802,13 @@ export default class Panel extends React.Component {
           onChange={this.changeTab}
           selectedTabId={this.props.store.editorPanel.activeEditorId}
         >
+          <Tab
+            className={globalString('editor/home/title')}
+            key={globalString('editor/home/title')}
+            id="Default"
+            title={globalString('editor/home/title')}
+            panel={<WelcomeConfigPanel />}
+          />
           {editors.map(editor => {
             const [, editorObj] = editor;
             const tabClassName = editorObj.alias.replace(/[\. ]/g, '');

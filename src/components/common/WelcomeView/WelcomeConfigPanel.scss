@@ -1,0 +1,445 @@
+/**
+ * @Author: Michael Harrison <mike>, Guan Gui <guiguan>
+ * @Date:   2018-07-11T14:20:28+10:00
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-17T15:32:59+10:00
+ *
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import '../../../styles/_defaultTheme.scss';
+
+.WelcomeConfigPanel {
+  width: 100%;
+  height: 100%;
+  padding-left: 20px;
+
+  .welcomePageContentWrapper {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    font-weight: lighter;
+
+    .welcomePageContentLeft {
+      width: 250px;
+      color: $welcomeViewSocialMediaText;
+      padding-right: 20px;
+      border-right: 1px solid $welcomeViewDividerTransparent;
+      flex-shrink: 0;
+      flex-direction: column;
+
+      h2 {
+        color: $welcomeViewFontColor;
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+
+      p {
+        color: $welcomeViewFontColorDark;
+      }
+
+      .docsContent {
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+
+        .docsList {
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+
+          .documentationLinkWrapper {
+            padding-bottom: 12px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-right: 6%;
+
+            .iconWrapper {
+              width: 50px;
+              height: 50px;
+              order: 1;
+              border-radius: 0.4em;
+              text-align: center;
+
+              a {
+                float: left;
+                width: 50px;
+                height: 50px;
+                border-radius: 0.4em;
+                background: $welcomeViewIconBGHover;
+                position: relative;
+                text-align: center;
+
+                svg {
+                  position: absolute;
+                  top: 50%;
+                  bottom: 50%;
+                  transform: translate(-50%, -50%);
+                  fill: $welcomeViewSocialMediaIcons;
+                }
+              }
+
+              a:focus {
+                box-shadow: none !important;
+              }
+
+              a:hover {
+                background-color: $welcomeViewIconBG;
+              }
+            }
+
+            p {
+              padding-left: 16px;
+              padding-top: 6px;
+              padding-bottom: 5px;
+              margin: 0;
+              flex-grow: 3;
+              order: 2;
+              text-align: left;
+            }
+          }
+        }
+
+        .linksWrapper {
+          h2 {
+            margin: 0px;
+          }
+
+          .linksList {
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+
+            .linkWrapper {
+              flex-direction: column;
+              margin-right: 10px;
+
+              a {
+                width: 40px;
+                border-radius: 50%;
+                order: 1;
+                flex-grow: 4;
+                background: none;
+                font-size: 40;
+              }
+
+              a:focus {
+                box-shadow: none !important;
+              }
+
+              .twitterIcon {
+                width: 40px;
+                height: 40px;
+                position: relative;
+
+                svg {
+                  width: 30px;
+                  height: 30px;
+                  position: absolute;
+                  top: 50%;
+                  bottom: 50%;
+                  transform: translate(-50%, -50%);
+                  fill: $welcomeViewSocialMediaIcons;
+                }
+
+                svg:hover {
+                  fill: lighten($welcomeViewSocialMediaIcons, 20);
+                }
+              }
+
+              .gitHubIcon {
+                width: 40px;
+                height: 40px;
+                position: relative;
+
+                svg {
+                  width: 30px;
+                  height: 30px;
+                  position: absolute;
+                  top: 50%;
+                  bottom: 50%;
+                  transform: translate(-50%, -50%);
+                  fill: $welcomeViewSocialMediaIcons;
+                }
+
+                svg:hover {
+                  fill: lighten($welcomeViewSocialMediaIcons, 20);
+                }
+              }
+
+              .kodaIcon {
+                width: 40px;
+                height: 40px;
+                position: relative;
+
+                svg {
+                  width: 30px;
+                  height: 30px;
+                  position: absolute;
+                  top: 50%;
+                  bottom: 50%;
+                  transform: translate(-50%, -50%);
+                  fill: $welcomeViewSocialMediaIcons;
+
+                  path.st0 {
+                    fill: none;
+                  }
+                }
+
+                svg:hover {
+                  fill: lighten($welcomeViewSocialMediaIcons, 20);
+                }
+              }
+
+              .mediumIcon {
+                width: 40px;
+                height: 40px;
+                position: relative;
+
+                svg {
+                  width: 30px;
+                  height: 30px;
+                  position: absolute;
+                  top: 50%;
+                  bottom: 50%;
+                  transform: translate(-50%, -50%);
+                  fill: $welcomeViewSocialMediaIcons;
+                }
+
+                svg:hover {
+                  fill: lighten($welcomeViewSocialMediaIcons, 20);
+                }
+              }
+
+              a:hover {
+                background-color: none;
+              }
+
+              p {
+                flex-grow: 1;
+                order: 2;
+                text-align: center;
+                margin-top: 10%;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .welcomePageContentRight {
+      padding-right: 3%;
+      flex-grow: 1;
+      flex-shrink: 1;
+      display: flex;
+      flex-direction: column;
+      padding-left: 40px;
+
+      h2 {
+        margin-bottom: 20px;
+        font-size: 18px;
+        color: $welcomeViewFontColor;
+      }
+
+      .feedList {
+        .feedItem {
+          display: flex;
+          flex-direction: row;
+          overflow-x: auto;
+
+          .feedIconWrapper {
+            width: 60px;
+            height: 60px;
+            order: 1;
+            border-radius: 0.4em;
+            text-align: center;
+
+            a {
+              width: 60px;
+              height: 60px;
+              border-radius: 0.4em;
+              background: $welcomeViewIconBGHover;
+              position: relative;
+              text-align: center;
+
+              svg {
+                width: 30px;
+                height: 30px;
+                position: absolute;
+                top: 50%;
+                bottom: 50%;
+                transform: translate(-50%, -50%);
+                fill: $welcomeViewSocialMediaIcons;
+              }
+            }
+
+            a:hover {
+              background-color: $welcomeViewIconBG;
+            }
+          }
+
+          .feedItemContent {
+            order: 2;
+            margin-left: 10px;
+            display: flex;
+            flex-direction: column;
+            color: $welcomeViewFontColor;
+
+            .feedItemTitle {
+              font-weight: bold;
+              font-size: 12;
+            }
+
+            .feedItemContent {
+              margin-left: 0;
+              width: 600px;
+            }
+
+            .feedItemPubDate {
+              font-weight: lighter;
+              font-size: 8;
+            }
+          }
+        }
+      }
+
+      .newsListWrapper {
+        overflow-y: auto;
+
+        .newsItemWrapper {
+          display: flex;
+          flex-direction: row;
+          background-color: #41465c;
+          min-height: 150px;
+          max-height: 300px;
+          margin-bottom: 20px;
+          padding-top: 10px;
+
+          .newsContentWrapper {
+            margin-left: 12px;
+            margin-bottom: 12px;
+            padding-right: 5px;
+            font-family: 'Arial';
+            color: $welcomeViewFontColorDark;
+
+            h2.newsTitle {
+              color: $welcomeViewFontColorDark;
+              font-family: 'Arial';
+              font-size: 18px;
+              line-height: 20px;
+              margin-bottom: 12px;
+            }
+
+            p.newsContent {
+              color: $welcomeViewFontColorDark;
+              font-family: 'Arial';
+              font-size: small;
+              margin-bottom: 4px;
+              line-height: 16px;
+            }
+
+            p.datePublished {
+              color: $welcomeViewFontColorDark;
+              opacity: 0.6;
+              font-family: 'Arial';
+            }
+
+            .svgWrapper {
+              float: left;
+              height: 24px;
+              border-radius: 0.4em;
+              background: $welcomeViewIconBGHover;
+              position: relative;
+              text-align: center;
+              color: $welcomeViewFontColorDark;
+
+              svg {
+                opacity: 0.9;
+                position: absolute;
+                height: 30px;
+                top: 50%;
+                bottom: 50%;
+                transform: translate(-50%, -50%);
+                fill: $welcomeViewFontColorDark;
+
+                .st0 {
+                  fill: none;
+                }
+              }
+            }
+
+            .svgWrapper:hover {
+              background: $welcomeViewIconBG;
+            }
+
+            .svgWrapper:focus {
+              outline: none;
+              box-shadow: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.ConfigPanelMenuEntry {
+  #home-icon {
+    background-color: #e0b448;
+
+    .st0 {
+      fill: #ffffff;
+    }
+
+    .st1 {
+      fill: #d7dadb;
+    }
+
+    .st2 {
+      fill: #3d516a;
+    }
+
+    .st3 {
+      fill: #2d384c;
+    }
+
+    .st4 {
+      fill: #0f2a48;
+    }
+
+    .st5 {
+      fill: #2c3d51;
+    }
+
+    .st6 {
+      fill: #e2ebf2;
+    }
+
+    .st7 {
+      fill: #3c526a;
+    }
+
+    .st8 {
+      fill: #e1ebed;
+    }
+  }
+}
