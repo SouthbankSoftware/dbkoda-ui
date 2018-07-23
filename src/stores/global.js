@@ -152,7 +152,7 @@ export default class Store {
     overallSplitResizerState: resizerStates.ALL_SHOWN,
     leftSplitPos: '50%',
     leftSplitResizerState: resizerStates.ALL_SHOWN,
-    rightSplitPos: '60%',
+    rightSplitPos: '35%',
     rightSplitResizerState: resizerStates.ALL_SHOWN
   };
 
