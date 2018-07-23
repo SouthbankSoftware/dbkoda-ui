@@ -34,7 +34,6 @@ import { NavPanes } from '#/common/Constants';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import { DialogHotkeys } from '#/common/hotkeys/hotkeyList';
-import WelcomeConfigPanel, { WelcomeMenuEntry } from './WelcomeConfigPanel';
 import GeneralConfigPanel, { GeneralMenuEntry } from './GeneralConfigPanel';
 import PathsConfigPanel, { PathsMenuEntry } from './PathsConfigPanel';
 import PerformanceLabConfigPanel, { PerformanceLabMenuEntry } from './PerformanceLabConfigPanel';
