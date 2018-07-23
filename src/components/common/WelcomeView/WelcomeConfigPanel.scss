@@ -27,20 +27,147 @@
 @import '../../../styles/_defaultTheme.scss';
 
 .WelcomeConfigPanel {
+  background-color: #363a4f;
   width: 100%;
-  height: 100%;
+  height: 1200px;
   padding-left: 20px;
+
+  .welcomeText {
+    margin-top: 60px;
+    margin-left: 20px;
+    margin-bottom: 60px;
+    color: $welcomeViewFontColor;
+    font-size: x-large;
+    font-weight: 400;
+  }
 
   .welcomePageContentWrapper {
     display: flex;
     flex-direction: row;
     height: 100%;
     font-weight: lighter;
+    padding-left: 20px;
+
+    .welcomePageGetStarted {
+      width: 350px;
+      color: $welcomeViewSocialMediaText;
+      padding-left: 20px;
+      border-right: 1px solid $welcomeViewDividerTransparent;
+      flex-shrink: 0;
+      flex-direction: column;
+
+      h2 {
+        color: $welcomeViewFontColor;
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+
+      .linksList {
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+
+        .iconWrapper {
+          display: flex;
+          flex-direction: row;
+
+          .iconText {
+            margin-left: 20px;
+            align-self: center;
+            color: $welcomeViewFontColorDark;
+          }
+        }
+
+        .pt-button {
+          border-radius: 0px !important;
+          background: unset !important;
+          width: 100px;
+          height: 100px;
+          margin-bottom: 10px;
+        }
+
+        .blog {
+          background-color: #e0b448 !important;
+
+          .st0 {
+            fill: #dfdeed;
+          }
+
+          .st1 {
+            fill: #babac6;
+          }
+
+          .st2 {
+            fill: #f73445;
+          }
+
+          .st3 {
+            fill: #fed966;
+          }
+
+          .st4 {
+            fill: #92b1f9;
+          }
+
+          .st5 {
+            fill: #f59536;
+          }
+
+          .st6 {
+            fill: #393939;
+          }
+
+          .st7 {
+            fill: #646464;
+          }
+        }
+
+        .video {
+          background-color: #837395 !important;
+
+          .st0 {
+            fill: #415661;
+          }
+
+          .st1 {
+            fill: #2b414d;
+          }
+
+          .st2 {
+            fill: #e2574c;
+          }
+
+          .st3 {
+            fill: #e66b62;
+          }
+
+          .st4 {
+            fill: #ffffff;
+          }
+
+          .st5 {
+            fill: #324d5b;
+          }
+        }
+
+        .new {
+          background-color: #adc88f !important;
+
+          .st0 {
+            fill: #ffffff;
+          }
+
+          .st1 {
+            fill: #656d78;
+          }
+        }
+      }
+    }
 
     .welcomePageContentLeft {
-      width: 250px;
+      width: 325px;
       color: $welcomeViewSocialMediaText;
-      padding-right: 20px;
+      padding-left: 45px;
       border-right: 1px solid $welcomeViewDividerTransparent;
       flex-shrink: 0;
       flex-direction: column;
@@ -85,7 +212,7 @@
                 width: 50px;
                 height: 50px;
                 border-radius: 0.4em;
-                background: $welcomeViewIconBGHover;
+                background-color: #41465c !important;
                 position: relative;
                 text-align: center;
 
@@ -95,6 +222,7 @@
                   bottom: 50%;
                   transform: translate(-50%, -50%);
                   fill: $welcomeViewSocialMediaIcons;
+                  opacity: 0.5;
                 }
               }
 
@@ -103,7 +231,9 @@
               }
 
               a:hover {
-                background-color: $welcomeViewIconBG;
+                svg {
+                  opacity: 1;
+                }
               }
             }
 
@@ -247,6 +377,7 @@
     }
 
     .welcomePageContentRight {
+      max-height: 600px;
       padding-right: 3%;
       flex-grow: 1;
       flex-shrink: 1;

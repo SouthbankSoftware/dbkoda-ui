@@ -45,10 +45,6 @@ import './Panel.scss';
 
 // IMPORTANT: this should be kept consistent with globalString('config/menu/*')
 export const manifest = {
-  welcome: {
-    menuEntry: WelcomeMenuEntry,
-    configPanel: WelcomeConfigPanel
-  },
   general: {
     menuEntry: GeneralMenuEntry,
     configPanel: GeneralConfigPanel

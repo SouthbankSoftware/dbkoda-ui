@@ -28,19 +28,28 @@ import _ from 'lodash';
 import * as React from 'react';
 import autobind from 'autobind-decorator';
 import xml2js from 'xml2js';
+import { inject } from 'mobx-react';
 import { AnchorButton } from '@blueprintjs/core';
 import moment from 'moment';
 import LoadingView from '#/common/LoadingView';
+import { NavPanes } from '#/common/Constants';
 import TwitterIcon from '~/styles/icons/twitter-icon.svg';
 import GithubIcon from '~/styles/icons/github-icon.svg';
 import DocumentIcon from '~/styles/icons/document-solid-icon.svg';
 import KodaIcon from '~/styles/icons/dbkoda-logo.svg';
 import MediumIcon from '~/styles/icons/medium-logo.svg';
+import GettingStartedBlog from '~/styles/icons/color/blog-guide-icon.svg';
+import GettingStartedVideo from '~/styles/icons/color/video-icon.svg';
+import NewProfileIcon from '~/styles/icons/color/create-profile-icon.svg';
 import './WelcomeConfigPanel.scss';
 
 const FEED_URL = 'https://cors-anywhere.herokuapp.com/https://medium.com/feed/dbkoda';
 const CONTENT_SUMMARY_RE = /<p>.*?<\/p>/;
 
+@inject(allStores => ({
+  store: allStores.store,
+  drawer: allStores.store.drawer
+}))
 export default class WelcomeConfigPanel extends React.Component<*> {
   constructor(props) {
     super(props);
@@ -165,6 +174,25 @@ export default class WelcomeConfigPanel extends React.Component<*> {
     }
   }
 
+  @autobind
+  _onClickGettingStartedBlog() {
+    if (IS_ELECTRON) {
+      window.require('electron').shell.openExternal('https://medium.com/dbkoda/');
+    }
+  }
+
+  @autobind
+  _onClickGettingStartedVideo() {
+    if (IS_ELECTRON) {
+      window.require('electron').shell.openExternal('https://youtube.com/dbkoda/');
+    }
+  }
+
+  @autobind
+  _onClickNewConnection() {
+    this.props.store.setActiveNavPane(NavPanes.PROFILE);
+  }
+
   _captureAndOpenHrefExternally = e => {
     e.preventDefault();
 
@@ -178,7 +206,43 @@ export default class WelcomeConfigPanel extends React.Component<*> {
   render() {
     return (
       <div className="WelcomeConfigPanel">
+        <div className="welcomeText">
+          <span className="welcomeText">{globalString('editor/home/welcome')}</span>
+        </div>
         <div className="welcomePageContentWrapper">
+          <div className="welcomePageGetStarted">
+            <h2 className="getStartedText"> {globalString('editor/home/gettingStartedTitle')} </h2>
+            <div className="linksList">
+              <div className="iconWrapper">
+                <AnchorButton
+                  className="gettingStartedBlogIcon blog"
+                  onClick={this._onClickGettingStartedBlog}
+                >
+                  <GettingStartedBlog width={65} height={65} />
+                </AnchorButton>
+                <span className="iconText">
+                  {globalString('editor/home/gettingStartedBlogText')}
+                </span>
+              </div>
+              <div className="iconWrapper">
+                <AnchorButton
+                  className="gettingStartedVideoIcon video"
+                  onClick={this._onClickGettingStartedVideo}
+                >
+                  <GettingStartedVideo width={75} height={75} />
+                </AnchorButton>
+                <span className="iconText">
+                  {globalString('editor/home/gettingStartedVideoText')}
+                </span>
+              </div>
+              <div className="iconWrapper">
+                <AnchorButton className="newProfileButton new" onClick={this._onClickNewConnection}>
+                  <NewProfileIcon width={75} height={75} />
+                </AnchorButton>
+                <span className="iconText">{globalString('editor/home/gettingStartedNew')}</span>
+              </div>
+            </div>
+          </div>
           <div className="welcomePageContentLeft">
             <h2>Documentation</h2>
             <div className="docsContent">
@@ -198,14 +262,6 @@ export default class WelcomeConfigPanel extends React.Component<*> {
                     </AnchorButton>
                   </span>
                   <p>dbKoda Release Notes</p>
-                </div>
-                <div className="documentationLinkWrapper">
-                  <span className="iconWrapper">
-                    <AnchorButton className="docsIcon" onClick={this.onClickGettingStarted}>
-                      <DocumentIcon width={30} height={30} />
-                    </AnchorButton>
-                  </span>
-                  <p>Need help getting started?</p>
                 </div>
                 <div className="documentationLinkWrapper">
                   <span className="iconWrapper">

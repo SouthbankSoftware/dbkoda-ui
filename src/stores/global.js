@@ -79,7 +79,7 @@ export default class Store {
 
   @observable
   configPanel = observable({
-    currentMenuEntry: 'welcome',
+    currentMenuEntry: 'general',
     changes: observable.map(null),
     errors: observable.map(null)
   });
@@ -159,7 +159,7 @@ export default class Store {
   @observable
   drawer = observable({
     drawerChild: DrawerPanes.DEFAULT,
-    activeNavPane: NavPanes.CONFIG
+    activeNavPane: NavPanes.EDITOR
   });
 
   @observable

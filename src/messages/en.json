@@ -367,7 +367,11 @@
       },
       "home": {
         "title": "Home",
-        "welcome": "Welcome to dbKoda."
+        "welcome": "Welcome to dbKoda.",
+        "gettingStartedTitle": "Let's get started!",
+        "gettingStartedBlogText": "Getting started blog.",
+        "gettingStartedVideoText": "Getting started video.",
+        "gettingStartedNew": "Create a new profile."
       },
       "config": {
         "sections": {
