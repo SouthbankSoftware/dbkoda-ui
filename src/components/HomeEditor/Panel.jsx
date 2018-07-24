@@ -95,6 +95,7 @@ class MainPanel extends React.Component<*, *> {
         onResizerStateChanged={this.updateRightSplitResizerState}
         primary="second"
         minSize={200}
+        maxSize={700}
         pane2Style={this.splitPane2Style}
       >
         <EditorPanel />

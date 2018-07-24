@@ -142,7 +142,7 @@ export default class ConfigStore {
           }
 
           // open PathsConfigPanel
-          global.store.configPanel.currentMenuEntry = 'paths';
+          global.store.configPanel.currentMenuEntry = 'general';
           global.store.setActiveNavPane(NavPanes.CONFIG);
         }
 

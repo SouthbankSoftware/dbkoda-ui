@@ -60,10 +60,6 @@ export const manifest = {
     menuEntry: EditorMenuEntry,
     configPanel: EditorConfigPanel
   },
-  passwordStore: {
-    menuEntry: PasswordStoreMenuEntry,
-    configPanel: PasswordStoreConfigPanel
-  },
   shortcuts: {
     menuEntry: ShortcutsMenuEntry,
     configPanel: ShortcutsConfigPanel
