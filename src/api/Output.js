@@ -204,6 +204,10 @@ export default class OutputApi {
    */
   @action.bound
   outputAvailable(output: Output) {
+    output.output = output.output.replace(
+      /---((.|\n|\r|\r\n)*)db.enableFreeMonitoring\(\)/gim,
+      ' '
+    );
     // Parse output for string 'Type "it" for more'
     const outputId = this.outputHash[output.id + '|' + output.shellId];
 
@@ -230,9 +234,13 @@ export default class OutputApi {
 
   @action.bound
   onReconnect(output: *) {
+    l.debug('RECON');
     const outputId = this.outputHash[output.id + '|' + output.shellId];
-
-    this.store.outputs.get(outputId).append(output.output.join(''));
+    this.store.outputs
+      .get(outputId)
+      .append(
+        output.output.join('').replace(/---((.|\n|\r|\r\n)*)db.enableFreeMonitoring\(\)/gim, ' ')
+      );
   }
 
   /**
@@ -274,7 +282,7 @@ export default class OutputApi {
 
         if (editor.initialMsg && editor.id != 'Default') {
           let tmp = editor.initialMsg;
-          tmp = tmp.replace(/---((.|\n)*)db.enableFreeMonitoring\(\)/gi, '');
+          tmp = tmp.replace(/---((.|\n|\r|\r\n)*)db.enableFreeMonitoring\(\)/gim, ' ');
           tmp = tmp.replace(/^(?:\n|\r|\r\n)/gm, '');
           outputObj.append(tmp);
         }

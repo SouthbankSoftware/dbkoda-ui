@@ -333,7 +333,7 @@ export default class ProfileApi {
         shellId: res.shellId,
         status: ProfileStatus.OPEN,
         initialMsg: res.output
-          ? res.output.join('\r').replace(/---((.|\n)*)db.enableFreeMonitoring\(\)/gi, '')
+          ? res.output.join('\r').replace(/---((.|\n|\r|\r\n)*)db.enableFreeMonitoring\(\)/gim, ' ')
           : '',
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
@@ -474,7 +474,10 @@ export default class ProfileApi {
             visible: true,
             executing: false,
             shellVersion: profile.shellVersion,
-            initialMsg: profile.initialMsg,
+            initialMsg: profile.initialMsg.replace(
+              /---((.|\n|\r|\r\n)*)db.enableFreeMonitoring\(\)/gim,
+              ' '
+            ),
             doc,
             status: profile.status,
             path: null,
@@ -494,7 +497,6 @@ export default class ProfileApi {
       editorPanel.shouldScrollToActiveTab = true;
       editorPanel.activeEditorId = targetEditor.id;
     }
-
     editorToolbar.noActiveProfile = false;
     editorToolbar.id = profile.id;
     editorToolbar.shellId = profile.shellId;
