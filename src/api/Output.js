@@ -140,6 +140,7 @@ export default class OutputApi {
 
         if (editor.initialMsg && editor.id != 'Default') {
           let tmp = editor.initialMsg;
+          tmp = tmp.replace(/---((.|\n|\r|\r\n)*)db.enableFreeMonitoring\(\)/gim, ' ');
           tmp = tmp.replace(/^(?:\n|\r|\r\n)/gm, '');
           outputObj.append(tmp);
         }
@@ -273,6 +274,7 @@ export default class OutputApi {
 
         if (editor.initialMsg && editor.id != 'Default') {
           let tmp = editor.initialMsg;
+          tmp = tmp.replace(/---((.|\n)*)db.enableFreeMonitoring\(\)/gi, '');
           tmp = tmp.replace(/^(?:\n|\r|\r\n)/gm, '');
           outputObj.append(tmp);
         }

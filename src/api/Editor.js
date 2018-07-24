@@ -216,7 +216,10 @@ export default class EditorApi {
             // TODO this `visible` is not used anymore. Needs a cleanup
             visible: true,
             shellVersion: res.shellVersion,
-            initialMsg: res.output ? res.output.join('\n') : '',
+            // Scrape out 4.0 message that breaks all formatting.
+            initialMsg: res.output
+              ? res.output.join('\n').replace(/---((.|\n)*)db.enableFreeMonitoring\(\)/gi, '')
+              : '',
             doc,
             status: ProfileStatus.OPEN,
             path: null,

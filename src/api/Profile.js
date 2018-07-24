@@ -332,7 +332,9 @@ export default class ProfileApi {
         id: res.id,
         shellId: res.shellId,
         status: ProfileStatus.OPEN,
-        initialMsg: res.output ? res.output.join('\r') : '',
+        initialMsg: res.output
+          ? res.output.join('\r').replace(/---((.|\n)*)db.enableFreeMonitoring\(\)/gi, '')
+          : '',
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
         mongoType: res.mongoType
