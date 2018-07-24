@@ -394,8 +394,11 @@ div.pt-dialog {
 .pt-tab-panel {
   flex: 1;
   display: flex;
-  flex-direction: column;
   margin-top: 0px;
+}
+
+.pt-tab-panel.Home {
+  flex-direction: column;
 }
 
 .pt-tab {
