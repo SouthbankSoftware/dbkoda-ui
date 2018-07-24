@@ -177,14 +177,16 @@ export default class WelcomeConfigPanel extends React.Component<*> {
   @autobind
   _onClickGettingStartedBlog() {
     if (IS_ELECTRON) {
-      window.require('electron').shell.openExternal('https://medium.com/dbkoda/');
+      window
+        .require('electron')
+        .shell.openExternal('https://medium.com/dbkoda/a-beginners-guide-to-dbkoda-50c2c2897108');
     }
   }
 
   @autobind
   _onClickGettingStartedVideo() {
     if (IS_ELECTRON) {
-      window.require('electron').shell.openExternal('https://youtube.com/dbkoda/');
+      window.require('electron').shell.openExternal('https://youtu.be/9_jRnWUlSR4');
     }
   }
 
