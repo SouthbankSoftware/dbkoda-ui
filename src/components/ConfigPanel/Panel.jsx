@@ -38,7 +38,6 @@ import GeneralConfigPanel, { GeneralMenuEntry } from './GeneralConfigPanel';
 import PathsConfigPanel, { PathsMenuEntry } from './PathsConfigPanel';
 import PerformanceLabConfigPanel, { PerformanceLabMenuEntry } from './PerformanceLabConfigPanel';
 import EditorConfigPanel, { EditorMenuEntry } from './EditorConfigPanel';
-import PasswordStoreConfigPanel, { PasswordStoreMenuEntry } from './PasswordStoreConfigPanel';
 import ShortcutsConfigPanel, { ShortcutsMenuEntry } from './ShortcutsConfigPanel';
 import './Panel.scss';
 
