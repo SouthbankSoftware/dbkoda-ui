@@ -765,6 +765,10 @@
           "label": "gzip",
           "tooltip": "Compress or decompress dumps using GZIP"
         },
+        "sslAllowInvalidCertificates": {
+          "label": "sslAllowInvalidCertificates",
+          "tooltip": "Allow invalid SSL certificates."
+        },
         "archive": {
           "label": "archive",
           "tooltip": "Compress or decompress an archive."

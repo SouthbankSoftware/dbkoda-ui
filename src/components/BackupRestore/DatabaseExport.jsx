@@ -55,6 +55,7 @@ export default class DatabaseExport extends React.Component {
       directoryPath: '',
       jsonArray: false,
       gzip: false,
+      sslAllowInvalidCertificates: false,
       archive: false,
       pretty: false,
       db: '',
@@ -362,6 +363,12 @@ export default class DatabaseExport extends React.Component {
             }
             gzip={this.state.gzip}
             changeGzip={() => this.setState({ gzip: !this.state.gzip })}
+            sslAllowInvalidCertificates={this.state.sslAllowInvalidCertificates}
+            changeSslAllowInvalidCertificates={() =>
+              this.setState({
+                sslAllowInvalidCertificates: !this.state.sslAllowInvalidCertificates
+              })
+            }
             archive={this.state.archive}
             changeArchive={() => this.setState({ archive: !this.state.archive })}
           />
