@@ -42,6 +42,7 @@ const paths = {
   dockerContainerId: 'config.mongo.docker.containerId',
   dockerHostPath: 'config.mongo.docker.hostPath',
   dockerContainerPath: 'config.mongo.docker.containerPath',
+  mongoCmd: 'config.mongo.cmd',
   drillCmd: 'config.drillCmd'
 };
 
@@ -63,6 +64,7 @@ export default class PathsConfigPanel extends React.Component<*> {
       <div className="PathsConfigPanel">
         <div className="MainColumn">
           <ConfigEntry path={paths.dockerized} />
+          <ConfigEntry path={paths.mongoCmd} disabled={dockerized} />
           <ConfigEntry path={paths.drillCmd} />
         </div>
         <div className="SecondaryColumn">
