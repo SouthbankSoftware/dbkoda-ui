@@ -40,18 +40,24 @@ Handlebars.registerHelper('escapeDoubleQuotes', escapeDoubleQuotes);
 
 const createTemplateObject = state => {
   const { db, profile, exportType, parseGrace, mode } = state;
+
   const {
     host,
     port,
     sha,
     hostRadio,
     url,
-    database,
-    ssl,
     sshLocalPort,
     authenticationDatabase,
     sshTunnel
   } = profile;
+  let { ssl, database } = profile;
+
+  if (profile.useClusterConfig) {
+    // Get variables from the cluster URI
+    ssl = profile.sslCluster;
+    database = profile.databaseCluster;
+  }
   const items = {
     ...profile,
     ...state,
@@ -77,7 +83,11 @@ const createTemplateObject = state => {
       items.port = port;
     }
   } else {
-    const uri = mongodbUri.parse(url);
+    let uri = mongodbUri.parse(url);
+    if (profile.useClusterConfig) {
+      // Get variables from the cluster URI
+      uri = mongodbUri.parse(profile.urlCluster);
+    }
     if (uri.hosts.length == 1) {
       items.host = uri.hosts[0].host;
       items.port = uri.hosts[0].port ? uri.hosts[0].port : '27017';
