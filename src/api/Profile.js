@@ -279,6 +279,10 @@ export default class ProfileApi {
         });
         l.error('Profile connection failed:', err);
         this.onFail();
+        if (err.message === 'Data does not match schema') {
+          err.message =
+            'Data does not match schema. Please verify if you have entered the username/password correctly.';
+        }
         this.toasterCallback && this.toasterCallback('connectionFail', err);
       });
   }

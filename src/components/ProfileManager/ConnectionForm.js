@@ -93,6 +93,7 @@ export class ConnectionForm extends JsonForm {
    */
   @action
   updateFieldValue(field: Field, newValue: any) {
+    console.log('updateFieldValue::', field.name);
     if (field.name === 'alias' && field.value !== newValue) {
       this.hasAliasChanged = true;
     }
@@ -143,7 +144,8 @@ export class ConnectionForm extends JsonForm {
       field.name == 'usernameCluster' ||
       field.name == 'replicaSetName' ||
       field.name == 'useClusterConfig' ||
-      field.name == 'urlCluster'
+      field.name == 'urlCluster' ||
+      field.name == 'scheme'
     ) {
       this.updateAlias(field);
     }
@@ -175,7 +177,14 @@ export class ConnectionForm extends JsonForm {
     const urlField = field.$('url');
 
     if (urlField) {
-      const uriObject = { hosts: [], options: {}, database: '', username: '', password: '' };
+      const uriObject = {
+        hosts: [],
+        options: {},
+        database: '',
+        username: '',
+        password: '',
+        scheme: 'mongodb'
+      };
       let connectionUrl = '';
 
       const hostField = field.$('host');
@@ -186,10 +195,16 @@ export class ConnectionForm extends JsonForm {
         hostObj.host = hostField.value;
       }
       if (portField) {
-        hostObj.port =
-          !isNaN(portField.value) && Number(portField.value) > 0 ? portField.value : 27017;
+        if (!isNaN(portField.value) && Number(portField.value) > 0) {
+          hostObj.port = portField.value;
+        }
       }
       uriObject.hosts.push(hostObj);
+
+      const schemeField = field.$('scheme');
+      if (schemeField) {
+        uriObject.scheme = schemeField.value === '' ? 'mongodb' : String(schemeField.value);
+      }
 
       const databaseField = field.$('database');
       if (databaseField) {
@@ -227,6 +242,12 @@ export class ConnectionForm extends JsonForm {
       return;
     }
     console.log(urlParams);
+    if (urlParams.scheme) {
+      const schemeField = urlField.$('scheme');
+      if (schemeField) {
+        schemeField.value = urlParams.scheme;
+      }
+    }
     if (urlParams.hosts.length === 1) {
       const [{ host, port }] = urlParams.hosts;
       const hostField = urlField.$('host');
@@ -235,7 +256,7 @@ export class ConnectionForm extends JsonForm {
       }
       const portField = urlField.$('port');
       if (portField) {
-        portField.value = !isNaN(port) ? port : 27017;
+        portField.value = !isNaN(port) ? port : 0;
       }
     }
     if (urlParams.database) {
