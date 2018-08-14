@@ -30,6 +30,37 @@
               }
             },
             {
+              "$id": "scheme",
+              "required": ["disabled"],
+              "properties": {
+                "disabled": { "type": "boolean" }
+              },
+              "select": { "$data": "0/disabled" },
+              "selectCases": {
+                "false": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string", "pattern": "^mongodb(.srv)?" }
+                  },
+                  "errorMessage": {
+                    "properties": {
+                      "value": "Only 'mongodb' or 'mongodb+srv' protocols are supported"
+                    }
+                  }
+                },
+                "true": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string" }
+                  }
+                }
+              }
+            },
+            {
               "$id": "host",
               "required": ["disabled"],
               "properties": {
@@ -116,11 +147,11 @@
                   "properties": {
                     "disabled": {},
                     "name": { "type": "string" },
-                    "value": { "type": "string", "pattern": "^mongodb://" }
+                    "value": { "type": "string", "pattern": "^mongodb(\\+srv)?://" }
                   },
                   "errorMessage": {
                     "properties": {
-                      "value": "URI should start with 'mongodb://' protocol"
+                      "value": "URI should start with 'mongodb://' or 'mongodb+srv://' protocol"
                     }
                   }
                 },
