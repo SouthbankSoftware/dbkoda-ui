@@ -371,4 +371,52 @@ export default class PerformanceWindowApi {
   getChildStorageData(profileId, shellId, db, col) {
     return this.storageDrillApi.getChildStorageData(profileId, shellId, db, col);
   }
+
+  @action.bound
+  getExampleForSelectedProfileOp = (selectedOperation: *) => {
+    return new Promise((resolve, reject) => {
+      if (
+        selectedOperation.op &&
+        (selectedOperation.command || selectedOperation.example) &&
+        selectedOperation.ns
+      ) {
+        let database = '';
+        if (selectedOperation.op === 'command' || selectedOperation.op === 'query') {
+          const nsParams = selectedOperation.ns.split('.');
+          [database] = nsParams;
+
+          const strCommands = `db.getSiblingDB("${database}").getCollection("system.profile").find({ns:"${
+            selectedOperation.ns
+          }",op:"${selectedOperation.op}","command.lsid.id":BinData(4,"${
+            selectedOperation.example.lsid.id
+          }")},{command:1}).limit(1).pretty()`;
+          l.log(strCommands);
+          const service = featherClient().service('/mongo-sync-execution');
+          service.timeout = 30000;
+
+          service
+            .update(this.profileId, {
+              shellId: this.shellId,
+              commands: strCommands,
+              responseType: 'STRING'
+            })
+            .then(
+              action(res => {
+                resolve(res);
+              })
+            )
+            .catch(err => {
+              l.error(err);
+              reject(
+                new Error(
+                  'dbkoda: Timeout exceeded while trying to get example for selected operation.'
+                )
+              );
+            });
+        }
+      } else {
+        reject(new Error('dbkoda: Operation doesnot have required information for example.'));
+      }
+    });
+  };
 }
