@@ -31,7 +31,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import React from 'react';
 import CodeMirror from '#/common/LegacyCodeMirror';
 import 'codemirror/mode/javascript/javascript';
@@ -52,6 +52,11 @@ import 'codemirror-formatting';
 import '#/common/MongoScript.js';
 import 'codemirror/theme/material.css';
 
+@inject(({ store }) => {
+  return {
+    api: store.api
+  };
+})
 @observer
 export default class OperationDetails extends React.Component {
   static propTypes = {};
@@ -89,13 +94,34 @@ export default class OperationDetails extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.operation) {
-      this.setState({
-        code: JSON.stringify(nextProps.operation.example, null, 2)
-      });
-      setTimeout(() => {
-        this.forceUpdate();
-      }, 100);
+    if (nextProps && nextProps.operation && nextProps.api) {
+      const { api, operation } = nextProps;
+      api
+        .getExampleForSelectedProfileOp(operation)
+        .then(res => {
+          l.log(res);
+          if (res && res.length > 0) {
+            this.setState({
+              code: res
+            });
+            setTimeout(() => {
+              this.forceUpdate();
+            }, 100);
+          }
+        })
+        .catch(error => {
+          api.showToaster({
+            message: error.message,
+            className: 'danger',
+            iconName: 'pt-icon-thumbs-down'
+          });
+          this.setState({
+            code: JSON.stringify(nextProps.operation.example, null, 2)
+          });
+          setTimeout(() => {
+            this.forceUpdate();
+          }, 100);
+        });
     }
   }
 
