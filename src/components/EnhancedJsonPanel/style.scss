@@ -20,8 +20,8 @@
  * @Author: chris
  * @Date:   2017-05-15T09:44:11+10:00
  * @Email:  chris@southbanksoftware.com
-// @Last modified by:   chris
-// @Last modified time: 2017-08-28T15:13:20+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-19T17:39:51+10:00
  */
 
 @import '../../styles/_defaultTheme.scss';
@@ -32,7 +32,7 @@
 
   width: 100%;
   background-color: $tabBackgroundSelected;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   .pt-navbar.pt-dark {
     position: absolute;

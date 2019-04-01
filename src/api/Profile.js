@@ -279,6 +279,10 @@ export default class ProfileApi {
         });
         l.error('Profile connection failed:', err);
         this.onFail();
+        if (err.message === 'Data does not match schema') {
+          err.message =
+            'Data does not match schema. Please verify if you have entered the username/password correctly.';
+        }
         this.toasterCallback && this.toasterCallback('connectionFail', err);
       });
   }
@@ -332,7 +336,9 @@ export default class ProfileApi {
         id: res.id,
         shellId: res.shellId,
         status: ProfileStatus.OPEN,
-        initialMsg: res.output ? res.output.join('\r') : '',
+        initialMsg: res.output
+          ? res.output.join('\r').replace(/---((.|\n|\r|\r\n)*)db.enableFreeMonitoring\(\)/gim, ' ')
+          : '',
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
         mongoType: res.mongoType
@@ -472,7 +478,10 @@ export default class ProfileApi {
             visible: true,
             executing: false,
             shellVersion: profile.shellVersion,
-            initialMsg: profile.initialMsg,
+            initialMsg: profile.initialMsg.replace(
+              /---((.|\n|\r|\r\n)*)db.enableFreeMonitoring\(\)/gim,
+              ' '
+            ),
             doc,
             status: profile.status,
             path: null,
@@ -492,7 +501,6 @@ export default class ProfileApi {
       editorPanel.shouldScrollToActiveTab = true;
       editorPanel.activeEditorId = targetEditor.id;
     }
-
     editorToolbar.noActiveProfile = false;
     editorToolbar.id = profile.id;
     editorToolbar.shellId = profile.shellId;

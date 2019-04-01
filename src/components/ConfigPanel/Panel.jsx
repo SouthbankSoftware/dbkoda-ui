@@ -34,21 +34,15 @@ import { NavPanes } from '#/common/Constants';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import { DialogHotkeys } from '#/common/hotkeys/hotkeyList';
-import WelcomeConfigPanel, { WelcomeMenuEntry } from './WelcomeConfigPanel';
 import GeneralConfigPanel, { GeneralMenuEntry } from './GeneralConfigPanel';
 import PathsConfigPanel, { PathsMenuEntry } from './PathsConfigPanel';
 import PerformanceLabConfigPanel, { PerformanceLabMenuEntry } from './PerformanceLabConfigPanel';
 import EditorConfigPanel, { EditorMenuEntry } from './EditorConfigPanel';
-import PasswordStoreConfigPanel, { PasswordStoreMenuEntry } from './PasswordStoreConfigPanel';
 import ShortcutsConfigPanel, { ShortcutsMenuEntry } from './ShortcutsConfigPanel';
 import './Panel.scss';
 
 // IMPORTANT: this should be kept consistent with globalString('config/menu/*')
 export const manifest = {
-  welcome: {
-    menuEntry: WelcomeMenuEntry,
-    configPanel: WelcomeConfigPanel
-  },
   general: {
     menuEntry: GeneralMenuEntry,
     configPanel: GeneralConfigPanel
@@ -64,10 +58,6 @@ export const manifest = {
   editor: {
     menuEntry: EditorMenuEntry,
     configPanel: EditorConfigPanel
-  },
-  passwordStore: {
-    menuEntry: PasswordStoreMenuEntry,
-    configPanel: PasswordStoreConfigPanel
   },
   shortcuts: {
     menuEntry: ShortcutsMenuEntry,

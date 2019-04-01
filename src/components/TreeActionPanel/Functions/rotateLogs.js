@@ -1,10 +1,4 @@
-/**
- * @Author: Guan Gui <guiguan>
- * @Date:   2017-09-21T15:25:12+10:00
- * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-07-19T17:39:18+10:00
- *
+/*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -24,37 +18,19 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import '../../styles/_defaultTheme.scss';
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-04-03T16:14:52+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-12-15T13:42:45+11:00
+ */
 
-.ChartPanel {
-  background: $tabBackgroundSelected;
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+import { Aggregate } from './Aggregate';
 
-  ul.pt-tree-node-list li.pt-tree-node div.pt-tree-node-content-0 {
-    letter-spacing: normal;
-    height: 30px;
-    border: none;
-    padding-left: 10px;
+export const rotateLogs = {
+  executeCommand: null,
+  setExecuteFunction: cbFuncExecute => {
+    Aggregate.executeCommand = cbFuncExecute;
   }
-
-  .Resizer {
-    background-color: $navbarSecondaryBackground;
-  }
-
-  .SplitPane.SplitPane.vertical {
-    // fix resizer hidden problem
-    right: auto !important;
-
-    .Pane1 {
-      overflow-y: auto !important;
-    }
-  }
-
-  .DataTree,
-  .BarChart {
-    width: 100%;
-    height: 100%;
-  }
-}
+};

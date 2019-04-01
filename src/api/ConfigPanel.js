@@ -5,7 +5,7 @@
  * @Date:   2018-07-08T21:22:56+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-13T00:40:14+10:00
+ * @Last modified time: 2018-07-18T11:39:49+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -95,7 +95,7 @@ export default class ConfigPanelApi {
     } = this.store;
 
     if (path) {
-      for (const errPath of errors.keys()) {
+      for (const errPath of [...errors.keys()]) {
         if (errPath.startsWith(path)) {
           errors.delete(errPath);
         }
@@ -134,7 +134,11 @@ export default class ConfigPanelApi {
       changes.delete(path);
 
       if (errors.has(path)) {
-        this.clearConfigError();
+        for (const [k, v] of [...errors.entries()]) {
+          if (!v.asyncError) {
+            errors.delete(k);
+          }
+        }
       }
     } else {
       changes.set(path, value);

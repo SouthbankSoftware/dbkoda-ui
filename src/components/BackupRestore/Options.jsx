@@ -411,6 +411,8 @@ export const RestoreOptions = ({
   oplogLimit,
   changeOplogLimit,
   restoreDbUsersAndRoles,
+  sslAllowInvalidCertificates,
+  changeSslAllowInvalidCertificates,
   changeRestoreDbUsersAndRoles,
   gzip,
   changeGzip,
@@ -544,6 +546,13 @@ export const RestoreOptions = ({
       value: archive,
       onChange: changeArchive,
       name: 'archive'
+    },
+    {
+      label: globalString('backuprestore/parameters/sslAllowInvalidCertificates/label'),
+      tooltips: globalString('backuprestore/parameters/sslAllowInvalidCertificates/tooltip'),
+      value: sslAllowInvalidCertificates,
+      onChange: changeSslAllowInvalidCertificates,
+      name: 'sslAllowInvalidCertificates'
     },
     {
       label: globalString('backuprestore/parameters/gzip/label'),

@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-17T14:47:23+10:00
+ * @Last modified time: 2018-07-18T10:32:53+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -79,7 +79,7 @@ export default class Store {
 
   @observable
   configPanel = observable({
-    currentMenuEntry: 'welcome',
+    currentMenuEntry: 'general',
     changes: observable.map(null),
     errors: observable.map(null)
   });
@@ -152,14 +152,14 @@ export default class Store {
     overallSplitResizerState: resizerStates.ALL_SHOWN,
     leftSplitPos: '50%',
     leftSplitResizerState: resizerStates.ALL_SHOWN,
-    rightSplitPos: '60%',
+    rightSplitPos: '35%',
     rightSplitResizerState: resizerStates.ALL_SHOWN
   };
 
   @observable
   drawer = observable({
     drawerChild: DrawerPanes.DEFAULT,
-    activeNavPane: NavPanes.CONFIG
+    activeNavPane: NavPanes.EDITOR
   });
 
   @observable
@@ -630,6 +630,21 @@ export default class Store {
         // init api
         this.api = new DataCenter(this, this.configStore, this.profileStore);
         global.api = this.api;
+
+        // check and generate missing config.mongo.cmd or config.mongo.docker.cmd
+        if (_.get(this.configStore, 'config.mongo.dockerized')) {
+          if (_.get(this.configStore, 'config.mongo.docker.cmd') === null) {
+            const request = {};
+            _.set(request, 'config.mongo.docker.cmd', null);
+
+            this.configStore.patch(request.config);
+          }
+        } else if (_.get(this.configStore, 'config.mongo.cmd') === null) {
+          const request = {};
+          _.set(request, 'config.mongo.cmd', null);
+
+          this.configStore.patch(request.config);
+        }
 
         let settingsUserChangedReaction;
         let settingsTelemetryEnabledReaction;

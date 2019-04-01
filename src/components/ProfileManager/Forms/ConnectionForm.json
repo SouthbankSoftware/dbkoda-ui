@@ -19,6 +19,7 @@
         "type": "switch",
         "column": 1,
         "refFields": [
+          "scheme",
           "host",
           "port",
           "database",
@@ -28,6 +29,15 @@
           "sha"
         ],
         "disabled": false
+      },
+      {
+        "name": "scheme",
+        "label": "Protocol",
+        "value": "mongodb",
+        "type": "text",
+        "column": 1,
+        "disabled": false,
+        "checkbox": "enabled"
       },
       {
         "name": "host",

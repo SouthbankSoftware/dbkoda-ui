@@ -274,7 +274,12 @@
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["wtCache_maxBytes", "wtCache_currentBytes"],
+      "items": [
+        "wtCache_maxBytes",
+        "wtCache_cleanBytes",
+        "wtCache_dirtyBytes",
+        "wtCache_currentBytes"
+      ],
       "layout": {
         "x": 11,
         "y": 27,
@@ -286,7 +291,8 @@
       "extraState": {
         "name": "WiredTiger Cache",
         "title": "WiredTiger Cache",
-        "colorList": ["#32554D", "#4E8476"],
+        "colorList": ["#32554D", "#4E8476", "#68C2A9", "#4E8476"],
+        "hideLast": true,
         "infoWidget": true,
         "description": "Current and Maximum size of the WiredTiger cache.",
         "unit": "b",

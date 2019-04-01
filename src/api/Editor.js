@@ -3,7 +3,7 @@
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-17T14:17:31+10:00
+ * @Last modified time: 2018-07-19T15:41:25+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -122,9 +122,7 @@ export default class EditorApi {
 
   @action.bound
   openHomeTab() {
-    // this.store.configPage.isOpen = true;
     this.store.setActiveNavPane(NavPanes.EDITOR);
-    this.store.editorPanel.activeEditorId = 'Default';
   }
 
   @action.bound
@@ -218,7 +216,10 @@ export default class EditorApi {
             // TODO this `visible` is not used anymore. Needs a cleanup
             visible: true,
             shellVersion: res.shellVersion,
-            initialMsg: res.output ? res.output.join('\n') : '',
+            // Scrape out 4.0 message that breaks all formatting.
+            initialMsg: res.output
+              ? res.output.join('\n').replace(/---((.|\n)*)db.enableFreeMonitoring\(\)/gi, '')
+              : '',
             doc,
             status: ProfileStatus.OPEN,
             path: null,
