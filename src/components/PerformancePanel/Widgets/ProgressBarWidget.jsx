@@ -56,6 +56,7 @@ type Props = {
     firstValueIsHighWaterMark: boolean,
     waterMarkGroup: any,
     colorList: any,
+    hideLast: any,
     maintainOrder: boolean,
     chartAlign: any
   },
@@ -176,6 +177,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
     // eslint-disable-next-line
     const bVertical = this.props.widget.showVertical === true;
     const sData = Object.keys(data); // .sort(); // sort according to keys to keep the color same
+    if (this.props.widget.hideLast) {
+      sData.splice(-1, 1);
+    }
     let arrData = [];
     let sumOfValues = 0;
     let sumOfHWM = 0;
@@ -266,23 +270,6 @@ export default class ProgressBarWidget extends React.Component<Props> {
       if (this._totalDivisor < groupHwm) {
         this._totalDivisor = groupHwm;
       }
-      // if (!this.props.performancePanel.highWaterMarkGroups) {
-      //   this.props.performancePanel.highWaterMarkGroups = {};
-      //   this.props.performancePanel.highWaterMarkGroups[this.props.widget.waterMarkGroup] = 0;
-      // }
-      // let highestValue = this.props.performancePanel
-      //   .highWaterMarkGroups[this.props.widget.waterMarkGroup];
-      // highestValue = !highestValue ? 0 : highestValue;
-      // if (this._totalDivisor > highestValue) {
-      //   this.props.performancePanel.highWaterMarkGroups[
-      //     this.props.widget.waterMarkGroup
-      //   ] = this._totalDivisor;
-      // } else {
-      //   this._totalDivisor = this.props.performancePanel.highWaterMarkGroups[
-      //     this.props.widget.waterMarkGroup
-      //     ];
-      // }
-      // this._chartLabel = this._totalDivisor;
     }
 
     // $FlowFixMe

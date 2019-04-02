@@ -182,6 +182,7 @@ class Terminal extends React.Component {
     const cm = this.terminal.getCodeMirror();
     const editorType = this.props.store.editors.get(this.props.id).type;
 
+    /*  Uncomment this to enable auto-complete on the terminal -> NOT RECOMMENDED.
     this.automaticAutocomplete = _.debounce(() => {
       if (
         this.state.historyCursor >
@@ -192,7 +193,7 @@ class Terminal extends React.Component {
         this.setState({ lastAutocomplete: this.state.command });
         cm.execCommand('autocomplete');
       }
-    }, 400);
+    }, 400); */
     if (this.props.configStore.config.automaticAutoComplete && editorType !== EditorTypes.DRILL) {
       cm.on('change', this.automaticAutocomplete);
     }

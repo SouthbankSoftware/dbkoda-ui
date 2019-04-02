@@ -47,9 +47,7 @@ export default class TreePanel extends React.Component {
   static get defaultProps() {
     return { store: undefined };
   }
-  // constructor(props) {   super(props);   if (this.props.store.topology.json !==
-  // null) {     this.props.treeState.parseJson(this.props.store.topology.json); }
-  // }
+
   componentWillMount() {
     const onSelectProfile = () => {
       const profile = this.props.store.profileList.selectedProfile;
@@ -61,41 +59,61 @@ export default class TreePanel extends React.Component {
           } else {
             this.updateStatus('LOADING');
             this.props.treeState.setProfileId(profile.id);
-            const service = featherClient().service('/mongo-inspector'); // Calls the controller to load the topology associated with the selected Profile
-            service.timeout = 60000;
             runInAction(() => {
               this.props.store.treePanel.isRefreshing = true;
             });
-            service
-              .get(profile.id)
-              .then(res => {
-                runInAction(() => {
-                  this.props.store.treePanel.isRefreshing = false;
-                  this.props.store.treePanel.isRefreshDisabled = false;
-                  this.props.store.topology.isChanged = false;
-                });
 
-                if (this.props.store.profileList.selectedProfile.id == res.profileId) {
-                  this.props.store.updateTopology(res);
-                  this.updateStatus('LOADED');
-                } else {
+            const cachedTopology = this.props.store.topologyCache[profile.id];
+            if (
+              cachedTopology &&
+              cachedTopology.updated > Date.now() - 30000 &&
+              cachedTopology.json
+            ) {
+              runInAction(() => {
+                this.props.store.treePanel.isRefreshing = false;
+                this.props.store.treePanel.isRefreshDisabled = false;
+              });
+              this.props.store.updateTopology({
+                profileId: cachedTopology.profileId,
+                result: cachedTopology.json,
+                updated: cachedTopology.updated
+              });
+              this.props.treeState.parseJson(cachedTopology.json, cachedTopology.profileId);
+              this.updateStatus('LOADED');
+            } else {
+              const service = featherClient().service('/mongo-inspector'); // Calls the controller to load the topology associated with the selected Profile
+              service.timeout = 60000;
+              service
+                .get(profile.id)
+                .then(res => {
+                  runInAction(() => {
+                    this.props.store.treePanel.isRefreshing = false;
+                    this.props.store.treePanel.isRefreshDisabled = false;
+                    this.props.store.topology.isChanged = false;
+                  });
+
+                  if (this.props.store.profileList.selectedProfile.id == res.profileId) {
+                    this.props.store.updateTopology(res);
+                    this.updateStatus('LOADED');
+                  } else {
+                    DBKodaToaster(Position.LEFT_BOTTOM).show({
+                      message: 'Profile got changed before loading completes.',
+                      className: 'warning',
+                      icon: 'thumbs-down'
+                    });
+                    this.updateStatus('FAILED');
+                  }
+                })
+                .catch(err => {
+                  l.error(err.stack);
+                  this.updateStatus('FAILED');
                   DBKodaToaster(Position.LEFT_BOTTOM).show({
-                    message: 'Profile got changed before loading completes.',
-                    className: 'warning',
+                    message: err.message,
+                    className: 'danger',
                     icon: 'thumbs-down'
                   });
-                  this.updateStatus('FAILED');
-                }
-              })
-              .catch(err => {
-                l.error(err.stack);
-                this.updateStatus('FAILED');
-                DBKodaToaster(Position.LEFT_BOTTOM).show({
-                  message: err.message,
-                  className: 'danger',
-                  icon: 'thumbs-down'
                 });
-              });
+            }
           }
         } else {
           runInAction(() => {

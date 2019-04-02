@@ -367,7 +367,11 @@
       },
       "home": {
         "title": "Home",
-        "welcome": "Welcome to dbKoda."
+        "welcome": "Welcome to dbKoda.",
+        "gettingStartedTitle": "Let's get started!",
+        "gettingStartedBlogText": "Getting started blog.",
+        "gettingStartedVideoText": "Getting started video.",
+        "gettingStartedNew": "Create a new profile."
       },
       "config": {
         "sections": {
@@ -760,6 +764,10 @@
         "gzip": {
           "label": "gzip",
           "tooltip": "Compress or decompress dumps using GZIP"
+        },
+        "sslAllowInvalidCertificates": {
+          "label": "sslAllowInvalidCertificates",
+          "tooltip": "Allow invalid SSL certificates."
         },
         "archive": {
           "label": "archive",

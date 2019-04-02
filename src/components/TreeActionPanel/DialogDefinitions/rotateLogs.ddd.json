@@ -1,0 +1,11 @@
+{
+  "Title": "rotateLogs",
+  "AutoExecute": true,
+  "Fields": [
+    {
+      "name": " ",
+      "type": "Text",
+      "readOnly": true
+    }
+  ]
+}

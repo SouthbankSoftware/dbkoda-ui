@@ -20,8 +20,8 @@
  * @Author: chris
  * @Date:   2017-05-15T09:44:11+10:00
  * @Email:  chris@southbanksoftware.com
-// @Last modified by:   chris
-// @Last modified time: 2017-08-16T14:02:54+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-07-19T17:40:13+10:00
  */
 
 @import '../../styles/_defaultTheme.scss';
@@ -88,7 +88,7 @@ div.tableViewWrapper {
   }
   .table-json-panel {
     background-color: $tabBackgroundSelected;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: auto;
     height: calc(100% - (40px));
     h2.errorMessage {

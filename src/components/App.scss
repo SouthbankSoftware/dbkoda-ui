@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2018-07-06T14:47:12+10:00
+ * @Last modified time: 2018-07-19T17:39:11+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -92,7 +92,7 @@ $resizerHoverColor: rgba($connectionButtonBackgroundColourHover, 0.7);
 }
 
 .Pane .vertical .Pane1 {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .Resizer.disabled {

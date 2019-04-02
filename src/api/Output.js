@@ -5,7 +5,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@sout≈hbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-05-22T11:25:08+10:00
+ * @Last modified time: 2018-07-19T19:04:51+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -140,6 +140,7 @@ export default class OutputApi {
 
         if (editor.initialMsg && editor.id != 'Default') {
           let tmp = editor.initialMsg;
+          tmp = tmp.replace(/---((.|\n|\r|\r\n)*)db.enableFreeMonitoring\(\)/gim, ' ');
           tmp = tmp.replace(/^(?:\n|\r|\r\n)/gm, '');
           outputObj.append(tmp);
         }
@@ -203,6 +204,10 @@ export default class OutputApi {
    */
   @action.bound
   outputAvailable(output: Output) {
+    output.output = output.output.replace(
+      /---((.|\n|\r|\r\n)*)db.enableFreeMonitoring\(\)/gim,
+      ' '
+    );
     // Parse output for string 'Type "it" for more'
     const outputId = this.outputHash[output.id + '|' + output.shellId];
 
@@ -229,9 +234,13 @@ export default class OutputApi {
 
   @action.bound
   onReconnect(output: *) {
+    l.debug('RECON');
     const outputId = this.outputHash[output.id + '|' + output.shellId];
-
-    this.store.outputs.get(outputId).append(output.output.join(''));
+    this.store.outputs
+      .get(outputId)
+      .append(
+        output.output.join('').replace(/---((.|\n|\r|\r\n)*)db.enableFreeMonitoring\(\)/gim, ' ')
+      );
   }
 
   /**
@@ -273,6 +282,7 @@ export default class OutputApi {
 
         if (editor.initialMsg && editor.id != 'Default') {
           let tmp = editor.initialMsg;
+          tmp = tmp.replace(/---((.|\n|\r|\r\n)*)db.enableFreeMonitoring\(\)/gim, ' ');
           tmp = tmp.replace(/^(?:\n|\r|\r\n)/gm, '');
           outputObj.append(tmp);
         }
@@ -367,9 +377,8 @@ export default class OutputApi {
         });
       },
       error => {
-        l.error(error);
         NewToaster.show({
-          message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+          message: globalString('output/editor/parseJsonError') + String(error).substring(0, 1000),
           className: 'danger',
           icon: ''
         });
@@ -400,27 +409,21 @@ export default class OutputApi {
       lines.start = this.store.outputs.get(outputId).currentExecStartLine;
       // $FlowFixMe
       lines.end = cm.lineCount();
-      StaticApi.parseDefaultTableJson(jsonStr, lines, cm, outputId)
-        .then(
-          result => {
-            runInAction(() => {
-              this.store.outputs.get(outputId)[displayType] = {
-                json: result,
-                firstLine: lines.start,
-                lastLine: lines.end
-              };
-            });
-          },
-          () => {
-            runInAction(() => {
-              // Revert to raw view if table view JSON can't be parsed
-              this.openView(OutputToolbarContexts.RAW);
-            });
-          }
-        )
-        .catch(err => {
-          l.error(err);
-        });
+      StaticApi.parseDefaultTableJson(jsonStr, lines, cm, outputId).then(
+        result => {
+          runInAction(() => {
+            this.store.outputs.get(outputId)[displayType] = {
+              json: result,
+              firstLine: lines.start,
+              lastLine: lines.end
+            };
+          });
+        },
+        () => {
+          // Revert to raw view if table view JSON can't be parsed
+          this.openView(OutputToolbarContexts.RAW);
+        }
+      );
     } else if (singleLine) {
       // Single line implemention
       StaticApi.parseShellJson(jsonStr).then(
@@ -434,11 +437,18 @@ export default class OutputApi {
           });
         },
         error => {
-          l.error(error);
           NewToaster.show({
-            message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+            message:
+              globalString('output/editor/parseJsonError') + String(error).substring(0, 1000),
             className: 'danger',
             icon: ''
+          });
+          runInAction(() => {
+            this.store.outputs.get(outputId)[displayType] = {
+              json: false,
+              firstLine: false,
+              lastLine: false
+            };
           });
         }
       );
@@ -454,9 +464,9 @@ export default class OutputApi {
           });
         },
         error => {
-          l.error(error);
           NewToaster.show({
-            message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+            message:
+              globalString('output/editor/parseJsonError') + String(error).substring(0, 1000),
             className: 'danger',
             icon: ''
           });
