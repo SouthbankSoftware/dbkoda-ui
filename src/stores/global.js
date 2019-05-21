@@ -242,7 +242,13 @@ export default class Store {
 
   @nodump
   @observable
-  topology = observable({ isChanged: false, json: {}, profileId: '' });
+  topology = observable({
+    isChanged: false,
+    json: {},
+    profileId: ''
+  });
+
+  @nodump topologyCache = {};
 
   @action.bound
   setDrawerChild = value => {
@@ -307,7 +313,14 @@ export default class Store {
   updateTopology = res => {
     this.topology.profileId = res.profileId;
     this.topology.json = res.result;
-    this.topology.isChanged = true;
+    if (!res.updated) {
+      this.topology.isChanged = true;
+    }
+    this.topologyCache[res.profileId] = {
+      profileId: res.profileId,
+      json: res.result,
+      updated: res.updated ? res.updated : Date.now()
+    };
   };
 
   @action.bound
