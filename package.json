@@ -138,7 +138,7 @@
     "jest": "^22.4.3",
     "lazy-route": "^1.0.7",
     "little-loader": "^0.2.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.19",
     "mobx": "^4.3.1",
     "mobx-react": "^5.2.3",
     "mobx-react-devtools": "^5.0.1",
