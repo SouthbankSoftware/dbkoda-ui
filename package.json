@@ -92,7 +92,7 @@
     "classnames": "^2.2.5",
     "cldr-data": "^32.0.0",
     "cm-show-invisibles": "^2.0.2",
-    "codemirror": "^5.32.0",
+    "codemirror": "^5.58.2",
     "codemirror-colorpicker": "^1.0.10",
     "codemirror-formatting": "^1.0.0",
     "codemirror-highlight": "^1.0.0",
