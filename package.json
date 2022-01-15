@@ -191,7 +191,7 @@
     "sass-loader": "^6.0.5",
     "shallowequal": "^1.0.2",
     "shebang-loader": "0.0.1",
-    "shelljs": "^0.7.7",
+    "shelljs": "^0.8.5",
     "shx": "^0.2.2",
     "sql-formatter": "^2.1.0",
     "stringquery": "^1.0.8",
