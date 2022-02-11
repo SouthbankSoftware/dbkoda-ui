@@ -70,7 +70,7 @@
     "@storybook/addon-links": "^4.0.0-alpha.7",
     "@storybook/addon-notes": "^4.0.0-alpha.7",
     "@storybook/react": "^4.0.0-alpha.7",
-    "ajv": "^6.0.1",
+    "ajv": "^6.12.3",
     "ajv-errors": "^1.0.0",
     "ajv-keywords": "^3.0.0",
     "autobind-decorator": "^2.1.0",
