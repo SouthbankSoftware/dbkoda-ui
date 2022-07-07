@@ -143,7 +143,7 @@
     "mobx-react": "^5.2.3",
     "mobx-react-devtools": "^5.0.1",
     "mobx-react-form": "github:SouthbankSoftware/mobx-react-form",
-    "moment": "^2.19.2",
+    "moment": "^2.29.4",
     "mongo-shell-translator": "0.1.2",
     "mongodb-uri": "^0.9.7",
     "mousetrap": "^1.6.1",
