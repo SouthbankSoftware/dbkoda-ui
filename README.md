@@ -1,4 +1,6 @@
-# dbKoda UI
+# dbKoda UI [No Longer Maintained]
+
+**Note**: Unfortunately this project is no longer under active development.
 
 _dbKoda UI built with state of the art React stack, see [dbKoda](https://github.com/SouthbankSoftware/dbkoda) for main repository_
 
