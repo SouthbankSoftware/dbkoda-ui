@@ -3073,9 +3073,9 @@ codemirror@3.x:
   version "3.24.0"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-3.24.0.tgz#335634d8aaf469f2d6968d2bc80417213fba99d6"
 
-codemirror@^5.32.0:
-  version "5.32.0"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.32.0.tgz#cb6ff5d8ef36d0b10f031130e2d9ebeee92c902e"
+codemirror@^5.58.2:
+  version "5.58.2"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.58.2.tgz#ed54a1796de1498688bea1cdd4e9eeb187565d1b"
 
 collection-visit@^1.0.0:
   version "1.0.0"
