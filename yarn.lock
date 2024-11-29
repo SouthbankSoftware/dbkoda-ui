@@ -10163,8 +10163,8 @@ precss@^2.0.0:
     postcss-selector-not "^3.0.1"
 
 predefine@0.1.x:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/predefine/-/predefine-0.1.2.tgz#2aa92b4496bc1f8554e43a45f76bfbe50d33d37f"
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/predefine/-/predefine-0.1.3.tgz#833d67afa815c42707845449dbc88d8a307744e5"
   dependencies:
     extendible "0.1.x"
 
